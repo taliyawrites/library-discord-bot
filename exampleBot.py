@@ -83,6 +83,7 @@ async def choose_winner():
     # need a check that not in the most recent N winners
     await channel.send(f'{choice.display_name} is the user of the day')
     # maybe give them a special role and name color for the day
+    # should also send notification
 
 
 

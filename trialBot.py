@@ -45,6 +45,10 @@ class Audio:
 
     def tags(self):
         data = self.parsed_data()
+        # # convert string of tags "[a] [b] [c] [d]" into a list {a,b,c,d}
+        # tag_string = self.parsed_data()[3]
+        # tags = tag_string[1:-1]
+        # return tags.split('][')
         return parse_tags(data[3])
 
     def link(self):
@@ -105,6 +109,7 @@ async def on_message(message):
     if message.author == client.user:
         return
 
+
     if message.content.startswith('!masterlist'):
         embed = discord.Embed(title="Vel's Library Masterlist",
                        url="https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr",
@@ -141,6 +146,9 @@ async def on_message(message):
 
 
 
+
+
+
 #in utc
 time = datetime.time(hour=22, minute=50)
 
@@ -160,6 +168,8 @@ async def choose_winner():
 
 
 
+
+
 @client.event
 async def on_member_join(member):
     await member.send("Welcome to the Library! Here is a link to the masterlist.")
@@ -167,6 +177,9 @@ async def on_member_join(member):
                        url="https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr",
                        description="here's the card catalogue!")
     await member.send(embed=embed)
+
+
+
 
 
 

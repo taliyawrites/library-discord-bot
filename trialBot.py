@@ -2,6 +2,8 @@ import discord
 import os
 import datetime
 import random
+import string
+import asyncio
 
 
 from dotenv import load_dotenv
@@ -28,6 +30,8 @@ intents.members = True
 client = discord.Client(intents=intents)
 
 
+
+test_time = datetime.time(hour=23, minute=8)
 
 
 
@@ -95,6 +99,17 @@ class Audio:
         post_body = self.tag_string() + self.series() + self.description() + self.writer()
         return discord.Embed(title = self.name(), url = self.link(), description = post_body)
 
+    def allowed_choice(self):
+        if 'sfw' in self.tags() or 'behind the scenes' in self.tags():
+            return False
+        elif self.name() == 'A Pool Party Turns Into a Fucking Competition' or self.name() == 'I Brought a Friend to Help Spoil You':
+            return False
+        else:
+            return True
+
+
+
+
 
 
 def tagged_options(audios, tag):
@@ -103,7 +118,6 @@ def tagged_options(audios, tag):
         if tag in audio.tags():
             options.append(audio)
     return options
-
 
 
 def random_audio(audios, tag=None):
@@ -116,16 +130,25 @@ def random_audio(audios, tag=None):
     else:
         return random.choice(audios)
 
+
+
+
+
+
+def import_airtable_data():
+    table = airtable_api.table('apprrNWlCwDHYj4wW', 'tblqwSpe5CdMuWHW6')
+    all_records = table.all()
+    all_audios = [Audio(entry) for entry in all_records]
     
+    allowed = []
+    for audio in all_audios:
+        if audio.allowed_choice():
+            allowed.append(audio)
+
+    return allowed
 
 
 
-
-
-# import data from airtable
-table = airtable_api.table('apprrNWlCwDHYj4wW', 'tblqwSpe5CdMuWHW6')
-all_records = table.all()
-all_audios = [Audio(entry) for entry in all_records]
 
 
 
@@ -135,9 +158,16 @@ all_audios = [Audio(entry) for entry in all_records]
 async def on_ready():
     print(f'We have logged in as {client.user}')
 
+
+    # import data from airtable
+    global audio_choices
+    audio_choices = import_airtable_data()
+
+
     # set all daily tasks running
     choose_winner.start()
     choose_daily_audio.start()
+    daily_balatro.start()
 
 
 
@@ -156,8 +186,12 @@ async def on_message(message):
 
 
 
-    if message.content.startswith('!dm masterlist'):
-        await message.author.send("here's a link to the masterlist!")
+    if message.content.startswith('!dm'):
+        await message.author.send("Here's a link to the masterlist!")
+        embed = discord.Embed(title="Vel's Library Masterlist",
+                       url="https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr",
+                       description="here's the card catalogue!")
+        await message.author.send(embed=embed)
         await message.delete()
 
 
@@ -167,49 +201,56 @@ async def on_message(message):
         leading, trailing = 1+msg.find('['), msg.find(']')
         if leading != 0:
             tag = msg[leading:trailing]
-            audio = random_audio(all_audios,tag)
+            audio = random_audio(audio_choices,tag)
             if audio is not None:
                 await message.channel.send(f"here's a random audio with the tag [{tag}]!")
                 await message.channel.send(embed=audio.discord_post())
             else:
                 await message.channel.send("no audios with the tag [" + tag + "] were found")
         else:
-            audio =random_audio(all_audios)
+            audio =random_audio(audio_choices)
             await message.channel.send(f"here's a random audio!")
             await message.channel.send(embed=audio.discord_post())
 
+    if message.content.startswith('!daily'):
+        await message.channel.send(f"here's a link to the audio of the day!")
+        await message.channel.send(embed=daily_audio.discord_post())
 
 
 
-def choose_next_audio(options, recent):
-    next = all_audios[1]
-    breaker = 0
-    while next.name() in recent and breaker < 45:
-        next = random.choice(options)
-        print(next.name())
-        breaker += 1
-    recent.append(next.name())
-    recent.pop(0)
-    print(recent)
-    return next
+    if message.content.startswith('!balatro'):
+        await message.channel.send(f"the Balatro seed of the day is: {random_seed}")
+
+    if message.content.startswith('!schedule'):
+        schedule = "Sunday 4:30PM EST: Private Library Release \n Monday 4:30PM EST: Reddit GWA Release \n Wednesday 6:30PM EST: Library Card Release \n Every other Thursday 4:30PM EST: Reddit GWA Release \n Friday 6:30PM EST: Book Club Release"
+        schedule_embed = discord.Embed(title = "Vel's Posting Schedule",description=schedule)
+        await message.channel.send(embed=schedule_embed)
+
+    if message.content.startswith('!live'):
+        await message.channel.send("Vel does a live recordings here on discord every Sunday at 7:30PM EST.")
+
+    if message.content.startswith('!social'):
+        await message.channel.send("here are links to all of Vel's socials")
+        links = "[twitter](https://x.com/VelsLibrary) \n [reddit](https://www.reddit.com/user/VelsLibrary/) \n [twitch](https://www.twitch.tv/velslibrary) \n [pornhub](https://www.pornhub.com/model/velslibrary) \n [youtube](https://www.youtube.com/@VelsLibrary)"
+        link_embed = discord.Embed(title = "Vel's Socials",description=links)
+        await message.channel.send(embed=link_embed)
+
 
 
 
 def choose_next(options, recent):
-    next = recent[0]
-    i = 0
-    while next in recent and i < 20:
+    next = random.choice(options)
+    breaker = 0
+    while next in recent and breaker < 45:
         next = random.choice(options)
-        print(next)
-        i += 1
+        breaker += 1
     recent.append(next)
     recent.pop(0)
     return next
 
-
-
 #in utc
-new_winner_time = datetime.time(hour=19, minute=57)
+# new_winner_time = datetime.time(hour=14, minute=0)
+new_winner_time = test_time
 recent_winners = [None for i in range(RECENT_WINNER_TOLERANCE)]
 
 
@@ -225,36 +266,51 @@ async def choose_winner():
     options = guild.get_role(OPTIONS_ROLE).members
     winner = choose_next(options, recent_winners)
 
-    # need a check that not in the most recent N winners
+    await asyncio.sleep(5)
     await channel.send(f'{winner.mention} is the good girl of the day!')
     await winner.add_roles(good_girl_role)
 
 
 
+def choose_next_audio(options, recent):
+    next = random.choice(options)
+    breaker = 0
+    while next.name() in recent and breaker < 45:
+        next = random.choice(options)
+        breaker += 1
+    recent.append(next.name())
+    recent.pop(0)
+    return next
 
-daily_audio_time = datetime.time(hour=16, minute=0)
-times = [datetime.time(hour=19, minute=49,second = 0),datetime.time(hour=19, minute=49,second = 10),datetime.time(hour=19, minute=49,second = 20),datetime.time(hour=19, minute=49,second = 30)]
 
-recent_audios = ['' for i in range(4)]
+# daily_audio_time = datetime.time(hour=15, minute=0)
+daily_audio_time = test_time
+recent_audios = ['' for i in range(RECENT_AUDIO_TOLERANCE)]
 
 
-@tasks.loop(time = times)
+@tasks.loop(time = daily_audio_time)
 async def choose_daily_audio():
     # sync with airtable data to pull any masterlist updates
-    global table, all_records, all_audios
-    table = airtable_api.table('apprrNWlCwDHYj4wW', 'tblqwSpe5CdMuWHW6')
-    all_records = table.all()
-    all_audios = [Audio(entry) for entry in all_records]
-    all_audios = all_audios[1:6]
+    audio_choices = import_airtable_data()
 
     guild = client.get_guild(GUILD)
     channel = client.get_channel(GENERAL)
 
-    # need a check that not in the most recent N winners
-    audio = choose_next_audio(all_audios,recent_audios)
-    await channel.send(f"today's daily audio!")
-    await channel.send(embed=audio.discord_post())
+    global daily_audio
+    daily_audio = choose_next_audio(audio_choices,recent_audios)
+    await channel.send(f"The audio of the day!")
+    await channel.send(embed=daily_audio.discord_post())
 
+
+
+# daily_balatro_time = datetime.time(hour=8, minute=0)
+daily_balatro_time = test_time
+
+@tasks.loop(time=daily_balatro_time)
+async def daily_balatro():
+    global random_seed
+    random_seed = ''.join(random.choices(string.ascii_uppercase +
+                             string.digits, k=8))
 
 
 
@@ -269,12 +325,6 @@ async def on_member_join(member):
 
 
 
-
-
-# want basic commands for vel's links !twitter !reddit !twitch !youtube !pornhub
-# daily balatro seed 
-# !posts and !lives schedules
-# remove deep audios 
 
 
 

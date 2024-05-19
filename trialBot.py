@@ -48,7 +48,7 @@ class Audio:
     def tag_string(self):
         for entry in self.parsed_data():
             if entry[0]=='Tags':
-                return 'Tags: ' + entry[1]
+                return entry[1] + '\n'
         return ''
 
     def tags(self):
@@ -67,42 +67,31 @@ class Audio:
 
     def date(self):
         for entry in self.parsed_data():
-            if entry[0]=='General Date':
-                return '\n Date: ' + entry[1]
+            if entry[0]=='Simplified Date':
+                return ' (' +  entry[1] + ')'
         return ''
 
     def series(self):
         for entry in self.parsed_data():
-            if entry[0]=='Series Name':
-                return '\n Series: ' + entry[1]
+            if entry[0]=='Series Name (if applicable)':
+                return '\n Series: ' + entry[1] + '\n'
         return ''
 
     def writer(self):
         for entry in self.parsed_data():
             if entry[0]=='Scriptwriter':
                 if entry[1] != 'Vel':
-                    return '\n Scriptwriter: ' + entry[1]
+                    return 'Scriptwriter: ' + entry[1]
         return ''
 
     def description(self):
         for entry in self.parsed_data():
             if entry[0]=='Description':
-                return '\n Description: ' + entry[1]
+                return '\n' + entry[1] + '\n \n'
         return ''
 
-    # def discord_post(self):
-    #     title, url, description = '','',''
-    #     for entry in self.parsed_data():
-    #         if entry[0]=='Title':
-    #             title = entry[1]
-    #         elif entry[0]=='Post Link':
-    #             url = entry[1]
-    #         elif entry[0]=='Tags':
-    #             description = entry[1]
-    #     return discord.Embed(title = title,url = url,description = description)
-
     def discord_post(self):
-        post_body = self.tag_string() + self.date() + self.writer() + self.series() + self.description()
+        post_body = self.tag_string() + self.series() + self.description() + self.writer()
         return discord.Embed(title = self.name(),url = self.link(),description = post_body)
 
 
@@ -123,7 +112,7 @@ def random_audio(audios, tag=None):
         if len(options) != 0:
             return random.choice(options)
         else:
-            return "no audios with the tag [" + tag + "] were found"
+            return None
     else:
         return random.choice(audios)
 
@@ -178,9 +167,11 @@ async def on_message(message):
         if leading != 0:
             tag = msg[leading:trailing]
             audio = random_audio(all_audios,tag)
-            # need to code in an exception for no audio found string 
-            await message.channel.send(f"here's a random audio with the tag [{tag}]!")
-            await message.channel.send(embed=audio.discord_post())
+            if audio is not None:
+                await message.channel.send(f"here's a random audio with the tag [{tag}]!")
+                await message.channel.send(embed=audio.discord_post())
+            else:
+                await message.channel.send("no audios with the tag [" + tag + "] were found")
         else:
             audio =random_audio(all_audios)
             await message.channel.send(f"here's a random audio!")

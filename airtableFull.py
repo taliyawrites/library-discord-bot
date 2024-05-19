@@ -9,6 +9,7 @@ load_dotenv()
 api = Api(os.getenv('AIRTABLE_TOKEN'))
 
 
+
 class Audio:
 	def __init__(self, raw_data):
 		self.raw_data = raw_data
@@ -16,26 +17,63 @@ class Audio:
 	def parsed_data(self):
 		# formats airtable data into list [name, tags, etc]
 		fields = list(self.raw_data.items())[2][1]
-		return [entry[1] for entry in list(fields.items())]
+		return list(fields.items())
 
 	def name(self):
-		data = self.parsed_data()
-		return data[1]
+		for entry in self.parsed_data():
+			if entry[0]=='Title':
+				return entry[1]
+		return 'WARNING: no name found'
 
 	def tags(self):
-		data = self.parsed_data()
-		return parse_tags(data[3])
+		for entry in self.parsed_data():
+			if entry[0]=='Tags':
+				# convert string of tags "[a] [b] [c] [d]" into a list {a,b,c,d}
+				tag_string = entry[1][1:-1]
+				return tag_string.split('] [')
+		return []
 
 	def link(self):
-		data = self.parsed_data()
-		return data[5]
+		for entry in self.parsed_data():
+			if entry[0]=='Post Link':
+				return entry[1]
+		return 'WARNING: no link found'
 
+	def date(self):
+		for entry in self.parsed_data():
+			if entry[0]=='General Date':
+				return entry[1]
+		return ''
 
+	def series(self):
+		for entry in self.parsed_data():
+			if entry[0]=='Series Name':
+				return entry[1]
+		return ''
 
-def parse_tags(tag_string):
-	# convert string of tags "[a] [b] [c] [d]" into a list {a,b,c,d}
-	tags = tag_string[1:-1]
-	return tags.split('] [')
+	def writer(self):
+		for entry in self.parsed_data():
+			if entry[0]=='Scriptwriter':
+				return entry[1]
+		return 'Vel'
+
+	def description(self):
+		for entry in self.parsed_data():
+			if entry[0]=='Description':
+				return entry[1]
+		return ''
+
+	# def discord_post(self):
+    #     title, url, description = '','',''
+    #     for entry in self.parsed_data():
+    #         if entry[0]=='Title':
+    #             title = entry[1]
+    #         elif entry[0]=='Post Link':
+    #             url = entry[1]
+    #         elif entry[0]=='Tags':
+    #             description = entry[1]
+    #     return discord.Embed(title = title,url = url,description = description)
+
 
 
 
@@ -67,7 +105,19 @@ all_audios = [Audio(entry) for entry in all_records]
 
 
 
-print(random_audio(all_audios,'degradation').name())
-print(random_audio(all_audios).name())
-print(random_audio(all_audios,'straight people'))
+# print(random_audio(all_audios,'degradation').name())
+# print(random_audio(all_audios).name())
+# print(random_audio(all_audios,'straight people'))
+
+audio = random.choice(all_audios)
+print(audio.name())
+print(audio.tags())
+print(audio.link())
+print(audio.date())
+print(audio.series())
+print(audio.writer())
+print(audio.description())
+
+
+
 

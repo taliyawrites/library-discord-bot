@@ -37,30 +37,73 @@ class Audio:
     def parsed_data(self):
         # formats airtable data into list [name, tags, etc]
         fields = list(self.raw_data.items())[2][1]
-        return [entry[1] for entry in list(fields.items())]
+        return list(fields.items())
 
     def name(self):
-        data = self.parsed_data()
-        return data[1]
+        for entry in self.parsed_data():
+            if entry[0]=='Title':
+                return entry[1]
+        return 'WARNING: no name found'
+
+    def tag_string(self):
+        for entry in self.parsed_data():
+            if entry[0]=='Tags':
+                return 'Tags: ' + entry[1]
+        return ''
 
     def tags(self):
-        data = self.parsed_data()
-        # # convert string of tags "[a] [b] [c] [d]" into a list {a,b,c,d}
-        # tag_string = self.parsed_data()[3]
-        # tags = tag_string[1:-1]
-        # return tags.split('][')
-        return parse_tags(data[3])
+        for entry in self.parsed_data():
+            if entry[0]=='Tags':
+                # convert string of tags "[a] [b] [c] [d]" into a list {a,b,c,d}
+                tag_string = entry[1][1:-1]
+                return tag_string.split('] [')
+        return []
 
     def link(self):
-        data = self.parsed_data()
-        return data[5]
+        for entry in self.parsed_data():
+            if entry[0]=='Post Link':
+                return entry[1]
+        return 'WARNING: no link found'
 
+    def date(self):
+        for entry in self.parsed_data():
+            if entry[0]=='General Date':
+                return '\n Date: ' + entry[1]
+        return ''
 
+    def series(self):
+        for entry in self.parsed_data():
+            if entry[0]=='Series Name':
+                return '\n Series: ' + entry[1]
+        return ''
 
-def parse_tags(tag_string):
-    # convert string of tags "[a] [b] [c] [d]" into a list {a,b,c,d}
-    tags = tag_string[1:-1]
-    return tags.split('] [')
+    def writer(self):
+        for entry in self.parsed_data():
+            if entry[0]=='Scriptwriter':
+                if entry[1] != 'Vel':
+                    return '\n Scriptwriter: ' + entry[1]
+        return ''
+
+    def description(self):
+        for entry in self.parsed_data():
+            if entry[0]=='Description':
+                return '\n Description: ' + entry[1]
+        return ''
+
+    # def discord_post(self):
+    #     title, url, description = '','',''
+    #     for entry in self.parsed_data():
+    #         if entry[0]=='Title':
+    #             title = entry[1]
+    #         elif entry[0]=='Post Link':
+    #             url = entry[1]
+    #         elif entry[0]=='Tags':
+    #             description = entry[1]
+    #     return discord.Embed(title = title,url = url,description = description)
+
+    def discord_post(self):
+        post_body = self.tag_string() + self.date() + self.writer() + self.series() + self.description()
+        return discord.Embed(title = self.name(),url = self.link(),description = post_body)
 
 
 
@@ -73,6 +116,7 @@ def tagged_options(audios, tag):
 
 
 
+
 def random_audio(audios, tag=None):
     if tag is not None:
         options = tagged_options(audios,tag)
@@ -82,6 +126,10 @@ def random_audio(audios, tag=None):
             return "no audios with the tag [" + tag + "] were found"
     else:
         return random.choice(audios)
+
+    
+
+
 
 
 
@@ -132,17 +180,11 @@ async def on_message(message):
             audio = random_audio(all_audios,tag)
             # need to code in an exception for no audio found string 
             await message.channel.send(f"here's a random audio with the tag [{tag}]!")
-            embed = discord.Embed(title=audio.name(),
-                       url=audio.link(),
-                       description='audio yay')
-            await message.channel.send(embed=embed)
+            await message.channel.send(embed=audio.discord_post())
         else:
             audio =random_audio(all_audios)
             await message.channel.send(f"here's a random audio!")
-            embed = discord.Embed(title=audio.name(),
-                       url=audio.link(),
-                       description='audio yay')
-            await message.channel.send(embed=embed)
+            await message.channel.send(embed=audio.discord_post())
 
 
 

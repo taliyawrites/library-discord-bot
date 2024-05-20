@@ -9,6 +9,7 @@
 - `!schedule` audio posting schedule
 - `!lives` info about live recordings
 - `!socials`
+- `!balatro` for daily seed
 
 #### Other Functionality
 - chooses one random audio per day and posts it at 1pm

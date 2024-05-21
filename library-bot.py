@@ -33,8 +33,8 @@ client = discord.Client(intents=intents)
 
 
 test_time = datetime.time(hour=21, minute=0) # in utc 
-new_winner_time, daily_audio_time, daily_balatro_time = test_time, test_time, test_time
-# new_winner_time = datetime.time(hour=14, minute=0)
+daily_winner_time, daily_audio_time, daily_balatro_time = test_time, test_time, test_time
+# daily_winner_time = datetime.time(hour=14, minute=0)
 # daily_audio_time = datetime.time(hour=15, minute=0)
 # daily_balatro_time = datetime.time(hour=8, minute=0)
 

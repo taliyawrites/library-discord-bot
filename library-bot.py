@@ -154,11 +154,6 @@ def import_airtable_data():
 
 
 
-
-
-
-
-
 @client.event
 async def on_ready():
     print(f'Logged in as {client.user}')
@@ -167,9 +162,18 @@ async def on_ready():
     global audio_choices
     audio_choices = import_airtable_data()
 
+    # should on startup import the logs for recent audio/winner choices
+
+    global recent_audios, recent_winners
+    recent_audios = ['' for i in range(REPEAT_AUDIO_TOLERANCE)]
+    recent_winners = ['' for i in range(REPEAT_WINNER_TOLERANCE)]
+
+    global daily_audio
+    daily_audio = audio_of_the_day()
+
     # set all daily tasks running
-    choose_winner.start()
     choose_daily_audio.start()
+    choose_winner.start()
     daily_balatro.start()
 
 
@@ -245,22 +249,46 @@ async def on_message(message):
 
 
 
-
 def choose_next(options, recent):
-    next = random.choice(options)
+    next_one = random.choice(options)
     breaker = 0
-    while next in recent and breaker < 45:
-        next = random.choice(options)
+    while next_one.name() in recent and breaker < 45:
+        next_one = random.choice(options)
         breaker += 1
-    recent.append(next)
+    recent.append(next_one.name())
     recent.pop(0)
-    return next
+    return next_one
+
+def audio_of_the_day():
+    # sync with airtable data to pull any masterlist updates
+    global audio_choices
+    audio_choices = import_airtable_data()
+    return choose_next(audio_choices,recent_audios)
+
+@tasks.loop(time = daily_audio_time)
+async def choose_daily_audio():
+    guild = client.get_guild(GUILD)
+    channel = client.get_channel(GENERAL)
+
+    global daily_audio
+    daily_audio = audio_of_the_day()
+    await channel.send(f"The audio of the day!")
+    await channel.send(embed=daily_audio.discord_post())
 
 
-recent_winners = [None for i in range(REPEAT_WINNER_TOLERANCE)]
+
+def choose_next_winner(options, recent):
+    next_one = random.choice(options)
+    breaker = 0
+    while next_one.display_name in recent and breaker < 45:
+        next_one = random.choice(options)
+        breaker += 1
+    recent.append(next_one.display_name)
+    recent.pop(0)
+    return next_one
 
 
-@tasks.loop(time = new_winner_time)
+@tasks.loop(time = daily_winner_time)
 async def choose_winner():
     guild = client.get_guild(GUILD)
     channel = client.get_channel(GENERAL)
@@ -271,40 +299,10 @@ async def choose_winner():
         await member.remove_roles(good_girl_role)
 
     options = guild.get_role(OPTIONS_ROLE).members
-    winner = choose_next(options, recent_winners)
+    winner = choose_next_winner(options, recent_winners)
 
     await channel.send(f'{winner.mention} is the good girl of the day!')
     await winner.add_roles(good_girl_role)
-
-
-
-def choose_next_audio(options, recent):
-    next = random.choice(options)
-    breaker = 0
-    while next.name() in recent and breaker < 45:
-        next = random.choice(options)
-        breaker += 1
-    recent.append(next.name())
-    recent.pop(0)
-    return next
-
-
-
-recent_audios = ['' for i in range(REPEAT_AUDIO_TOLERANCE)]
-
-@tasks.loop(time = daily_audio_time)
-async def choose_daily_audio():
-    # sync with airtable data to pull any masterlist updates
-    audio_choices = import_airtable_data()
-
-    guild = client.get_guild(GUILD)
-    channel = client.get_channel(GENERAL)
-
-    global daily_audio
-    daily_audio = choose_next_audio(audio_choices,recent_audios)
-    await channel.send(f"The audio of the day!")
-    await channel.send(embed=daily_audio.discord_post())
-
 
 
 @tasks.loop(time=daily_balatro_time)

@@ -32,7 +32,7 @@ client = discord.Client(intents=intents)
 
 
 
-test_time = datetime.time(hour=19, minute=0) # in utc 
+test_time = datetime.time(hour=21, minute=0) # in utc 
 new_winner_time, daily_audio_time, daily_balatro_time = test_time, test_time, test_time
 # new_winner_time = datetime.time(hour=14, minute=0)
 # daily_audio_time = datetime.time(hour=15, minute=0)
@@ -172,8 +172,8 @@ async def on_ready():
     daily_audio = audio_of_the_day()
 
     # set all daily tasks running
-    choose_daily_audio.start()
-    choose_winner.start()
+    announce_daily_audio.start()
+    choose_good_girl.start()
     daily_balatro.start()
 
 
@@ -266,7 +266,7 @@ def audio_of_the_day():
     return choose_next(audio_choices,recent_audios)
 
 @tasks.loop(time = daily_audio_time)
-async def choose_daily_audio():
+async def announce_daily_audio():
     guild = client.get_guild(GUILD)
     channel = client.get_channel(GENERAL)
 
@@ -289,7 +289,7 @@ def choose_next_winner(options, recent):
 
 
 @tasks.loop(time = daily_winner_time)
-async def choose_winner():
+async def choose_good_girl():
     guild = client.get_guild(GUILD)
     channel = client.get_channel(GENERAL)
     good_girl_role = guild.get_role(WINNER_ROLE)

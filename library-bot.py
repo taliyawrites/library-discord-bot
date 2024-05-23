@@ -32,7 +32,7 @@ client = discord.Client(intents=intents)
 
 
 
-test_time = datetime.time(hour=21, minute=0) # in utc 
+test_time = datetime.time(hour=21, minute=39) # in utc 
 daily_winner_time, daily_audio_time, daily_balatro_time = test_time, test_time, test_time
 # daily_winner_time = datetime.time(hour=14, minute=0)
 # daily_audio_time = datetime.time(hour=15, minute=0)
@@ -158,11 +158,15 @@ def import_airtable_data():
 async def on_ready():
     print(f'Logged in as {client.user}')
 
+
+
+@client.event
+async def setup_hook():
+    print("setup hook running")
+
     # import data from airtable
     global audio_choices
     audio_choices = import_airtable_data()
-
-    # should on startup import the logs for recent audio/winner choices
 
     global recent_audios, recent_winners
     recent_audios = ['' for i in range(REPEAT_AUDIO_TOLERANCE)]
@@ -172,9 +176,12 @@ async def on_ready():
     daily_audio = audio_of_the_day()
 
     # set all daily tasks running
-    announce_daily_audio.start()
-    choose_good_girl.start()
-    daily_balatro.start()
+    if not announce_daily_audio.is_running():
+        announce_daily_audio.start()
+    if not choose_good_girl.is_running():
+        choose_good_girl.start()
+    if not daily_balatro.is_running():
+        daily_balatro.start()
 
 
 
@@ -265,15 +272,17 @@ def audio_of_the_day():
     audio_choices = import_airtable_data()
     return choose_next(audio_choices,recent_audios)
 
-@tasks.loop(time = daily_audio_time)
+@tasks.loop(hours = 1)
 async def announce_daily_audio():
-    guild = client.get_guild(GUILD)
-    channel = client.get_channel(GENERAL)
+    if datetime.datetime.now().hour == 17:
+        guild = client.get_guild(GUILD)
+        channel = client.get_channel(GENERAL)
 
-    global daily_audio
-    daily_audio = audio_of_the_day()
-    await channel.send(f"The audio of the day!")
-    await channel.send(embed=daily_audio.discord_post())
+        global daily_audio
+        daily_audio = audio_of_the_day()
+        await channel.send(f"The audio of the day!")
+        await channel.send(embed=daily_audio.discord_post())
+
 
 
 
@@ -288,27 +297,29 @@ def choose_next_winner(options, recent):
     return next_one
 
 
-@tasks.loop(time = daily_winner_time)
+@tasks.loop(hours = 1)
 async def choose_good_girl():
-    guild = client.get_guild(GUILD)
-    channel = client.get_channel(GENERAL)
-    good_girl_role = guild.get_role(WINNER_ROLE)
+    if datetime.datetime.now().hour == 17:
+        guild = client.get_guild(GUILD)
+        channel = client.get_channel(GENERAL)
+        good_girl_role = guild.get_role(WINNER_ROLE)
 
-    await asyncio.sleep(5)
-    for member in good_girl_role.members:
-        await member.remove_roles(good_girl_role)
+        await asyncio.sleep(5)
+        for member in good_girl_role.members:
+            await member.remove_roles(good_girl_role)
 
-    options = guild.get_role(OPTIONS_ROLE).members
-    winner = choose_next_winner(options, recent_winners)
+        options = guild.get_role(OPTIONS_ROLE).members
+        winner = choose_next_winner(options, recent_winners)
 
-    await channel.send(f'{winner.mention} is the good girl of the day!')
-    await winner.add_roles(good_girl_role)
+        await channel.send(f'{winner.mention} is the good girl of the day!')
+        await winner.add_roles(good_girl_role)
 
 
-@tasks.loop(time=daily_balatro_time)
+@tasks.loop(hours = 1)
 async def daily_balatro():
-    global random_seed
-    random_seed = ''.join(random.choices(string.ascii_uppercase+string.digits, k=8))
+    if datetime.datetime.now().hour == 17:
+        global random_seed
+        random_seed = ''.join(random.choices(string.ascii_uppercase+string.digits, k=8))
 
 
 

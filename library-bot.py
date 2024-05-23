@@ -272,9 +272,9 @@ def audio_of_the_day():
     audio_choices = import_airtable_data()
     return choose_next(audio_choices,recent_audios)
 
-@tasks.loop(hours = 1)
+@tasks.loop(minutes = 1)
 async def announce_daily_audio():
-    if datetime.datetime.now().hour == 17:
+    if datetime.datetime.now().hour == 17 and datetime.datetime.now().minute == 0:
         guild = client.get_guild(GUILD)
         channel = client.get_channel(GENERAL)
 
@@ -297,9 +297,9 @@ def choose_next_winner(options, recent):
     return next_one
 
 
-@tasks.loop(hours = 1)
+@tasks.loop(minutes = 1)
 async def choose_good_girl():
-    if datetime.datetime.now().hour == 17:
+    if datetime.datetime.now().hour == 17 and datetime.datetime.now().minute == 0:
         guild = client.get_guild(GUILD)
         channel = client.get_channel(GENERAL)
         good_girl_role = guild.get_role(WINNER_ROLE)
@@ -315,9 +315,9 @@ async def choose_good_girl():
         await winner.add_roles(good_girl_role)
 
 
-@tasks.loop(hours = 1)
+@tasks.loop(minutes = 1)
 async def daily_balatro():
-    if datetime.datetime.now().hour == 17:
+    if datetime.datetime.now().hour == 17 and datetime.datetime.now().minute == 0:
         global random_seed
         random_seed = ''.join(random.choices(string.ascii_uppercase+string.digits, k=8))
 

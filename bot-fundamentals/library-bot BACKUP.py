@@ -22,8 +22,8 @@ airtable_api = Api(os.getenv('AIRTABLE_TOKEN'))
 WINNERS_FILENAME = "recentwinners.txt"
 AUDIOS_FILENAME = "recentaudios.txt"
 
-HOUR = 12
-MINUTE = 0
+HOUR = 16
+MINUTE = 10
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -272,8 +272,7 @@ def save_to_file(filename, list):
 
 
 
-
-def choose_next(options):
+def choose_next_winner(options):
     recent = read_from_file(AUDIOS_FILENAME)
     next_one = random.choice(options)
 
@@ -288,6 +287,7 @@ def choose_next(options):
     save_to_file(AUDIOS_FILENAME,recent)
     return next_one
 
+
 def audio_of_the_day():
     # sync with airtable data to pull any masterlist updates
     global audio_choices
@@ -297,8 +297,6 @@ def audio_of_the_day():
 @tasks.loop(minutes = 1)
 async def announce_daily_audio():
     if datetime.datetime.now().hour == HOUR and datetime.datetime.now().minute == MINUTE:
-    #     print("starting")
-    # else:
         guild = client.get_guild(GUILD)
         channel = client.get_channel(GENERAL)
 
@@ -319,7 +317,6 @@ def choose_next_winner(options):
 
     breaker = 0
     while next_one.display_name in recent and breaker < 45:
-        print(next_one.display_name)
         next_one = random.choice(options)
         breaker += 1
 
@@ -333,8 +330,6 @@ def choose_next_winner(options):
 @tasks.loop(minutes = 1)
 async def choose_good_girl():
     if datetime.datetime.now().hour == HOUR and datetime.datetime.now().minute == MINUTE:
-    #     print("starting")
-    # else:
         guild = client.get_guild(GUILD)
         channel = client.get_channel(GENERAL)
         good_girl_role = guild.get_role(WINNER_ROLE)
@@ -357,8 +352,6 @@ async def choose_good_girl():
 @tasks.loop(minutes = 1)
 async def daily_balatro():
     if datetime.datetime.now().hour == HOUR and datetime.datetime.now().minute == MINUTE:
-    #     print("starting")
-    # else:
         global random_seed
         random_seed = ''.join(random.choices(string.ascii_uppercase+string.digits, k=8))
 

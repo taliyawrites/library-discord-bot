@@ -23,7 +23,7 @@ WINNERS_FILENAME = "recentwinners.txt"
 AUDIOS_FILENAME = "recentaudios.txt"
 
 HOUR = 22
-MINUTE = 21
+MINUTE = 39
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -62,7 +62,8 @@ class Audio:
         for entry in self.parsed_data():
             if entry[0]=='Tags':
                 # convert string of tags "[a] [b] [c] [d]" into a list {a,b,c,d}
-                tag_string = entry[1][1:-1]
+                raw_string = entry[1].strip()
+                tag_string = raw_string[1:-1]
                 return tag_string.split('] [')
         return []
 
@@ -191,7 +192,6 @@ async def setup_hook():
     if not daily_balatro.is_running():
         daily_balatro.start()
 
-    print(datetime.datetime.now())
 
 
 

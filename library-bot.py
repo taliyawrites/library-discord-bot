@@ -22,7 +22,7 @@ airtable_api = Api(os.getenv('AIRTABLE_TOKEN'))
 WINNERS_FILENAME = "recentwinners.txt"
 AUDIOS_FILENAME = "recentaudios.txt"
 
-run daily tasks at 1pm eastern time (6pm UTC+1)
+# run daily tasks at 1pm eastern time (6pm UTC+1)
 HOUR = 18
 MINUTE = 0
 

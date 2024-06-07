@@ -6,7 +6,7 @@ import string
 WINNERS_FILENAME = "recentwinners.txt"
 AUDIOS_FILENAME = "recentaudios.txt"
 
-WINNER_TOLERANCE = 20
+WINNER_TOLERANCE = 90
 AUDIO_TOLERANCE = 90
 
 winners = open(WINNERS_FILENAME,"w")

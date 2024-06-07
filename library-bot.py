@@ -22,8 +22,8 @@ airtable_api = Api(os.getenv('AIRTABLE_TOKEN'))
 WINNERS_FILENAME = "recentwinners.txt"
 AUDIOS_FILENAME = "recentaudios.txt"
 
-HOUR = 22
-MINUTE = 58
+HOUR = 23
+MINUTE = 4
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -338,7 +338,7 @@ def choose_next_winner(options):
         next_one = random.choice(options)
         breaker += 1
 
-    recent.append(next_one.display_name)
+    recent.append(next_one.name)
     recent.pop(0)
 
     save_to_file(WINNERS_FILENAME,recent)

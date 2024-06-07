@@ -23,8 +23,11 @@ WINNERS_FILENAME = "recentwinners.txt"
 AUDIOS_FILENAME = "recentaudios.txt"
 
 # run daily tasks at 1pm eastern time (6pm UTC+1)
-HOUR = 18
-MINUTE = 0
+# HOUR = 18
+# MINUTE = 0
+
+HOUR = 23
+MINUTE = 45
 
 intents = discord.Intents.default()
 intents.message_content = True

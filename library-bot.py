@@ -124,8 +124,6 @@ class Audio:
             return False
         elif self.name() == 'A Pool Party Turns Into a Fucking Competition' or self.name() == 'I Brought a Friend to Help Spoil You':
             return False
-        elif self.age() <= 4:
-            return False
         else:
             return True
 
@@ -168,6 +166,7 @@ def import_airtable_data():
             allowed.append(audio)
 
     return allowed
+
 
 
 
@@ -270,7 +269,10 @@ async def on_message(message):
     if message.content.startswith('!greet'):
         greet = True
 
-
+    if message.content.startswith('!command'):
+        commands = "**!randomaudio** randomly chosen audio from the masterlist \n **!randomaudio [tag]** specify desired tag in square brackets \n **!daily** for the randomly chosen audio of the day \n **!dm** bot will DM you the masterlist \n **!masterlist** \n **!schedule** audio posting schedule \n **!lives** info about live recordings \n **!socials** \n  **!balatro** for daily seed \n"
+        command_embed = discord.Embed(title = "Card Catalog Bot Commands",description=commands)
+        await message.channel.send(embed=command_embed)
 
 
 
@@ -314,7 +316,14 @@ def audio_of_the_day():
     # sync with airtable data to pull any masterlist updates
     global audio_choices
     audio_choices = import_airtable_data()
-    return choose_next(audio_choices)
+
+    daily_audio_options = []
+    for audio in audio_choices:
+        if audio.age() > 4:
+            daily_audio_options.append(audio)  
+
+    return choose_next(daily_audio_options)
+
 
 @tasks.loop(minutes = 1)
 async def announce_daily_audio():

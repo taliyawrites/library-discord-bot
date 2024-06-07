@@ -22,12 +22,12 @@ airtable_api = Api(os.getenv('AIRTABLE_TOKEN'))
 WINNERS_FILENAME = "recentwinners.txt"
 AUDIOS_FILENAME = "recentaudios.txt"
 
-# run daily tasks at 1pm eastern time (6pm UTC+1)
-# HOUR = 18
-# MINUTE = 0
+run daily tasks at 1pm eastern time (6pm UTC+1)
+HOUR = 18
+MINUTE = 0
 
-HOUR = 23
-MINUTE = 44
+greet = False
+
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -267,6 +267,9 @@ async def on_message(message):
         link_embed = discord.Embed(title = "Vel's Socials",description=links)
         await message.channel.send(embed=link_embed)
 
+    if message.content.startswith('!greet'):
+        greet = True
+
 
 
 
@@ -338,7 +341,6 @@ def choose_next_winner(options):
 
     breaker = 0
     while next_one.name in recent and breaker < 45:
-        print(next_one.name)
         next_one = random.choice(options)
         breaker += 1
 
@@ -387,13 +389,14 @@ async def daily_balatro():
 
 
 
-# @client.event
-# async def on_member_join(member):
-#     await member.send("Welcome to the Library! Here is a link to the masterlist.")
-#     embed = discord.Embed(title="Vel's Library Masterlist",
-#                        url="https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr",
-#                        description="here's the card catalogue!")
-#     await member.send(embed=embed)
+@client.event
+async def on_member_join(member):
+    if greet:
+        await member.send("Welcome to the Library! Here is a link to the masterlist.")
+        embed = discord.Embed(title="Vel's Library Masterlist",
+                       url="https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr",
+                       description="here's the card catalogue!")
+        await member.send(embed=embed)
 
 
 

@@ -23,7 +23,7 @@ WINNERS_FILENAME = "recentwinners.txt"
 AUDIOS_FILENAME = "recentaudios.txt"
 
 HOUR = 16
-MINUTE = 05
+MINUTE = 4
 
 intents = discord.Intents.default()
 intents.message_content = True

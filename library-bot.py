@@ -333,8 +333,8 @@ def choose_next_winner(options):
     next_one = random.choice(options)
 
     breaker = 0
-    while next_one.display_name in recent and breaker < 45:
-        print(next_one.display_name)
+    while next_one.name in recent and breaker < 45:
+        print(next_one.name)
         next_one = random.choice(options)
         breaker += 1
 

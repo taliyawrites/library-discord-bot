@@ -387,13 +387,13 @@ async def daily_balatro():
 
 
 
-@client.event
-async def on_member_join(member):
-    await member.send("Welcome to the Library! Here is a link to the masterlist.")
-    embed = discord.Embed(title="Vel's Library Masterlist",
-                       url="https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr",
-                       description="here's the card catalogue!")
-    await member.send(embed=embed)
+# @client.event
+# async def on_member_join(member):
+#     await member.send("Welcome to the Library! Here is a link to the masterlist.")
+#     embed = discord.Embed(title="Vel's Library Masterlist",
+#                        url="https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr",
+#                        description="here's the card catalogue!")
+#     await member.send(embed=embed)
 
 
 

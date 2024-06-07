@@ -23,7 +23,7 @@ WINNERS_FILENAME = "recentwinners.txt"
 AUDIOS_FILENAME = "recentaudios.txt"
 
 HOUR = 17
-MINUTE = 6
+MINUTE = 9
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -190,6 +190,8 @@ async def setup_hook():
         choose_good_girl.start()
     if not daily_balatro.is_running():
         daily_balatro.start()
+
+    print(datetime.datetime.now())
 
 
 

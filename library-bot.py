@@ -27,7 +27,7 @@ AUDIOS_FILENAME = "recentaudios.txt"
 # MINUTE = 0
 
 HOUR = 23
-MINUTE = 43
+MINUTE = 44
 
 intents = discord.Intents.default()
 intents.message_content = True

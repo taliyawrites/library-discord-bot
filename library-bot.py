@@ -75,8 +75,19 @@ class Audio:
     def date(self):
         for entry in self.parsed_data():
             if entry[0]=='Simplified Date':
-                return ' (' +  entry[1] + ')'
-        return ''
+        #         return ' (' +  entry[1] + ')'
+        # return ''
+                datestring = entry[1]
+                datelist = datestring.split('/')
+                return [int(x) for x in datelist]
+
+    def age(self):
+        current = datetime.datetime.now()
+        now = (current.year)*12 + current.month
+        audiodate = self.date()
+        date = audiodate[0] + audiodate[1]*12
+        return (now - date)
+
 
     def series(self):
         for entry in self.parsed_data():
@@ -107,6 +118,8 @@ class Audio:
         if 'sfw' in self.tags() or 'behind the scenes' in self.tags():
             return False
         elif self.name() == 'A Pool Party Turns Into a Fucking Competition' or self.name() == 'I Brought a Friend to Help Spoil You':
+            return False
+        elif self.age() <= 4:
             return False
         else:
             return True

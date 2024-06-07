@@ -22,8 +22,8 @@ airtable_api = Api(os.getenv('AIRTABLE_TOKEN'))
 WINNERS_FILENAME = "recentwinners.txt"
 AUDIOS_FILENAME = "recentaudios.txt"
 
-HOUR = 23
-MINUTE = 7
+HOUR = 18
+MINUTE = 0
 
 intents = discord.Intents.default()
 intents.message_content = True

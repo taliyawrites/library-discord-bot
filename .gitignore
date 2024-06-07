@@ -3,3 +3,6 @@ bot-env/
 .DS_Store
 
 .env
+
+recentwinners.txt
+recentaudios.txt

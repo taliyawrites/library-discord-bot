@@ -137,7 +137,7 @@ def get_tag(message):
         return None
     if tag[0] == '[':
         return tag[1:-1]
-    else
+    else:
         return tag
 
 # select audios with a specified tag

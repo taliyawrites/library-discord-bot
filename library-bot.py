@@ -187,6 +187,9 @@ async def setup_hook():
     global daily_audio
     daily_audio = audio_of_the_day()
 
+    global random_seed
+    random_seed = ''.join(random.choices(string.ascii_uppercase+string.digits, k=8))
+
     # set all daily tasks running
     if not announce_daily_audio.is_running():
         announce_daily_audio.start()
@@ -230,23 +233,23 @@ async def on_message(message):
             tag = msg[leading:trailing]
             audio = random_audio(audio_choices,tag)
             if audio is not None:
-                await message.channel.send(f"here's a random audio with the tag [{tag}]!")
+                await message.channel.send(f"Here's a random audio with the tag [{tag}]!")
                 await message.channel.send(embed=audio.discord_post())
             else:
-                await message.channel.send("no audios with the tag [" + tag + "] were found")
+                await message.channel.send("No audios with the tag [" + tag + "] were found")
         else:
             audio =random_audio(audio_choices)
-            await message.channel.send(f"here's a random audio!")
+            await message.channel.send(f"Here's a random audio!")
             await message.channel.send(embed=audio.discord_post())
 
 
     if message.content.startswith('!daily'):
-        await message.channel.send("here's a link to the audio of the day!")
+        await message.channel.send("Here's a link to the audio of the day!")
         await message.channel.send(embed=daily_audio.discord_post())
 
 
     if message.content.startswith('!balatro'):
-        await message.channel.send(f"the Balatro seed of the day is: {random_seed}")
+        await message.channel.send(f"The Balatro seed of the day is: {random_seed}")
 
 
     if message.content.startswith('!schedule'):
@@ -270,7 +273,7 @@ async def on_message(message):
         greet = True
 
     if message.content.startswith('!command'):
-        commands = "**!randomaudio** randomly chosen audio from the masterlist \n **!randomaudio [tag]** specify desired tag in square brackets \n **!daily** for the randomly chosen audio of the day \n **!dm** bot will DM you the masterlist \n **!masterlist** \n **!schedule** audio posting schedule \n **!lives** info about live recordings \n **!socials** \n  **!balatro** for daily seed \n"
+        commands = "- **!randomaudio** randomly chosen audio from the masterlist \n - **!randomaudio [tag]** specify desired tag in square brackets \n - **!daily** for the randomly chosen audio of the day \n - **!dm** bot will DM you the masterlist \n - **!masterlist** \n - **!schedule** audio posting schedule \n - **!lives** info about live recordings \n - **!socials** \n - **!balatro** for daily seed"
         command_embed = discord.Embed(title = "Card Catalog Bot Commands",description=commands)
         await message.channel.send(embed=command_embed)
 
@@ -400,11 +403,12 @@ async def daily_balatro():
 
 @client.event
 async def on_member_join(member):
+    # turn this on with !greet, just coded in so it doesn't DM anyone who joins before the bot is announced publicly 
     if greet:
-        await member.send("Welcome to the Library! Here is a link to the masterlist.")
+        await member.send("Welcome to the Library! Here's a link to the masterlist of all of Vel's audios. You can search and filter the masterlist for your favorite tags, or send a message with the command *!randomaudio [insert desired tag here]* to have a random audio chosen for you.")
         embed = discord.Embed(title="Vel's Library Masterlist",
                        url="https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr",
-                       description="here's the card catalogue!")
+                       description="searchable list of all of Vel's audios, from both free reddit posts and patreon exclusives!")
         await member.send(embed=embed)
 
 
@@ -414,3 +418,4 @@ async def on_member_join(member):
 
 
 client.run(TOKEN)
+

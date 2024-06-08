@@ -24,7 +24,7 @@ AUDIOS_FILENAME = "recentaudios.txt"
 
 # run daily tasks at 1pm eastern time (6pm UTC+1)
 HOUR = 18
-MINUTE = 28
+MINUTE = 0
 
 greet = False
 

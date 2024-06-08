@@ -130,6 +130,15 @@ class Audio:
 
 
 
+def get_tag(message):
+    msg = message.strip()
+    tag = msg[13:]
+    if len(tag) == 0:
+        return None
+    if tag[0] == '[':
+        return tag[1:-1]
+    else
+        return tag
 
 # select audios with a specified tag
 def tagged_options(audios, tag):
@@ -227,10 +236,25 @@ async def on_message(message):
 
     if message.content.startswith('!randomaudio'):
         msg = message.content
-        # checking to see if the user specified a tag 
-        leading, trailing = 1+msg.find('['), msg.find(']')
-        if leading != 0:
-            tag = msg[leading:trailing]
+        # # checking to see if the user specified a tag, use if leading != 0
+        # leading, trailing = 1+msg.find('['), msg.find(']')
+        # tag = msg[leading:trailing]
+        tag = get_tag(message.content)
+        if tag is not None:
+            audio = random_audio(audio_choices,tag)
+            if audio is not None:
+                await message.channel.send(f"Here's a random audio with the tag [{tag}]!")
+                await message.channel.send(embed=audio.discord_post())
+            else:
+                await message.channel.send("No audios with the tag [" + tag + "] were found")
+        else:
+            audio =random_audio(audio_choices)
+            await message.channel.send(f"Here's a random audio!")
+            await message.channel.send(embed=audio.discord_post())
+
+    if message.content.startswith('!randomaudio'):
+        tag = get_tag(message.content)
+        if tag is not None:
             audio = random_audio(audio_choices,tag)
             if audio is not None:
                 await message.channel.send(f"Here's a random audio with the tag [{tag}]!")
@@ -272,8 +296,8 @@ async def on_message(message):
     if message.content.startswith('!greet'):
         greet = True
 
-    if message.content.startswith('!command'):
-        commands = "- `!randomaudio` randomly chosen audio from the masterlist \n- `!randomaudio [tag]` specify desired tag in square brackets \n- `!daily` for the randomly chosen audio of the day \n- `!dm` bot will DM you the masterlist \n- `!masterlist` \n- `!schedule` audio posting schedule \n- `!lives` info about live recordings \n- `!socials` \n- `!balatro` for daily seed"
+    if message.content.startswith('!allcommands'):
+        commands = "- `!randomaudio` randomly chosen audio from the masterlist \n- `!randomaudio [tag]` specify desired tag in square brackets \n- `!daily` for the randomly chosen audio of the day \n- `!dm` bot will DM you the masterlist \n- `!masterlist` link to the masterlist \n- `!schedule` audio posting schedule \n- `!lives` info about live recordings \n- `!socials` links to all of Vel's social media accounts \n- `!balatro` for daily seed"
         command_embed = discord.Embed(title = "Card Catalog Bot Commands",description=commands)
         await message.channel.send(embed=command_embed)
 

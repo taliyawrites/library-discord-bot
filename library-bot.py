@@ -211,7 +211,7 @@ async def on_message(message):
     if message.content.startswith('!masterlist'):
         embed = discord.Embed(title="Vel's Library Masterlist",
                        url="https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr",
-                       description="here's the card catalogue!")
+                       description="searchable list of all of Vel's audios, from both free reddit posts and patreon exclusives!")
         await message.channel.send(embed=embed)
 
 
@@ -219,7 +219,7 @@ async def on_message(message):
         await message.author.send("Here's a link to the masterlist!")
         embed = discord.Embed(title="Vel's Library Masterlist",
                        url="https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr",
-                       description="here's the card catalogue!")
+                       description="searchable list of all of Vel's audios, from both free reddit posts and patreon exclusives!")
         await message.author.send(embed=embed)
         # delete the user's message requesting the DM 
         await message.delete()
@@ -273,7 +273,7 @@ async def on_message(message):
         greet = True
 
     if message.content.startswith('!command'):
-        commands = "    - **!randomaudio** randomly chosen audio from the masterlist \n - **!randomaudio [tag]** specify desired tag in square brackets \n - **!daily** for the randomly chosen audio of the day \n - **!dm** bot will DM you the masterlist \n - **!masterlist** \n - **!schedule** audio posting schedule \n - **!lives** info about live recordings \n - **!socials** \n - **!balatro** for daily seed"
+        commands = "&nbsp; - **!randomaudio** randomly chosen audio from the masterlist \n - **!randomaudio [tag]** specify desired tag in square brackets \n - **!daily** for the randomly chosen audio of the day \n - **!dm** bot will DM you the masterlist \n - **!masterlist** \n - **!schedule** audio posting schedule \n - **!lives** info about live recordings \n - **!socials** \n - **!balatro** for daily seed"
         command_embed = discord.Embed(title = "Card Catalog Bot Commands",description=commands)
         await message.channel.send(embed=command_embed)
 

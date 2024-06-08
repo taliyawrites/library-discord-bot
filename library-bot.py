@@ -231,7 +231,8 @@ async def on_message(message):
                        description="masterlist of all of Vel's audios!")
         await message.author.send(embed=embed)
         # delete the user's message requesting the DM 
-        await message.delete()
+        if not isinstance(message.channel, discord.DMChannel):
+            await message.delete()
 
 
     if message.content.startswith('!randomaudio'):

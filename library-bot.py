@@ -252,20 +252,6 @@ async def on_message(message):
             await message.channel.send(f"Here's a random audio!")
             await message.channel.send(embed=audio.discord_post())
 
-    if message.content.startswith('!randomaudio'):
-        tag = get_tag(message.content)
-        if tag is not None:
-            audio = random_audio(audio_choices,tag)
-            if audio is not None:
-                await message.channel.send(f"Here's a random audio with the tag [{tag}]!")
-                await message.channel.send(embed=audio.discord_post())
-            else:
-                await message.channel.send("No audios with the tag [" + tag + "] were found")
-        else:
-            audio =random_audio(audio_choices)
-            await message.channel.send(f"Here's a random audio!")
-            await message.channel.send(embed=audio.discord_post())
-
 
     if message.content.startswith('!daily'):
         await message.channel.send("Here's a link to the audio of the day!")

@@ -273,7 +273,7 @@ async def on_message(message):
         greet = True
 
     if message.content.startswith('!command'):
-        commands = "- **!randomaudio** randomly chosen audio from the masterlist \n - **!randomaudio [tag]** specify desired tag in square brackets \n - **!daily** for the randomly chosen audio of the day \n - **!dm** bot will DM you the masterlist \n - **!masterlist** \n - **!schedule** audio posting schedule \n - **!lives** info about live recordings \n - **!socials** \n - **!balatro** for daily seed"
+        commands = "    - **!randomaudio** randomly chosen audio from the masterlist \n - **!randomaudio [tag]** specify desired tag in square brackets \n - **!daily** for the randomly chosen audio of the day \n - **!dm** bot will DM you the masterlist \n - **!masterlist** \n - **!schedule** audio posting schedule \n - **!lives** info about live recordings \n - **!socials** \n - **!balatro** for daily seed"
         command_embed = discord.Embed(title = "Card Catalog Bot Commands",description=commands)
         await message.channel.send(embed=command_embed)
 

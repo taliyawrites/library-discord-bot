@@ -29,11 +29,9 @@ MINUTE = 0
 greet = False
 report = True
 
-
 intents = discord.Intents.default()
 intents.message_content = True
 intents.members = True
-
 
 client = discord.Client(intents=intents)
 
@@ -94,7 +92,6 @@ class Audio:
         date = audiodate[0] + audiodate[1]*12
         return (now - date)
 
-
     def series(self):
         for entry in self.parsed_data():
             if entry[0]=='Series Name (if applicable)':
@@ -130,7 +127,8 @@ class Audio:
 
 
 
-
+# extracts tag from !randomaudio request 
+# works regardless of whether or not square brackets were used
 def get_tag(message):
     msg = message.strip()
     tag = msg[13:]
@@ -212,6 +210,9 @@ async def setup_hook():
 
 
 
+
+# ON MESSSAGE COMMANDS
+
 @client.event
 async def on_message(message):
     if message.author == client.user:
@@ -282,13 +283,15 @@ async def on_message(message):
         await message.channel.send(embed=link_embed)
 
 
+    # turns on new member DMs
     if message.content.startswith('!greet'):
         greet = True
 
+    # turns off reports of new member DMs (since no other way to know they're sent)
     if message.content.startswith('!silence'):
         report = False
 
-
+    # list all bot commands
     if message.content.startswith('!allcommands'):
         commands = "- `!randomaudio` randomly chosen audio from the masterlist \n- `!randomaudio [tag]` random audio with the specified desired tag \n- `!daily` for the randomly chosen audio of the day \n- `!dm` bot will privately DM you the masterlist \n- `!masterlist` link to the masterlist \n- `!schedule` audio posting schedule \n- `!lives` info about live recordings \n- `!socials` links to all of Vel's social media accounts \n- `!balatro` for daily seed"
         command_embed = discord.Embed(title = "Card Catalog Bot Commands",description=commands)
@@ -297,12 +300,21 @@ async def on_message(message):
 
 
 
+
+
+
+
+# DAILY LOOPING TASKS
+
+
+# extract list from text file
 def read_from_file(filename):
     f = open(filename)
     lines = f.read().splitlines()
     f.close()
     return lines
 
+# save list to text file
 def save_to_file(filename, list):
     padded = []
     for x in list:
@@ -315,8 +327,8 @@ def save_to_file(filename, list):
 
 
 
-
-
+# choose random audio from list of eligible options
+# ensures choice not in the recent list (imported from file)
 def choose_next(options):
     recent = read_from_file(AUDIOS_FILENAME)
     next_one = random.choice(options)
@@ -326,11 +338,13 @@ def choose_next(options):
         next_one = random.choice(options)
         breaker += 1
 
+    # add new choice to recent list and save to file
     recent.append(next_one.name())
     recent.pop(0)
     
     save_to_file(AUDIOS_FILENAME,recent)
     return next_one
+
 
 def audio_of_the_day():
     # sync with airtable data to pull any masterlist updates
@@ -339,6 +353,7 @@ def audio_of_the_day():
 
     daily_audio_options = []
     for audio in audio_choices:
+        # ensure audio wasn't posted in the past four months
         if audio.age() > 4:
             daily_audio_options.append(audio)  
 
@@ -348,8 +363,6 @@ def audio_of_the_day():
 @tasks.loop(minutes = 1)
 async def announce_daily_audio():
     if datetime.datetime.now().hour == HOUR and datetime.datetime.now().minute == MINUTE:
-    #     print("starting")
-    # else:
         guild = client.get_guild(GUILD)
         channel = client.get_channel(GENERAL)
 
@@ -363,7 +376,7 @@ async def announce_daily_audio():
 
 
 
-
+# choose random winner not in the recent list (imported from file)
 def choose_next_winner(options):
     recent = read_from_file(WINNERS_FILENAME)
     next_one = random.choice(options)
@@ -373,6 +386,7 @@ def choose_next_winner(options):
         next_one = random.choice(options)
         breaker += 1
 
+    # add new choice to recent list and save to file
     recent.append(next_one.name)
     recent.pop(0)
 
@@ -383,23 +397,22 @@ def choose_next_winner(options):
 @tasks.loop(minutes = 1)
 async def choose_good_girl():
     if datetime.datetime.now().hour == HOUR and datetime.datetime.now().minute == MINUTE:
-    #     print("starting")
-    # else:
         guild = client.get_guild(GUILD)
         channel = client.get_channel(GENERAL)
         good_girl_role = guild.get_role(WINNER_ROLE)
 
         await asyncio.sleep(5)
         for member in good_girl_role.members:
+            # remove good girl role from yesterday's winner
             await member.remove_roles(good_girl_role)
 
+        # choose new random winner for the day
         options = guild.get_role(OPTIONS_ROLE).members
         winner = choose_next_winner(options)
 
+        # send message and assign good girl role to winner
         await channel.send(f'{winner.mention} is the good girl of the day!')
         await winner.add_roles(good_girl_role)
-
-
 
 
 
@@ -407,8 +420,6 @@ async def choose_good_girl():
 @tasks.loop(minutes = 1)
 async def daily_balatro():
     if datetime.datetime.now().hour == HOUR and datetime.datetime.now().minute == MINUTE:
-    #     print("starting")
-    # else:
         global random_seed
         random_seed = ''.join(random.choices(string.ascii_uppercase+string.digits, k=8))
 
@@ -417,6 +428,8 @@ async def daily_balatro():
 
 
 
+
+# ON NEW MEMBER JOIN
 
 @client.event
 async def on_member_join(member):
@@ -434,6 +447,6 @@ async def on_member_join(member):
 
 
 
-
+# RUN BOT
 
 client.run(TOKEN)

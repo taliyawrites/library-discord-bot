@@ -216,7 +216,7 @@ async def setup_hook():
         daily_balatro.start()
 
     # read schedule data from file
-    fetch_data(UPDATING_INFO_FILENAME)
+    fetch_data()
 
 
 

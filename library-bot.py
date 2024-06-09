@@ -21,13 +21,13 @@ airtable_api = Api(os.getenv('AIRTABLE_TOKEN'))
 
 WINNERS_FILENAME = "recentwinners.txt"
 AUDIOS_FILENAME = "recentaudios.txt"
-# UPDATING_INFO_FILENAME = "embedcontent.txt"
 
 # run daily tasks at 1pm eastern time (6pm UTC+1)
 HOUR = 18
 MINUTE = 0
 
 greet = False
+report = True
 
 
 intents = discord.Intents.default()
@@ -178,13 +178,6 @@ def import_airtable_data():
     return allowed
 
 
-# def fetch_data():
-#     f = open(UPDATING_INFO_FILENAME)
-#     lines = f.read().splitlines()
-#     f.close()
-#     global socials_text, schedule_text, lives_text
-#     socials_text, schedule_text, lives_text = lines[0], lines[1], lines[2]
-
 
 
 @client.event
@@ -214,9 +207,6 @@ async def setup_hook():
         choose_good_girl.start()
     if not daily_balatro.is_running():
         daily_balatro.start()
-
-    # # read schedule data from file
-    # fetch_data()
 
 
 
@@ -276,31 +266,27 @@ async def on_message(message):
 
     if message.content.startswith('!schedule'):
         # schedule = "Sunday 4:30PM EST: Private Library Release \n Monday 4:30PM EST: Reddit GWA Release \n Wednesday 6:30PM EST: Library Card Release \n Every other Thursday 4:30PM EST: Reddit GWA Release \n Friday 6:30PM EST: Book Club Release"
-        schedule_text = "Sunday 4:30PM EST (<t:1716755400:t>): Private Library Release \n Monday 4:30PM EST (<t:1716841800:t>): Reddit GWA Release \n Wednesday 6:30PM EST (<t:1717021800:t>): Library Card Release \n Every other Thursday 4:30PM EST (<t:1717101000:t>): Reddit GWA Release \n Friday 6:30PM EST (<t:1717194600:t>): Book Club Release"
-        schedule_embed = discord.Embed(title = "Vel's Posting Schedule",description=schedule_text)
+        schedule = "Sunday 4:30PM EST (<t:1716755400:t>): Private Library Release \n Monday 4:30PM EST (<t:1716841800:t>): Reddit GWA Release \n Wednesday 6:30PM EST (<t:1717021800:t>): Library Card Release \n Every other Thursday 4:30PM EST (<t:1717101000:t>): Reddit GWA Release \n Friday 6:30PM EST (<t:1717194600:t>): Book Club Release"
+        schedule_embed = discord.Embed(title = "Vel's Posting Schedule",description=schedule)
         await message.channel.send(embed=schedule_embed)
 
 
     if message.content.startswith('!live'):
-        lives_text = "Vel does live audio recordings here on discord every Sunday at 7:30PM EST (<t:1716766200:t>)!"
-        await message.channel.send(lives_text)
+        await message.channel.send("Vel does live audio recordings here on discord every Sunday at 7:30PM EST (<t:1716766200:t>)!")
 
 
     if message.content.startswith('!social'):
         # await message.channel.send("here are links to all of Vel's socials")
-        socials_text = "[twitter](https://x.com/VelsLibrary) \n [reddit](https://www.reddit.com/user/VelsLibrary/) \n [twitch](https://www.twitch.tv/velslibrary) \n [pornhub](https://www.pornhub.com/model/velslibrary) \n [youtube](https://www.youtube.com/@VelsLibrary)"
-        link_embed = discord.Embed(title = "Vel's Socials",description=socials_text)
+        links = "[twitter](https://x.com/VelsLibrary) \n [reddit](https://www.reddit.com/user/VelsLibrary/) \n [twitch](https://www.twitch.tv/velslibrary) \n [pornhub](https://www.pornhub.com/model/velslibrary) \n [youtube](https://www.youtube.com/@VelsLibrary)"
+        link_embed = discord.Embed(title = "Vel's Socials",description=links)
         await message.channel.send(embed=link_embed)
 
 
     if message.content.startswith('!greet'):
         greet = True
 
-    # if message.content.startswith('!sync'):
-    #     fetch_data()
-    #     print("data updated")
-    #     print(schedule_text)
-
+    if message.content.startswith('!silence'):
+        report = False
 
 
     if message.content.startswith('!allcommands'):
@@ -441,6 +427,8 @@ async def on_member_join(member):
                        url="https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr",
                        description="masterlist of all of Vel's audios!")
         await member.send(embed=embed)
+        if report:
+            print('new member join message sent')
 
 
 
@@ -449,4 +437,3 @@ async def on_member_join(member):
 
 
 client.run(TOKEN)
-

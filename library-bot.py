@@ -183,7 +183,7 @@ def fetch_data():
     lines = f.read().splitlines()
     f.close()
     global socials_text, schedule_text, lives_text
-    socials_text, schedule_text, lives_text = infolines[0], infolines[1], infolines[2]
+    socials_text, schedule_text, lives_text = lines[0], lines[1], lines[2]
 
 
 

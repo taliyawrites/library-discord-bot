@@ -299,6 +299,7 @@ async def on_message(message):
     if message.content.startswith('!sync'):
         fetch_data()
         print("data updated")
+        print(schedule_text)
 
 
 

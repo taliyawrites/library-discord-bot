@@ -291,10 +291,10 @@ async def on_message(message):
     if msg.startswith('!goodgirl'):
         await message.channel.send(f"The good girl of the day is {good_girl}!")
         
-        guild = client.get_guild(GUILD)
-        role_channel = guild.get_channel("<id:customize>")
+        # guild = client.get_guild(GUILD)
+        # role_channel = guild.get_channel("<id:customize>")
 
-        await message.channel.send(f"To be eligible to be randomly chosen as the good girl of the day, assign yourself the 'I wanna be a good girl role' in {role_channel.mention}")
+        await message.channel.send(f"To be eligible to be randomly chosen as the good girl of the day, assign yourself the 'I wanna be a good girl role' in <id:customize>")
 
 
 

@@ -26,8 +26,6 @@ AUDIOS_FILENAME = "recentaudios.txt"
 HOUR = 18
 MINUTE = 0
 
-global report
-report = True
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -199,6 +197,7 @@ async def setup_hook():
     random_seed = ''.join(random.choices(string.ascii_uppercase+string.digits, k=8))
 
     global good_girl
+    good_girl = "Vel's Library"
 
     # set all daily tasks running
     if not announce_daily_audio.is_running():
@@ -217,18 +216,22 @@ async def setup_hook():
 
 @client.event
 async def on_message(message):
+
     if message.author == client.user:
         return
 
+    # remove case-sensitivity
+    msg = message.content.lower()
 
-    if message.content.startswith('!masterlist'):
+
+    if msg.startswith('!masterlist'):
         embed = discord.Embed(title="Vel's Library Masterlist",
                        url="https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr",
                        description="masterlist of all of Vel's audios!")
         await message.channel.send(embed=embed)
 
 
-    if message.content.startswith('!dm'):
+    if msg.startswith('!dm'):
         await message.author.send("Here's a link to the masterlist!")
         embed = discord.Embed(title="Vel's Library Masterlist",
                        url="https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr",
@@ -239,12 +242,12 @@ async def on_message(message):
             await message.delete()
 
 
-    if message.content.startswith('!randomaudio'):
-        msg = message.content
+    if msg.startswith('!randomaudio'):
+        # msg = message.content
         # # checking to see if the user specified a tag, use if leading != 0
         # leading, trailing = 1+msg.find('['), msg.find(']')
         # tag = msg[leading:trailing]
-        tag = get_tag(message.content)
+        tag = get_tag(msg)
         if tag is not None:
             audio = random_audio(audio_choices,tag)
             if audio is not None:
@@ -258,47 +261,50 @@ async def on_message(message):
             await message.channel.send(embed=audio.discord_post())
 
 
-    if message.content.startswith('!daily'):
+    if msg.startswith('!daily'):
         await message.channel.send("Here's a link to the audio of the day!")
         await message.channel.send(embed=daily_audio.discord_post())
 
 
-    if message.content.startswith('!balatro'):
+    if msg.startswith('!balatro'):
         await message.channel.send(f"The Balatro seed of the day is: {random_seed}")
 
 
-    if message.content.startswith('!schedule'):
+    if msg.startswith('!schedule'):
         # schedule = "Sunday 4:30PM EST: Private Library Release \n Monday 4:30PM EST: Reddit GWA Release \n Wednesday 6:30PM EST: Library Card Release \n Every other Thursday 4:30PM EST: Reddit GWA Release \n Friday 6:30PM EST: Book Club Release"
         schedule = "Sunday 4:30PM EST (<t:1716755400:t>): Private Library Release \n Monday 4:30PM EST (<t:1716841800:t>): Reddit GWA Release \n Wednesday 6:30PM EST (<t:1717021800:t>): Library Card Release \n Every other Thursday 4:30PM EST (<t:1717101000:t>): Reddit GWA Release \n Friday 6:30PM EST (<t:1717194600:t>): Book Club Release"
         schedule_embed = discord.Embed(title = "Vel's Posting Schedule",description=schedule)
         await message.channel.send(embed=schedule_embed)
 
 
-    if message.content.startswith('!live'):
+    if msg.startswith('!live'):
         await message.channel.send("Vel does live audio recordings here on discord every Sunday at 7:30PM EST (<t:1716766200:t>)!")
 
 
-    if message.content.startswith('!social'):
+    if msg.startswith('!social'):
         # await message.channel.send("here are links to all of Vel's socials")
         links = "[twitter](https://x.com/VelsLibrary) \n [reddit](https://www.reddit.com/user/VelsLibrary/) \n [twitch](https://www.twitch.tv/velslibrary) \n [pornhub](https://www.pornhub.com/model/velslibrary) \n [youtube](https://www.youtube.com/@VelsLibrary)"
         link_embed = discord.Embed(title = "Vel's Socials",description=links)
         await message.channel.send(embed=link_embed)
 
 
+    if msg.startswith('!goodgirl'):
+        await message.channel.send(f"The good girl of the day is {good_girl}!")
+        
+        guild = client.get_guild(GUILD)
+        role_channel = guild.fetch_channel("id:customize")
+
+        await message.channel.send(f"To be eligible to be randomly chosen as the good girl of the day, assign yourself the 'I wanna be a good girl role' in {role_channel.mention}")
+
+
+
     # list all bot commands
-    if message.content.startswith('!allcommands'):
-        commands = "- `!randomaudio` randomly chosen audio from the masterlist \n- `!randomaudio [tag]` random audio with the specified desired tag \n- `!daily` for the randomly chosen audio of the day \n- `!dm` bot will privately DM you the masterlist \n- `!masterlist` link to the masterlist \n- `!schedule` audio posting schedule \n- `!lives` info about live recordings \n- `!socials` links to all of Vel's social media accounts \n- `!balatro` for daily seed"
+    if msg.startswith('!allcommands'):
+        commands = "- `!randomaudio` randomly chosen audio from the masterlist \n- `!randomaudio [tag]` random audio with the specified desired tag \n- `!daily` for the randomly chosen audio of the day \n- `!dm` bot will privately DM you the masterlist \n- `!masterlist` link to the masterlist \n- `!schedule` audio posting schedule \n- `!lives` info about live recordings \n- `!socials` links to all of Vel's social media accounts \n- `!goodgirl` to sign up for good girl role \n- `!balatro` for daily seed"
         command_embed = discord.Embed(title = "Card Catalog Bot Commands",description=commands)
         await message.channel.send(embed=command_embed)
 
 
-    if message.content.startswith('!report'):
-        global report
-        report = True
-
-    if message.content.startswith('!silence'):
-        global report
-        report = False
 
 
 
@@ -441,8 +447,7 @@ async def on_member_join(member):
                    url="https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr",
                    description="masterlist of all of Vel's audios!")
     await member.send(embed=embed)
-    if report:
-        print('new member join message sent')
+    print('new member join message sent')
 
 
 

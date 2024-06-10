@@ -26,6 +26,8 @@ AUDIOS_FILENAME = "recentaudios.txt"
 HOUR = 18
 MINUTE = 0
 
+global report
+report = True
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -291,6 +293,7 @@ async def on_message(message):
 
 
     if message.content.startswith('!report'):
+        global report
         report = True
 
     if message.content.startswith('!silence'):
@@ -433,7 +436,7 @@ async def daily_balatro():
 
 @client.event
 async def on_member_join(member):
-    await member.send("Welcome to the Library! Here's a link to the masterlist of all of Vel's audios. You can search and filter the masterlist for your favorite tags, or send a message with the command *!randomaudio [insert desired tag here]* to have a random audio chosen for you.")
+    await member.send("Welcome to the Library! Here's a link to the masterlist of all of Vel's audios. You can search and filter the masterlist for your favorite tags, or send a message with the command `!randomaudio [insert desired tag here]` to have a random audio selected for you!")
     embed = discord.Embed(title="Vel's Library Masterlist",
                    url="https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr",
                    description="masterlist of all of Vel's audios!")

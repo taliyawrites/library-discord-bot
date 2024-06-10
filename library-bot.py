@@ -232,7 +232,7 @@ async def on_message(message):
 
 
     if msg.startswith('!dm'):
-        await message.author.send("Here's a link to the masterlist!")
+        await message.author.send("Here's a link to the masterlist! Send the message `!allcommands` to learn how to use the bot to find audios and more.")
         embed = discord.Embed(title="Vel's Library Masterlist",
                        url="https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr",
                        description="masterlist of all of Vel's audios!")
@@ -290,7 +290,6 @@ async def on_message(message):
 
     if msg.startswith('!goodgirl'):
         await message.channel.send(f"To be eligible to be selected as the random good girl of the day, assign yourself the 'I wanna be a good girl role' in <id:customize>. Today's good girl is {good_girl}!")
-
 
 
     # list all bot commands

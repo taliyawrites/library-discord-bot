@@ -26,8 +26,6 @@ AUDIOS_FILENAME = "recentaudios.txt"
 HOUR = 18
 MINUTE = 0
 
-greet = False
-report = True
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -198,6 +196,8 @@ async def setup_hook():
     global random_seed
     random_seed = ''.join(random.choices(string.ascii_uppercase+string.digits, k=8))
 
+    global good_girl
+
     # set all daily tasks running
     if not announce_daily_audio.is_running():
         announce_daily_audio.start()
@@ -283,14 +283,6 @@ async def on_message(message):
         await message.channel.send(embed=link_embed)
 
 
-    # turns on new member DMs
-    if message.content.startswith('!greet'):
-        greet = True
-
-    # turns off reports of new member DMs (since no other way to know they're sent)
-    if message.content.startswith('!silence'):
-        report = False
-
     # list all bot commands
     if message.content.startswith('!allcommands'):
         commands = "- `!randomaudio` randomly chosen audio from the masterlist \n- `!randomaudio [tag]` random audio with the specified desired tag \n- `!daily` for the randomly chosen audio of the day \n- `!dm` bot will privately DM you the masterlist \n- `!masterlist` link to the masterlist \n- `!schedule` audio posting schedule \n- `!lives` info about live recordings \n- `!socials` links to all of Vel's social media accounts \n- `!balatro` for daily seed"
@@ -298,7 +290,12 @@ async def on_message(message):
         await message.channel.send(embed=command_embed)
 
 
+    if message.content.startswith('!report'):
+        report = True
 
+    if message.content.startswith('!silence'):
+        global report
+        report = False
 
 
 
@@ -410,6 +407,9 @@ async def choose_good_girl():
         options = guild.get_role(OPTIONS_ROLE).members
         winner = choose_next_winner(options)
 
+        global good_girl 
+        good_girl = winner.display_name
+
         # send message and assign good girl role to winner
         await channel.send(f'{winner.mention} is the good girl of the day!')
         await winner.add_roles(good_girl_role)
@@ -433,15 +433,13 @@ async def daily_balatro():
 
 @client.event
 async def on_member_join(member):
-    # turn this on with !greet, just coded in so it doesn't DM anyone who joins before the bot is announced publicly 
-    if greet:
-        await member.send("Welcome to the Library! Here's a link to the masterlist of all of Vel's audios. You can search and filter the masterlist for your favorite tags, or send a message with the command *!randomaudio [insert desired tag here]* to have a random audio chosen for you.")
-        embed = discord.Embed(title="Vel's Library Masterlist",
-                       url="https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr",
-                       description="masterlist of all of Vel's audios!")
-        await member.send(embed=embed)
-        if report:
-            print('new member join message sent')
+    await member.send("Welcome to the Library! Here's a link to the masterlist of all of Vel's audios. You can search and filter the masterlist for your favorite tags, or send a message with the command *!randomaudio [insert desired tag here]* to have a random audio chosen for you.")
+    embed = discord.Embed(title="Vel's Library Masterlist",
+                   url="https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr",
+                   description="masterlist of all of Vel's audios!")
+    await member.send(embed=embed)
+    if report:
+        print('new member join message sent')
 
 
 

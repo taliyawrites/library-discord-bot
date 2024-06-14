@@ -213,7 +213,9 @@ async def setup_hook():
     audio_choices = import_airtable_data()
 
     global daily_audio
-    daily_audio = currentdaily
+    for audio in audio_choices:
+        if audio.name() == currentdaily:
+            daily_audio = audio
 
     global random_seed
     random_seed = ''.join(random.choices(string.ascii_uppercase+string.digits, k=8))

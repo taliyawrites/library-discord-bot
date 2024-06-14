@@ -173,6 +173,30 @@ def import_airtable_data():
 
 
 
+# extract list from text file
+def read_from_file(filename):
+    f = open(filename)
+    lines = f.read().splitlines()
+    f.close()
+    return lines
+
+# save list to text file
+def save_to_file(filename, list):
+    padded = []
+    for x in list:
+        padded.append(x + "\n")
+    f = open(filename,"w")
+    for line in padded:
+        f.write(line)
+    f.close()
+    return None
+
+currentwinner = read_from_file(WINNERS_FILENAME)[-1]
+currentdaily = read_from_file(AUDIOS_FILENAME)[-1]
+
+
+
+
 
 @client.event
 async def on_ready():
@@ -189,13 +213,13 @@ async def setup_hook():
     audio_choices = import_airtable_data()
 
     global daily_audio
-    daily_audio = audio_of_the_day()
+    daily_audio = currentdaily
 
     global random_seed
     random_seed = ''.join(random.choices(string.ascii_uppercase+string.digits, k=8))
 
     global good_girl
-    good_girl = "Vel's Library"
+    good_girl = currentwinner
 
     # set all daily tasks running
     if not announce_daily_audio.is_running():
@@ -303,26 +327,6 @@ async def on_message(message):
 
 
 # DAILY LOOPING TASKS
-
-
-# extract list from text file
-def read_from_file(filename):
-    f = open(filename)
-    lines = f.read().splitlines()
-    f.close()
-    return lines
-
-# save list to text file
-def save_to_file(filename, list):
-    padded = []
-    for x in list:
-        padded.append(x + "\n")
-    f = open(filename,"w")
-    for line in padded:
-        f.write(line)
-    f.close()
-    return None
-
 
 
 # choose random audio from list of eligible options

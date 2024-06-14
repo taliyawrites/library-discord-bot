@@ -116,9 +116,7 @@ class Audio:
 
     # exclude certain audios from showing up as a random choice or the audio of the day
     def allowed_choice(self):
-        if 'sfw' in self.tags() or 'behind the scenes' in self.tags():
-            return False
-        elif self.name() == 'A Pool Party Turns Into a Fucking Competition' or self.name() == 'I Brought a Friend to Help Spoil You':
+        if self.name() == 'A Pool Party Turns Into a Fucking Competition' or self.name() == 'I Brought a Friend to Help Spoil You':
             return False
         else:
             return True
@@ -354,7 +352,8 @@ def audio_of_the_day():
     daily_audio_options = []
     for audio in audio_choices:
         # ensure audio wasn't posted in the past four months
-        if audio.age() > 4:
+        nsfw = 'sfw' not in audio.tags() and 'behind the scenes' not in audio.tags()
+        if audio.age() > 4 and nsfw:
             daily_audio_options.append(audio)  
 
     return choose_next(daily_audio_options)

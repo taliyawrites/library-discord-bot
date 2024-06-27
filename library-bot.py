@@ -273,7 +273,7 @@ async def on_message(message):
         # tag = msg[leading:trailing]
         tags = get_tags(msg)
         if tags is not None:
-            audio = random_audio(audio_choices,tag)
+            audio = random_audio(audio_choices,tags)
             string =  '] ['.join(msg[13:])
             if audio is not None:
                 await message.channel.send(f"Here's a random audio tagged [{string}]!")

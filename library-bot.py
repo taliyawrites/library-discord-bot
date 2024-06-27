@@ -125,21 +125,22 @@ class Audio:
 
 # extracts tag from !randomaudio request 
 # works regardless of whether or not square brackets were used
-def get_tag(message):
+def get_tags(message):
     msg = message.strip()
     tag = msg[13:]
     if len(tag) == 0:
         return None
     if tag[0] == '[':
-        return tag[1:-1]
+        tags = tag[1:-1]
+        return tags.split('] [')
     else:
-        return tag
+        return [tag]
 
 # select audios with a specified tag
-def tagged_options(audios, tag):
+def tagged_options(audios, tags):
     options = []
     for audio in audios:
-        if tag in audio.tags():
+        if sorted(list(set(audio.tags()).intersection(tags))) == sorted(tags):
             options.append(audio)
     return options
 
@@ -271,14 +272,15 @@ async def on_message(message):
         # # checking to see if the user specified a tag, use if leading != 0
         # leading, trailing = 1+msg.find('['), msg.find(']')
         # tag = msg[leading:trailing]
-        tag = get_tag(msg)
-        if tag is not None:
+        tags = get_tags(msg)
+        if tags is not None:
+            string =  '] ['.join(msg[13:])
             audio = random_audio(audio_choices,tag)
             if audio is not None:
-                await message.channel.send(f"Here's a random audio with the tag [{tag}]!")
+                await message.channel.send(f"Here's a random audio tagged [{string}]!")
                 await message.channel.send(embed=audio.discord_post())
             else:
-                await message.channel.send("No audios with the tag [" + tag + "] were found")
+                await message.channel.send("No audios tagged [" + string + "] were found")
         else:
             audio =random_audio(audio_choices)
             await message.channel.send(f"Here's a random audio!")
@@ -306,9 +308,8 @@ async def on_message(message):
 
 
     if msg.startswith('!stream'):
-        await message.channel.send("Vel's next twitch stream will be <t:1719171000:F>!")
+        await message.channel.send("Vel streams every other Sunday on twitch. The next twitch stream (ranking GWA tags) will be <t:1719171000:F>!")
 
-    
 
     if msg.startswith('!social'):
         # await message.channel.send("here are links to all of Vel's socials")
@@ -323,7 +324,7 @@ async def on_message(message):
 
     # list all bot commands
     if msg.startswith('!allcommands'):
-        commands = "- `!randomaudio` randomly chosen audio from the masterlist \n- `!randomaudio [tag]` random audio with the specified desired tag \n- `!daily` for the randomly chosen audio of the day \n- `!dm` bot will privately DM you the masterlist \n- `!masterlist` link to the masterlist \n- `!schedule` audio posting schedule \n- `!lives` info about live recordings \n- `!socials` links to all of Vel's social media accounts \n- `!goodgirl` to sign up for good girl role \n- `!stream` for info about next twitch stream \n- `!balatro` for daily seed"
+        commands = "- `!randomaudio` randomly chosen audio from the masterlist \n- `!randomaudio [tag]` random audio with the specified desired tag \n- `!daily` for the randomly chosen audio of the day \n- `!dm` bot will privately DM you the masterlist \n- `!masterlist` link to the masterlist \n- `!schedule` audio posting schedule \n- `!lives` info about live recordings \n- `!socials` links to all of Vel's social media accounts \n- `!goodgirl` to sign up for good girl role \n- `!stream` to learn about next twitch stream \n- `!balatro` for daily seed"
         command_embed = discord.Embed(title = "Card Catalog Bot Commands",description=commands)
         await message.channel.send(embed=command_embed)
 

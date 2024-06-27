@@ -304,7 +304,7 @@ async def on_message(message):
         matches = title_matches(phrase)
         if len(matches) == 0:
             await message.channel.send(f"No audios found")
-        elif len(matches):
+        elif len(matches) == 1:
             audio = matches[0]
             await message.channel.send(embed=audio.discord_post())
         else:

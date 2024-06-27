@@ -301,15 +301,25 @@ async def on_message(message):
 
     if msg.startswith('!titlesearch'):
         phrase = msg[13:]
+        if phrase[0] == '"' or phrase[0] == "'":
+            phrase = phrase[1:-1]
         matches = title_matches(phrase)
+
         if len(matches) == 0:
-            await message.channel.send(f"No audios found")
-        elif len(matches) <= 4:
-            for audio in matches:
-                await message.channel.send(embed=audio.discord_post())
+            await message.channel.send(f'No audios found with title including the phrase "{phrase}."')
+        elif len(matches) == 1:
+            await message.channel.send(embed=matches[0].discord_post())     
         else:
             count = len(matches)
-            await message.channel.send(str(count) + " audios found")
+            await message.channel.send(str(count) + ' matches found for "' + phrase + '."')
+
+            link_string = ""
+            for i in list(range(count)):
+                next = str(i+1) + ". [" + matches[i].name() + "](" + matches[i].link() + ")" + '\n'
+                link_string = link_string + next
+
+            matches_embed = discord.Embed(title = "Matching Results",description=link_string)
+            await message.channel.send(embed = matches_embed)
 
 
 

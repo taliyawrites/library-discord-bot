@@ -123,6 +123,8 @@ class Audio:
 
 
 
+
+
 # extracts tag from !randomaudio request 
 # works regardless of whether or not square brackets were used
 def get_tags(message):
@@ -155,6 +157,16 @@ def random_audio(audios, tag=None):
     else:
         return random.choice(audios)
 
+
+
+
+# search to see if phrase appears in any titles
+def title_matches(phrase):
+    matches = []
+    for audio in audio_choices:
+        if phrase.lower() in audio.name().lower():
+            matches.append(audio)
+    return matches
 
 
 
@@ -286,6 +298,21 @@ async def on_message(message):
             await message.channel.send(embed=audio.discord_post())
 
 
+
+    if msg.startswith('!titlesearch'):
+        phrase = msg[13:]
+        matches = title_matches(phrase)
+        if len(matches) == 0:
+            await message.channel.send(f"No audios found")
+        else if len(matches):
+            audio = matches[0]
+            await message.channel.send(embed=audio.discord_post())
+        else:
+            count = len(matches)
+            await message.channel.send(str(count) + " audios found")
+
+
+
     if msg.startswith('!daily'):
         await message.channel.send("Here's a link to the audio of the day!")
         await message.channel.send(embed=daily_audio.discord_post())
@@ -323,7 +350,7 @@ async def on_message(message):
 
     # list all bot commands
     if msg.startswith('!allcommands'):
-        commands = "- `!randomaudio` randomly chosen audio from the masterlist \n- `!randomaudio [tag] [another tag]` random audio with the specified desired tags \n- `!daily` for the randomly chosen audio of the day \n- `!dm` bot will privately DM you the masterlist \n- `!masterlist` link to the masterlist \n- `!schedule` audio posting schedule \n- `!lives` info about live recordings \n- `!socials` links to all of Vel's social media accounts \n- `!goodgirl` to sign up for good girl role \n- `!stream` to learn about next twitch stream \n- `!balatro` for daily seed"
+        commands = "- `!randomaudio` randomly chosen audio from the masterlist \n- `!randomaudio [tag]` random audio with the specified desired tag(s) \n- `!daily` for the randomly chosen audio of the day \n- `!dm` bot will privately DM you the masterlist \n- `!masterlist` link to the masterlist \n- `!schedule` audio posting schedule \n- `!lives` info about live recordings \n- `!socials` links to all of Vel's social media accounts \n- `!goodgirl` to sign up for good girl role \n- `!stream` to learn about next twitch stream \n- `!balatro` for daily seed"
         command_embed = discord.Embed(title = "Card Catalog Bot Commands",description=commands)
         await message.channel.send(embed=command_embed)
 

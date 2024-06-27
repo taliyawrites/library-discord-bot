@@ -274,7 +274,7 @@ async def on_message(message):
         tags = get_tags(msg)
         if tags is not None:
             audio = random_audio(audio_choices,tags)
-            string =  '] ['.join(msg[13:])
+            string =  '] ['.join(tags)
             if audio is not None:
                 await message.channel.send(f"Here's a random audio tagged [{string}]!")
                 await message.channel.send(embed=audio.discord_post())

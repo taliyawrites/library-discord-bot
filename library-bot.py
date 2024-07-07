@@ -349,7 +349,7 @@ async def on_message(message):
 
 
     if msg.startswith('!stream'):
-        await message.channel.send("Vel streams every other Sunday on twitch. The next twitch stream (bonsai hand cam) will be <t:1720380600:F>!")
+        await message.channel.send("Vel streams every other Sunday on twitch. The next twitch stream (bonsai hand cam) will be <t:1720985400:F>!")
 
 
     if msg.startswith('!social'):
@@ -365,7 +365,7 @@ async def on_message(message):
 
     # list all bot commands
     if msg.startswith('!allcommands'):
-        commands = "- `!randomaudio` randomly chosen audio from the masterlist \n- `!randomaudio [some] [tags]` random audio with these desired tag(s) \n- `!title phrase` for list of audios with specified phrase in title \n- `!daily` for the randomly chosen audio of the day \n- `!dm` bot will privately DM you the masterlist \n- `!masterlist` link to the masterlist \n- `!schedule` audio posting schedule \n- `!lives` info about live recordings \n- `!socials` links to all of Vel's social media accounts \n- `!goodgirl` to sign up for good girl role \n- `!stream` to learn about next twitch stream \n- `!balatro` for daily seed"
+        commands = "- `!randomaudio` randomly chosen audio from the masterlist \n- `!randomaudio [some] [tags]` random audio with these desired tag(s) \n- `!title phrase` for list of audios with specified phrase in title \n- `!daily` for the randomly chosen audio of the day \n- `!dm` bot will privately DM you the masterlist \n- `!masterlist` link to the masterlist \n- `!schedule` audio posting schedule \n- `!lives` info about live recordings \n- `!socials` links to all of Vel's social media accounts \n- `!goodgirl` to sign up for good girl role \n- `!stream` for information about next twitch stream \n- `!balatro` for daily seed"
         command_embed = discord.Embed(title = "Card Catalog Bot Commands",description=commands)
         await message.channel.send(embed=command_embed)
 

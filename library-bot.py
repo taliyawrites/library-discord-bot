@@ -386,7 +386,7 @@ async def on_message(message):
         char_string = ''
         for char in characters:
             char_string = char_string + char + ", "
-        await message.channel.send('Named characters: ' + charstring[:-2])
+        await message.channel.send('Named characters: ' + char_string[:-2])
 
     if msg.startswith('!daily'):
         await message.channel.send("Here's a link to the audio of the day!")

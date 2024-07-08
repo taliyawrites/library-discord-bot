@@ -38,6 +38,7 @@ client = discord.Client(intents=intents)
 
 
 
+
 class Audio:
     def __init__(self, raw_data):
         self.raw_data = raw_data
@@ -89,6 +90,14 @@ class Audio:
         audiodate = self.date()
         date = audiodate[0] + audiodate[1]*12
         return (now - date)
+
+    def date_long(self):
+        for entry in self.parsed_data():
+            if entry[0]=='General Date':
+                datestring = entry[1]
+                datelist = datestring.split('-')
+                date_full = [int(x) for x in datelist]
+        return date_full[0]*365 + date_full[1]*30 + date_full[2]
 
     def series(self):
         for entry in self.parsed_data():
@@ -168,24 +177,27 @@ def random_audio(audios, tag=None):
         return random.choice(audios)
 
 
-
+# sort audios chronologically
+def age_sort(audio):
+    return audio.date_long()
 
 # search to see if phrase appears in any titles
 def title_matches(phrase):
-    matches = []
+    matching = []
     for audio in audio_choices:
         if phrase.lower() in audio.name().lower():
-            matches.append(audio)
-    return matches
-
+            matching.append(audio)
+    matching.sort(key = age_sort)
+    return matching
 
 # search for matching character names
 def character_search(name):
-    matches = []
+    matching = []
     for audio in audio_choices:
         if name.lower() in audio.characters().lower():
-            matches.append(audio)
-    return matches
+            matching.append(audio)
+    matching.sort(key = age_sort)
+    return matching
 
 
 

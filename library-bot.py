@@ -376,7 +376,17 @@ async def on_message(message):
             matches_embed = discord.Embed(title = name.capitalize() + " Audios",description=link_string)
             await message.channel.send(embed = matches_embed)
 
-
+    if msg.startswith('!allcharacters'):
+        character_list = []
+        for audio in audio_choices:
+            if audio.characters() != ''
+                for char in audio.characters().split(', '):
+                    character_list.append(char)
+        characters = list(set(character_list))
+        char_string = ''
+        for char in characters:
+            char_string = char_string + char + ", "
+        await message.channel.send('Named characters: ' + charstring[:-2])
 
     if msg.startswith('!daily'):
         await message.channel.send("Here's a link to the audio of the day!")

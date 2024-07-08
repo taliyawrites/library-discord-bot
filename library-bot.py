@@ -379,7 +379,7 @@ async def on_message(message):
     if msg.startswith('!allcharacters'):
         character_list = []
         for audio in audio_choices:
-            if audio.characters() != ''
+            if audio.characters() != '':
                 for char in audio.characters().split(', '):
                     character_list.append(char)
         characters = list(set(character_list))

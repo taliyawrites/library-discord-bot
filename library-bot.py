@@ -109,6 +109,12 @@ class Audio:
                 return '\n' + entry[1] + '\n \n'
         return ''
 
+    def characters(self):
+        for entry in self.parsed_data():
+            if entry[0]=='Recurring Characters':
+                return entry[1]
+        return ''
+
     # format a post for the audio
     def discord_post(self):
         post_body = self.tag_string() + self.series() + self.description() + self.writer()
@@ -171,6 +177,19 @@ def title_matches(phrase):
         if phrase.lower() in audio.name().lower():
             matches.append(audio)
     return matches
+
+
+# search for matching character names
+def character_search(name):
+    matches = []
+    for audio in audio_choices:
+        if name.lower() in audio.characters().lower():
+            matches.append(audio)
+    return matches
+
+
+
+
 
 
 
@@ -327,6 +346,25 @@ async def on_message(message):
             await message.channel.send(embed = matches_embed)
 
 
+    if msg.startswith('!character'):
+        name = msg[11:].strip()
+        matches = character_search(name)
+
+        if len(matches) == 0:
+            await message.channel.send(f'No audios found with character {name.capitalize()}.')
+        elif len(matches) == 1:
+            await message.channel.send(embed=matches[0].discord_post())     
+        else:
+            count = len(matches)
+            link_string = ""
+            for i in list(range(count)):
+                next = str(i+1) + ". [" + matches[i].name() + "](" + matches[i].link() + ")" + '\n'
+                link_string = link_string + next
+
+            matches_embed = discord.Embed(title = name.capitalize() + " Results",description=link_string)
+            await message.channel.send(embed = matches_embed)
+
+
 
     if msg.startswith('!daily'):
         await message.channel.send("Here's a link to the audio of the day!")
@@ -365,7 +403,7 @@ async def on_message(message):
 
     # list all bot commands
     if msg.startswith('!allcommands'):
-        commands = "- `!randomaudio` randomly chosen audio from the masterlist \n- `!randomaudio [some] [tags]` random audio with these desired tag(s) \n- `!title phrase` for list of audios with specified phrase in title \n- `!daily` for the randomly chosen audio of the day \n- `!dm` bot will privately DM you the masterlist \n- `!masterlist` link to the masterlist \n- `!schedule` audio posting schedule \n- `!lives` info about live recordings \n- `!socials` links to all of Vel's social media accounts \n- `!goodgirl` to sign up for good girl role \n- `!stream` for information about next twitch stream \n- `!balatro` for daily seed"
+        commands = "- `!randomaudio` randomly chosen audio from the masterlist \n- `!randomaudio [some] [tags]` random audio with these desired tag(s) \n- `!title phrase` for list of audios with specified phrase in title \n- `!daily` for the randomly chosen audio of the day \n- `!dm` bot will privately DM you the masterlist \n- `!masterlist` link to the masterlist \n- `!schedule` audio posting schedule \n- `!lives` info about live recordings \n- `!socials` links to all of Vel's social media accounts \n- `!goodgirl` to sign up for good girl role \n- `!stream` for information about the next twitch stream \n- `!balatro` for daily seed"
         command_embed = discord.Embed(title = "Card Catalog Bot Commands",description=commands)
         await message.channel.send(embed=command_embed)
 

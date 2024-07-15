@@ -412,14 +412,14 @@ async def on_message(message):
     #     await message.channel.send("Vel streams every other Sunday on twitch. The next twitch stream (competition with Clean) will be <t:1721590200:F>!")
 
     if msg.startswith('!stream'):
-        stream_info = "Vel streams every other Sunday on [Twitch](https://www.twitch.tv/velslibrary). The next twitch stream (competition with Clean) will be <t:1721590200:F>!"
-        stream_embed = discord.Embed(title = "Vel's Livestreams", description = stream_info, url = "https://www.twitch.tv/velslibrary")
+        stream_info = "Vel streams live every other Sunday on [Twitch](https://www.twitch.tv/velslibrary). The next stream (competition with Clean) will be <t:1721590200:F>!"
+        stream_embed = discord.Embed(title = "Vel's Livestreams", description = stream_info)
         await message.channel.send(embed = stream_embed)
 
 
     if msg.startswith('!social'):
         # await message.channel.send("here are links to all of Vel's socials")
-        links = "- [Twitter](https://x.com/VelsLibrary) \n - [Reddit](https://www.reddit.com/user/VelsLibrary/) \n - [Twitch](https://www.twitch.tv/velslibrary) \n - [Pornhub](https://www.pornhub.com/model/velslibrary) \n - [Youtube](https://www.youtube.com/@VelsLibrary)"
+        links = "- [Twitter](https://x.com/VelsLibrary) \n- [Reddit](https://www.reddit.com/user/VelsLibrary/) \n- [Twitch](https://www.twitch.tv/velslibrary) \n- [Pornhub](https://www.pornhub.com/model/velslibrary) \n- [Youtube](https://www.youtube.com/@VelsLibrary)"
         link_embed = discord.Embed(title = "Vel's Socials",description=links)
         await message.channel.send(embed=link_embed)
 

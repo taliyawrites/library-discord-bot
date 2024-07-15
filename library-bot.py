@@ -413,7 +413,7 @@ async def on_message(message):
 
     if msg.startswith('!stream'):
         stream_info = "Vel streams every other Sunday on [Twitch](https://www.twitch.tv/velslibrary). The next twitch stream (competition with Clean) will be <t:1721590200:F>!"
-        stream_embed = discord.Embed(title = "Vel's Livestreams", description = stream_info, url = https://www.twitch.tv/velslibrary)
+        stream_embed = discord.Embed(title = "Vel's Livestreams", description = stream_info, url = "https://www.twitch.tv/velslibrary")
         await message.channel.send(embed = stream_embed)
 
 

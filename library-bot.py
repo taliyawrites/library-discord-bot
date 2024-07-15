@@ -408,13 +408,16 @@ async def on_message(message):
         await message.channel.send("Vel does live audio recordings here on discord every Sunday at 7:30PM EST (<t:1716766200:t>)!")
 
 
-    # if msg.startswith('!stream'):
-    #     await message.channel.send("Vel streams every other Sunday on twitch. The next twitch stream (competition with Clean) will be <t:1721590200:F>!")
-
     if msg.startswith('!stream'):
         stream_info = "Vel streams live every other Sunday on [Twitch](https://www.twitch.tv/velslibrary). The next stream (competition with Clean) will be <t:1721590200:F>!"
         stream_embed = discord.Embed(title = "Vel's Livestreams", description = stream_info)
         await message.channel.send(embed = stream_embed)
+
+
+    if msg.startswith('!merch'):
+        merch_info = "Merch goes live for patrons after stream on July 21st! Items will be available for purchase for two weeks. Merch drops will be seasonal, so this is your only chance to get these!"
+        merch_embed = discord.Embed(title = "Vel's Merch!", description = merch_info, url = "https://vel-1-shop.fourthwall.com/")
+        await message.channel.send(embed = merch_embed)
 
 
     if msg.startswith('!social'):

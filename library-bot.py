@@ -409,13 +409,13 @@ async def on_message(message):
 
 
     if msg.startswith('!stream'):
-        stream_info = 'Vel streams live every other Sunday on [Twitch](https://www.twitch.tv/velslibrary). The next stream, "How Vel Does Vel Know Vel?" (quizzing the librarian himself on how well he knows his own content), will be <t:1722195000:F>!'
+        stream_info = 'Vel streams live every other Sunday on [Twitch](https://www.twitch.tv/velslibrary). The next stream, "How Vel Does Vel Know Vel?" (quizzing the librarian himself on how well he knows his own content), will be <t:1722799800:F>!'
         stream_embed = discord.Embed(title = "Vel's Livestreams", description = stream_info, url = "https://www.twitch.tv/velslibrary")
         await message.channel.send(embed = stream_embed)
 
 
     if msg.startswith('!merch'):
-        merch_info = "Merch is now live for patrons to purchase! To access the store, use password ||goodgirl||. These items will be available until Sunday, August 4th. Merch drops are seasonal, so this is your only chance to get these!"
+        merch_info = "Merch is now live for patrons to purchase! To access the store, use password ||goodgirl||. These items will be available until Saturday, August 3rd. Merch drops are seasonal, so this is your only chance to get these!"
         merch_embed = discord.Embed(title = "Vel's Library Merch, Summer 2024", description = merch_info, url = "https://vel-1-shop.fourthwall.com/")
         await message.channel.send(embed = merch_embed)
 

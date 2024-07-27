@@ -415,7 +415,7 @@ async def on_message(message):
 
 
     if msg.startswith('!merch'):
-        merch_info = "Merch is now live for patrons to purchase! To access the store, use password ||goodgirl||. These items will be available until Saturday, August 3rd. Merch drops are seasonal, so this is your only chance to get these!"
+        merch_info = "Merch is now live for patrons to purchase! To access the store, use password ||goodgirl||. These items will be available until <t:1722830340:F>. Merch drops are seasonal, so this is your only chance to get these!"
         merch_embed = discord.Embed(title = "Vel's Library Merch, Summer 2024", description = merch_info, url = "https://vel-1-shop.fourthwall.com/")
         await message.channel.send(embed = merch_embed)
 
@@ -438,6 +438,11 @@ async def on_message(message):
         await message.channel.send(embed=command_embed)
 
 
+    if msg.startswith('!forcerefresh'):
+        # sync with airtable data to pull any masterlist updates
+        global audio_choices
+        audio_choices = import_airtable_data()
+        await message.author.send("Masterlist data sync'ed with Airtable updates.")
 
 
 

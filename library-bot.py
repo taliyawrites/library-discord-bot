@@ -440,7 +440,6 @@ async def on_message(message):
 
     if msg.startswith('!forcerefresh'):
         # sync with airtable data to pull any masterlist updates
-        global audio_choices
         audio_choices = import_airtable_data()
         await message.author.send("Masterlist data sync'ed with Airtable updates.")
 

@@ -295,6 +295,7 @@ async def on_message(message):
     # remove case-sensitivity
     msg = message.content.lower()
 
+    global audio_choices
 
     if msg.startswith('!masterlist'):
         embed = discord.Embed(title="Vel's Library Masterlist",
@@ -437,13 +438,10 @@ async def on_message(message):
         command_embed = discord.Embed(title = "Card Catalog Bot Commands",description=commands)
         await message.channel.send(embed=command_embed)
 
-
     if msg.startswith('!forcerefresh'):
         # sync with airtable data to pull any masterlist updates
         audio_choices = import_airtable_data()
         await message.author.send("Masterlist data sync'ed with Airtable updates.")
-
-
 
 
 

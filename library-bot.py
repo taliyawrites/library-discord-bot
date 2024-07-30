@@ -163,14 +163,14 @@ def tagged_options(audios, tags):
     for audio in audios:
         if sorted(list(set(audio.tags()).intersection(tags))) == sorted(tags):
             options.append(audio)
-    if len(options) == 0:
-        for audio in audios:
-            tag_count = 0
-            for tag in tags:
-                if tag in audio.tag_string():
-                    tag_count = tag_count + 1
-            if tag_count == len(tags):
-                options.append(audio)
+    # if len(options) == 0:
+    #     for audio in audios:
+    #         tag_count = 0
+    #         for tag in tags:
+    #             if tag in audio.tag_string():
+    #                 tag_count = tag_count + 1
+    #         if tag_count == len(tags):
+    #             options.append(audio)
     return options
 
 # choose a random audio, optional argument to specify a tag 

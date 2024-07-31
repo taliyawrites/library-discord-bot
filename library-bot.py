@@ -424,7 +424,7 @@ async def on_message(message):
 
 
     if msg.startswith('!merch'):
-        merch_info = "Merch is now live for patrons to purchase! To access the store, use password ||goodgirl||. These items will be available until <t:1722830340:F>. Merch drops are seasonal, so this is your only chance to get these!"
+        merch_info = "Merch is now live for patrons to purchase! To access the store, use password ||goodgirl||. These items will be available until <t:1723089540:F>. Merch drops are seasonal, so this is your only chance to get these!"
         merch_embed = discord.Embed(title = "Vel's Library Merch, Summer 2024", description = merch_info, url = "https://vel-1-shop.fourthwall.com/")
         await message.channel.send(embed = merch_embed)
 

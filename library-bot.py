@@ -450,6 +450,23 @@ async def on_message(message):
         audio_choices = import_airtable_data()
         await message.author.send("Masterlist data sync'ed with Airtable updates.")
 
+    if msg.startswith('!testdaily'):
+        options = import_airtable_data()
+        recent = read_from_file(AUDIOS_FILENAME)
+        choices = []
+
+        for audio in options:
+            if audio.name() not in recent:
+                choices.append(audio)
+
+        if len(viable) != 0:
+            next_one = random.choice(choices)
+        else:
+            print("no viable options; choosing random")
+            next_one = random.choice(choices)
+
+        await message.author.send(next_one.name())
+
 
 
 # DAILY LOOPING TASKS
@@ -459,39 +476,24 @@ async def on_message(message):
 # ensures choice not in the recent list (imported from file)
 def choose_next(options):
     recent = read_from_file(AUDIOS_FILENAME)
-    next_one = random.choice(options)
+    choices = []
 
-    breaker = 0
-    while next_one.name() in recent and breaker < 45:
-        next_one = random.choice(options)
-        breaker += 1
+    for audio in options:
+        if audio.name() not in recent:
+            choices.append(audio)
+
+    if len(viable) != 0:
+        next_one = random.choice(choices)
+    else:
+        print("no viable options; choosing random")
+        next_one = random.choice(choices)
 
     # add new choice to recent list and save to file
     recent.append(next_one.name())
     recent.pop(0)
-    
+
     save_to_file(AUDIOS_FILENAME,recent)
     return next_one
-# def choose_next(options):
-#     recent = read_from_file(AUDIOS_FILENAME)
-#     viable = []
-
-#     for audio in options:
-#         if audio.name() not in recent:
-#             viable.append(audio)
-
-#     if len(viable) != 0:
-#         winner = random.choice(viable)
-#     else:
-#         print("no viable options; choosing random")
-#         winner = random.choice(options)
-
-#     # add new choice to recent list and save to file
-#     recent.append(winner.name())
-#     recent.pop(0)
-
-#     save_to_file(AUDIOS_FILENAME,recent)
-#     return winner
 
 
 def audio_of_the_day():
@@ -528,17 +530,17 @@ async def announce_daily_audio():
 # choose random winner not in the recent list (imported from file)
 def choose_next_winner(options):
     recent = read_from_file(WINNERS_FILENAME)
-    viable = []
+    choices = []
 
     for user in options:
         if user.name not in recent:
-            viable.append(user)
+            choices.append(user)
 
     if len(viable) != 0:
-        winner = random.choice(viable)
+        winner = random.choice(choices)
     else:
         print("no viable options; choosing random")
-        winner = random.choice(options)
+        winner = random.choice(choices)
 
     # add new choice to recent list and save to file
     recent.append(winner.name)

@@ -450,19 +450,6 @@ async def on_message(message):
         audio_choices = import_airtable_data()
         await message.author.send("Masterlist data sync'ed with Airtable updates.")
 
-    if msg.startswith('!testingcommand'):
-        guild = client.get_guild(GUILD)
-        good_girl_role = guild.get_role(WINNER_ROLE)
-        options = guild.get_role(OPTIONS_ROLE).members
-        recent = read_from_file(WINNERS_FILENAME)
-        viable = []
-
-        for user in options:
-            if user.name not in recent:
-                viable.append(user.name)
-
-        save_to_file("testfile.txt",viable)
-
 
 
 # DAILY LOOPING TASKS
@@ -485,6 +472,26 @@ def choose_next(options):
     
     save_to_file(AUDIOS_FILENAME,recent)
     return next_one
+# def choose_next(options):
+#     recent = read_from_file(AUDIOS_FILENAME)
+#     viable = []
+
+#     for audio in options:
+#         if audio.name() not in recent:
+#             viable.append(audio)
+
+#     if len(viable) != 0:
+#         winner = random.choice(viable)
+#     else:
+#         print("no viable options; choosing random")
+#         winner = random.choice(options)
+
+#     # add new choice to recent list and save to file
+#     recent.append(winner.name())
+#     recent.pop(0)
+
+#     save_to_file(AUDIOS_FILENAME,recent)
+#     return winner
 
 
 def audio_of_the_day():

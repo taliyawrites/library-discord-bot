@@ -459,7 +459,7 @@ async def on_message(message):
             if audio.name() not in recent:
                 choices.append(audio)
 
-        if len(viable) != 0:
+        if len(choices) != 0:
             next_one = random.choice(choices)
         else:
             print("no viable options; choosing random")
@@ -482,7 +482,7 @@ def choose_next(options):
         if audio.name() not in recent:
             choices.append(audio)
 
-    if len(viable) != 0:
+    if len(choices) != 0:
         next_one = random.choice(choices)
     else:
         print("no viable options; choosing random")
@@ -536,7 +536,7 @@ def choose_next_winner(options):
         if user.name not in recent:
             choices.append(user)
 
-    if len(viable) != 0:
+    if len(choices) != 0:
         winner = random.choice(choices)
     else:
         print("no viable options; choosing random")

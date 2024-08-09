@@ -144,7 +144,7 @@ class Audio:
 # works regardless of whether or not square brackets were used
 def get_tags(message):
     msg = message.strip()
-    tag = msg[13:]
+    tag = msg[13:].strip()
 
     if len(tag) == 0:
         return None

@@ -451,12 +451,14 @@ async def on_message(message):
         await message.author.send("Masterlist data sync'ed with Airtable updates.")
 
     if msg.startswith('!testdaily'):
-        options = import_airtable_data()
-        recent = read_from_file(AUDIOS_FILENAME)
+        guild = client.get_guild(GUILD)
+        good_girl_role = guild.get_role(WINNER_ROLE)
+        options = guild.get_role(OPTIONS_ROLE).members
+        recent = read_from_file(WINNERS_FILENAME)
         choices = []
 
         for audio in options:
-            if audio.name() not in recent:
+            if audio.name not in recent:
                 choices.append(audio)
 
         if len(choices) != 0:
@@ -465,7 +467,7 @@ async def on_message(message):
             print("no viable options; choosing random")
             next_one = random.choice(choices)
 
-        await message.author.send(next_one.name())
+        await message.author.send(next_one.name)
 
 
 

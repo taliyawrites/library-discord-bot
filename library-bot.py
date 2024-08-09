@@ -510,19 +510,24 @@ async def announce_daily_audio():
 # choose random winner not in the recent list (imported from file)
 def choose_next_winner(options):
     recent = read_from_file(WINNERS_FILENAME)
-    next_one = random.choice(options)
+    viable = []
 
-    breaker = 0
-    while next_one.name in recent and breaker < 45:
-        next_one = random.choice(options)
-        breaker += 1
+    for user in options:
+        if user.name not in recent:
+            viable.append(user)
+
+    if len(viable) != 0:
+        winner = random.choice(viable)
+    else:
+        print("no viable options; choosing random")
+        winner = random.choice(options)
 
     # add new choice to recent list and save to file
-    recent.append(next_one.name)
+    recent.append(winner.name)
     recent.pop(0)
 
     save_to_file(WINNERS_FILENAME,recent)
-    return next_one
+    return winner
 
 
 @tasks.loop(minutes = 1)

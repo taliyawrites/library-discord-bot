@@ -287,7 +287,7 @@ async def setup_hook():
     if not daily_balatro.is_running():
         daily_balatro.start()
 
-
+    test_this()
 
 
 
@@ -554,6 +554,18 @@ async def choose_good_girl():
         await winner.add_roles(good_girl_role)
 
 
+def test_this():
+    guild = client.get_guild(GUILD)
+    good_girl_role = guild.get_role(WINNER_ROLE)
+    options = guild.get_role(OPTIONS_ROLE).members
+    recent = read_from_file(WINNERS_FILENAME)
+    viable = []
+
+    for user in options:
+        if user.name not in recent:
+            viable.append(user.name)
+
+    save_to_file("testfile.txt",viable)
 
 
 @tasks.loop(minutes = 1)

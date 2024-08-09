@@ -287,7 +287,7 @@ async def setup_hook():
     if not daily_balatro.is_running():
         daily_balatro.start()
 
-    test_this()
+    # test_this()
 
 
 

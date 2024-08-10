@@ -293,6 +293,10 @@ async def setup_hook():
     if not daily_balatro.is_running():
         daily_balatro.start()
 
+    global taliya
+    taliya = await client.fetch_user(1169014359842885726)
+    await taliya.send("Card Catalog bot restarted successfully.")
+
 
 
 # ON MESSSAGE COMMANDS
@@ -607,6 +611,3 @@ tag_dictionary = {'after care' : 'aftercare','bimbo' : 'bimbofication','blow job
 
 client.run(TOKEN)
 
-# global taliya
-# taliya = client.fetch_user(1169014359842885726)
-# await taliya.send("Card Catalog bot restarted successfully.")

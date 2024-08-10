@@ -295,13 +295,8 @@ async def setup_hook():
 
     global taliya
     taliya = await client.fetch_user(1169014359842885726)
-    # await taliya.send("Card Catalog bot restarted successfully.")
+    await taliya.send("Card Catalog bot restarted successfully.")
 
-    await taliya.send("Welcome to the Library! You can use this bot to explore all of Vel's content. There are over three hundred audios to choose from, so send a message with the command `!randomaudio [desired tag]` to have the bot choose a random audio for you with whatever tag(s) you like. To learn how to use this bot to search for audios and learn other information about Vel's content, send the message`!allcommands`.")
-    embed = discord.Embed(title="Vel's Library Masterlist",
-                   url="https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr",
-                   description="Here's a link to the masterlist of all of Vel's audios. You can search and filter the masterlist for your favorite tags.")
-    await taliya.send(embed=embed)
 
 
 

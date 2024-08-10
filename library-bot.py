@@ -607,6 +607,6 @@ tag_dictionary = {'after care' : 'aftercare','bimbo' : 'bimbofication','blow job
 
 client.run(TOKEN)
 
-global taliya
-taliya = client.fetch_user(1169014359842885726)
-await taliya.send("Card Catalog bot restarted successfully.")
+# global taliya
+# taliya = client.fetch_user(1169014359842885726)
+# await taliya.send("Card Catalog bot restarted successfully.")

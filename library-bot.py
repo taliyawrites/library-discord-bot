@@ -456,7 +456,7 @@ async def on_message(message):
         await message.channel.send(embed=command_embed)
 
 
-    if msg.startswith('!manualsync'):
+    if msg.startswith('!manualrefresh'):
         # sync with airtable data to pull any masterlist updates
         audio_choices = import_airtable_data()
         await taliya.send("Masterlist data sync'ed with Airtable updates.")
@@ -486,8 +486,7 @@ def choose_next(options):
     if len(choices) != 0:
         next_one = random.choice(choices)
     else:
-        # await taliya.send("ERROR: no non-recent options for daily audio.")
-        next_one = random.choice(choices)
+        return None
 
     # add new choice to recent list and save to file
     recent.append(next_one.name())
@@ -520,8 +519,12 @@ async def announce_daily_audio():
 
         global daily_audio
         daily_audio = audio_of_the_day()
-        await channel.send(f"The audio of the day!")
-        await channel.send(embed=daily_audio.discord_post())
+
+        if daily_audio is not None: 
+            await channel.send(f"The audio of the day!")
+            await channel.send(embed=daily_audio.discord_post())
+        else:
+            await taliya.send("ERROR: no non-recent options for daily audio.")
 
 
 
@@ -541,8 +544,7 @@ def choose_next_winner(options):
     if len(choices) != 0:
         winner = random.choice(choices)
     else:
-        # await taliya.send("ERROR: no non-recent options for good girl of the day.")
-        winner = random.choice(choices)
+        return None
 
     # add new choice to recent list and save to file
     recent.append(winner.name)
@@ -556,6 +558,7 @@ def choose_next_winner(options):
 @tasks.loop(minutes = 1)
 async def choose_good_girl():
     if datetime.datetime.now().hour == HOUR and datetime.datetime.now().minute == MINUTE:
+        global good_girl
         guild = client.get_guild(GUILD)
         channel = client.get_channel(GENERAL)
         good_girl_role = guild.get_role(WINNER_ROLE)
@@ -569,12 +572,13 @@ async def choose_good_girl():
         options = guild.get_role(OPTIONS_ROLE).members
         winner = choose_next_winner(options)
 
-        global good_girl 
-        good_girl = winner.display_name
-
         # send message and assign good girl role to winner
-        await channel.send(f'{winner.mention} is the good girl of the day!')
-        await winner.add_roles(good_girl_role)
+        if winner is not None:
+            await channel.send(f'{winner.mention} is the good girl of the day!')
+            await winner.add_roles(good_girl_role)
+            good_girl = winner.display_name
+        else:
+            await taliya.send("ERROR: no non-recent options for good girl of the day.")
 
 
 
@@ -606,6 +610,11 @@ async def on_member_join(member):
 
 
 tag_dictionary = {'after care' : 'aftercare','bimbo' : 'bimbofication','blow job' : 'blowjob','blowjobs' : 'blowjob','body appreciation' : 'body worship','body writing' : 'bodywriting','bound' : 'bondage','brainwash' : 'brainwashing','breath play' : 'breathplay','breeding kink' : 'breeding','clitplay' : 'clit play','clit slapping' : 'clit slaps','coached' : 'coaching','collars' : 'collar','comforting' : 'comfort','condescension' : 'condescending','consensual' : 'consent','consensual non consent' : 'cnc','consensual non-consent' : 'cnc','consensual-non-consent' : 'cnc','count down' : 'countdown','cream pie' : 'creampie','cuckold' : 'cuckolding','cucking' : 'cuckolding','cuck' : 'cuckolding','bull' : 'cuckolding','cum in clothes' : 'cumming in clothes','cum play' : 'cumplay','pussy eating' : 'cunnilingus','pussy-eating' : 'cunnilingus','oral' : 'cunnilingus','daddy kink' : 'daddy','deep throat' : 'deepthroat','degrading' : 'degradation','degredation' : 'degradation','dehumanizing' : 'dehumanization','desk pet' : 'deskpet','dildos' : 'dildo','doggystyle' : 'doggy style','doggy' : 'doggy style','dominance loss' : 'domination loss','double penetration' : 'dp','double vaginal penetration' : 'dvp','double vaginal' : 'dvp','edged' : 'edging','exhibitionist' : 'exhibitionism','face down ass up' : 'face down, ass up','face sitting' : 'facesitting','face-sitting' : 'facesitting','cum on face' : 'facial','femdom' : 'fdom','feral mdom' : 'feral','fingersucking' : 'finger sucking','sucking on fingers' : 'finger sucking','flirtation' : 'flirting','forced orgasm' : 'forced orgasms','free-use' : 'free use','freeuse' : 'free use','friends with benefits' : 'fwb','g-spot' : 'g spot','glory hole' : 'gloryhole','guided' : 'guidance','handkink' : 'hand kink','hands' : 'hand kink','hand' : 'hand kink','hands free' : 'hfo','hands-free' : 'hfo','hands free orgasm' : 'hfo','hate fuck' : 'hatefuck','hatefucking' : 'hatefuck','hips appreciation' : 'hip appreciation','hip worship' : 'hip appreciation','hook up' : 'hookup','hook-up' : 'hookup','hot wife' : 'hotwife','hot-wife' : 'hotwife','humiliating' : 'humiliation','husband/wife' : 'husband','hypno' : 'hypnosis','impregnation' : 'impreg','instruction' : 'instructions','instructional' : 'instructions','jealous' : 'jealousy','knifeplay' : 'knife play','knot' : 'knotting','library' : 'library sex','L bombs' : 'L-bombs','L bomb' : 'L-bombs','L-bomb' : 'L-bombs','love bombs' : 'L-bombs','love-bombs' : 'L-bombs','manhandled' : 'manhandling','manipulated' : 'manipulative','bodymarking' : 'marking','body marking' : 'marking','masked' : 'masks','mask' : 'masks','masturbating' : 'masturbation','medical kink' : 'medical','medical play' : 'medical','mindbreak' : 'mind break','mind-control' : 'mind control','mirror' : 'mirror play','mirror sex' : 'mirror play','mirrors' : 'mirror play','moans' : 'moaning','two listener orgasms' : 'multiple listener orgasms','2 listener orgasms' : 'multiple listener orgasms','mutual orgasms' : 'mutual orgasm','nipple' : 'nipple play','nipples' : 'nipple play','nippleplay' : 'nipple play','objectified' : 'objectification','obsession' : 'obsessed','overstimulation' : 'overstim','overstimulated' : 'overstim','petplay' : 'pet play','photo' : 'photography','photos' : 'photography','photoshoot' : 'photography','pregnancy' : 'pregnant','pronebone' : 'prone bone','public' : 'public sex','sex in public' : 'public sex','pussy slapping' : 'pussy slaps','ramblefap' : 'ramble','relaxing' : 'relaxation','restraint' : 'restrained','restraints' : 'restrained','cowgirl' : 'riding','crop' : 'riding crop','roommate' : 'roommates','ruin' : 'ruined orgasm','sadist' : 'sadism','sadistic' : 'sadism','scentplay' : 'scent play','scent' : 'scent play','sci-fi' : 'sci fi','science fiction' : 'sci fi','scratch' : 'scratching','pollen' : 'sex pollen','tension' : 'sexual tension','safe for work' : 'sfw','sharing' : 'sharing you','shared' : 'sharing you','shock collars' : 'shock collar','sixty nine' : 'sixty-nine','69' : 'sixty-nine','size difference' : 'size kink','face slaps' : 'slapping','slaps' : 'slapping','sleep aide' : 'sleep aid','sleep-aid' : 'sleep aid','sleep-aide' : 'sleep aid', 'southern accent' : 'country accent','overstim for speaker' : 'speaker overstim','spitting' : 'spit','squirt' : 'squirting','sleep play' : 'somno','story time' : 'storytime','strap on' : 'strap-on','strap' : 'strap-on','stretching' : 'stretch','stretched' : 'stretch','tentacle' : 'tentacles','thighfucking' : 'thigh fucking','thigh-fucking' : 'thigh fucking','threeway' : 'threesome','titfuck' : 'titjob','titfucking' : 'titjob','tit job' : 'titjob','toy' : 'toys','sex toys' : 'toys','sextoys' : 'toys','sextoy' : 'toys','sex toy' : 'toys','tummy worship' : 'tummy appreciation','tummy' : 'tummy appreciation','virgin' : 'virgin listener','waxplay' : 'wax play','werewolves' : 'werewolf','wet sounds' : 'wet sfx','whimpers' : 'whimpering'}
+
+
+
+
+
 
 # RUN BOT
 

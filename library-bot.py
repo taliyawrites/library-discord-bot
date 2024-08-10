@@ -486,7 +486,7 @@ def choose_next(options):
     if len(choices) != 0:
         next_one = random.choice(choices)
     else:
-        await taliya.send("ERROR: no non-recent options for daily audio.")
+        # await taliya.send("ERROR: no non-recent options for daily audio.")
         next_one = random.choice(choices)
 
     # add new choice to recent list and save to file
@@ -539,10 +539,9 @@ def choose_next_winner(options):
     remaining = [user.name for user in choices]
 
     if len(choices) != 0:
-        await taliya.send("working okay!")
         winner = random.choice(choices)
     else:
-        await taliya.send("ERROR: no non-recent options for good girl of the day.")
+        # await taliya.send("ERROR: no non-recent options for good girl of the day.")
         winner = random.choice(choices)
 
     # add new choice to recent list and save to file

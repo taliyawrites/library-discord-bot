@@ -21,6 +21,7 @@ airtable_api = Api(os.getenv('AIRTABLE_TOKEN'))
 
 WINNERS_FILENAME = "recentwinners.txt"
 AUDIOS_FILENAME = "recentaudios.txt"
+OPTIONS_FILENAME = "remaining.txt"
 
 # run daily tasks at 1pm eastern time (6pm UTC+1)
 HOUR = 18
@@ -185,6 +186,9 @@ def random_audio(audios, tag=None):
         return random.choice(audios)
 
 
+
+
+
 # sort audios chronologically
 def age_sort(audio):
     return audio.date_long()
@@ -226,6 +230,8 @@ def import_airtable_data():
             allowed.append(audio)
 
     return allowed
+
+
 
 
 
@@ -287,6 +293,9 @@ async def setup_hook():
     if not daily_balatro.is_running():
         daily_balatro.start()
 
+    global taliya
+    taliya = fetch_user(1169014359842885726)
+    await taliya.send("Card Catalog bot restarted successfully.")
 
 
 
@@ -340,7 +349,6 @@ async def on_message(message):
             await message.channel.send(embed=audio.discord_post())
 
 
-
     if msg.startswith('!title'):
         phrase = msg[7:]
         if phrase[0] == '"' or phrase[0] == "'":
@@ -383,6 +391,7 @@ async def on_message(message):
             matches_embed = discord.Embed(title = name.capitalize() + " Audios",description=link_string)
             await message.channel.send(embed = matches_embed)
 
+
     if msg.startswith('!allcharacters'):
         character_list = []
         for audio in audio_choices:
@@ -394,6 +403,7 @@ async def on_message(message):
         for char in characters:
             char_string = char_string + char + ", "
         await message.channel.send('Named characters: ' + char_string[:-2])
+
 
     if msg.startswith('!daily'):
         await message.channel.send("Here's a link to the audio of the day!")
@@ -417,7 +427,7 @@ async def on_message(message):
 
     if msg.startswith('!stream'):
         # stream_info = 'Vel streams live every other Sunday on [Twitch](https://www.twitch.tv/velslibrary). The next stream, "How Vel Does Vel Know Vel?" (quizzing the librarian himself on how well he knows his own content), will be <t:1722799800:F>!'
-        stream_info = 'Vel streams live every other Sunday on [Twitch](https://www.twitch.tv/velslibrary). The next stream will be <t:1722799800:F>!'
+        stream_info = 'Vel streams live every other Sunday on [Twitch](https://www.twitch.tv/velslibrary). The next stream will be <t:1724009400:F>!'
         stream_embed = discord.Embed(title = "Vel's Livestreams", description = stream_info, url = "https://www.twitch.tv/velslibrary")
         await message.channel.send(embed = stream_embed)
 
@@ -445,10 +455,19 @@ async def on_message(message):
         command_embed = discord.Embed(title = "Card Catalog Bot Commands",description=commands)
         await message.channel.send(embed=command_embed)
 
-    if msg.startswith('!forcerefresh'):
+
+    if msg.startswith('!manualsync'):
         # sync with airtable data to pull any masterlist updates
         audio_choices = import_airtable_data()
-        await message.author.send("Masterlist data sync'ed with Airtable updates.")
+        await taliya.send("Masterlist data sync'ed with Airtable updates.")
+
+
+
+
+
+
+
+
 
 
 # DAILY LOOPING TASKS
@@ -467,7 +486,7 @@ def choose_next(options):
     if len(choices) != 0:
         next_one = random.choice(choices)
     else:
-        print("no viable options; choosing random")
+        # await taliya.send("ERROR: no non-recent options for daily audio.")
         next_one = random.choice(choices)
 
     # add new choice to recent list and save to file
@@ -517,17 +536,19 @@ def choose_next_winner(options):
     for user in options:
         if user.name not in recent:
             choices.append(user)
+    remaining = [user.name for user in choices]
 
     if len(choices) != 0:
         winner = random.choice(choices)
     else:
-        print("no viable options; choosing random")
+        # await taliya.send("ERROR: no non-recent options for good girl of the day.")
         winner = random.choice(choices)
 
     # add new choice to recent list and save to file
     recent.append(winner.name)
     recent.pop(0)
 
+    save_to_file(OPTIONS_FILENAME,remaining)
     save_to_file(WINNERS_FILENAME,recent)
     return winner
 
@@ -579,6 +600,8 @@ async def on_member_join(member):
                    description="masterlist of all of Vel's audios!")
     await member.send(embed=embed)
     print('new member join message sent')
+
+
 
 
 

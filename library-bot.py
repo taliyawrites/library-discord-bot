@@ -297,6 +297,12 @@ async def setup_hook():
     taliya = await client.fetch_user(1169014359842885726)
     await taliya.send("Card Catalog bot restarted successfully.")
 
+    await taliya.send("Welcome to the Library! Here's a link to the masterlist of all of Vel's audios. You can search and filter the masterlist for your favorite tags, or send a message with the command `!randomaudio [insert desired tag here]` to have a random audio selected for you! Send a message with the command `!allcommands` to learn how to use this bot to search for audios and learn other information about Vel's content.")
+    embed = discord.Embed(title="Vel's Library Masterlist",
+                   url="https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr",
+                   description="masterlist of all of Vel's audios!")
+    await taliya.send(embed=embed)
+
 
 
 # ON MESSSAGE COMMANDS
@@ -530,7 +536,6 @@ async def announce_daily_audio():
 
 
 
-
 # choose random winner not in the recent list (imported from file)
 def choose_next_winner(options):
     recent = read_from_file(WINNERS_FILENAME)
@@ -594,11 +599,12 @@ async def daily_balatro():
 
 
 
+
 # ON NEW MEMBER JOIN
 
 @client.event
 async def on_member_join(member):
-    await member.send("Welcome to the Library! Here's a link to the masterlist of all of Vel's audios. You can search and filter the masterlist for your favorite tags, or send a message with the command `!randomaudio [insert desired tag here]` to have a random audio selected for you!")
+    await member.send("Welcome to the Library! Here's a link to the masterlist of all of Vel's audios. You can search and filter the masterlist for your favorite tags, or send a message with the command `!randomaudio [insert desired tag here]` to have a random audio selected for you! Send a message with the command `!allcommands` to learn how to use this bot to search for audios and learn other information about Vel's content.")
     embed = discord.Embed(title="Vel's Library Masterlist",
                    url="https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr",
                    description="masterlist of all of Vel's audios!")

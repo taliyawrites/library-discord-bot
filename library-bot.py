@@ -166,14 +166,6 @@ def tagged_options(audios, tags):
     for audio in audios:
         if sorted(list(set(audio.tags()).intersection(tags))) == sorted(tags):
             options.append(audio)
-    # if len(options) == 0:
-    #     for audio in audios:
-    #         tag_count = 0
-    #         for tag in tags:
-    #             if tag in audio.tag_string():
-    #                 tag_count = tag_count + 1
-    #         if tag_count == len(tags):
-    #             options.append(audio)
     return options
 
 # choose a random audio, optional argument to specify a tag 
@@ -454,7 +446,7 @@ async def on_message(message):
 
     # list all bot commands
     if msg.startswith('!allcommands'):
-        commands = "- `!randomaudio` randomly chosen audio from the masterlist \n- `!randomaudio [some] [tags]` random audio with these desired tag(s) \n- `!title phrase` for list of audios with that phrase in title \n- `!character name` for list of audios featuring a specific named character \n- `!daily` for the randomly chosen audio of the day \n- `!dm` bot will privately DM you the masterlist \n- `!masterlist` link to the masterlist \n- `!schedule` audio posting schedule \n- `!lives` info about live recordings \n- `!socials` links to all of Vel's social media accounts \n- `!goodgirl` to sign up for good girl role \n- `!stream` for information about the next twitch stream \n- `!balatro` for daily seed \n- `!merch` for information about the upcoming merch drop"
+        commands = "- `!randomaudio` randomly chosen audio from the masterlist \n- `!randomaudio [some] [tags]` random audio with these desired tag(s) \n- `!title phrase` for list of audios with that phrase in title \n- `!character name` for list of audios featuring a specific named character \n- `!daily` for the randomly chosen audio of the day \n- `!dm` bot will privately DM you the masterlist \n- `!masterlist` link to the masterlist \n- `!schedule` audio posting schedule \n- `!lives` info about live recordings \n- `!socials` links to all of Vel's social media accounts \n- `!goodgirl` to sign up for good girl role \n- `!stream` for information about the next twitch stream \n- `!balatro` for daily seed \n- `!merch` for information about the upcoming merch drop \n- `!time H:MM AM/PM` to convert from eastern time to universal timestamp"
         command_embed = discord.Embed(title = "Card Catalog Bot Commands",description=commands)
         await message.channel.send(embed=command_embed)
 
@@ -465,23 +457,32 @@ async def on_message(message):
         await taliya.send("Masterlist data sync'ed with Airtable updates.")
 
 
-    if msg.startswith('!timestamp'):
-        # input is like !timestamp 3:00 PM
-        input_string = msg[11:].strip()
-        timestamp = get_timestamp(input_string)
+    if '!time' in msg:
+        # input is in the format "!timestamp 3:00 PM" assumed eastern time
+        timestamp = universal_time(msg)
         await message.channel.send(timestamp)
 
 
 
-def get_timestamp(eastern_time_string):
-    split = eastern_time_string.partition(":")
-    hour = int(split[0])
-    minute = int(split[2][:-2])
-    am = split[2][-2] == "A" or split[2][-2] == "a"
-    if am:
-        utc_hour = (hour + 4)
+def universal_time(eastern_timestring):
+    cut = eastern_timestring[(6 + eastern_timestring.find("!time")):]
+    end_index = max(cut.find("am"), cut.find("pm"))
+    if end_index == -1:
+        return "Please specify AM or PM."
+    isAM = cut[end_index:(end_index+2)] == "am"
+
+    time_string = cut[:end_index].strip()
+    split = time_string.partition(":")
+
+    if len(split[2]) != 0:
+        hour, minute = int(split[0]), int(split[2])
     else:
-        utc_hour = (hour + 4 + 12)
+        hour, minute = int(split[0]), 0
+
+    if isAM:
+        utc_hour = hour + 4
+    else:
+        utc_hour = hour + 4 + 12
 
     now = datetime.datetime.utcnow()
     if utc_hour < 24:
@@ -492,7 +493,6 @@ def get_timestamp(eastern_time_string):
     epoch_time = calendar.timegm(utc_time.timetuple())
     stamp = "<t:" + str(epoch_time) + ":t>"
     return stamp
-
 
 
 

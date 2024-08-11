@@ -463,6 +463,33 @@ async def on_message(message):
         await taliya.send("Masterlist data sync'ed with Airtable updates.")
 
 
+    if msg.startswith('!timestamp'):
+        # input is like !timestamp 3:00 PM
+        input_string = msg[11:].strip()
+        timestamp = get_timestamp(input_string)
+        await message.channel.send(timestamp)
+
+
+
+def get_timestamp(eastern_time_string):
+    split = eastern_time_string.partition(":")
+    hour = int(split[0])
+    minute = int(split[2][:-2])
+    am = split[2][-2] == "A" or split[2][-2] == "a"
+    if am:
+        utc_hour = (hour + 4)
+    else:
+        utc_hour = (hour + 4 + 12)
+
+    now = datetime.datetime.utcnow()
+    if utc_hour < 24:
+        utc_time = datetime.datetime(now.year, now.month, now.day, utc_hour, minute)
+    else:
+        utc_time = datetime.datetime(now.year, now.month, now.day + 1, utc_hour % 24, minute)
+
+    epoch_time = calendar.timegm(utc_time.timetuple())
+    stamp = "<t:" + str(epoch_time) + ":t>"
+    return stamp
 
 
 

@@ -6,6 +6,7 @@ import string
 import asyncio
 import time
 import calendar
+import traceback
 
 
 from dotenv import load_dotenv
@@ -479,6 +480,9 @@ def universal_time(eastern_timestring):
     else:
         hour, minute = int(split[0]), 0
 
+    if hour == 12:
+        hour = 0
+
     if isAM:
         utc_hour = hour + 4
     else:
@@ -634,6 +638,21 @@ async def on_member_join(member):
                    description="Here's a link to the masterlist of all of Vel's audios. You can search and filter the masterlist for your favorite tags.")
     await member.send(embed=embed)
     print('new member join message sent')
+
+
+
+
+
+
+
+# DM ERROR MESSAGES
+
+@client.event
+async def on_error(event, *args, **kwargs):
+    message = args[0]
+    await taliya.send("**ERROR:** " + message.jump_url + "\n**MESSAGE CONTENT:** " + message.content + "\n\n" + traceback.format_exc())
+
+
 
 
 

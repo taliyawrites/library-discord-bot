@@ -650,10 +650,7 @@ async def on_member_join(member):
 @client.event
 async def on_error(event, *args, **kwargs):
     message = args[0]
-    if not isinstance(message.channel, discord.DMChannel):
-        await taliya.send("**ERROR:** " + message.jump_url + "\n**MESSAGE CONTENT:** " + message.content + "\n\n" + traceback.format_exc())
-    else:
-        await taliya.send("**ERROR:** " + message.jump_url + "\n**MESSAGE CONTENT:** " + message.content + "\n\n" + traceback.format_exc())
+    await taliya.send("**ERROR:** " + message.jump_url + "\n**MESSAGE CONTENT:** " + message.content + "\n\n" + traceback.format_exc())
 
 
 

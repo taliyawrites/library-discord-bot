@@ -349,7 +349,7 @@ async def on_message(message):
         phrase = msg[7:].strip()
 
         if len(phrase) == 0:
-            await message.channel.send("Please enter a search phrase after `!title `.")
+            await message.channel.send("Please enter a search phrase after `!title`.")
             return
 
         if phrase[0] == '"' or phrase[0] == "'":
@@ -380,7 +380,7 @@ async def on_message(message):
         name = msg[11:].strip()
 
         if len(name) == 0:
-            await message.channel.send("Please specify a character name.")
+            await message.channel.send("Please specify a character name after `!character`.")
             return
 
         matches = character_search(name)

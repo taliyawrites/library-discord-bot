@@ -28,7 +28,7 @@ OPTIONS_FILENAME = "remaining.txt"
 
 # run daily tasks at 1pm eastern time (6pm UTC+1)
 HOUR = 18
-MINUTE = 30
+MINUTE = 22
 
 
 intents = discord.Intents.default()

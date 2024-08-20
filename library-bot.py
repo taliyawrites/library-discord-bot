@@ -27,8 +27,8 @@ AUDIOS_FILENAME = "recentaudios.txt"
 OPTIONS_FILENAME = "remaining.txt"
 
 # run daily tasks at 1pm eastern time (6pm UTC+1)
-HOUR = 18
-MINUTE = 22
+HOUR = 17
+MINUTE = 30
 
 
 intents = discord.Intents.default()

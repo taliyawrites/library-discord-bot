@@ -233,8 +233,8 @@ def import_tag_dictionary():
     for entry in table.all():
         fields = list(entry.items())[2][1]
         data = list(fields.items())
-        tag = data[0][1]
-        canonical = data[1][1]
+        tag = data[0][1].strip()
+        canonical = data[1][1].strip()
         dictionary[tag] = canonical
 
     return dictionary
@@ -485,10 +485,6 @@ async def on_message(message):
         # sync with airtable data to pull any masterlist updates
         audio_choices = import_airtable_data()
         tag_dictionary = import_tag_dictionary()
-        # print(tag_dictionary["bimbo"])
-        # print(tag_dictionary["vibrator"])
-        # print(tag_dictionary["vibrators"])
-        print(tag_dictionary)
         await taliya.send("Masterlist data sync'ed with Airtable updates.")
 
 

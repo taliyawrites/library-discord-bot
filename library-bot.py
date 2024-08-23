@@ -485,6 +485,7 @@ async def on_message(message):
         # sync with airtable data to pull any masterlist updates
         audio_choices = import_airtable_data()
         tag_dictionary = import_tag_dictionary()
+        print(tag_dictionary["vibrator"])
         await taliya.send("Masterlist data sync'ed with Airtable updates.")
 
 

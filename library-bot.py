@@ -69,7 +69,7 @@ class Audio:
             if entry[0]=='Tags':
                 # convert string of tags "[a] [b] [c] [d]" into a list {a,b,c,d}
                 raw_string = entry[1].strip()
-                tag_string = raw_string[1:-1]
+                tag_string = raw_string[1:-1].lower()
                 return tag_string.split('] [')
         return []
 
@@ -608,7 +608,7 @@ async def choose_good_girl():
         channel = client.get_channel(GENERAL)
         good_girl_role = guild.get_role(WINNER_ROLE)
 
-        await asyncio.sleep(5)
+        await asyncio.sleep(10)
         for member in good_girl_role.members:
             # remove good girl role from yesterday's winner
             await member.remove_roles(good_girl_role)

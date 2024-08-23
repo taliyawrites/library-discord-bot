@@ -226,6 +226,19 @@ def import_airtable_data():
 
     return allowed
 
+def import_tag_dictionary():
+    table = airtable_api.table('appeb72XP6YJzGRyY', 'tbltF1MithqYynsdU')
+    dictionary = dict()
+
+    for entry in table.all():
+        fields = list(entry.items())[2][1]
+        data = list(fields.items())
+        tag = data[0][1]
+        canonical = data[1][1]
+        dictionary[tag] = canonical
+
+    return dictionary
+
 
 
 
@@ -269,6 +282,9 @@ async def setup_hook():
     global audio_choices
     audio_choices = import_airtable_data()
 
+    global tag_dictionary
+    tag_dictionary = import_tag_dictionary()
+
     global daily_audio
     for audio in audio_choices:
         if audio.name() == currentdaily:
@@ -307,6 +323,7 @@ async def on_message(message):
     msg = message.content.lower()
 
     global audio_choices
+    global tag_dictionary
 
     if msg.startswith('!masterlist'):
         embed = discord.Embed(title="Vel's Library Masterlist",
@@ -467,6 +484,7 @@ async def on_message(message):
     if msg.startswith('!refresh'):
         # sync with airtable data to pull any masterlist updates
         audio_choices = import_airtable_data()
+        tag_dictionary = import_tag_dictionary()
         await taliya.send("Masterlist data sync'ed with Airtable updates.")
 
 

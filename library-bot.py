@@ -514,15 +514,22 @@ async def on_message(message):
             else:
                 await message.channel.send(f"Thank you! :smiling_face_with_3_hearts: The bot has been pet {pet_count} times!")
 
-        # if not isinstance(message.channel, discord.DMChannel):
-        #     await message.channel.send(f"The bot has been pet {pet_count} times!")
-        # else:
-        #     await message.channel.send(f"Thank you! :smiling_face_with_3_hearts: The bot has been pet {pet_count} times!")
-
         if pet_count == 69:
             await message.channel.send("What? Are you really so horny that you thought there would be some special message for 69? Sluts like you are so predictable, you know. So needy and desperate and completely at the mercy of your pathetic fucking cunt. But you like being that way, don't you? Silly whore.")
 
 
+        if msg.startswith('!degrade'):
+            adjectives = ["desperate","pretty","depraved","pathetic","needy","worthless"]
+            nouns = ["whore","slut","bitch","cunt","set of holes"]
+            response = random.choice(adjectives) + " " + random.choice(nouns) + "."
+            await message.channel.send(response)
+
+
+        if msg.startswith('!praise'):
+            adjectives = ["perfect","pretty","beautiful"]
+            nouns = ["angel","bunny","pet","princess","toy"]
+            response = random.choice(adjectives) + " " + random.choice(nouns) + "!"
+            await message.channel.send(response)
 
 
 

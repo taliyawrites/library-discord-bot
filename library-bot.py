@@ -508,8 +508,13 @@ async def on_message(message):
         if pet_count == 69:
             await message.channel.send("What? Are you really so horny that you thought there would be some special message for 69? Sluts like you are so predictable, you know. So needy and desperate and completely at the mercy of your pathetic fucking cunt. But you like being that way, don't you? Silly whore.")
 
-    # if msg.startswith('!checkthis')
-
+    if msg.startswith('!checkthis'):
+        if datetime.datetime.now().month == 8 and datetime.datetime.now().day == 27:
+            blah = await client.fetch_user(1241573320114049078)
+            await message.channel.send(blah.display_name)
+        if datetime.datetime.now().month == 8 and datetime.datetime.now().day == 28:
+            blah = await client.fetch_user(1241573320114049078)
+            await message.channel.send(blah.display_name)
 
 
 def universal_time(eastern_timestring):

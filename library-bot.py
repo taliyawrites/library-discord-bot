@@ -518,14 +518,14 @@ async def on_message(message):
             await message.channel.send("What? Are you really so horny that you thought there would be some special message for 69? Sluts like you are so predictable, you know. So needy and desperate and completely at the mercy of your pathetic fucking cunt. But you like being that way, don't you? Silly whore.")
 
 
-    if msg.startswith('!degrade me'):
+    if msg.startswith('!degrade'):
         adjectives = ["desperate","pretty","depraved","pathetic","needy","worthless","Daddy's"]
         nouns = ["whore","slut","bitch","cunt","set of holes","cumslut","fucktoy","cumrag","cumdump"]
         response = random.choice(adjectives) + " " + random.choice(nouns) + "."
         await message.channel.send(response)
 
 
-    if msg.startswith('!praise me'):
+    if msg.startswith('!praise'):
         adjectives = ["perfect","pretty","beautiful","darling","sweet"]
         nouns = ["angel","bunny","pet","princess","toy","doll","kitten"]
         response = random.choice(adjectives) + " " + random.choice(nouns) + "!"

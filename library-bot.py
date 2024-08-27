@@ -500,6 +500,7 @@ async def on_message(message):
 
     if msg.startswith('!pet'):
         pet_count += 1
+        save_to_file(COUNTER_FILENAME, [pet_count])
         await message.channel.send(f"The bot has been pet {pet_count} times!")
 
 

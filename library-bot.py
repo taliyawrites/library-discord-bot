@@ -501,7 +501,14 @@ async def on_message(message):
     if msg.startswith('!pet'):
         pet_count += 1
         save_to_file(COUNTER_FILENAME, [str(pet_count)])
-        await message.channel.send(f"The bot has been pet {pet_count} times!")
+        if not isinstance(message.channel, discord.DMChannel):
+            await message.channel.send(f"The bot has been pet {pet_count} times!")
+        else:
+            await message.channel.send("Thank you! :smiling_face_with_3_hearts:")
+        if pet_count == 69:
+            await message.channel.send("What? Are you really so horny that you thought there would be some special message for 69? Sluts like you are so predictable, you know, so needy and desperate and completely at the mercy of your pathetic fucking cunt. But you like being that way, don't you? Silly whore.")
+
+    # if msg.startswith('!checkthis')
 
 
 
@@ -644,6 +651,9 @@ async def choose_good_girl():
         # choose new random winner for the day
         options = guild.get_role(OPTIONS_ROLE).members
         winner = choose_next_winner(options)
+
+        if datetime.datetime.now().month == 6 and datetime.datetime.now().day == 9:
+            winner = await client.fetch_user(1241573320114049078)
 
         # send message and assign good girl role to winner
         if winner is not None:

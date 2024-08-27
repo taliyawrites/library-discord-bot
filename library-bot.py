@@ -527,7 +527,7 @@ async def on_message(message):
 
     if msg.startswith('!praise me'):
         adjectives = ["perfect","pretty","beautiful","darling","sweet"]
-        nouns = ["angel","bunny","pet","princess","toy","doll"]
+        nouns = ["angel","bunny","pet","princess","toy","doll","kitten"]
         response = random.choice(adjectives) + " " + random.choice(nouns) + "!"
         await message.channel.send(response)
 

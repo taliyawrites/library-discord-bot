@@ -521,7 +521,7 @@ async def on_message(message):
     if msg.startswith('!degrade'):
         adjectives = ["desperate","pretty","depraved","pathetic","needy","worthless"]
         nouns = ["whore","slut","bitch","cunt","set of holes","cumslut","fucktoy","cumrag","cumdump"]
-        if random.choice(range(10000)) == 0:
+        if random.choice(range(1000)) < 3:
             whose = "Vel's "
         elif random.choice(range(5)) == 0:
             whose = "Daddy's "
@@ -534,7 +534,7 @@ async def on_message(message):
     if msg.startswith('!praise'):
         adjectives = ["perfect","pretty","beautiful","darling","sweet"]
         nouns = ["angel","bunny","pet","princess","toy","doll","kitten"]
-        if random.choice(range(10000)) == 0:
+        if random.choice(range(1000)) < 3:
             whose = "Vel's "
         elif random.choice(range(5)) == 0:
             whose = "Daddy's "

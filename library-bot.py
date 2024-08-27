@@ -525,11 +525,12 @@ async def on_message(message):
     #     await message.channel.send(response)
 
 
-    # if msg.startswith('!praise'):
-    #     adjectives = ["perfect","pretty","beautiful","darling","sweet"]
-    #     nouns = ["angel","bunny","pet","princess","toy","doll","kitten"]
-    #     response = random.choice(adjectives) + " " + random.choice(nouns) + "!"
-    #     await message.channel.send(response)
+    if msg.startswith('!praise'):
+        adjectives = ["perfect","pretty","beautiful","darling","sweet"]
+        nouns = ["angel","bunny","pet","princess","toy","doll","kitten"]
+        daddy = ["","","","","Daddy's "]
+        response = random.choice(daddy) + random.choice(adjectives) + " " + random.choice(nouns) + "!"
+        await message.channel.send(response)
 
 
 

@@ -25,6 +25,7 @@ airtable_api = Api(os.getenv('AIRTABLE_TOKEN'))
 WINNERS_FILENAME = "recentwinners.txt"
 AUDIOS_FILENAME = "recentaudios.txt"
 OPTIONS_FILENAME = "remaining.txt"
+COUNTER_FILENAME = "count.txt"
 
 # run daily tasks at 1pm eastern time (6pm UTC+1)
 HOUR = 17
@@ -263,7 +264,7 @@ def save_to_file(filename, list):
 
 currentwinner = read_from_file(WINNERS_FILENAME)[-1]
 currentdaily = read_from_file(AUDIOS_FILENAME)[-1]
-
+currentpetcount = int(read_from_file(COUNTER_FILENAME)[-1])
 
 
 
@@ -296,6 +297,9 @@ async def setup_hook():
     global good_girl
     good_girl = currentwinner
 
+    global pet_count
+    pet_count = currentpetcount
+
     # set all daily tasks running
     if not announce_daily_audio.is_running():
         announce_daily_audio.start()
@@ -324,6 +328,7 @@ async def on_message(message):
 
     global audio_choices
     global tag_dictionary
+    global pet_count
 
     if msg.startswith('!masterlist'):
         embed = discord.Embed(title="Vel's Library Masterlist",
@@ -492,6 +497,10 @@ async def on_message(message):
         # input is in the format "!timestamp 3:00 PM" assumed eastern time
         timestamp = universal_time(msg)
         await message.channel.send(timestamp)
+
+    if msg.startswith('!pet'):
+        pet_count += 1
+        await message.channel.send(f"The bot has been pet {pet_count} times!")
 
 
 

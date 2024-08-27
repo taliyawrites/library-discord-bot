@@ -519,10 +519,9 @@ async def on_message(message):
 
 
     if msg.startswith('!degrade me'):
-        adjectives = ["desperate","pretty","depraved","pathetic","needy","worthless"]
+        adjectives = ["desperate","pretty","depraved","pathetic","needy","worthless","Daddy's"]
         nouns = ["whore","slut","bitch","cunt","set of holes","cumslut","fucktoy","cumrag","cumdump"]
-        daddy = ["","","","Daddy's "]
-        response = random.choice(daddy) + random.choice(adjectives) + " " + random.choice(nouns) + "."
+        response = random.choice(adjectives) + " " + random.choice(nouns) + "."
         await message.channel.send(response)
 
 

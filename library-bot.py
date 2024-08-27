@@ -498,6 +498,7 @@ async def on_message(message):
         timestamp = universal_time(msg)
         await message.channel.send(timestamp)
 
+
     if msg.startswith('!pet'):
         pet_count += 1
         save_to_file(COUNTER_FILENAME, [str(pet_count)])
@@ -507,6 +508,11 @@ async def on_message(message):
             await message.channel.send(f"Thank you! :smiling_face_with_3_hearts: The bot has been pet {pet_count} times!")
         if pet_count == 69:
             await message.channel.send("What? Are you really so horny that you thought there would be some special message for 69? Sluts like you are so predictable, you know. So needy and desperate and completely at the mercy of your pathetic fucking cunt. But you like being that way, don't you? Silly whore.")
+
+
+
+
+
 
 
 def universal_time(eastern_timestring):

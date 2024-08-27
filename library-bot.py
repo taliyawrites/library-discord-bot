@@ -522,7 +522,7 @@ async def on_message(message):
         adjectives = ["desperate","pretty","depraved","pathetic","needy","worthless"]
         nouns = ["whore","slut","bitch","cunt","set of holes","cumslut","fucktoy","cumrag","cumdump"]
         daddy = ["","","","","Daddy's "]
-        response = random.choice(daddy) + random.choice(adjectives) + " " + random.choice(nouns) + "!"
+        response = random.choice(daddy) + random.choice(adjectives) + " " + random.choice(nouns) + "."
         await message.channel.send("deg ||" + response + "||")
 
 

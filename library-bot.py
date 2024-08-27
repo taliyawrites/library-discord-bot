@@ -536,7 +536,7 @@ async def on_message(message):
         nouns = ["angel","bunny","pet","princess","toy","doll","kitten"]
         if random.choice(range(10000)) == 0:
             whose = "Vel's "
-        else if random.choice(range(5)) == 0:
+        elif random.choice(range(5)) == 0:
             whose = "Daddy's "
         else:
             whose = ""

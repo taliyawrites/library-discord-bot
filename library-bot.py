@@ -521,16 +521,26 @@ async def on_message(message):
     if msg.startswith('!degrade'):
         adjectives = ["desperate","pretty","depraved","pathetic","needy","worthless"]
         nouns = ["whore","slut","bitch","cunt","set of holes","cumslut","fucktoy","cumrag","cumdump"]
-        daddy = ["","","","","Daddy's "]
-        response = random.choice(daddy) + random.choice(adjectives) + " " + random.choice(nouns) + "."
+        if random.choice(range(10000)) == 0:
+            whose = "Vel's "
+        else if random.choice(range(5)) == 0:
+            whose = "Daddy's "
+        else:
+            whose = ""
+        response = whose + random.choice(adjectives) + " " + random.choice(nouns) + "."
         await message.channel.send("deg ||" + response + "||")
 
 
     if msg.startswith('!praise'):
         adjectives = ["perfect","pretty","beautiful","darling","sweet"]
         nouns = ["angel","bunny","pet","princess","toy","doll","kitten"]
-        daddy = ["","","","","Daddy's "]
-        response = random.choice(daddy) + random.choice(adjectives) + " " + random.choice(nouns) + "!"
+        if random.choice(range(10000)) == 0:
+            whose = "Vel's "
+        else if random.choice(range(5)) == 0:
+            whose = "Daddy's "
+        else:
+            whose = ""
+        response = whose + random.choice(adjectives) + " " + random.choice(nouns) + "!"
         await message.channel.send(response)
 
 

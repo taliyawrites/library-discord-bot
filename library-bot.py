@@ -315,6 +315,12 @@ async def setup_hook():
     global vel 
     vel = await client.fetch_user(1089053035377999912)
 
+    global mod_ids
+    mod_ids = [1169014359842885726, 1089053035377999912, 159860526841593856, 415894832515383296]
+
+    global edge_counter
+    edge_counter = 0
+
 
 
 
@@ -329,9 +335,7 @@ async def on_message(message):
     # remove case-sensitivity
     msg = message.content.lower()
 
-    global audio_choices
-    global tag_dictionary
-    global pet_count
+    global audio_choices, tag_dictionary, pet_count, edge_counter
 
     if msg.startswith('!masterlist'):
         embed = discord.Embed(title="Vel's Library Masterlist",
@@ -543,6 +547,20 @@ async def on_message(message):
         response = whose + random.choice(adjectives) + " " + random.choice(nouns) + "!"
         await message.channel.send(response)
 
+
+    if msg.startswith('!edge'):
+        edge_counter += 1
+        if edge_counter == 1:
+            await message.channel.send(f"I've been edged 1 time. May I please cum?")
+        else:
+            await message.channel.send(f"I've been edged {edge_counter} times. May I please cum?")
+
+    if msg.startswith('!cum'):
+        if message.author.id in mod_ids:
+            edge_counter == 0
+            await message.channel.send("Thank you!")
+        else:
+            await message.channel.send("Silence, sub.")
 
 
 

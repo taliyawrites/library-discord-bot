@@ -557,7 +557,7 @@ async def on_message(message):
 
     if msg.startswith('!cum'):
         if message.author.id in mod_ids:
-            edge_counter == 0
+            edge_counter = 0
             await message.channel.send("Thank you!")
         else:
             await message.channel.send("Silence, sub.")

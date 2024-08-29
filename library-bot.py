@@ -721,6 +721,14 @@ async def choose_good_girl():
         else:
             await taliya.send("ERROR: no non-recent options for good girl of the day.")
 
+        # randomly assign cum permissions
+        winners = random.choices(options, k = 3)
+        global winner_ids
+        winner_ids  = [user.id for user in winners]
+        winner_names = [user.display_name for user in winners]
+        print("edging permissions assigned to: ")
+        print(winner_names)
+
 
 
 @tasks.loop(minutes = 1)
@@ -732,12 +740,12 @@ async def daily_balatro():
 
 @tasks.loop(minutes = 1)
 async def cum_permissions():
-    if datetime.datetime.now().hour == 15 and datetime.datetime.now().minute == 40:
-        LIBRARY_CARD = 1148454184824360990
+    if datetime.datetime.now().hour == 15 and datetime.datetime.now().minute == 45:
+        # LIBRARY_CARD = 1148454184824360990
         guild = client.get_guild(GUILD)
-        options = guild.get_role(LIBRARY_CARD).members
+        options = guild.get_role(OPTIONS_ROLE).members
 
-        winners = random.choices(options, k = 20)
+        winners = random.choices(options, k = 3)
         global winner_ids
         winner_ids  = [user.id for user in winners]
         winner_names = [user.display_name for user in winners]

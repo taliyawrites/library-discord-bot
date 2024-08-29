@@ -297,10 +297,10 @@ async def setup_hook():
     global good_girl
     good_girl = currentwinner
 
-    global pet_count, edge_counter, winner_ids
+    global pet_count, edge_counter, cum_permission_ids
     pet_count = currentpetcount
     edge_counter = 0
-    winner_ids = [0]
+    cum_permission_ids = [0]
 
     # set all daily tasks running
     if not announce_daily_audio.is_running():
@@ -309,8 +309,6 @@ async def setup_hook():
         choose_good_girl.start()
     if not daily_balatro.is_running():
         daily_balatro.start()
-    if not cum_permissions.is_running():
-        cum_permissions.start()
 
     global taliya, vel
     taliya = await client.fetch_user(1169014359842885726)
@@ -560,11 +558,11 @@ async def on_message(message):
 
     if msg.startswith('!cum'):
         mod_ids = [1169014359842885726, 1089053035377999912, 159860526841593856, 415894832515383296]
-        if message.author.id in mod_ids or message.author.id in winner_ids:
+        if message.author.id in mod_ids or message.author.id in cum_permission_ids:
             edge_counter = 0
             await message.channel.send("Thank you!")
         else:
-            responses = ["Silence, sub.","Daddy didn't give me permission yet.", "I don't answer to you.","You'd really like that, wouldn't you?","Nice try."]
+            responses = ["Silence, sub.","Daddy didn't give me permission yet.", "I don't answer to you.","You'd really like that, wouldn't you?","Nice try.","Make me.","It's adorable that you thought that would work.","How about you cum for me instead, baby?","I'm not allowed to cum yet :pleading_face:"]
             await message.channel.send(random.choice(responses))
 
 
@@ -722,10 +720,10 @@ async def choose_good_girl():
             await taliya.send("ERROR: no non-recent options for good girl of the day.")
 
         # randomly assign cum permissions
-        winners = random.choices(options, k = 3)
-        global winner_ids
-        winner_ids  = [user.id for user in winners]
-        print(f"edging permissions assigned to: {winners[0].display_name}, {winners[1].display_name}, and {winners[2].display_name}")
+        winners = random.choices(options, k = 4)
+        global cum_permission_ids
+        cum_permission_ids  = [user.id for user in winners]
+        print(f"edging permissions assigned to: {winners[0].display_name}, {winners[1].display_name}, {winners[2].display_name}, and {winners[3].display_name}")
 
 
 
@@ -735,18 +733,6 @@ async def daily_balatro():
         global random_seed
         random_seed = ''.join(random.choices(string.ascii_uppercase+string.digits, k=8))
 
-
-@tasks.loop(minutes = 1)
-async def cum_permissions():
-    if datetime.datetime.now().hour == 15 and datetime.datetime.now().minute == 45:
-        # LIBRARY_CARD = 1148454184824360990
-        guild = client.get_guild(GUILD)
-        options = guild.get_role(OPTIONS_ROLE).members
-
-        winners = random.choices(options, k = 3)
-        global winner_ids
-        winner_ids  = [user.id for user in winners]
-        print(f"edging permissions assigned to: {winners[0].display_name}, {winners[1].display_name}, and {winners[2].display_name}")
 
 
 

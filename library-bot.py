@@ -544,7 +544,11 @@ async def on_message(message):
             whose = "Daddy's "
         else:
             whose = ""
-        response = whose + random.choice(adjectives) + " " + random.choice(nouns) + "!"
+        if message.author.id == 208091268897701898:
+            # Tora check
+            response = whose + random.choice(adjectives) + " kitten!"
+        else:
+            response = whose + random.choice(adjectives) + " " + random.choice(nouns) + "!"
         await message.channel.send(response)
 
 

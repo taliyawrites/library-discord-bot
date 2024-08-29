@@ -741,6 +741,7 @@ async def cum_permissions():
         global winner_ids
         winner_ids  = [user.id for user in winners]
         winner_names = [user.display_name for user in winners]
+        print("edging permissions assigned to: ")
         print(winner_names)
 
 

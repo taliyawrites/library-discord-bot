@@ -297,8 +297,10 @@ async def setup_hook():
     global good_girl
     good_girl = currentwinner
 
-    global pet_count
+    global pet_count, edge_counter, winner_ids
     pet_count = currentpetcount
+    edge_counter = 0
+    winner_ids = [0]
 
     # set all daily tasks running
     if not announce_daily_audio.is_running():
@@ -308,19 +310,11 @@ async def setup_hook():
     if not daily_balatro.is_running():
         daily_balatro.start()
 
-    global taliya
+    global taliya, vel
     taliya = await client.fetch_user(1169014359842885726)
-    await taliya.send(f"Card Catalog bot restarted successfully at {datetime.datetime.now().hour}:{datetime.datetime.now().minute}!")
-
-    global vel 
     vel = await client.fetch_user(1089053035377999912)
 
-    global mod_ids
-    mod_ids = [1169014359842885726, 1089053035377999912, 159860526841593856, 415894832515383296]
-
-    global edge_counter
-    edge_counter = 0
-
+    await taliya.send(f"Card Catalog bot restarted successfully at {datetime.datetime.now().hour}:{datetime.datetime.now().minute}!")
 
 
 
@@ -538,14 +532,16 @@ async def on_message(message):
     if msg.startswith('!praise'):
         adjectives = ["perfect","pretty","beautiful","darling","sweet"]
         nouns = ["angel","bunny","pet","princess","toy","doll","kitten"]
+
         if random.choice(range(1000)) < 3:
             whose = "Vel's "
         elif random.choice(range(5)) == 0:
             whose = "Daddy's "
         else:
             whose = ""
-        if message.author.id == 208091268897701898:
-            # Tora check
+
+        TORA_ID = 208091268897701898
+        if message.author.id == TORA_ID:
             response = whose + random.choice(adjectives) + " kitten!"
         else:
             response = whose + random.choice(adjectives) + " " + random.choice(nouns) + "!"
@@ -559,8 +555,10 @@ async def on_message(message):
         else:
             await message.channel.send(f"I've been edged {edge_counter} times. May I please cum?")
 
+
     if msg.startswith('!cum'):
-        if message.author.id in mod_ids:
+        mod_ids = [1169014359842885726, 1089053035377999912, 159860526841593856, 415894832515383296]
+        if message.author.id in mod_ids or message.author.id in winner_ids:
             edge_counter = 0
             await message.channel.send("Thank you!")
         else:
@@ -729,8 +727,18 @@ async def daily_balatro():
         random_seed = ''.join(random.choices(string.ascii_uppercase+string.digits, k=8))
 
 
+@tasks.loop(minutes = 1)
+async def cum_permissions():
+    if datetime.datetime.now().hour == 15 and datetime.datetime.now().minute == 30:
+        LIBRARY_CARD = 1148454184824360990
+        guild = client.get_guild(GUILD)
+        options = guild.get_role(LIBRARY_CARD)
 
-
+        winners = random.choices(options, 10)
+        global winner_ids
+        winner_ids  = [user.id for user in winners]
+        winner_names = [user.display_name for user in winners]
+        print(winner_names)
 
 
 

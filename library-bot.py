@@ -562,7 +562,8 @@ async def on_message(message):
             edge_counter = 0
             await message.channel.send("Thank you!")
         else:
-            await message.channel.send("Silence, sub.")
+            responses = ["Silence, sub.","Daddy didn't give me permission yet.", "I don't answer to you.","You'd really like that, wouldn't you?"]
+            await message.channel.send(random.choice(responses))
 
 
 

@@ -725,9 +725,7 @@ async def choose_good_girl():
         winners = random.choices(options, k = 3)
         global winner_ids
         winner_ids  = [user.id for user in winners]
-        winner_names = [user.display_name for user in winners]
-        print("edging permissions assigned to: ")
-        print(winner_names)
+        print(f"edging permissions assigned to: {winners[0].display_name}, {winners[1].display_name}, and {winners[2].display_name}")
 
 
 
@@ -748,9 +746,7 @@ async def cum_permissions():
         winners = random.choices(options, k = 3)
         global winner_ids
         winner_ids  = [user.id for user in winners]
-        winner_names = [user.display_name for user in winners]
-        print("edging permissions assigned to: ")
-        print(winner_names)
+        print(f"edging permissions assigned to: {winners[0].display_name}, {winners[1].display_name}, and {winners[2].display_name}")
 
 
 

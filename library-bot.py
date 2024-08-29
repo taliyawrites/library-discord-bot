@@ -564,7 +564,7 @@ async def on_message(message):
             edge_counter = 0
             await message.channel.send("Thank you!")
         else:
-            responses = ["Silence, sub.","Daddy didn't give me permission yet.", "I don't answer to you.","You'd really like that, wouldn't you?"]
+            responses = ["Silence, sub.","Daddy didn't give me permission yet.", "I don't answer to you.","You'd really like that, wouldn't you?","Nice try."]
             await message.channel.send(random.choice(responses))
 
 
@@ -732,7 +732,7 @@ async def daily_balatro():
 
 @tasks.loop(minutes = 1)
 async def cum_permissions():
-    if datetime.datetime.now().hour == 15 and datetime.datetime.now().minute == 31:
+    if datetime.datetime.now().hour == 15 and datetime.datetime.now().minute == 32:
         LIBRARY_CARD = 1148454184824360990
         guild = client.get_guild(GUILD)
         options = guild.get_role(LIBRARY_CARD)

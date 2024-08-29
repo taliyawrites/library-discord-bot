@@ -732,10 +732,10 @@ async def daily_balatro():
 
 @tasks.loop(minutes = 1)
 async def cum_permissions():
-    if datetime.datetime.now().hour == 15 and datetime.datetime.now().minute == 32:
+    if datetime.datetime.now().hour == 15 and datetime.datetime.now().minute == 34:
         LIBRARY_CARD = 1148454184824360990
         guild = client.get_guild(GUILD)
-        options = guild.get_role(LIBRARY_CARD)
+        options = guild.get_role(LIBRARY_CARD).members
 
         winners = random.choices(options, 10)
         global winner_ids

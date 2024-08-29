@@ -315,7 +315,7 @@ async def setup_hook():
     global taliya, vel
     taliya = await client.fetch_user(1169014359842885726)
     vel = await client.fetch_user(1089053035377999912)
-    await taliya.send(f"Card Catalog bot restarted successfully at {datetime.datetime.now().hour}:{datetime.datetime.now().minute}!")
+    await taliya.send(f"Card Catalog bot restarted successfully at {datetime.datetime.now().hour}h{datetime.datetime.now().minute}!")
 
 
 
@@ -561,7 +561,10 @@ async def on_message(message):
         mod_ids = [1169014359842885726, 1089053035377999912, 159860526841593856, 415894832515383296]
         if message.author.id in mod_ids or message.author.id in cum_permission_ids:
             edge_counter = 0
-            await message.channel.send("Thank you!")
+            if message.author is vel:
+                await message.channel.send("Thank you, Daddy!")
+            else:
+                await message.channel.send("Thank you!")
         else:
             responses = ["Silence, sub.","Daddy didn't give me permission yet.", "I don't answer to you.","You'd really like that, wouldn't you?","Nice try.","Make me.","It's adorable that you thought that would work.","How about you cum for me instead, baby?","I'm not allowed to cum yet :pleading_face:"]
             await message.channel.send(random.choice(responses))
@@ -724,7 +727,7 @@ async def choose_good_girl():
         winners = random.choices(options, k = 4)
         global cum_permission_ids
         cum_permission_ids  = [user.id for user in winners]
-        print(f"edging permissions assigned to: {winners[0].display_name}, {winners[1].display_name}, {winners[2].display_name}, and {winners[3].display_name}")
+        # print(f"edging permissions assigned to: {winners[0].display_name}, {winners[1].display_name}, {winners[2].display_name}, and {winners[3].display_name}")
         save_to_file(RECORD_FILENAME,[str(ids) for ids in cum_permission_ids])
 
 

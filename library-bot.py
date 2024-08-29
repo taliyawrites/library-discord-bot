@@ -309,6 +309,8 @@ async def setup_hook():
         choose_good_girl.start()
     if not daily_balatro.is_running():
         daily_balatro.start()
+    if not cum_permissions.is_running():
+        cum_permissions.start()
 
     global taliya, vel
     taliya = await client.fetch_user(1169014359842885726)
@@ -730,7 +732,7 @@ async def daily_balatro():
 
 @tasks.loop(minutes = 1)
 async def cum_permissions():
-    if datetime.datetime.now().hour == 15 and datetime.datetime.now().minute == 30:
+    if datetime.datetime.now().hour == 15 and datetime.datetime.now().minute == 31:
         LIBRARY_CARD = 1148454184824360990
         guild = client.get_guild(GUILD)
         options = guild.get_role(LIBRARY_CARD)

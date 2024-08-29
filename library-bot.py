@@ -26,6 +26,7 @@ WINNERS_FILENAME = "recentwinners.txt"
 AUDIOS_FILENAME = "recentaudios.txt"
 OPTIONS_FILENAME = "remaining.txt"
 COUNTER_FILENAME = "count.txt"
+RECORD_FILENAME = "record.txt"
 
 # run daily tasks at 1pm eastern time (6pm UTC+1)
 HOUR = 17
@@ -265,6 +266,7 @@ def save_to_file(filename, list):
 currentwinner = read_from_file(WINNERS_FILENAME)[-1]
 currentdaily = read_from_file(AUDIOS_FILENAME)[-1]
 currentpetcount = int(read_from_file(COUNTER_FILENAME)[-1])
+currentchosen = [int(value) for value in read_from_file(RECORD_FILENAME)]
 
 
 
@@ -300,7 +302,7 @@ async def setup_hook():
     global pet_count, edge_counter, cum_permission_ids
     pet_count = currentpetcount
     edge_counter = 0
-    cum_permission_ids = [0]
+    cum_permission_ids = currentchosen
 
     # set all daily tasks running
     if not announce_daily_audio.is_running():
@@ -313,7 +315,6 @@ async def setup_hook():
     global taliya, vel
     taliya = await client.fetch_user(1169014359842885726)
     vel = await client.fetch_user(1089053035377999912)
-
     await taliya.send(f"Card Catalog bot restarted successfully at {datetime.datetime.now().hour}:{datetime.datetime.now().minute}!")
 
 
@@ -699,7 +700,7 @@ async def choose_good_girl():
         channel = client.get_channel(GENERAL)
         good_girl_role = guild.get_role(WINNER_ROLE)
 
-        await asyncio.sleep(10)
+        await asyncio.sleep(6)
         for member in good_girl_role.members:
             # remove good girl role from yesterday's winner
             await member.remove_roles(good_girl_role)
@@ -724,6 +725,7 @@ async def choose_good_girl():
         global cum_permission_ids
         cum_permission_ids  = [user.id for user in winners]
         print(f"edging permissions assigned to: {winners[0].display_name}, {winners[1].display_name}, {winners[2].display_name}, and {winners[3].display_name}")
+        save_to_file(RECORD_FILENAME,[str(ids) for ids in cum_permission_ids])
 
 
 

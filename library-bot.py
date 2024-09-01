@@ -575,7 +575,7 @@ async def on_message(message):
 
 
 
-    if msg.author == vel and len(message.attachments) != 0:
+    if message.author == vel and len(message.attachments) != 0:
         attached = message.attachments
         if attached[0].is_voice_message():
             voice_note_links.append(message.jump_url)

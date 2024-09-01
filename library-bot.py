@@ -462,8 +462,9 @@ async def on_message(message):
 
 
     if msg.startswith('!stream'):
-        # stream_info = 'Vel streams live every other Sunday on [Twitch](https://www.twitch.tv/velslibrary). The next stream, "How Vel Does Vel Know Vel?" (quizzing the librarian himself on how well he knows his own content), will be <t:1722799800:F>!'
-        stream_info = 'Vel streams live every other Sunday on [Twitch](https://www.twitch.tv/velslibrary). The next stream will be <t:1724009400:F>!'
+        # stream_info = 'Vel streams live every other Sunday on [Twitch](https://www.twitch.tv/velslibrary). The next stream, "How Vel Does Vel Know Vel?" (quizzing the librarian himself on how well he knows his own content), will be <t:1722799800:F>! The next stream will be <t:1724009400:F>!'
+        # stream_info = 'Vel streams live every other Sunday on [Twitch](https://www.twitch.tv/velslibrary). The next stream will be <t:1724009400:F>!'
+        stream_info = 'Vel is taking a short break from streaming on [Twitch](https://www.twitch.tv/velslibrary)!'
         stream_embed = discord.Embed(title = "Vel's Livestreams", description = stream_info, url = "https://www.twitch.tv/velslibrary")
         await message.channel.send(embed = stream_embed)
 

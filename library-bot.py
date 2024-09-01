@@ -584,7 +584,7 @@ async def on_message(message):
 
     if msg.startswith("!vn"):
         link = random.choice(voice_note_links)
-        await message.channel.send("Here's a random voice note!" + link)
+        await message.channel.send("Here's a random voice note! " + link)
 
 
 

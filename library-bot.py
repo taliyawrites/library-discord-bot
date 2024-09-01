@@ -27,6 +27,7 @@ AUDIOS_FILENAME = "recentaudios.txt"
 OPTIONS_FILENAME = "remaining.txt"
 COUNTER_FILENAME = "count.txt"
 RECORD_FILENAME = "record.txt"
+ARCHIVE_FILENAME = "voice-note-archive.txt"
 
 # run daily tasks at 1pm eastern time (6pm UTC+1)
 HOUR = 17
@@ -304,6 +305,9 @@ async def setup_hook():
     edge_counter = 0
     cum_permission_ids = currentchosen
 
+    global voice_note_links
+    voice_note_links = read_from_file(ARCHIVE_FILENAME)
+
     # set all daily tasks running
     if not announce_daily_audio.is_running():
         announce_daily_audio.start()
@@ -330,7 +334,7 @@ async def on_message(message):
     # remove case-sensitivity
     msg = message.content.lower()
 
-    global audio_choices, tag_dictionary, pet_count, edge_counter
+    global audio_choices, tag_dictionary, pet_count, edge_counter, voice_note_links
 
     if msg.startswith('!masterlist'):
         embed = discord.Embed(title="Vel's Library Masterlist",
@@ -568,6 +572,19 @@ async def on_message(message):
         else:
             responses = ["Silence, sub.","Daddy didn't give me permission yet.", "I don't answer to you.","You'd really like that, wouldn't you?","Nice try.","Make me.","It's adorable that you thought that would work.","How about you cum for me instead, baby?","I'm not allowed to cum yet :pleading_face:"]
             await message.channel.send(random.choice(responses))
+
+
+
+    if msg.author == vel and len(message.attachments) != 0:
+        attached = message.attachments
+        if attached[0].is_voice_message():
+            voice_note_links.append(message.jump_url)
+            save_to_file(ARCHIVE_FILENAME,voice_note_links)
+
+
+    if msg.startswith("!vn"):
+        link = random.choice(voice_note_links)
+        await channel.message.send(link)
 
 
 

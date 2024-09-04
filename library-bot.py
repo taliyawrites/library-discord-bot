@@ -537,7 +537,7 @@ async def on_message(message):
 
     if msg.startswith('!praise'):
         adjectives = ["perfect","pretty","beautiful","darling","sweet"]
-        nouns = ["angel","bunny","pet","princess","toy","doll","kitten"]
+        nouns = ["angel","bunny","pet","princess","toy","doll","kitten","flower"]
 
         if random.choice(range(1000)) < 3:
             whose = "Vel's "
@@ -571,7 +571,7 @@ async def on_message(message):
             else:
                 await message.channel.send("Thank you!")
         else:
-            responses = ["Silence, sub.","Daddy didn't give me permission yet.", "I don't answer to you.","You'd really like that, wouldn't you?","Nice try.","Make me.","It's adorable that you thought that would work.","How about you cum for me instead, baby?","I'm not allowed to cum yet :pleading_face:"]
+            responses = ["Silence, sub.","Daddy didn't give me permission yet.", "I don't answer to you.","You'd really like that, wouldn't you?","Nice try.","Make me.","It's adorable that you thought that would work.","How about you cum for me instead, baby?","I'm not allowed to cum yet :pleading_face:",""]
             await message.channel.send(random.choice(responses))
 
 
@@ -583,9 +583,12 @@ async def on_message(message):
             save_to_file(ARCHIVE_FILENAME,voice_note_links)
 
 
+
     if msg.startswith("!vn"):
         link = random.choice(voice_note_links)
         await message.channel.send("Here's a random voice note! " + link)
+
+
 
 
 
@@ -710,7 +713,7 @@ def choose_next_winner(options):
 
     save_to_file(OPTIONS_FILENAME,remaining)
     save_to_file(WINNERS_FILENAME,recent)
-    return winner
+    return winner, len(remaining)
 
 
 @tasks.loop(minutes = 1)
@@ -728,7 +731,10 @@ async def choose_good_girl():
 
         # choose new random winner for the day
         options = guild.get_role(OPTIONS_ROLE).members
-        winner = choose_next_winner(options)
+        winner, remaining_number = choose_next_winner(options)
+        if remaining_number == 10: 
+            await taliya.send("Only ten remaining options for good girl of the day.")
+
 
         if datetime.datetime.now().month == 6 and datetime.datetime.now().day == 9:
             winner = await client.fetch_user(1241573320114049078)
@@ -745,7 +751,7 @@ async def choose_good_girl():
         winners = random.choices(options, k = 4)
         global cum_permission_ids
         cum_permission_ids  = [user.id for user in winners]
-        # print(f"edging permissions assigned to: {winners[0].display_name}, {winners[1].display_name}, {winners[2].display_name}, and {winners[3].display_name}")
+        print(f"daily permissions assigned to: {winners[0].display_name}, {winners[1].display_name}, {winners[2].display_name}, and {winners[3].display_name}")
         save_to_file(RECORD_FILENAME,[str(ids) for ids in cum_permission_ids])
 
 

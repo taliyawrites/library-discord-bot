@@ -476,8 +476,7 @@ async def on_message(message):
 
 
     if msg.startswith('!social'):
-        # await message.channel.send("here are links to all of Vel's socials")
-        links = "- [Twitter](https://x.com/VelsLibrary) \n- [Reddit](https://www.reddit.com/user/VelsLibrary/) \n- [Twitch](https://www.twitch.tv/velslibrary) \n- [Pornhub](https://www.pornhub.com/model/velslibrary) \n- [Youtube](https://www.youtube.com/@VelsLibrary)"
+        links = "- [Twitter](https://x.com/VelsLibrary) \n- [Reddit](https://www.reddit.com/user/VelsLibrary/) \n- [Twitch](https://www.twitch.tv/velslibrary) \n- [Pornhub](https://www.pornhub.com/model/velslibrary) \n- [Youtube](https://www.youtube.com/@VelsLibrary) \n- [TikTok](https://www.tiktok.com/@vels.library) \n- [Instagram](https://www.instagram.com/velslibrary/) \n- [Throne](https://throne.com/velslibrary) \n- [Quinn](https://www.tryquinn.com/creators/vels-library)"
         link_embed = discord.Embed(title = "Vel's Socials",description=links)
         await message.channel.send(embed=link_embed)
 

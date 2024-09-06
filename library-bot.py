@@ -505,8 +505,8 @@ async def on_message(message):
         await message.channel.send(timestamp)
 
     if msg.startswith('!bingo'):
-        stream_info = "Vel's Library discord server bingo! If you win, tell teacup."
-        stream_embed = discord.Embed(title = "Server Bingo", description = bingo_info, url = "https://www.bingocardcreator.com/game/29103/")
+        bingo_info = "Vel's Library discord server bingo! If you win, tell teacup."
+        bingo_embed = discord.Embed(title = "Server Bingo", description = bingo_info, url = "https://www.bingocardcreator.com/game/29103/")
         await message.channel.send(embed = bingo_embed)
 
 

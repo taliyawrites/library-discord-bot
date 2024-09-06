@@ -481,6 +481,12 @@ async def on_message(message):
         await message.channel.send(embed=link_embed)
 
 
+    if msg.startswith('!quinn'):
+        quinn_info = "Listen to Vel's exclusive Quinn audios here!"
+        quinn_embed = discord.Embed(title = "Vel's Quinn Audios", description = quinn_info, url = "https://www.tryquinn.com/creators/vels-library")
+        await message.channel.send(embed = quinn_embed)
+
+
     if msg.startswith('!goodgirl'):
         await message.channel.send(f"To be eligible to be selected as the random good girl of the day, assign yourself the 'I wanna be a good girl role' in <id:customize>. Today's good girl is {good_girl}!")
 

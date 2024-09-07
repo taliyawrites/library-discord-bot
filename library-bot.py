@@ -606,7 +606,7 @@ async def on_message(message):
             await client.wait_for('message',check = lambda m: m.content.startswith == "!randomaudio" and m.channel == message.channel, timeout = 20)
             await message.channel.send("great")
         except:
-            await messsage.channel.send("bot timeout")
+            await message.channel.send("bot timeout")
         # response = await client.wait_for('message',check = lambda m: m.content.startswith == "!randomaudio" and m.channel == message.channel)
         # await asyncio.sleep(4)
 

@@ -321,6 +321,8 @@ async def setup_hook():
     vel = await client.fetch_user(1089053035377999912)
     await taliya.send(f"Card Catalog bot restarted successfully at {datetime.datetime.now().hour}h{datetime.datetime.now().minute}!")
 
+    await taliya.send("Welcome to the Library! Vel has over three hundred audios to choose from, and you can use this bot to search through and explore all of Vel's content. It can pick a random audio with your favorite tags for you to listen to, you can search for audios by title, and more! To learn in detail how to use this bot to search for audios and learn other information about Vel's content, send the message`!tutorial`. To just receive a quick summary of what the bot can do, send the message `!allcommands`.")
+
 
 
 # ON MESSSAGE COMMANDS
@@ -493,7 +495,7 @@ async def on_message(message):
 
     # list all bot commands
     if msg.startswith('!allcommands'):
-        commands = "- `!randomaudio` randomly chosen audio from the masterlist \n- `!randomaudio [some] [tags]` random audio with these desired tag(s) \n- `!title phrase` for list of audios with that phrase in title \n- `!character name` for list of audios featuring a specific named character \n- `!daily` for the randomly chosen audio of the day \n- `!dm` bot will privately DM you the masterlist \n- `!masterlist` link to the masterlist \n- `!schedule` audio posting schedule \n- `!lives` info about live recordings \n- `!socials` links to all of Vel's social media accounts \n- `!goodgirl` to sign up for good girl role \n- `!stream` for information about the next twitch stream \n- `!balatro` for daily seed \n- `!merch` for information about the upcoming merch drop \n- `!time H:MM AM/PM` to convert from eastern time to universal timestamp \n- `!pet`, `!edge`, and `!cum` to show the bot some love \n- `!praise` and `!degrade` to be called a nice/mean name \n- `!vn` for a random voice note"
+        commands = "- `!randomaudio` randomly chosen audio from the masterlist \n- `!randomaudio [some] [tags]` random audio with these desired tag(s) \n- `!title phrase` for list of audios with that phrase in title \n- `!character name` for list of audios featuring a specific named character \n- `!daily` for the randomly chosen audio of the day \n- `!dm` bot will privately DM you the masterlist \n- `!masterlist` link to the masterlist \n- `!schedule` audio posting schedule \n- `!lives` info about live recordings \n- `!socials` links to all of Vel's social media accounts \n- `!goodgirl` to sign up for good girl role \n- `!stream` for information about the next twitch stream \n- `!balatro` for daily seed \n- `!merch` for information about the upcoming merch drop \n- `!time H:MM AM/PM` to convert from eastern time to universal timestamp \n- `!pet`, `!edge`, and `!cum` to show the bot some love \n- `!praise` and `!degrade` to be called a nice/mean name \n- `!tutorial` to receive a DM teaching you to use the bot \n- `!vn` for a random voice note"
         command_embed = discord.Embed(title = "Card Catalog Bot Commands",description=commands)
         await message.channel.send(embed=command_embed)
 
@@ -600,64 +602,69 @@ async def on_message(message):
         await message.channel.send("Here's a random voice note! " + link)
 
 
+
     if msg.startswith('!tutorial'):
+        # delete the user's message requesting the DM 
+        if not isinstance(message.channel, discord.DMChannel):
+            await message.delete()
+        
         cont = True
         if cont:
-            await message.channel.send("The bot is primarily used to search through the masterlist of Vel's audios! If you don't know what you're in the mood for, search `!randomaudio` to have any of over three hundred audios chosen for you. Try it here: ")
+            await message.author.send("The bot is primarily used to search through the masterlist of Vel's audios! If you don't know what you're in the mood for, search `!randomaudio` to have any of over three hundred audios chosen for you. Try it here: ")
             try:
-                await client.wait_for('message',check = lambda m: m.content.startswith("!randomaudio") and m.channel == message.channel, timeout = 300)
+                await client.wait_for('message',check = lambda m: m.content.startswith("!randomaudio") and m.author == message.author, timeout = 300)
                 await asyncio.sleep(1)
                 cont = True
             except:
-                await message.channel.send("Tutorial automatically ended after ten minutes of inactivity. If you want to finish the tutorial, send `!tutorial` to start again.")
+                await message.author.send("Tutorial automatically ended after ten minutes of inactivity. If you want to finish the tutorial, send `!tutorial` to start again.")
                 cont = False
 
         if cont:
-            await message.channel.send("You can also specify one or more tags that you'd like the random audio to have by sending a message with the format `!randomaudio [tag one] [tag two]`. Try it here with some of your favorite tag(s):")
+            await message.author.send("You can also specify one or more tags that you'd like the random audio to have by sending a message with the format `!randomaudio [tag one] [tag two]`. Try it here with some of your favorite tag(s):")
             cont = False
             try:
-                await client.wait_for('message',check = lambda m: m.content.startswith("!randomaudio") and m.channel == message.channel, timeout = 300)
+                await client.wait_for('message',check = lambda m: m.content.startswith("!randomaudio") and m.author == message.author, timeout = 300)
                 await asyncio.sleep(1)
                 cont = True
             except:
-                await message.channel.send("Tutorial automatically ended after ten minutes of inactivity. If you want to finish the tutorial, send `!tutorial` to start again.")
+                await message.author.send("Tutorial automatically ended after ten minutes of inactivity. If you want to finish the tutorial, send `!tutorial` to start again.")
                 cont = False
 
         if cont:
-            await message.channel.send("Of course, you might already know which of Vel's audios you'd like to listen to! To get a link to a specific audio, all you need to know is part of the title. The bot will send a list of all audios that match your search. Vel has a lot of multi-part series, so this is great way to get a list of all audios in a specific series! \n \nTry sending a message with the format `!title phrase`, where `phrase` is what you remember being in the title of the audio (for example, you could try `!title academic` or `!title need you to be mine`):")
+            await message.author.send("Of course, you might already know which of Vel's audios you'd like to listen to! To get a link to a specific audio, all you need to know is part of the title. The bot will send a list of all audios that match your search. Vel has a lot of multi-part series, so this is great way to get a list of all audios in a specific series! \n \nTry sending a message with the format `!title phrase`, where `phrase` is what you remember being in the title of the audio (for example, you could try `!title academic` or `!title need you to be mine`):")
             cont = False
             try:
-                await client.wait_for('message',check = lambda m: m.content.startswith("!title") and m.channel == message.channel, timeout = 300)
+                await client.wait_for('message',check = lambda m: m.content.startswith("!title") and m.author == message.author, timeout = 300)
                 await asyncio.sleep(1)
                 cont = True
             except:
-                await message.channel.send("Tutorial automatically ended after ten minutes of inactivity. If you want to finish the tutorial, send `!tutorial` to start again.")
+                await message.author.send("Tutorial automatically ended after ten minutes of inactivity. If you want to finish the tutorial, send `!tutorial` to start again.")
                 cont = False
 
         if cont:
-            await message.channel.send("You can even search by character name using `!character name`. If you aren't familiar with any of Vel's named characters yet, try searching for Sam: ")
+            await message.author.send("You can even search by character name using `!character name`. If you aren't familiar with any of Vel's named characters yet, try searching for Sam: ")
             cont = False
             try:
-                await client.wait_for('message',check = lambda m: m.content.startswith("!character") and m.channel == message.channel, timeout = 300)
+                await client.wait_for('message',check = lambda m: m.content.startswith("!character") and m.author == message.author, timeout = 300)
                 await asyncio.sleep(1)
                 cont = True
             except:
-                await message.channel.send("Tutorial automatically ended after ten minutes of inactivity. If you want to finish the tutorial, send `!tutorial` to start again.")
+                await message.author.send("Tutorial automatically ended after ten minutes of inactivity. If you want to finish the tutorial, send `!tutorial` to start again.")
                 cont = False
 
         if cont:
-            await message.channel.send("Vel also records lots of voice notes as little audio 'snacks' for the discord to enjoy. To listen to a random voice note, send the command `!vn`:")
+            await message.author.send("Vel also records lots of voice notes as little audio 'snacks' for the discord to enjoy. To listen to a random voice note, send the command `!vn`:")
             cont = False
             try:
-                await client.wait_for('message',check = lambda m: m.content.startswith("!vn") and m.channel == message.channel, timeout = 300)
+                await client.wait_for('message',check = lambda m: m.content.startswith("!vn") and m.author == message.author, timeout = 300)
                 await asyncio.sleep(1)
                 cont = True
             except:
-                await message.channel.send("Tutorial automatically ended after ten minutes of inactivity. If you want to finish the tutorial, send `!tutorial` to start again.")
+                await message.author.send("Tutorial automatically ended after ten minutes of inactivity. If you want to finish the tutorial, send `!tutorial` to start again.")
                 cont = False
 
         if cont: 
-            await message.channel.send("The bot also has lots of helpful information for all things Vel. For example, you can type `!masterlist` to get a link to the list of all of his audios, or `!socials` for links to all of Vel's accounts on various platforms online. There are also some commands just for fun that you'll often see people using in the https://discord.com/channels/1148449914188218399/1248773338726400040 channel, like sending the message `!praise` to be called a random nice petname! To see a full list of everything the bot can do and finish this tutorial, send the message `!allcommands`:")
+            await message.author.send("The bot also has lots of helpful information for all things Vel. For example, you can type `!masterlist` to get a link to the list of all of his audios, or `!socials` for links to all of Vel's accounts on various platforms online. There are also some commands just for fun that you'll often see people using in the https://discord.com/channels/1148449914188218399/1248773338726400040 channel, like sending the message `!praise` to be called a random nice petname! To see a full list of everything the bot can do and finish this tutorial, send the message `!allcommands`:")
 
 
 
@@ -840,7 +847,7 @@ async def daily_balatro():
 
 @client.event
 async def on_member_join(member):
-    await member.send("Welcome to the Library! You can use this bot to explore all of Vel's content. There are over three hundred audios to choose from, so send a message with the command `!randomaudio [desired tag]` to have the bot choose a random audio for you with whatever tag(s) you like. To learn how to use this bot to search for audios and learn other information about Vel's content, send the message`!allcommands`.")
+    await member.send("Welcome to the Library! Vel has over three hundred audios to choose from, and you can use this bot to search through and explore all of Vel's content. It can pick a random audio with your favorite tags for you to listen to, you can search for audios by title, and more! To learn in detail how to use this bot to search for audios and learn other information about Vel's content, send the message`!tutorial`. To just receive a quick summary of what the bot can do, send the message `!allcommands`.")
     embed = discord.Embed(title="Vel's Library Masterlist",
                    url="https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr",
                    description="Here's a link to the masterlist of all of Vel's audios. You can search and filter the masterlist for your favorite tags.")

@@ -602,7 +602,9 @@ async def on_message(message):
 
     if msg.startswith('!tutorial'):
         await message.channel.send("Primarily, the bot can be used to search through the masterlist of all of Vel's audios! If you don't know what you're in the mood for, search `!randomaudio` to have any of over three hundred audios chosen for you. Try it here: ")
-        await client.wait_for('message',check = (lambda m: m.content.startswith == "!randomaudio" and m.channel == message.channel))
+        def check(m):
+            return m.content.startswith == "!randomaudio" and m.channel == message.channel
+        await client.wait_for('message',check = check)
         await asyncio.sleep(4)
 
         await message.channel.send("You can also specify one or more tags that you'd like the random audio to have by sending a message with the format `!randomaudio [tag one] [tag two]`, try it here with some of your favorite tag(s):")

@@ -618,7 +618,7 @@ async def on_message(message):
                 cont = False
 
         if cont:
-            await message.author.send("You can also specify one or more tags that you'd like the random audio to have by sending a message with the format `!randomaudio [tag one] [tag two]`. Try it here with some of your favorite tag(s):")
+            await message.author.send("You can also specify tags that you'd like the random audio to have by sending a message with the format `!randomaudio [tag one] [tag two]`. Try it here with one (or more!) of your favorite tags:")
             cont = False
             try:
                 await client.wait_for('message',check = lambda m: m.content.startswith("!randomaudio") and m.author == message.author, timeout = 300)

@@ -582,8 +582,13 @@ async def on_message(message):
             else:
                 await message.channel.send("Thank you!")
         else:
-            responses = ["Silence, sub.","Daddy didn't give me permission yet.", "I don't answer to you.","You'd really like that, wouldn't you?","Nice try.","Make me.","It's adorable that you thought that would work.","How about you cum for me instead, baby?","I'm not allowed to cum yet :pleading_face:"]
-            await message.channel.send(random.choice(responses))
+            responses = ["Silence, sub.","Daddy didn't give me permission yet.", "I don't answer to you.","You'd really like that, wouldn't you?","Nice try.","Make me.","It's adorable that you thought that would work.","How about you cum for me instead, baby?","I'm not allowed to cum yet :pleading_face:","no u"]
+            response = random.choice(responses)
+            await message.channel.send(response)
+            if response == "no u":
+                audio =random_audio(audio_choices)
+                await message.channel.send(embed=audio.discord_post())
+
 
 
 

@@ -321,8 +321,6 @@ async def setup_hook():
     vel = await client.fetch_user(1089053035377999912)
     await taliya.send(f"Card Catalog bot restarted successfully at {datetime.datetime.now().hour}h{datetime.datetime.now().minute}!")
 
-    await taliya.send("Welcome to the Library! Vel has over three hundred audios to choose from, and you can use this bot to search through and explore all of Vel's content. It can pick a random audio with your favorite tags for you to listen to, you can search for audios by title, and more! To learn in detail how to use this bot to search for audios and learn other information about Vel's content, send the message `!tutorial`. To just receive a quick summary of what the bot can do, send the message `!allcommands`.")
-
 
 
 # ON MESSSAGE COMMANDS

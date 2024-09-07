@@ -604,9 +604,9 @@ async def on_message(message):
         await message.channel.send("Primarily, the bot can be used to search through the masterlist of all of Vel's audios! If you don't know what you're in the mood for, search `!randomaudio` to have any of over three hundred audios chosen for you. Try it here: ")
         try:
             await client.wait_for('message',check = lambda m: m.content.startswith == "!randomaudio" and m.channel == message.channel, timeout = 20)
-            await channel.send("great")
+            await message.channel.send("great")
         except:
-            await channel.send("bot timeout")
+            await messsage.channel.send("bot timeout")
         # response = await client.wait_for('message',check = lambda m: m.content.startswith == "!randomaudio" and m.channel == message.channel)
         # await asyncio.sleep(4)
 

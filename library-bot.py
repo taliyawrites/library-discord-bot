@@ -602,29 +602,23 @@ async def on_message(message):
 
     if msg.startswith('!tutorial'):
         await message.channel.send("Primarily, the bot can be used to search through the masterlist of all of Vel's audios! If you don't know what you're in the mood for, search `!randomaudio` to have any of over three hundred audios chosen for you. Try it here: ")
-        try:
-            await client.wait_for('message',check = lambda m: m.content.startswith == "randomaudio" and m.channel == message.channel, timeout = 20)
-            await message.channel.send("great")
-        except:
-            await message.channel.send("bot timeout")
-        # response = await client.wait_for('message',check = lambda m: m.content.startswith == "!randomaudio" and m.channel == message.channel)
-        # await asyncio.sleep(4)
-
+        await client.wait_for('message',check = lambda m: m.content.startswith("!randomaudio") and m.channel == message.channel, timeout = 20)
+        await asyncio.sleep(4)
 
         await message.channel.send("You can also specify one or more tags that you'd like the random audio to have by sending a message with the format `!randomaudio [tag one] [tag two]`, try it here with some of your favorite tag(s):")
-        await client.wait_for('message',check = lambda m: m.content.startswith == "!randomaudio" and m.channel == message.channel)
+        await client.wait_for('message',check = lambda m: m.content.startswith("!randomaudio") and m.channel == message.channel, timeout = 20)
         await asyncio.sleep(4)
 
         await message.channel.send("Of course, you might already know which of Vel's audios you'd like to hear! To get a link to a specific audio, all you need to know is part of the title. The bot will send a list of all audios that have that phrase in their title. Vel has a lot of multi-part series, so this is great way to get a list of all audios in a given series! \n \n Try sending a message with the format `!title phrase`, where `phrase` is what you remember being in the title of the audio (for example, you could try `!title academic` or `!title need you to be mine`)")
-        await client.wait_for('message',check = lambda m: m.content.startswith == "!title" and m.channel == message.channel)
+        await client.wait_for('message',check = lambda m: m.content.startswith("!title") and m.channel == message.channel, timeout = 20)
         await asyncio.sleep(4)
 
         await message.channel.send("You can even search by character name using `!character name`. If you aren't familiar with any of Vel's named characters yet, try searching for Sam: ")
-        await client.wait_for('message',check = lambda m: m.content.startswith == "!character" and m.channel == message.channel)
+        await client.wait_for('message',check = lambda m: m.content.startswith("!character") and m.channel == message.channel, timeout = 20)
         await asyncio.sleep(4)
 
         await message.channel.send("Vel also records lots of horny voice notes as little audio 'snacks' for the discord to enjoy. To listen to a random voice note, send the command `!vn`:")
-        await client.wait_for('message',check = lambda m: m.content.startswith == "!vn" and m.channel == message.channel)
+        await client.wait_for('message',check = lambda m: m.content.startswith("!vn") and m.channel == message.channel, timeout = 20)
         await asyncio.sleep(4)
 
         await message.channel.send("The bot also has lots of helpful information for all things Vel. For example, you can type `!masterlist` to get a link to the full masterlist, or `!socials` for links to all of Vel's accounts on various platforms online. There are also some commands just for fun that you'll often see people using in the https://discord.com/channels/1148449914188218399/1248773338726400040 channel, like sending the message `!praise` to be called a random nice petname! \n \n To see a full list of everything the bot can do and finish this tutorial, send the message `!allcommands`:")

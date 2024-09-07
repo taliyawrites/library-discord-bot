@@ -603,12 +603,13 @@ async def on_message(message):
     if msg.startswith('!tutorial'):
         cont = True
         if cont:
-            await message.channel.send("Primarily, the bot can be used to search through the masterlist of all of Vel's audios! If you don't know what you're in the mood for, search `!randomaudio` to have any of over three hundred audios chosen for you. Try it here: ")
+            await message.channel.send("The bot is primarily used to search through the masterlist of all of Vel's audios! If you don't know what you're in the mood for, search `!randomaudio` to have any of over three hundred audios chosen for you. Try it here: ")
             try:
                 await client.wait_for('message',check = lambda m: m.content.startswith("!randomaudio") and m.channel == message.channel, timeout = 300)
-                await asyncio.sleep(2)
+                await asyncio.sleep(1)
                 cont = True
             except:
+                await message.channel.send("Tutorial automatically ended after ten minutes of inactivity. If you want to finish the tutorial, send `!tutorial` to start again.")
                 cont = False
 
         if cont:
@@ -616,9 +617,10 @@ async def on_message(message):
             cont = False
             try:
                 await client.wait_for('message',check = lambda m: m.content.startswith("!randomaudio") and m.channel == message.channel, timeout = 300)
-                await asyncio.sleep(2)
+                await asyncio.sleep(1)
                 cont = True
             except:
+                await message.channel.send("Tutorial automatically ended after ten minutes of inactivity. If you want to finish the tutorial, send `!tutorial` to start again.")
                 cont = False
 
         if cont:
@@ -626,19 +628,21 @@ async def on_message(message):
             cont = False
             try:
                 await client.wait_for('message',check = lambda m: m.content.startswith("!title") and m.channel == message.channel, timeout = 300)
-                await asyncio.sleep(2)
+                await asyncio.sleep(1)
                 cont = True
             except:
+                await message.channel.send("Tutorial automatically ended after ten minutes of inactivity. If you want to finish the tutorial, send `!tutorial` to start again.")
                 cont = False
 
         if cont:
             await message.channel.send("You can even search by character name using `!character name`. If you aren't familiar with any of Vel's named characters yet, try searching for Sam: ")
             cont = False
             try:
-                await client.wait_for('message',check = lambda m: m.content.startswith("!character") and m.channel == message.channel, timeout = 20)
-                await asyncio.sleep(2)
+                await client.wait_for('message',check = lambda m: m.content.startswith("!character") and m.channel == message.channel, timeout = 15)
+                await asyncio.sleep(1)
                 cont = True
             except:
+                await message.channel.send("Tutorial automatically ended after ten minutes of inactivity. If you want to finish the tutorial, send `!tutorial` to start again.")
                 cont = False
 
         if cont:
@@ -646,13 +650,14 @@ async def on_message(message):
             cont = False
             try:
                 await client.wait_for('message',check = lambda m: m.content.startswith("!vn") and m.channel == message.channel, timeout = 300)
-                await asyncio.sleep(2)
+                await asyncio.sleep(1)
                 cont = True
             except:
+                await message.channel.send("Tutorial automatically ended after ten minutes of inactivity. If you want to finish the tutorial, send `!tutorial` to start again.")
                 cont = False
 
         if cont: 
-            await message.channel.send("The bot also has lots of helpful information for all things Vel. For example, you can type `!masterlist` to get a link to the full masterlist, or `!socials` for links to all of Vel's accounts on various platforms online. There are also some commands just for fun that you'll often see people using in the https://discord.com/channels/1148449914188218399/1248773338726400040 channel, like sending the message `!praise` to be called a random nice petname! \n \n To see a full list of everything the bot can do and finish this tutorial, send the message `!allcommands`:")
+            await message.channel.send("The bot also has lots of helpful information for all things Vel. For example, you can type `!masterlist` to get a link to the full masterlist, or `!socials` for links to all of Vel's accounts on various platforms online. There are also some commands just for fun that you'll often see people using in the https://discord.com/channels/1148449914188218399/1248773338726400040 channel, like sending the message `!praise` to be called a random nice petname! To see a full list of everything the bot can do and finish this tutorial, send the message `!allcommands`:")
 
 
 

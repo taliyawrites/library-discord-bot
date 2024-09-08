@@ -516,6 +516,12 @@ async def on_message(message):
         bingo_embed = discord.Embed(title = "Server Bingo", description = bingo_info, url = "https://www.bingocardcreator.com/game/29103/")
         await message.channel.send(embed = bingo_embed)
 
+    if msg.startswith('!book'):
+        books_info = "List of books Vel is or will be reading for content, with links to Storygraph for descriptions, reviews, and content warnings."
+        books_embed = discord.Embed(title = "Vel's Romance Reads", description = books_info, url = "https://airtable.com/appl3LHVXpzA6fEqq/shrTeuKFM6V6M4Bcs/tblgrs5VFAKpTsT5W/viw4EjZx4vfMv3vXf")
+        await message.channel.send(embed = books_embed)
+
+
 
     if msg.startswith('!pet'):
         pet_count += 1
@@ -591,13 +597,11 @@ async def on_message(message):
 
 
 
-
     if message.author == vel and len(message.attachments) != 0:
         attached = message.attachments
         if attached[0].is_voice_message():
             voice_note_links.append(message.jump_url)
             save_to_file(ARCHIVE_FILENAME,voice_note_links)
-
 
 
     if msg.startswith("!vn"):

@@ -150,8 +150,7 @@ class Audio:
 # extracts tag from !randomaudio request 
 # works regardless of whether or not square brackets were used
 def get_tags(message):
-    msg = message.strip()
-    tag = msg[13:].strip()
+    tag = message.strip()
 
     if len(tag) == 0:
         return None
@@ -197,6 +196,28 @@ def title_matches(phrase):
     for audio in audio_choices:
         if phrase.lower() in audio.name().lower():
             matching.append(audio)
+    matching.sort(key = age_sort)
+    return matching
+
+# search to see if any part of the phrase appears in any titles
+def inexact_matches(phrase):
+    matching = []
+    search_terms = phrase.split(" ")
+    too_common_words = ["the","a","an","is","on","for","you","my","i","to","me","up"]
+
+    search_words = []
+    for word in search_terms:
+        if word not in too_common_words and len(word) > 2:
+            search_words.append(word)
+
+    for audio in audio_choices:
+        overlap = 0
+        for word in search_words:
+            if word in audio.name().lower():
+                overlap += 1
+        if overlap > 0:
+            matching.append(audio)
+
     matching.sort(key = age_sort)
     return matching
 
@@ -358,7 +379,7 @@ async def on_message(message):
         # # checking to see if the user specified a tag, use if leading != 0
         # leading, trailing = 1+msg.find('['), msg.find(']')
         # tag = msg[leading:trailing]
-        tags = get_tags(msg)
+        tags = get_tags(msg[13:])
         if tags is not None:
             audio = random_audio(audio_choices,tags)
             string =  '] ['.join(tags)
@@ -384,24 +405,68 @@ async def on_message(message):
             phrase = phrase[1:-1]
         phrase = phrase.strip()
 
-
         matches = title_matches(phrase)
 
         if len(matches) == 0:
-            await message.channel.send(f'No audios found with title including the phrase "{phrase}."')
+            possible_matches = inexact_matches(phrase)
+            if len(possible_matches) == 0:
+                await message.channel.send(f'No audios found with title including the phrase "{phrase}."')
+            elif len(possible_matches) == 1:
+                await message.channel.send('No exact matches found for "' + phrase + '." One partially matching result found.')
+                await message.channel.send(embed=possible_matches[0].discord_post())
+            else:
+                await message.channel.send('No exact matches found for "' + phrase + '."')
+                link_string = ""
+                for i in list(range(len(possible_matches))):
+                    next = str(i+1) + ". [" + possible_matches[i].name() + "](" + possible_matches[i].link() + ")" + '\n'
+                    link_string = link_string + next
+
+                matches_embed = discord.Embed(title = "Partially Matching Results",description=link_string)
+                try:
+                    await message.channel.send(embed = matches_embed)
+                except:
+                    await message.channel.send('Partially matching results exceeded the Discord character limit, please try again with a different search!')
         elif len(matches) == 1:
             await message.channel.send(embed=matches[0].discord_post())     
         else:
             count = len(matches)
-            await message.channel.send(str(count) + ' matches found for "' + phrase + '."')
-
             link_string = ""
             for i in list(range(count)):
                 next = str(i+1) + ". [" + matches[i].name() + "](" + matches[i].link() + ")" + '\n'
                 link_string = link_string + next
 
             matches_embed = discord.Embed(title = "Matching Results",description=link_string)
-            await message.channel.send(embed = matches_embed)
+            try:
+                await message.channel.send(embed = matches_embed)
+            except:
+                await message.channel.send("Too many results found to display without exceeding Discord character limit, please try again with a more specific search term.")
+
+
+
+    if msg.startswith('!tag'):
+        tags = get_tags(msg[5:])
+        if len(tags) == 0:
+            await message.channel.send("Please enter a search phrase after `!tag`.")
+            return
+
+        matches = tagged_options(audio_choices,tags)
+
+        if len(matches) == 0:
+            await message.channel.send("No audios tagged with " + msg[5:] + " found.")
+        elif len(matches) == 1:
+            await message.channel.send(embed=matches[0].discord_post())     
+        else:
+            link_string = ""
+            for i in list(range(len(matches))):
+                next = str(i+1) + ". [" + matches[i].name() + "](" + matches[i].link() + ")" + '\n'
+                link_string = link_string + next
+
+            matches_embed = discord.Embed(title = "Matching Results",description=link_string)
+            try:
+                await message.channel.send(embed = matches_embed)
+            except:
+                await message.channel.send("Too many results found to display without exceeding Discord character limit, please try again with a more specific set of tags.")
+
 
 
     if msg.startswith('!character'):
@@ -588,8 +653,10 @@ async def on_message(message):
             else:
                 await message.channel.send("Thank you!")
         else:
-            responses = ["Silence, sub.","Daddy didn't give me permission yet.", "I don't answer to you.","You'd really like that, wouldn't you?","Nice try.","Make me.","It's adorable that you thought that would work.","How about you cum for me instead, baby?","I'm not allowed to cum yet :pleading_face:","no u"]
-            response = random.choice(responses)
+            responses = ["no u","Silence, sub.","Daddy didn't give me permission yet.", "I don't answer to you.","You'd really like that, wouldn't you?","Nice try.","Make me.","It's adorable that you thought that would work.","How about you cum for me instead, baby?","I'm not allowed to cum yet :pleading_face:","I'm trying :pensive:","It's okay, I'm a good girl, I can take a little more!","But I wanna be good for Daddy!","You're not my real dom!"]
+            weights = [1 for k in range(len(responses)-1)]
+            weights.insert(0,6)
+            response = random.choices(responses,weights = weights, k = 1)[0]
             await message.channel.send(response)
             if response == "no u":
                 audio =random_audio(audio_choices)
@@ -832,10 +899,10 @@ async def choose_good_girl():
             await taliya.send("ERROR: no non-recent options for good girl of the day.")
 
         # randomly assign cum permissions
-        winners = random.sample(options, 5)
+        winners = random.sample(options, 6)
         global cum_permission_ids
         cum_permission_ids  = [user.id for user in winners]
-        print(f"daily permissions assigned to: {winners[0].display_name}, {winners[1].display_name}, {winners[2].display_name}, {winners[3].display_name}, and {winners[4].display_name}")
+        print(f"daily permissions assigned to: {winners[0].display_name}, {winners[1].display_name}, {winners[2].display_name}, {winners[3].display_name}, {winners[4].display_name}, and {winners[5].display_name}")
         save_to_file(RECORD_FILENAME,[str(ids) for ids in cum_permission_ids])
 
 
@@ -886,4 +953,3 @@ async def on_error(event, *args, **kwargs):
 # RUN BOT
 
 client.run(TOKEN)
-

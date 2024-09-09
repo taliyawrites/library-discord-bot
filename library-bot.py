@@ -203,7 +203,7 @@ def title_matches(phrase):
 def inexact_matches(phrase):
     matching = []
     search_terms = phrase.split(" ")
-    too_common_words = ["the","a","an","is","on","for","you","my","i","to","me","up","and","are","with","your"]
+    too_common_words = ["the","a","an","is","on","for","you","my","i","to","me","up","and","are","with","your","by","part","of"]
     search_words = []
     for word in search_terms:
         if word not in too_common_words and len(word) > 2:

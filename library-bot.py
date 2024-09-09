@@ -661,7 +661,7 @@ async def on_message(message):
             if response == "no u":
                 options = []
                 for audio in audio_choices:
-                    if 'sfw' not in audio.tags():
+                    if 'sfw' not in audio.tags() and 'behind the scenes' not in audio.tags():
                         options.append(audio)
                 audio =random_audio(options)
                 await message.channel.send(embed=audio.discord_post())

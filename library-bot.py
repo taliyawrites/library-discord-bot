@@ -449,7 +449,8 @@ async def on_message(message):
             await message.channel.send("Please enter a search phrase after `!tag`.")
             return
 
-        matches = tagged_options(audio_choices,tags).sort(key = age_sort)
+        matches = tagged_options(audio_choices,tags)
+        matches.sort(key = age_sort)
 
         if len(matches) == 0:
             await message.channel.send("No audios tagged with " + msg[5:] + " found.")

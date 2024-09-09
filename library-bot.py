@@ -582,7 +582,7 @@ async def on_message(message):
         await message.channel.send(embed = bingo_embed)
 
     if msg.startswith('!book'):
-        books_info = "List of books Vel is or will be reading for content, with links to Storygraph for descriptions, reviews, and content warnings."
+        books_info = "List of books Vel is or will be reading for content, with links to Storygraph for descriptions, reviews, and content warnings. Maintained by Delphine!"
         books_embed = discord.Embed(title = "Vel's Romance Reads", description = books_info, url = "https://airtable.com/appl3LHVXpzA6fEqq/shrTeuKFM6V6M4Bcs/tblgrs5VFAKpTsT5W/viw4EjZx4vfMv3vXf")
         await message.channel.send(embed = books_embed)
 

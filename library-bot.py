@@ -535,7 +535,8 @@ async def on_message(message):
 
 
     if msg.startswith('!merch'):
-        merch_info = "Merch is now live for patrons to purchase! To access the store, use password ||goodgirl||. These items will be available until <t:1723089540:F>. Merch drops are seasonal, so this is your only chance to get these!"
+        # merch_info = "Merch is now live for patrons to purchase! To access the store, use password ||goodgirl||. These items will be available until <t:1723089540:F>. Merch drops are seasonal, so this is your only chance to get these!"
+        merch_info = "The summer merch drop has ended, but new merch will be available this winter!"
         merch_embed = discord.Embed(title = "Vel's Library Merch, Summer 2024", description = merch_info, url = "https://vel-1-shop.fourthwall.com/")
         await message.channel.send(embed = merch_embed)
 
@@ -558,7 +559,7 @@ async def on_message(message):
 
     # list all bot commands
     if msg.startswith('!allcommands'):
-        commands = "- `!randomaudio` randomly chosen audio from the masterlist \n- `!randomaudio [some] [tags]` random audio with these desired tag(s) \n- `!title phrase` for list of audios with that phrase in title \n- `!tag [some] [tags]` for list of audios with those tags \n- `!character name` for list of audios featuring a specific named character \n- `!daily` for the randomly chosen audio of the day \n- `!dm` bot will privately DM you the masterlist \n- `!masterlist` link to the masterlist \n- `!socials` links to all of Vel's social media accounts \n- `!schedule` audio posting schedule \n- `!lives` info about live recordings \n- `!tutorial` to receive a DM teaching you to use the bot \n- `!goodgirl` to sign up for good girl role \n- `!stream` for information about the next twitch stream \n- `!balatro` for daily seed \n- `!merch` for information about the upcoming merch drop \n- `!time H:MM AM/PM` to convert from eastern time to universal timestamp \n- `!pet`, `!edge`, and `!cum` to show the bot some love \n- `!praise` and `!degrade` to be called a nice/mean name \n- `!vn` for a random voice note"
+        commands = "- `!randomaudio` randomly chosen audio from the masterlist \n- `!randomaudio [some] [tags]` random audio with these desired tag(s) \n- `!title phrase` for list of audios with that phrase in title \n- `!tag [some] [tags]` for list of audios with those tags \n- `!character name` for list of audios featuring a specific named character \n- `!daily` for the randomly chosen audio of the day \n- `!dm` bot will privately DM you the masterlist \n- `!masterlist` link to the masterlist \n- `!socials` links to all of Vel's social media accounts \n- `!schedule` audio posting schedule \n- `!lives` info about live recordings \n- `!tutorial` to receive a DM teaching you to use the bot \n- `!goodgirl` to sign up for good girl role \n- `!stream` for information about the next twitch stream \n- `!balatro` for daily seed \n- `!merch` for information about merch drops \n- `!time H:MM AM/PM` to convert from eastern time to universal timestamp \n- `!pet`, `!edge`, and `!cum` to show the bot some love \n- `!praise` and `!degrade` to be called a nice/mean name \n- `!vn` for a random voice note"
         command_embed = discord.Embed(title = "Card Catalog Bot Commands",description=commands)
         await message.channel.send(embed=command_embed)
 

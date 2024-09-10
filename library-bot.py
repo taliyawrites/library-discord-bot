@@ -31,7 +31,7 @@ ARCHIVE_FILENAME = "voice-note-archive.txt"
 
 # run daily tasks at 1pm eastern time (6pm UTC+1)
 HOUR = 17
-MINUTE = 5
+MINUTE = 0
 
 
 intents = discord.Intents.default()

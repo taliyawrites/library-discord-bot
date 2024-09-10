@@ -31,7 +31,7 @@ ARCHIVE_FILENAME = "voice-note-archive.txt"
 
 # run daily tasks at 1pm eastern time (6pm UTC+1)
 HOUR = 17
-MINUTE = 0
+MINUTE = 5
 
 
 intents = discord.Intents.default()
@@ -536,7 +536,7 @@ async def on_message(message):
 
     if msg.startswith('!merch'):
         # merch_info = "Merch is now live for patrons to purchase! To access the store, use password ||goodgirl||. These items will be available until <t:1723089540:F>. Merch drops are seasonal, so this is your only chance to get these!"
-        merch_info = "The summer merch drop has ended, but new merch will be available this winter!"
+        merch_info = "The summer merch drop has ended, but new merch will likely be available this winter!"
         merch_embed = discord.Embed(title = "Vel's Library Merch, Summer 2024", description = merch_info, url = "https://vel-1-shop.fourthwall.com/")
         await message.channel.send(embed = merch_embed)
 

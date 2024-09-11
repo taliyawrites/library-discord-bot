@@ -30,7 +30,7 @@ RECORD_FILENAME = "record.txt"
 ARCHIVE_FILENAME = "voice-note-archive.txt"
 
 # run daily tasks at 1pm eastern time (6pm UTC+1)
-HOUR, MINUTE = 17, 11
+HOUR, MINUTE = 17, 0
 
 
 

@@ -30,7 +30,7 @@ RECORD_FILENAME = "record.txt"
 ARCHIVE_FILENAME = "voice-note-archive.txt"
 
 # run daily tasks at 1pm eastern time (6pm UTC+1)
-HOUR, MINUTE = 17, 0
+HOUR, MINUTE = 17, 11
 
 
 
@@ -343,7 +343,7 @@ async def setup_hook():
     taliya = await client.fetch_user(1169014359842885726)
     vel = await client.fetch_user(1089053035377999912)
     await taliya.send(f"Card Catalog bot restarted successfully!")
-    # print(f"bot local time: {datetime.datetime.now().hour}h{datetime.datetime.now().minute}.")
+    print(f"bot local time: {datetime.datetime.now().hour}h{datetime.datetime.now().minute}.")
 
 
 

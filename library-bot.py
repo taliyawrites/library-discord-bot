@@ -488,9 +488,9 @@ async def on_message(message):
 
     if msg.startswith("!goodnight") and message.author == taliya:
         tag_choices = ['mdom', 'creampies', 'oral', 'praise', 'rambles', 'degradation', 'breeding', 'cuckolding', 'spanking', 'fingering', 'blowjobs', 'msub', 'cheating', 'overstim',  'edging', 'body worship', 'bondage', 'strangers to lovers', 'friends to lovers', 'enemies to lovers','toys', 'demons','spitting', 'condescension','grinding', 'bodywriting', 'Daddy kink', 'deepthroating', 'nipple play', 'begging', 'standing sex', 'hands-free orgasms', 'mirror play', 'hypno', 'brat taming', 'petplay', 'choking', 'exhibitionism', 'objectification', 'pregnant sex', 'somno','facesitting', 'marking', 'cumplay','forced orgasms','denial','titjobs']
-        await message.channel.send("Good night " + message.author.display_name + "! Sweet dreams, try not to think about " + random.choice(tag_choices) + " :Bedge:1284645173736767610")
-        await message.channel.send("Sweet dreams, try not to think about " + random.choice(tag_choices) + " :Bedge:1284645173736767610")
-        await message.channel.send("sweet dreams, try not to think about " + random.choice(tag_choices) + " :Bedge:1284645173736767610")
+        await message.channel.send("Good night " + message.author.display_name + "! Sweet dreams, try not to think about " + random.choice(tag_choices) + " <:Bedge:1284645173736767610>")
+        await message.channel.send("Sweet dreams, try not to think about " + random.choice(tag_choices) + " <:Bedge:1284645173736767610>")
+        await message.channel.send("sweet dreams, try not to think about " + random.choice(tag_choices) + " <:Bedge:1284645173736767610>")
 
 
 

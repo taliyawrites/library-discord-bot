@@ -486,6 +486,12 @@ async def on_message(message):
         await message.channel.send("Here's a random voice note! " + link)
 
 
+    if msg.startswith("!goodnight") and message.author == taliya:
+        tag_choices = ['mdom', 'creampies', 'oral', 'praise', 'rambles', 'degradation', 'breeding', 'cuckolding', 'spanking', 'fingering', 'blowjobs', 'msub', 'cheating', 'overstim',  'edging', 'body worship', 'bondage', 'strangers to lovers', 'friends to lovers', 'enemies to lovers','toys', 'demons','spitting', 'condescension','grinding', 'bodywriting', 'Daddy kink', 'deepthroating', 'nipple play', 'begging', 'standing sex', 'hands-free orgasms', 'mirror play', 'hypno', 'brat taming', 'petplay', 'choking', 'exhibitionism', 'objectification', 'pregnant sex', 'somno','facesitting', 'marking', 'cumplay','forced orgasms','denial','titjobs']
+        await message.channel.send("Good night " + message.author.display_name + "! Sweet dreams, try not to think about " + random.(tag_choices) + " :Bedge:")
+        await message.channel.send("Sweet dreams, try not to think about " + random.(tag_choices) + " :Bedge:")
+        await message.channel.send("sweet dreams, try not to think about " + random.(tag_choices) + " :Bedge:")
+
 
 
 
@@ -787,7 +793,7 @@ async def on_message(message):
             else:
                 await message.channel.send("Thank you!")
         else:
-            responses = ["no u","Silence, sub.","Daddy didn't give me permission yet.", "I don't answer to you.","You'd really like that, wouldn't you?","Nice try.","Make me.","It's adorable that you thought that would work.","How about you cum for me instead, baby?","I'm not allowed to cum yet :pleading_face:","I'm trying :pensive:","It's okay, I'm a good girl, I can take a little more!","But I wanna be good for Daddy!","You're not my real dom!"]
+            responses = ["no u","Silence, sub.","Daddy didn't give me permission yet.", "I don't answer to you.","You'd really like that, wouldn't you?","Nice try.","Make me.","It's adorable that you thought that would work.","How about you cum for me instead, baby?","I'm not allowed to cum yet :pleading_face:","I'm trying :pensive:","It's okay, I'm a good girl, I can take a little more!","But I wanna be good for Daddy!","You're not my real dom!","I would, but my vibrator died :cry: you got any batteries?"]
             weights = [1 for k in range(len(responses)-1)]
             weights.insert(0,6)
             response = random.choices(responses,weights = weights, k = 1)[0]

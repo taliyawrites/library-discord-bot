@@ -486,11 +486,16 @@ async def on_message(message):
         await message.channel.send("Here's a random voice note! " + link)
 
 
-    if msg.startswith("!goodnight") and message.author == taliya:
+    if msg.startswith("!gn") and message.author == taliya:
         tag_choices = ['mdom', 'creampies', 'oral', 'praise', 'rambles', 'degradation', 'breeding', 'cuckolding', 'spanking', 'fingering', 'blowjobs', 'msub', 'cheating', 'overstim',  'edging', 'body worship', 'bondage', 'strangers to lovers', 'friends to lovers', 'enemies to lovers','toys', 'demons','spitting', 'condescension','grinding', 'bodywriting', 'Daddy kink', 'deepthroating', 'nipple play', 'begging', 'standing sex', 'hands-free orgasms', 'mirror play', 'hypno', 'brat taming', 'petplay', 'choking', 'exhibitionism', 'objectification', 'pregnant sex', 'somno','facesitting', 'marking', 'cumplay','forced orgasms','denial','titjobs']
-        await message.channel.send("Good night " + message.author.display_name + "! Sweet dreams, try not to think about " + random.choice(tag_choices) + " <:Bedge:1284645173736767610>")
-        await message.channel.send("Sweet dreams, try not to think about " + random.choice(tag_choices) + " <:Bedge:1284645173736767610>")
-        await message.channel.send("sweet dreams, try not to think about " + random.choice(tag_choices) + " <:Bedge:1284645173736767610>")
+        if msg.startswith("!gn1"):
+            await message.channel.send("Good night, " + message.author.display_name + "! Sweet dreams, try not to think about " + random.choice(tag_choices) + " <:Bedge:1284645173736767610>")
+        if msg.startswith("!gn2"):
+            await message.channel.send("Good night " + message.author.display_name + "! Sweet dreams, try not to think about " + random.choice(tag_choices) + " <:Bedge:1284645173736767610>")
+        if msg.startswith("!gn3"):
+            await message.channel.send("Sweet dreams, try not to think about " + random.choice(tag_choices) + " <:Bedge:1284645173736767610>")
+        if msg.startswith("!gn4"):
+            await message.channel.send("sweet dreams, try not to think about " + random.choice(tag_choices) + " <:Bedge:1284645173736767610>")
 
 
 

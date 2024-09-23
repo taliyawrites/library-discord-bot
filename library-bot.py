@@ -206,6 +206,7 @@ def title_matches(phrase):
 # search to see if any part of the phrase appears in any titles
 def inexact_matches(phrase):
     matching = []
+    closer_matches = []
     search_terms = phrase.split(" ")
     too_common_words = ["the","a","an","is","on","for","you","my","i","to","me","up","and","are","with","your","by","part","of"]
     search_words = []
@@ -220,9 +221,15 @@ def inexact_matches(phrase):
                 overlap += 1
         if overlap > 0:
             matching.append(audio)
+        if overlap == len(search_words):
+            closer_matches.append(audio)
 
-    matching.sort(key = age_sort)
-    return matching
+    if len(closer_matches) != 0:
+        closer_matches.sort(key = age_sort)
+        return closer_matches
+    else:
+        matching.sort(key = age_sort)
+        return matching
 
 # search for matching character names
 def character_search(name):
@@ -487,7 +494,7 @@ async def on_message(message):
 
 
     if msg.startswith("!gn") or msg.startswith("!goodnight"):
-        tag_choices = ['mdom', 'creampies', 'oral', 'praise', 'rambles', 'degradation', 'breeding', 'cuckolding', 'spanking', 'fingering', 'blowjobs', 'msub', 'cheating', 'overstim',  'edging', 'body worship', 'bondage', 'strangers to lovers', 'friends to lovers', 'enemies to lovers','toys', 'demons','spitting', 'condescension','grinding', 'bodywriting', 'Daddy kink', 'deepthroating', 'nipple play', 'begging', 'standing sex', 'hands-free orgasms', 'mirror play', 'hypno', 'brat taming', 'petplay', 'choking', 'exhibitionism', 'objectification', 'pregnant sex', 'somno','facesitting', 'marking', 'cumplay','forced orgasms','denial','titjobs']
+        tag_choices = ['mdom', 'creampies', 'oral', 'praise', 'rambles', 'degradation', 'breeding', 'cuckolding', 'spanking', 'fingering', 'blowjobs', 'msub', 'cheating', 'overstim',  'edging', 'body worship', 'bondage', 'strangers to lovers', 'friends to lovers', 'enemies to lovers','toys', 'demons','spitting', 'condescension','grinding', 'bodywriting', 'Daddy kink', 'deepthroating', 'nipple play', 'begging', 'standing sex', 'hands-free orgasms', 'mirror play', 'hypno', 'brat taming', 'petplay', 'choking', 'exhibitionism', 'objectification', 'pregnant sex', 'somno','facesitting', 'marking', 'cumplay','forced orgasms','denial','titjobs', 'cum on tits']
         bedge = " <:Bedge:1191310903208050839>"
         if message.author == taliya:
             await message.channel.send("Good night " + message.author.display_name + "! Sweet dreams, try not to think about " + random.choice(tag_choices) + bedge)

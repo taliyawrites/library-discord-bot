@@ -230,6 +230,7 @@ def inexact_matches(phrase):
     else:
         matching.sort(key = age_sort)
         return matching
+        
 
 # search for matching character names
 def character_search(name):
@@ -620,7 +621,7 @@ async def on_message(message):
 
     # information about live recordings
     if msg.startswith('!live'):
-        await message.channel.send("Vel does live audio recordings here on discord every Sunday at 7:30PM EST (<t:1716766200:t>)!")
+        await message.channel.send("Vel does live audio recordings here on discord every Sunday at 7:30PM EST (<t:1728862200:t>)!")
 
     # information about live twitch streams
     if msg.startswith('!stream'):

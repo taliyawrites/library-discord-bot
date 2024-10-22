@@ -645,7 +645,7 @@ async def on_message(message):
             await message.channel.send("Please specify the number of the request you'd like to remove. You can see all your requests (and their corresponding numeric label) using the command `!myrequests`.")
         else: 
             user_id = message.author.id
-
+            not_found = True
             for entry in snack_requests:
                 if entry[0] == user_id:
                     if remove_index > -1 + len(entry):
@@ -656,7 +656,10 @@ async def on_message(message):
                         if len(entry) == 1:
                             snack_requests.remove(entry)
                         await message.channel.send("Your snack request for " + deleted + " has been removed.")
+                        not_found = False
                     break
+            if not_found:
+                await message.channel.send("You have no saved requests to remove.")
                     
             with open("snack-requests.json", "w") as outfile:
                 outfile.write(json.dumps(snack_requests))

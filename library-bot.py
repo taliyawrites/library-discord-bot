@@ -644,6 +644,8 @@ async def on_message(message):
             if entry[0] == user_id:
                 deleted = entry[remove_index]
                 del entry[remove_index]
+                if len(entry) == 1:
+                    snack_requests.remove(entry)
                 break
                 
         with open("snack-requests.json", "w") as outfile:

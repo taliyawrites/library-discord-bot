@@ -7,6 +7,7 @@ import asyncio
 import time
 import calendar
 import traceback
+import json
 
 
 from dotenv import load_dotenv
@@ -28,6 +29,7 @@ OPTIONS_FILENAME = "remaining.txt"
 COUNTER_FILENAME = "count.txt"
 RECORD_FILENAME = "record.txt"
 ARCHIVE_FILENAME = "voice-note-archive.txt"
+REQUESTS_FILENAME = "snack-requests.json"
 
 # run daily tasks at 1pm eastern time (6pm UTC+1)
 HOUR, MINUTE = 17, 0
@@ -327,7 +329,7 @@ async def setup_hook():
     tag_dictionary = import_tag_dictionary()
 
     # import current state variable values
-    global random_seed, good_girl, pet_count, edge_counter, cum_permission_ids, daily_audio
+    global random_seed, good_girl, pet_count, edge_counter, cum_permission_ids, daily_audio, snack_requests
     random_seed = ''.join(random.choices(string.ascii_uppercase+string.digits, k=8))
     good_girl = read_from_file(WINNERS_FILENAME)[-1]
     pet_count = int(read_from_file(COUNTER_FILENAME)[-1])
@@ -335,6 +337,8 @@ async def setup_hook():
     cum_permission_ids = [int(value) for value in read_from_file(RECORD_FILENAME)]
     currentdaily = read_from_file(AUDIOS_FILENAME)[-1]
     daily_audio = list(filter(lambda a: a.name() == currentdaily, audio_choices))[0]
+    with open(REQUESTS_FILENAME, "r") as read_file:
+        snack_requests = json.load(read_file)
 
     global voice_note_links
     voice_note_links = read_from_file(ARCHIVE_FILENAME)
@@ -362,7 +366,7 @@ async def setup_hook():
 async def on_message(message):
 
     # allow modifications of state variables
-    global audio_choices, tag_dictionary, pet_count, edge_counter, voice_note_links
+    global audio_choices, tag_dictionary, pet_count, edge_counter, voice_note_links, snack_requests
 
     if message.author == client.user:
         return
@@ -593,54 +597,68 @@ async def on_message(message):
         if cont: 
             await message.author.send("The bot also has lots of helpful information for all things Vel. For example, you can type `!masterlist` to get a link to the list of all of his audios, or `!socials` for links to all of Vel's accounts on various platforms online. There are also some commands just for fun that you'll often see people using in the https://discord.com/channels/1148449914188218399/1248773338726400040 channel, like sending the message `!praise` to be called a random nice petname! \n \nTo see a full list of everything the bot can do (or just refresh your memory in the future), you can send the message `!allcommands` for a summary of bot features. Enjoy your time in the library!")
 
-    snack_requests = [[37,["cum","breeding"]]]
 
-    if msg.startswith('!request'):
+        if msg.startswith('!request'):
         request = msg[9:]
         user_id = message.author.id
 
         not_found = True
         for entry in snack_requests:
             if entry[0] == user_id:
-                entry[1].append(request)
+                entry.append(request)
                 not_found = False
                 break 
         if not_found:
-            snack_requests.append([user_id,[request]])
+            snack_requests.append([user_id,request])
 
-        message.channel.send("Your snack request for " + request + " has been saved! You can see your requests using the command `!mytags`.")
+        with open("snack-requests.json", "w") as outfile:
+            outfile.write(json.dumps(snack_requests))
+        await message.channel.send("Your snack request for " + request + " has been saved! You can see your requests using the command `!myrequests`.")
 
 
-
-    if msg.startswith('!mytags'):
+    if msg.startswith('!myrequests'):
         user_id = message.author.id
 
         requests = None
         for entry in snack_requests:
             if entry[0] == user_id:
-                requests = entry[1]
+                requests = entry[1:]
                 break
 
         if requests is not None: 
             req_string = "Your saved snack requests: "
-            for k in range(0, -1 + len(requests)):
-                req_string += "\n " + str(k) + ". " + requests[k]
-            req_string += "\n To remove a request, send the command `!removerequest X`, where X is the number of the request you'd like to remove."
-            message.channel.send(req_string)
+            for k in range(0, len(requests)):
+                req_string += "\n" + str(k + 1) + ". " + requests[k]
+            req_string += "\nTo remove a request, send the command `!removerequest X`, where X is the number of the entry."
+            await message.channel.send(req_string)
 
         else:
-            message.channel.send("You have no recorded snack requests! Use the command `!request` to add desired tags.")
-
+            await message.channel.send("You have no recorded snack requests! Use the command `!request` to add desired tags.")
 
 
     if msg.startswith('!removerequest'):
         remove_index = int(msg[15:].strip())
+        user_id = message.author.id
+
         for entry in snack_requests:
             if entry[0] == user_id:
-                deleted = entry[1][remove_index]
-                del entry[1][remove_index]
+                deleted = entry[remove_index]
+                del entry[remove_index]
                 break
-        message.channel.send("Your snack request for " + deleted + " has been removed.")
+                
+        with open("snack-requests.json", "w") as outfile:
+            outfile.write(json.dumps(snack_requests))
+        await message.channel.send("Your snack request for " + deleted + " has been removed.")
+
+
+    if msg.startswith("!randomrequest"):
+        if len(snack_requests) == 0:
+            await message.channel.send("There are no snack requests right now!")
+        else:
+            entry = random.choice(snack_requests)
+            user = await client.fetch_user(entry[0])
+            request = random.choice(entry[1:])
+            await message.channel.send(f"From {user.display_name} — {request}")
 
 
 

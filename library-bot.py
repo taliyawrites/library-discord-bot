@@ -642,7 +642,7 @@ async def on_message(message):
 
         for entry in snack_requests:
             if entry[0] == user_id:
-                if remove_index > len(entry):
+                if remove_index > -1 + len(entry):
                     await message.channel.send(f"Request out of range; entry {remove_index} does not exist!")
                 else:
                     deleted = entry[remove_index]

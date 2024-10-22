@@ -613,7 +613,7 @@ async def on_message(message):
 
         with open("snack-requests.json", "w") as outfile:
             outfile.write(json.dumps(snack_requests))
-        await message.channel.send("Your snack request for " + request + " has been saved! You can see your requests using the command `!myrequests`.")
+        await message.channel.send("Your snack request for " + request + " has been saved! You can see all of your requests using the command `!myrequests`.")
 
 
     if msg.startswith('!myrequests'):

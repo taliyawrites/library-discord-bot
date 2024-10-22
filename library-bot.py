@@ -642,15 +642,18 @@ async def on_message(message):
 
         for entry in snack_requests:
             if entry[0] == user_id:
-                deleted = entry[remove_index]
-                del entry[remove_index]
-                if len(entry) == 1:
-                    snack_requests.remove(entry)
+                if remove_index > len(entry):
+                    await message.channel.send(f"Request out of range; entry {remove_index} does not exist!")
+                else:
+                    deleted = entry[remove_index]
+                    del entry[remove_index]
+                    if len(entry) == 1:
+                        snack_requests.remove(entry)
+                    await message.channel.send("Your snack request for " + deleted + " has been removed.")
                 break
                 
         with open("snack-requests.json", "w") as outfile:
             outfile.write(json.dumps(snack_requests))
-        await message.channel.send("Your snack request for " + deleted + " has been removed.")
 
 
     if msg.startswith("!randomrequest"):

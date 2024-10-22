@@ -598,6 +598,8 @@ async def on_message(message):
             await message.author.send("The bot also has lots of helpful information for all things Vel. For example, you can type `!masterlist` to get a link to the list of all of his audios, or `!socials` for links to all of Vel's accounts on various platforms online. There are also some commands just for fun that you'll often see people using in the https://discord.com/channels/1148449914188218399/1248773338726400040 channel, like sending the message `!praise` to be called a random nice petname! \n \nTo see a full list of everything the bot can do (or just refresh your memory in the future), you can send the message `!allcommands` for a summary of bot features. Enjoy your time in the library!")
 
 
+    
+    # saving tag requests with the bot
     if msg.startswith('!request'):
         request = msg[9:]
         user_id = message.author.id
@@ -637,23 +639,27 @@ async def on_message(message):
 
 
     if msg.startswith('!removerequest'):
-        remove_index = int(msg[15:].strip())
-        user_id = message.author.id
+        try: 
+            remove_index = int(msg[15:].strip())
+        except: 
+            await message.channel.send("Please specify the number of the request you'd like to remove. You can see all your requests (and their corresponding numeric label) using the command `!myrequests`.")
+        else: 
+            user_id = message.author.id
 
-        for entry in snack_requests:
-            if entry[0] == user_id:
-                if remove_index > -1 + len(entry):
-                    await message.channel.send(f"Request out of range; entry {remove_index} does not exist!")
-                else:
-                    deleted = entry[remove_index]
-                    del entry[remove_index]
-                    if len(entry) == 1:
-                        snack_requests.remove(entry)
-                    await message.channel.send("Your snack request for " + deleted + " has been removed.")
-                break
-                
-        with open("snack-requests.json", "w") as outfile:
-            outfile.write(json.dumps(snack_requests))
+            for entry in snack_requests:
+                if entry[0] == user_id:
+                    if remove_index > -1 + len(entry):
+                        await message.channel.send(f"Request out of range; entry {remove_index} does not exist!")
+                    else:
+                        deleted = entry[remove_index]
+                        del entry[remove_index]
+                        if len(entry) == 1:
+                            snack_requests.remove(entry)
+                        await message.channel.send("Your snack request for " + deleted + " has been removed.")
+                    break
+                    
+            with open("snack-requests.json", "w") as outfile:
+                outfile.write(json.dumps(snack_requests))
 
 
     if msg.startswith("!randomrequest"):
@@ -864,7 +870,9 @@ async def on_message(message):
     # returns a random choice of no responses unless from a random group of winners or mods
     if msg.startswith('!cum'):
         mod_ids = [1169014359842885726, 1089053035377999912, 159860526841593856, 415894832515383296]
-        if message.author.id in mod_ids or message.author.id in cum_permission_ids:
+        if '?' in msg:
+            await message.channel.send("Try again, but this time, say it like you believe it.")
+        else if message.author.id in mod_ids or message.author.id in cum_permission_ids:
             edge_counter = 0
             if message.author == vel:
                 await message.channel.send("Thank you, Daddy!")
@@ -874,10 +882,7 @@ async def on_message(message):
             responses = ["no u","Silence, sub.","Daddy didn't give me permission yet.", "I don't answer to you.","You'd really like that, wouldn't you?","Nice try.","Make me.","It's adorable that you thought that would work.","How about you cum for me instead, baby?","I'm not allowed to cum yet :pleading_face:","I'm trying :pensive:","It's okay, I'm a good girl, I can take a little more!","But I wanna be good for Daddy!","You're not my real dom!","I would, but my vibrator died :cry: you got any batteries?"]
             weights = [1 for k in range(len(responses)-1)]
             weights.insert(0,6)
-            if '?' in msg:
-                response = "Try again, but this time, say it like you believe it."
-            else: 
-                response = random.choices(responses,weights = weights, k = 1)[0]
+            response = random.choices(responses,weights = weights, k = 1)[0]
             await message.channel.send(response)
             if response == "no u":
                 options = []

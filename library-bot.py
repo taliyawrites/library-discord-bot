@@ -872,7 +872,7 @@ async def on_message(message):
         mod_ids = [1169014359842885726, 1089053035377999912, 159860526841593856, 415894832515383296]
         if '?' in msg:
             await message.channel.send("Try again, but this time, say it like you believe it.")
-        else if message.author.id in mod_ids or message.author.id in cum_permission_ids:
+        elif message.author.id in mod_ids or message.author.id in cum_permission_ids:
             edge_counter = 0
             if message.author == vel:
                 await message.channel.send("Thank you, Daddy!")

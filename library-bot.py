@@ -676,7 +676,7 @@ async def on_message(message):
             await message.channel.send("There are no snack requests right now!")
         else:
             entry = random.choice(snack_requests)
-            user = await client.fetch_user(entry[0])
+            user = await client.get_guild(GUILD).fetch_member(entry[0])
             request = random.choice(entry[1:])
             await message.channel.send(f"From {user.display_name} — {request}")
 

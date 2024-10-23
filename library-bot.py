@@ -607,21 +607,24 @@ async def on_message(message):
     
     # saving tag requests with the bot
     if msg.startswith('!request'):
-        request = msg[9:]
+        request = msg[9:].strip()
         user_id = message.author.id
 
-        not_found = True
-        for entry in snack_requests:
-            if entry[0] == user_id:
-                entry.append(request)
-                not_found = False
-                break 
-        if not_found:
-            snack_requests.append([user_id,request])
+        if len(request) == 0:
+            await message.channel.send("Please enter some tags after `!request`.")
+        else:
+            not_found = True
+            for entry in snack_requests:
+                if entry[0] == user_id:
+                    entry.append(request)
+                    not_found = False
+                    break 
+            if not_found:
+                snack_requests.append([user_id,request])
 
-        with open("snack-requests.json", "w") as outfile:
-            outfile.write(json.dumps(snack_requests))
-        await message.channel.send("Your snack request for " + request + " has been saved! You can see all of your requests using the command `!myrequests`.")
+            with open("snack-requests.json", "w") as outfile:
+                outfile.write(json.dumps(snack_requests))
+            await message.channel.send("Your snack request for " + request + " has been saved! You can see all of your requests using the command `!myrequests`.")
 
 
     if msg.startswith('!myrequests'):

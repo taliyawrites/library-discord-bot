@@ -611,7 +611,7 @@ async def on_message(message):
         user_id = message.author.id
 
         if len(request) == 0:
-            await message.channel.send("Please enter some tags after `!request`.")
+            await message.channel.send("Please enter some tags after `!request`. Alternatively, to see your saved tags, send the command `!myrequests`; to get a random request, send the command `!randomrequest`.")
         else:
             not_found = True
             for entry in snack_requests:

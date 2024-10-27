@@ -603,7 +603,6 @@ async def on_message(message):
         if cont: 
             await message.author.send("The bot also has lots of helpful information for all things Vel. For example, you can type `!masterlist` to get a link to the list of all of his audios, or `!socials` for links to all of Vel's accounts on various platforms online. There are also some commands just for fun that you'll often see people using in the https://discord.com/channels/1148449914188218399/1248773338726400040 channel, like sending the message `!praise` to be called a random nice petname! \n \nTo see a full list of everything the bot can do (or just refresh your memory in the future), you can send the message `!allcommands` for a summary of bot features. Enjoy your time in the library!")
 
-
     
     # saving tag requests with the bot
     if msg.startswith('!request'):
@@ -624,8 +623,7 @@ async def on_message(message):
 
             with open("snack-requests.json", "w") as outfile:
                 outfile.write(json.dumps(snack_requests))
-            await message.channel.send("Your snack request for " + request + " has been saved! You can see all of your requests using the command `!myrequests`.")
-
+            await message.channel.send('Your snack request for "' + request + '" has been saved! You can see all of your requests using the command `!myrequests`.')
 
     if msg.startswith('!myrequests'):
         user_id = message.author.id
@@ -645,7 +643,6 @@ async def on_message(message):
 
         else:
             await message.channel.send("You have no recorded snack requests! Use the command `!request` to add desired tags.")
-
 
     if msg.startswith('!removerequest'):
         try: 
@@ -672,7 +669,6 @@ async def on_message(message):
                     
             with open("snack-requests.json", "w") as outfile:
                 outfile.write(json.dumps(snack_requests))
-
 
     if msg.startswith("!randomrequest"):
         if len(snack_requests) == 0:
@@ -709,7 +705,7 @@ async def on_message(message):
 
     # information about live recordings
     if msg.startswith('!live'):
-        await message.channel.send("Vel does live audio recordings here on discord every Sunday at 7:30PM EST (<t:1728862200:t>)!")
+        await message.channel.send("Vel does live audio recordings here on discord every Sunday. This week's live will be at 1:30PM EST (<t:1730050200:t>)!")
 
     # information about live twitch streams
     if msg.startswith('!stream'):
@@ -761,6 +757,9 @@ async def on_message(message):
         books_info = "List of books Vel is or will be reading for content, with links to Storygraph for descriptions, reviews, and content warnings. Maintained by Delphine!"
         books_embed = discord.Embed(title = "Vel's Romance Reads", description = books_info, url = "https://airtable.com/appl3LHVXpzA6fEqq/shrTeuKFM6V6M4Bcs/tblgrs5VFAKpTsT5W/viw4EjZx4vfMv3vXf")
         await message.channel.send(embed = books_embed)
+
+    # if msg.startswith('!bluetooth'):
+    #     await message.channel.send("Please buy some wired earbuds, they will never do this to you.")
 
 
 

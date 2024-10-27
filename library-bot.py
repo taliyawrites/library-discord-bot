@@ -841,7 +841,7 @@ async def on_message(message):
     # random degrading name, with 20% chance to pull the modifier "Daddy's" and 0.3% chance (legendary odds) to get "Vel's"
     if msg.startswith('!degrade'):
         adjectives = ["desperate","pretty","depraved","pathetic","needy","worthless"]
-        nouns = ["whore","slut","bitch","cunt","set of holes","cumslut","fucktoy","cumrag","cumdump"]
+        nouns = ["whore","slut","cunt","set of holes","cumslut","fucktoy","cumrag","cumdump"]
         if random.choice(range(1000)) < 3:
             whose = "Vel's "
         elif random.choice(range(5)) == 0:

@@ -535,7 +535,7 @@ async def on_message(message):
 
     # list fundamental commands
     if msg.startswith('!basiccommands'):
-        commands = "- `!randomaudio` randomly chosen audio from the masterlist \n- `!randomaudio [some] [tags]` random audio with these desired tag(s) \n- `!title phrase` for list of audios with that phrase in title \n- `!tag [some] [tags]` for list of audios with those tags \n- `!character name` for list of audios featuring a specific named character \n- `!dm` bot will privately DM you the masterlist \n- `!masterlist` link to the masterlist \n- `!socials` links to all of Vel's social media accounts \n- `!schedule` audio posting schedule \n- `!lives` info about live recordings"
+        commands = "- `!randomaudio` randomly chosen audio from the masterlist \n- `!randomaudio [some] [tags]` random audio with these desired tag(s) \n- `!title phrase` for list of audios with that phrase in title \n- `!tag [some] [tags]` for list of audios with those tags \n- `!character name` for list of audios featuring a specific named character \n- `!dm` bot will privately DM you the masterlist \n- `!masterlist` link to the masterlist \n- `!socials` links to all of Vel's social media accounts \n- `!schedule` audio posting schedule \n- `!lives` info about live recordings \n- `!allcommands` to see a full list of what the bot can do"
         command_embed = discord.Embed(title = "Card Catalog Bot Commands",description=commands)
         await message.channel.send(embed=command_embed)
 
@@ -1052,7 +1052,7 @@ async def daily_balatro():
 # DMs new user a welcome message with a link to the masterlist
 @client.event
 async def on_member_join(member):
-    await member.send("Welcome to the Library! Vel has over three hundred audios to choose from, and you can use this bot to search through and explore all of Vel's content. It can pick a random audio with your favorite tags for you to listen to, you can search for audios by title, and more! To learn in detail how to use this bot to search for audios and find other information about Vel's content, send the message `!tutorial`. To just receive a quick summary of what the bot can do, send the message `!allcommands`.")
+    await member.send("Welcome to the Library! Vel has over three hundred and fifty audios to choose from, and you can use this bot to search through and explore all of Vel's content. It can pick a random audio with your favorite tags for you to listen to, you can search for audios by title, and more! To learn in detail how to use this bot to search for audios and find other information about Vel's content, send the message `!tutorial`. To just receive a quick summary of what the bot can do, send the message `!basiccommands`.")
     embed = discord.Embed(title="Vel's Library Masterlist",
                    url="https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr",
                    description="Here's a link to the masterlist of all of Vel's audios. You can search and filter the masterlist for your favorite tags.")

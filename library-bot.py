@@ -816,8 +816,12 @@ async def on_message(message):
             voice_note_links.append(message.jump_url)
             save_to_file(ARCHIVE_FILENAME,voice_note_links)
 
-
-
+    if message.author == taliya and msg.startswith('!welcome'):
+        await member.send("Welcome to the Library! Vel has over three hundred and fifty audios to choose from, and you can use this bot to search through and explore all of Vel's content. It can pick a random audio with your favorite tags for you to listen to, you can search for audios by title, and more! To learn in detail how to use this bot to search for audios and find other information about Vel's content, send the message `!tutorial`. To just receive a quick summary of what the bot can do, send the message `!basiccommands`.")
+        embed = discord.Embed(title="Vel's Library Masterlist",
+                   url="https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr",
+                   description="Here's a link to the masterlist of all of Vel's audios. You can search and filter the masterlist for your favorite tags.")
+        await member.send(embed=embed)
 
 
     # SILLY COMMANDS #

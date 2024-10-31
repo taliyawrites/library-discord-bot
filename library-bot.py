@@ -275,6 +275,22 @@ def import_tag_dictionary():
 
     return dictionary
 
+def import_collections():
+    table = airtable_api.table('appeb72XP6YJzGRyY', 'tblphntbN1NGnEpEr')
+    collections = []
+
+    for entry in table.all():
+        fields = list(entry.items())[2][1]
+        data = list(fields.items())
+        title = data[0][1].strip()
+        url = data[1][1].strip()
+        description = data[2][1].strip()
+        search_terms = data[3][1].strip()
+        coll_data = [title,url,description,search_terms]
+        collections.append(coll_data)
+
+    return collections
+
 
 
 
@@ -324,9 +340,10 @@ async def setup_hook():
     print("setup hook running")
 
     # import data from airtable
-    global audio_choices, tag_dictionary
+    global audio_choices, tag_dictionary, collections
     audio_choices = import_airtable_data()
     tag_dictionary = import_tag_dictionary()
+    collections = import_collections()
 
     # import current state variable values
     global random_seed, good_girl, pet_count, edge_counter, cum_permission_ids, daily_audio, snack_requests
@@ -366,7 +383,7 @@ async def setup_hook():
 async def on_message(message):
 
     # allow modifications of state variables
-    global audio_choices, tag_dictionary, pet_count, edge_counter, voice_note_links, snack_requests
+    global audio_choices, tag_dictionary, collections, pet_count, edge_counter, voice_note_links, snack_requests
 
     if message.author == client.user:
         return
@@ -491,6 +508,27 @@ async def on_message(message):
 
             matches_embed = discord.Embed(title = name.capitalize() + " Audios",description=link_string)
             await message.channel.send(embed = matches_embed)
+
+    if msg.startswith("!collection"):
+        query = msg[12:].strip()
+        collection = None
+        for coll in collections:
+            if query in coll[3]:
+                collection = coll
+                break
+        if collection is not None:
+            coll_embed = discord.Embed(title = collection[0], url = collection[1], description = collection[2])
+            await message.channel.send(embed = coll_embed)
+        else:
+            await message.channel.send("No matching collection found.")
+
+    if msg.startswith("!allcollections"):
+        link_string = ""
+        for entry in collections:
+            next = "- [" + entry[0] + "](" + entry[1] + ") \n"
+            link_string = link_string + next
+        list_embed = discord.Embed(title = "Patreon Collections",description=link_string)
+        await message.channel.send(embed = list_embed)
 
     # responds with a link to a random voice note
     if msg.startswith("!vn"):
@@ -772,6 +810,7 @@ async def on_message(message):
     if msg.startswith('!refresh'):
         audio_choices = import_airtable_data()
         tag_dictionary = import_tag_dictionary()
+        collections = import_collections()
         await taliya.send("Masterlist data sync'ed with Airtable updates.")
 
     # converts a time in eastern timezone into a universal timestamp

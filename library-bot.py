@@ -511,16 +511,19 @@ async def on_message(message):
 
     if msg.startswith("!collection"):
         query = msg[12:].strip()
-        collection = None
-        for coll in collections:
-            if query in coll[3]:
-                collection = coll
-                break
-        if collection is not None:
-            coll_embed = discord.Embed(title = collection[0], url = collection[1], description = collection[2])
-            await message.channel.send(embed = coll_embed)
+        if len(query) == 0:
+            await message.channel.send("Please enter a search term.")
         else:
-            await message.channel.send("No matching collection found.")
+            collection = None
+            for coll in collections:
+                if query in coll[3]:
+                    collection = coll
+                    break
+            if collection is not None:
+                coll_embed = discord.Embed(title = collection[0], url = collection[1], description = collection[2])
+                await message.channel.send(embed = coll_embed)
+            else:
+                await message.channel.send("No matching collection found.")
 
     if msg.startswith("!allcollections"):
         link_string = ""

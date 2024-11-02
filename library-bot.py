@@ -559,7 +559,7 @@ async def on_message(message):
 
     # DM the user a link to the masterlist and then delete request for privacy
     if msg.startswith('!dm'):
-        await message.author.send("Here's a link to the masterlist! To learn how to use the bot to find audios and more, send the message `!tutorial`, or, to see a quick summary of the what the bot can do, send the message `!basiccommands`.")
+        await message.author.send("Here's a link to the masterlist! To learn how to use the bot to search the masterlist, find audios, and more, send the message `!tutorial`. To just see a quick summary of the what the bot can do, send the message `!basiccommands`. All commands can be used privately in this DM or in the server in the https://discord.com/channels/1148449914188218399/1248773338726400040 channel.")
         embed = discord.Embed(title="Vel's Library Masterlist",
                        url="https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr",
                        description="Masterlist of all of Vel's audios!")
@@ -859,7 +859,7 @@ async def on_message(message):
             save_to_file(ARCHIVE_FILENAME,voice_note_links)
 
     if message.author == taliya and msg.startswith('!welcome'):
-        await taliya.send("Welcome to the Vel's Library discord server! Vel has over three hundred and fifty audios for you to enjoy, and this bot can help you explore the collection and find your next favorite audio. The bot can pick a random audio with your favorite tags for you to listen to; you can search for audios by title, tags, or characters; and more! To learn in detail how to use this bot to search for audios and find other information about Vel's content, send the message `!tutorial`. To just receive a quick summary of what the bot can do, send the message `!basiccommands`. You can also find [the masterlist of all of Vel's audios here!](https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr) Enjoy your time in the Library.")
+        await taliya.send("Welcome to the Vel's Library discord server! Vel has over three hundred and fifty audios for you to enjoy, and this bot can help you explore the collection and find your next favorite audio. The bot can pick a random audio with your favorite tags for you to listen to; you can search for audios by title, tags, or characters; and more! To learn in detail how to use this bot to search for audios and find other information about Vel's content, send the message `!tutorial`. To just receive a quick summary of what the bot can do, send the message `!basiccommands`. You can also find the masterlist of all of Vel's audios [here](<https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr>)! Enjoy your time in the Library.")
 
 
     # SILLY COMMANDS #
@@ -1095,11 +1095,11 @@ async def daily_balatro():
 @client.event
 async def on_member_join(member):
     # await member.send("Welcome to the Library! Vel has over three hundred and fifty audios to choose from, and you can use this bot to search through and explore all of Vel's content. It can pick a random audio with your favorite tags for you to listen to, you can search for audios by title, and more! To learn in detail how to use this bot to search for audios and find other information about Vel's content, send the message `!tutorial`. To just receive a quick summary of what the bot can do, send the message `!basiccommands`.")
-    await member.send("Welcome to the Vel's Library discord server! Vel has over three hundred and fifty audios for you to enjoy, and this bot can help you explore the collection and find your next favorite audio. The bot can pick a random audio with your favorite tags for you to listen to; you can search for audios by title, tags, or characters; and more! To learn in detail how to use this bot to search for audios and find other information about Vel's content, send the message `!tutorial`. To just receive a quick summary of what the bot can do, send the message `!basiccommands`. You can also find [the masterlist of all of Vel's audios here!](https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr) Enjoy your time in the Library.")
     # embed = discord.Embed(title="Vel's Library Masterlist",
     #                url="https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr",
     #                description="Here's a link to the masterlist of all of Vel's audios. You can search and filter the masterlist for your favorite tags.")
     # await member.send(embed=embed)
+    await member.send("Welcome to the Vel's Library discord server! Vel has over three hundred and fifty audios for you to enjoy, and this bot can help you explore the collection and find your next favorite audio. The bot can pick a random audio with your favorite tags for you to listen to; you can search for audios by title, tags, or characters; and more! To learn in detail how to use this bot to search for audios and find other information about Vel's content, send the message `!tutorial`. To just receive a quick summary of what the bot can do, send the message `!basiccommands`. You can also find the masterlist of all of Vel's audios [here](<https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr>)! Enjoy your time in the Library.")
     print('new member join message sent')
 
 

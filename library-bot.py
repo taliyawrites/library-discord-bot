@@ -570,7 +570,7 @@ async def on_message(message):
 
     # list all bot commands
     if msg.startswith('!allcommands'):
-        commands = "- `!randomaudio` randomly chosen audio from the masterlist \n- `!randomaudio [some] [tags]` random audio with these desired tag(s) \n- `!title phrase` for list of audios with that phrase in title \n- `!tag [some] [tags]` for list of audios with those tags \n- `!character name` for list of audios featuring a specific named character \n- `!daily` for the randomly chosen audio of the day \n- `!dm` bot will privately DM you the masterlist \n- `!masterlist` link to the masterlist \n- `!socials` links to all of Vel's social media accounts \n- `!schedule` audio posting schedule \n- `!lives` info about live recordings \n- `!tutorial` to receive a DM teaching you to use the bot \n- `!goodgirl` to sign up for good girl role \n- `!stream` for information about the next twitch stream \n- `!balatro` for daily seed \n- `!merch` for information about merch drops \n- `!time H:MM AM/PM` to convert from eastern time to universal timestamp \n- `!pet`, `!edge`, and `!cum` to show the bot some love \n- `!praise` and `!degrade` to be called a nice/mean name \n- `!vn` for a random voice note \n- `!request` to save tags you'd like for snack requests \n- `!myrequests` to see a numbered list of all your saved requests \n- `!removerequest X` to remove request number X on your list \n- `!randomrequest` for a random tag request from anyone!"
+        commands = "- `!randomaudio` randomly chosen audio from the masterlist \n- `!randomaudio [some] [tags]` random audio with these desired tag(s) \n- `!title phrase` for list of audios with that phrase in title \n- `!tag [some] [tags]` for list of audios with those tags \n- `!character name` for list of audios featuring a specific named character \n- `!daily` for the randomly chosen audio of the day \n- `!dm` bot will privately DM you the masterlist \n- `!masterlist` link to the masterlist \n- `!socials` links to all of Vel's social media accounts \n- `!schedule` audio posting schedule \n- `!lives` info about live recordings \n- `!tutorial` to receive a DM teaching you to use the bot \n- `!goodgirl` to sign up for good girl role \n- `!stream` for information about the next twitch stream \n- `!balatro` for daily seed \n- `!merch` for information about merch drops \n- `!time H:MM AM/PM` to convert from eastern time to universal timestamp \n- `!pet`, `!edge`, and `!cum` to show the bot some love \n- `!praise` and `!degrade` to be called a nice/mean name \n- `!vn` for a random voice note \n- `!request` to save tags you'd like for snack requests \n- `!myrequests` to see a numbered list of all your saved requests \n- `!removerequest X` to remove request number X on your list \n- `!randomrequest` for a random tag request from anyone! \n- `!allcollections` for list of all patreon collections \n- `!collection name` for a link to a specific collection"
         command_embed = discord.Embed(title = "Card Catalog Bot Commands",description=commands)
         await message.channel.send(embed=command_embed)
 
@@ -620,7 +620,7 @@ async def on_message(message):
                 cont = False
 
         if cont:
-            await message.author.send("You can even search by character name using `!character name`. If you aren't familiar with any of Vel's named characters yet, try searching for Sam: ")
+            await message.author.send("You can search for all audios with a given set of tags in the same way using `!tag [desired] [tags]`, or you can even search by character using `!character name`. If you aren't familiar with any of Vel's named characters yet, try searching for Sam: ")
             cont = False
             try:
                 await client.wait_for('message',check = lambda m: m.content.startswith("!character") and m.author == message.author, timeout = 300)
@@ -642,6 +642,7 @@ async def on_message(message):
                 cont = False
 
         if cont: 
+            await message.author.send("You can also put in suggestions for tags you'd like to see Vel use in future voice notes using `!request [any tags you want]`.")
             await message.author.send("The bot also has lots of helpful information for all things Vel. For example, you can type `!masterlist` to get a link to the list of all of his audios, or `!socials` for links to all of Vel's accounts on various platforms online. There are also some commands just for fun that you'll often see people using in the https://discord.com/channels/1148449914188218399/1248773338726400040 channel, like sending the message `!praise` to be called a random nice petname! \n \nTo see a full list of everything the bot can do (or just refresh your memory in the future), you can send the message `!allcommands` for a summary of bot features. Enjoy your time in the library!")
 
     

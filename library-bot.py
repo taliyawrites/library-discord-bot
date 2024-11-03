@@ -741,13 +741,13 @@ async def on_message(message):
     # responds with Vel's release schedule
     if msg.startswith('!schedule'):
         # schedule = "Sunday 4:30PM EST: Private Library Release \n Monday 4:30PM EST: Reddit GWA Release \n Wednesday 6:30PM EST: Library Card Release \n Every other Thursday 4:30PM EST: Reddit GWA Release \n Friday 6:30PM EST: Book Club Release"
-        schedule = "Sunday 4:30PM EST (<t:1716755400:t>): Private Library Release \n Monday 4:30PM EST (<t:1716841800:t>): Reddit GWA Release \n Wednesday 6:30PM EST (<t:1717021800:t>): Library Card Release \n Every other Thursday 4:30PM EST (<t:1717101000:t>): Reddit GWA Release \n Friday 6:30PM EST (<t:1717194600:t>): Book Club Release"
+        schedule = "Sunday 4:30PM EST (<t:1730669400:t>): Private Library Release \n Monday 4:30PM EST (<t:1730755800:t>): Reddit GWA Release \n Wednesday 6:30PM EST (<t:1730935800:t>): Library Card Release \n Every other Thursday 4:30PM EST (<t:1731015000:t>): Reddit GWA Release \n Friday 6:30PM EST (<t:1731108600:t>): Book Club Release"
         schedule_embed = discord.Embed(title = "Vel's Posting Schedule",description=schedule)
         await message.channel.send(embed=schedule_embed)
 
     # information about live recordings
     if msg.startswith('!live'):
-        await message.channel.send("Vel does live audio recordings here on discord every Sunday. This week's live will be at 1:30PM EST (<t:1730050200:t>)!")
+        await message.channel.send("Vel does live audio recordings here on discord every Sunday at 6:30PM EST (<t:1730676600:t>)!")
 
     # information about live twitch streams
     if msg.startswith('!stream'):
@@ -838,9 +838,9 @@ async def on_message(message):
             hour = 0
 
         if isAM:
-            utc_hour = hour + 4
+            utc_hour = hour + 5
         else:
-            utc_hour = hour + 4 + 12
+            utc_hour = hour + 5 + 12
 
         now = datetime.datetime.utcnow()
         if utc_hour < 24:

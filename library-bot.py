@@ -747,7 +747,7 @@ async def on_message(message):
 
     # information about live recordings
     if msg.startswith('!live'):
-        await message.channel.send("Vel does live audio recordings here on discord every Sunday at 6:30PM EST (<t:1730676600:t>)!")
+        await message.channel.send("Vel does live audio recordings here on discord every Sunday at 7:30PM EST (<t:1730680200:t>)!")
 
     # information about live twitch streams
     if msg.startswith('!stream'):

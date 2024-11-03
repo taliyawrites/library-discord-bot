@@ -32,7 +32,7 @@ ARCHIVE_FILENAME = "voice-note-archive.txt"
 REQUESTS_FILENAME = "snack-requests.json"
 
 # run daily tasks at 1pm eastern time (6pm UTC+1)
-HOUR, MINUTE = 17, 0
+HOUR, MINUTE = 18, 0
 
 
 

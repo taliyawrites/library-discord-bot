@@ -947,7 +947,7 @@ async def on_message(message):
                 await message.channel.send(embed=audio.discord_post())
 
     if msg.startswith('!apple'):
-        await message.channel.send("follow [Vel's instagram for more](https://www.instagram.com/reel/DB7U4JtSd1D/)")
+        await message.channel.send("[follow Vel's instagram for more!](https://www.instagram.com/reel/DB7U4JtSd1D/)")
 
 
 

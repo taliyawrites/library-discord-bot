@@ -959,12 +959,15 @@ async def on_message(message):
 
     if msg.startswith('!treat'):
         treat = msg[6:].strip()
+
         if len(treat) == 0:
             await message.channel.send("Thank you for the treat!")
+        elif treat == "apple":
+            await message.channel.send("Thank you for [the apple](https://www.instagram.com/reel/DB7U4JtSd1D/) :flushed:")
         else:
             await message.channel.send("Thank you for the delicious " + treat + "!")
-        gifs = ["https://tenor.com/view/disney-winnie-the-pooh-hungry-food-gif-5184412","https://tenor.com/view/backpack-tasty-om-nom-nom-nom-nom-nom-nom-gif-14079761641419048939","https://tenor.com/view/sesame-street-cookie-monster-eats-your-art-eating-muppet-crazy-eyes-gif-1461380403278441959"]
-        await message.channel.send(random.choice(gifs))
+            gifs = ["https://tenor.com/view/disney-winnie-the-pooh-hungry-food-gif-5184412","https://tenor.com/view/backpack-tasty-om-nom-nom-nom-nom-nom-nom-gif-14079761641419048939","https://tenor.com/view/sesame-street-cookie-monster-eats-your-art-eating-muppet-crazy-eyes-gif-1461380403278441959"]
+            await message.channel.send(random.choice(gifs))
 
 
 

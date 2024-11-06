@@ -947,6 +947,7 @@ async def on_message(message):
     #             await message.channel.send(embed=audio.discord_post())
 
     if msg.startswith('!cum'):
+        edge_counter = 0
         if message.author == vel:
             await message.channel.send("Thank you, Daddy!")
         else:

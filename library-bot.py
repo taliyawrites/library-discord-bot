@@ -963,7 +963,8 @@ async def on_message(message):
             await message.channel.send("Thank you for the treat!")
         else:
             await message.channel.send("Thank you for the delicious " + treat + "!")
-        await message.channel.send("https://tenor.com/view/backpack-tasty-om-nom-nom-nom-nom-nom-nom-gif-14079761641419048939")
+        gifs = ["https://tenor.com/view/disney-winnie-the-pooh-hungry-food-gif-5184412","https://tenor.com/view/backpack-tasty-om-nom-nom-nom-nom-nom-nom-gif-14079761641419048939","https://tenor.com/view/sesame-street-cookie-monster-eats-your-art-eating-muppet-crazy-eyes-gif-1461380403278441959"]
+        await message.channel.send(random.choice(gifs))
 
 
 

@@ -949,11 +949,13 @@ async def on_message(message):
     if msg.startswith('!apple'):
         await message.channel.send("[follow Vel's instagram for more!](https://www.instagram.com/reel/DB7U4JtSd1D/)")
 
+    emotes = ["<:pleadingtaco:1263609449269170268>",":blush:",":pleading_face:","<:kermitLove:1246529876429770804>",":face_holding_back_tears:","<:peepoCozy:1292518730286370896>"]
+
     if msg.startswith('!kiss'):
-        await message.channel.send("Thank you <:Bedge:1191310903208050839>")
+        await message.channel.send("Thank you " + random.choice(emotes))
 
     if msg.startswith('!hug'):
-        await message.channel.send("Thank you <:pleadingtaco:1263609449269170268>")
+        await message.channel.send("Thank you " + random.choice(emotes))
 
     if msg.startswith('!treat'):
         await message.channel.send("https://tenor.com/view/backpack-tasty-om-nom-nom-nom-nom-nom-nom-gif-14079761641419048939")

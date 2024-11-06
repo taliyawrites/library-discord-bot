@@ -958,6 +958,11 @@ async def on_message(message):
         await message.channel.send("Thank you " + random.choice(emotes))
 
     if msg.startswith('!treat'):
+        treat = msg[6:].strip()
+        if len(treat) == 0:
+            await message.channel.send("Thank you for the treat!")
+        else:
+            await message.channel.send("Thank you for the delicious " + treat)
         await message.channel.send("https://tenor.com/view/backpack-tasty-om-nom-nom-nom-nom-nom-nom-gif-14079761641419048939")
 
 

@@ -949,8 +949,14 @@ async def on_message(message):
     if msg.startswith('!apple'):
         await message.channel.send("[follow Vel's instagram for more!](https://www.instagram.com/reel/DB7U4JtSd1D/)")
 
+    if msg.startswith('!kiss'):
+        await message.channel.send("Thank you <:Bedge:1191310903208050839>")
 
+    if msg.startswith('!hug'):
+        await message.channel.send("Thank you <:pleadingtaco:1263609449269170268>")
 
+    if msg.startswith('!treat'):
+        await message.channel.send("https://tenor.com/view/backpack-tasty-om-nom-nom-nom-nom-nom-nom-gif-14079761641419048939")
 
 
 

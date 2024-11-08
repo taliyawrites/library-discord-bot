@@ -922,36 +922,31 @@ async def on_message(message):
             await message.channel.send(f"I've been edged {edge_counter} times. May I please cum?")
 
     # returns a random choice of no responses unless from a random group of winners or mods
-    # if msg.startswith('!cum'):
-    #     mod_ids = [1169014359842885726, 1089053035377999912, 159860526841593856, 415894832515383296]
-    #     if '?' in msg:
-    #         await message.channel.send("Try again, but this time, say it like you believe it.")
-    #     elif message.author.id in mod_ids or message.author.id in cum_permission_ids:
-    #         edge_counter = 0
-    #         if message.author == vel:
-    #             await message.channel.send("Thank you, Daddy!")
-    #         else:
-    #             await message.channel.send("Thank you!")
-    #     else:
-    #         responses = ["no u","Silence, sub.","Daddy didn't give me permission yet.", "I don't answer to you.","You'd really like that, wouldn't you?","Nice try.","Make me.","It's adorable that you thought that would work.","How about you cum for me instead, baby?","I'm not allowed to cum yet :pleading_face:","I'm trying :pensive:","It's okay, I'm a good girl, I can take a little more!","But I wanna be good for Daddy!","You're not my real dom!","I would, but my vibrator died :cry: you got any batteries?"]
-    #         weights = [1 for k in range(len(responses)-1)]
-    #         weights.insert(0,6)
-    #         response = random.choices(responses,weights = weights, k = 1)[0]
-    #         await message.channel.send(response)
-    #         if response == "no u":
-    #             options = []
-    #             for audio in audio_choices:
-    #                 if 'sfw' not in audio.tags() and 'behind the scenes' not in audio.tags():
-    #                     options.append(audio)
-    #             audio =random_audio(options)
-    #             await message.channel.send(embed=audio.discord_post())
-
     if msg.startswith('!cum'):
-        edge_counter = 0
-        if message.author == vel:
-            await message.channel.send("Thank you, Daddy!")
+        mod_ids = [1169014359842885726, 1089053035377999912, 159860526841593856, 415894832515383296]
+        if '?' in msg:
+            await message.channel.send("Try again, but this time, say it like you believe it.")
+        elif message.author.id in mod_ids or message.author.id in cum_permission_ids:
+            edge_counter = 0
+            if message.author == vel:
+                await message.channel.send("Thank you, Daddy!")
+            else:
+                await message.channel.send("Thank you!")
         else:
-            await message.channel.send("Thank you!")
+            responses = ["no u","Silence, sub.","Daddy didn't give me permission yet.", "I don't answer to you.","You'd really like that, wouldn't you?","Nice try.","Make me.","It's adorable that you thought that would work.","How about you cum for me instead, baby?","I'm not allowed to cum yet :pleading_face:","I'm trying :pensive:","It's okay, I'm a good girl, I can take a little more!","But I wanna be good for Daddy!","You're not my real dom!","I would, but my vibrator died :cry: you got any batteries?"]
+            weights = [1 for k in range(len(responses)-1)]
+            weights.insert(0,6)
+            response = random.choices(responses,weights = weights, k = 1)[0]
+            await message.channel.send(response)
+            if response == "no u":
+                options = []
+                for audio in audio_choices:
+                    if 'sfw' not in audio.tags() and 'behind the scenes' not in audio.tags():
+                        options.append(audio)
+                audio =random_audio(options)
+                await message.channel.send(embed=audio.discord_post())
+
+
 
 
     if msg.startswith('!apple'):

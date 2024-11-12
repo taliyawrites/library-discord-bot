@@ -213,7 +213,7 @@ def inexact_matches(phrase):
     too_common_words = ["the","a","an","is","on","for","you","my","i","to","me","up","and","are","with","your","by","part","of"]
     search_words = []
     for word in search_terms:
-        if word not in too_common_words and len(word) > 2:
+        if word not in too_common_words and (len(word) > 2 or word.isnumeric()):
             search_words.append(word)
 
     for audio in audio_choices:

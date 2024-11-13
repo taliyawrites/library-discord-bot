@@ -389,7 +389,8 @@ async def on_message(message):
         return
 
     # remove case-sensitivity
-    msg = message.content.lower()
+    msg = message.content.lower().replace("’","'")
+
 
 
     # AUDIO COMMANDS # 
@@ -652,7 +653,7 @@ async def on_message(message):
         user_id = message.author.id
 
         if len(request) == 0:
-            await message.channel.send("Please enter some tags after `!request`. Alternatively, to see your saved tags, send the command `!myrequests`; to get a random request, send the command `!randomrequest`.")
+            await message.channel.send("Please enter some tags after `!request`. Alternatively, to see your saved tags, send the command `!myrequests`.")
         else:
             not_found = True
             for entry in snack_requests:
@@ -713,13 +714,17 @@ async def on_message(message):
                 outfile.write(json.dumps(snack_requests))
 
     if msg.startswith("!randomrequest"):
-        if len(snack_requests) == 0:
-            await message.channel.send("There are no snack requests right now!")
+        if message.author == vel:
+            if len(snack_requests) == 0:
+                await message.channel.send("There are no snack requests right now!")
+            else:
+                entry = random.choice(snack_requests)
+                user = await client.get_guild(GUILD).fetch_member(entry[0])
+                request = random.choice(entry[1:])
+                await message.channel.send(f"From {user.mention} — {request}")
         else:
-            entry = random.choice(snack_requests)
-            user = await client.get_guild(GUILD).fetch_member(entry[0])
-            request = random.choice(entry[1:])
-            await message.channel.send(f"From {user.display_name} — {request}")
+            await message.channel.send("Only Vel can use the randomrequest command! Feel free to submit your own tags with `!request`.")
+        
 
 
 

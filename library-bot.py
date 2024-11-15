@@ -465,7 +465,7 @@ async def on_message(message):
     # search for audio by tag(s)
     if msg.startswith('!tag'):
         tags = get_tags(msg[5:])
-        if len(tags) == 0:
+        if tags is None:
             await message.channel.send("Please enter a search phrase after `!tag`.")
             return
 

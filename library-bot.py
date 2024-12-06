@@ -699,6 +699,7 @@ async def on_message(message):
                 if entry[0] == user_id:
                     if remove_index > -1 + len(entry):
                         await message.channel.send(f"Request out of range; entry {remove_index} does not exist!")
+                        not_found=False
                     else:
                         deleted = entry[remove_index]
                         del entry[remove_index]
@@ -927,7 +928,7 @@ async def on_message(message):
 
     # returns a random choice of no responses unless from a random group of winners or mods
     if msg.startswith('!cum'):
-        mod_ids = [1169014359842885726, 1089053035377999912, 159860526841593856, 415894832515383296]
+        mod_ids = [1169014359842885726, 1089053035377999912, 159860526841593856, 415894832515383296,1262940885251784785]
         if '?' in msg:
             await message.channel.send("Try again, but this time, say it like you believe it.")
         elif message.author.id in mod_ids or message.author.id in cum_permission_ids:

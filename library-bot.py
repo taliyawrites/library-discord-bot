@@ -957,6 +957,9 @@ async def on_message(message):
     if msg.startswith('!apple'):
         await message.channel.send("[follow Vel's instagram for more!](https://www.instagram.com/reel/DB7U4JtSd1D/)")
 
+    if msg.startswith('!shirt'):
+        await message.channel.send("https://discord.com/channels/1148449914188218399/1194499430410371173/1316244852589072426")
+
     emotes = ["<:pleadingtaco:1263609449269170268>",":blush:",":pleading_face:","<:kermitLove:1246529876429770804>",":face_holding_back_tears:","<:peepoCozy:1292518730286370896>"]
 
     if msg.startswith('!kiss'):

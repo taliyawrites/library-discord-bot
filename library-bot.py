@@ -867,6 +867,10 @@ async def on_message(message):
     if message.author == taliya and msg.startswith('!welcome'):
         await taliya.send("Welcome to the Vel's Library discord server! Vel has over three hundred and fifty audios for you to enjoy, and this bot can help you explore the collection and find your next favorite audio. The bot can pick a random audio with your favorite tags for you to listen to; you can search for audios by title, tags, or characters; and more! To learn in detail how to use this bot to search for audios and find other information about Vel's content, send the message `!tutorial`. To just receive a quick summary of what the bot can do, send the message `!basiccommands`. You can also find the masterlist of all of Vel's audios [here](<https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr>). Enjoy your time in the library!")
 
+    if msg.startswith('!thread'):
+        await message.channel.send(client.get_guild(GUILD).active_threads())
+
+
 
     # SILLY COMMANDS #
 

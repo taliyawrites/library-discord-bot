@@ -875,7 +875,7 @@ async def on_message(message):
         await message.channel.send(link_string)
 
     if msg.startswith('!altthread'):
-        threads = await client.get_guild(GUILD).threads
+        threads = client.get_guild(GUILD).threads
         link_string = ""
         for thread in threads:
             link_string = link_string + "- " + thread.jump_url + "\n"

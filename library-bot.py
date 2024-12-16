@@ -869,9 +869,10 @@ async def on_message(message):
 
     if msg.startswith('!thread'):
         threads = await client.get_guild(GUILD).active_threads()
-        await message.channel.send(threads[1].jump_url)
-        links = [thread.jump_url for thread in threads]
-        await message.channel.send(links)
+        link_string = ""
+        for thread in threads:
+            link_string = link_string + "- " + thread.jump_url + "\n"
+        await message.channel.send(link_string)
 
 
 

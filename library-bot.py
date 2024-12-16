@@ -869,7 +869,7 @@ async def on_message(message):
 
     if msg.startswith('!thread'):
         threads = await client.get_guild(GUILD).active_threads()
-        await message.channel.send(threads)
+        await message.channel.send(threads[1])
 
 
 

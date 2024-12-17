@@ -486,7 +486,7 @@ async def on_message(message):
             try:
                 await message.channel.send(embed = matches_embed)
             except:
-                await message.channel.send("Too many results found to display without exceeding Discord character limit, please try again with a more specific set of tags.")
+                await message.channel.send("Vel has too many audios tagged [" + msg[5:] + "] to display without exceeding the Discord character limit! Please try again with a more specific set of tags." )
 
     # lists audios featuring specified named character
     if msg.startswith('!character'):
@@ -873,14 +873,6 @@ async def on_message(message):
         for thread in threads:
             link_string = link_string + "- " + thread.jump_url + "\n"
         await message.channel.send(link_string)
-
-    if msg.startswith('!altthread'):
-        threads = client.get_guild(GUILD).threads
-        link_string = ""
-        for thread in threads:
-            link_string = link_string + "- " + thread.jump_url + "\n"
-        await message.channel.send(link_string)
-
 
 
     # SILLY COMMANDS #

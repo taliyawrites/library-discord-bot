@@ -961,7 +961,7 @@ async def on_message(message):
         return
 
     if message.content.startswith('!') and not message.content.startswith('!refresh'):
-        await message.channel.send("The bot has been updated to use slash commands integrated into Discord! Type / to see the available commands.")
+        await message.channel.send("The bot has been updated to use slash commands integrated into Discord! The commands have the same names as before, but with `/` at the beginning instead of `!`. This means that you won't need to remember the exact name or format of a command, just type / and a menu of options will pop up!")
 
     # sync with airtable data to pull any masterlist updates
     if message.content.startswith('!refresh'):

@@ -1127,7 +1127,7 @@ async def daily_balatro():
 # DMs new user a welcome message with a link to the masterlist
 @client.event
 async def on_member_join(member):
-    await member.send("Welcome to the Vel's Library discord server! Vel has over three hundred and fifty audios for you to enjoy, and this bot can help you explore the collection and find your next favorite audio. The bot can pick a random audio with your favorite tags for you to listen to; you can search for audios by title, tags, or characters; and more! Type / to learn how to use the bot's commands, or send the message `/basiccommands` to see a list of the most used ones. You can also find the masterlist of all of Vel's audios [here](<https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr>). Enjoy your time in the library!")
+    await member.send("Welcome to the Vel's Library discord server! Vel has over three hundred and fifty audios for you to enjoy, and this bot can help you explore the collection and find your next favorite audio. The bot can pick a random audio with your favorite tags for you to listen to; you can search for audios by title, tags, or characters; and more! Type / to learn how to use the bot's commands, or send the message `/basiccommands` to see a list of the most used commands. You can also find the masterlist of all of Vel's audios [here](<https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr>). Enjoy your time in the library!")
     print('new member join message sent')
 
 

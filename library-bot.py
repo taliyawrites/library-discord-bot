@@ -963,6 +963,9 @@ async def on_message(message):
 
     # UTILITY COMMANDS #
 
+    if message.content.startswith("!"):
+        await message.channel.send("The bot has been updated to use slash commands! Type / to see the options")
+
     # sync with airtable data to pull any masterlist updates
     if message.content.startswith('!refresh'):
         audio_choices = import_airtable_data()

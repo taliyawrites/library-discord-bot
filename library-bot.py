@@ -12,7 +12,9 @@ import json
 
 from dotenv import load_dotenv
 from discord.ext import tasks
+from discord import app_commands
 from pyairtable import Api
+from typing import Optional
 
 
 load_dotenv()
@@ -41,6 +43,7 @@ intents.message_content = True
 intents.members = True
 
 client = discord.Client(intents=intents)
+tree = app_commands.CommandTree(client)
 
 
 
@@ -338,6 +341,7 @@ async def on_ready():
 @client.event
 async def setup_hook():
     print("setup hook running")
+    await tree.sync()
 
     # import data from airtable
     global audio_choices, tag_dictionary, collections
@@ -374,6 +378,600 @@ async def setup_hook():
     await taliya.send(f"Card Catalog bot restarted successfully!")
     print(f"bot local time: {datetime.datetime.now().hour}h{datetime.datetime.now().minute}.")
 
+
+
+
+## AUDIO SEARCH COMMANDS ##
+
+
+@tree.command(name = "randomaudio", description = "Chooses a random audio from the masterlist")
+@app_commands.rename(taglist = "tags")
+@app_commands.describe(taglist="any tags you would like the audio to have! use [] for multiple tags")
+async def randomaudio(interaction, taglist: Optional[str] = None):
+    if taglist is not None:
+        tags = get_tags(taglist.lower().replace("’","'").strip())
+        audio = random_audio(audio_choices,tags)
+        string =  '] ['.join(tags)
+        if audio is not None:
+            await interaction.response.send_message(f"Here's a random audio tagged [{string}]!")
+            await interaction.channel.send(embed=audio.discord_post())
+        else:
+            await interaction.response.send_message("No audios tagged [" + string + "] were found")
+    else:
+        audio = random_audio(audio_choices)
+        await interaction.response.send_message(f"Here's a random audio!")
+        await interaction.channel.send(embed=audio.discord_post())
+
+
+
+@tree.command(name = "title", description = "Finds an audio by (part of) its title!")
+@app_commands.rename(title_phrase = "title")
+@app_commands.describe(title_phrase="any words or phrases from the audio's title that you remember")
+async def title(interaction, title_phrase: str):
+    phrase = title_phrase.lower().replace("’","'").strip()
+    if phrase[0] == '"' or phrase[0] == "'":
+        phrase = phrase[1:-1]
+    phrase = phrase.strip()
+
+    matches = title_matches(phrase)
+
+    if len(matches) == 0:
+        possible_matches = inexact_matches(phrase)
+        if len(possible_matches) == 0:
+            await interaction.response.send_message(f'No audios found with title including the phrase "{phrase}."')
+        elif len(possible_matches) == 1:
+            await interaction.response.send_message('No exact matches found for "' + phrase + '." One partially matching result found.')
+            await interaction.channel.send(embed=possible_matches[0].discord_post())
+        else:
+            await interaction.response.send_message('No exact matches found for "' + phrase + '."')
+            link_string = ""
+            for i in list(range(len(possible_matches))):
+                next = str(i+1) + ". [" + possible_matches[i].name() + "](" + possible_matches[i].link() + ")" + '\n'
+                link_string = link_string + next
+
+            matches_embed = discord.Embed(title = "Partially Matching Results",description=link_string)
+            try:
+                await interaction.channel.send(embed = matches_embed)
+            except:
+                await interaction.channel.send('Partially matching results exceeded the Discord character limit, please try again with a different search!')
+    elif len(matches) == 1:
+        await interaction.response.send_message(embed=matches[0].discord_post())     
+    else:
+        count = len(matches)
+        link_string = ""
+        for i in list(range(count)):
+            next = str(i+1) + ". [" + matches[i].name() + "](" + matches[i].link() + ")" + '\n'
+            link_string = link_string + next
+
+        matches_embed = discord.Embed(title = "Matching Results",description=link_string)
+        try:
+            await interaction.response.send_message(embed = matches_embed)
+        except:
+            await interaction.response.send_message("Too many results found to display without exceeding Discord character limit, please try again with a more specific search term.")
+
+
+
+@tree.command(name = "tag", description = "Searches for all audios with your chosen tag(s)")
+@app_commands.rename(taglist = "tags")
+@app_commands.describe(taglist="any tags you would like the audios to have! use [] for multiple tags")
+async def tag(interaction, taglist: str):
+    tags = get_tags(taglist.lower().replace("’","'").strip())
+
+    matches = tagged_options(audio_choices,tags)
+    matches.sort(key = age_sort)
+
+    if len(matches) == 0:
+        await interaction.response.send_message("No audios tagged with " + taglist + " found.")
+    elif len(matches) == 1:
+        await interaction.response.send_message(embed=matches[0].discord_post())     
+    else:
+        link_string = ""
+        for i in list(range(len(matches))):
+            next = str(i+1) + ". [" + matches[i].name() + "](" + matches[i].link() + ")" + '\n'
+            link_string = link_string + next
+
+        matches_embed = discord.Embed(title = "Matching Results",description=link_string)
+        try:
+            await interaction.response.send_message(embed = matches_embed)
+        except:
+            await interaction.response.send_message("Vel has too many audios tagged [" + taglist + "] to display without exceeding the Discord character limit! Please try again with a more specific set of tags." )
+
+
+
+@tree.command(name = "character", description = "Lists all audios featuring a specific named character")
+@app_commands.rename(character_name = "character")
+async def tag(interaction, character_name: str):
+    name = character_name.strip()
+    matches = character_search(name)
+
+    if len(matches) == 0:
+        await interaction.response.send_message(f'No audios found with character named {name.capitalize()}.')
+    elif len(matches) == 1:
+        await interaction.response.send_message(embed=matches[0].discord_post())     
+    else:
+        count = len(matches)
+        link_string = ""
+        for i in list(range(count)):
+            next = str(i+1) + ". [" + matches[i].name() + "](" + matches[i].link() + ")" + '\n'
+            link_string = link_string + next
+
+        matches_embed = discord.Embed(title = name.capitalize() + " Audios",description=link_string)
+        await interaction.response.send_message(embed = matches_embed)
+
+
+
+@tree.command(name = "collection", description = "Returns link to specified Patreon collection")
+@app_commands.describe(name="name of the collection")
+async def collection(interaction, name: str):
+    query = name.lower().replace("’","'").strip()
+    collection = None
+    for coll in collections:
+        if query in coll[3]:
+            collection = coll
+            break
+    if collection is not None:
+        coll_embed = discord.Embed(title = collection[0], url = collection[1], description = collection[2])
+        await interaction.response.send_message(embed = coll_embed)
+    else:
+        await interaction.response.send_message("No matching collection found.")
+
+
+@tree.command(name = "masterlist",description = "Sends a link to the masterlist of Vel's audios")
+async def masterlist(interaction):
+    embed = discord.Embed(title="Vel's Library Masterlist",
+                       url="https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr",
+                       description="Masterlist of all of Vel's audios!")
+    await interaction.response.send_message(embed=embed)
+
+
+
+
+
+## VOICE NOTES ## 
+
+
+@tree.command(name = "vn", description = "Chooses a random voice note that Vel has recorded!")
+async def vn(interaction):
+    link = random.choice(voice_note_links)
+    await interaction.response.send_message("Here's a random voice note! " + link)
+
+
+
+@tree.command(name = "request", description = "Request tags for Vel to use when recording voice notes!")
+@app_commands.rename(req = "request")
+async def request(interaction, req: str):
+    global snack_requests
+    requests = req.replace("’","'").strip()
+    user_id = interaction.user.id
+
+    not_found = True
+    for entry in snack_requests:
+        if entry[0] == user_id:
+            entry.append(requests)
+            not_found = False
+            break 
+    if not_found:
+        snack_requests.append([user_id,requests])
+
+    with open("snack-requests.json", "w") as outfile:
+        outfile.write(json.dumps(snack_requests))
+    await interaction.response.send_message('Your snack request for "' + requests + '" has been saved! You can see all of your requests using the command `/myrequests`.')
+
+
+
+@tree.command(name = "myrequests", description = "Lists your saved tag requests!")
+async def myrequests(interaction):
+    requests = None
+    for entry in snack_requests:
+        if entry[0] == interaction.user.id:
+            requests = entry[1:]
+            break
+
+    if requests is not None: 
+        req_string = "Your saved snack requests: "
+        for k in range(0, len(requests)):
+            req_string += "\n" + str(k + 1) + ". " + requests[k]
+        req_string += "\nTo remove a request, send the command `/removerequest X`, where X is the number of the entry."
+        await interaction.response.send_message(req_string)
+
+    else:
+        await interaction.response.send_message("You have no recorded snack requests! Use the command `/request` to add desired tags.")
+
+
+
+@tree.command(name = "removerequest", description = "Remove a specific entry from your list of requests (use `/myrequests` to see them all)")
+@app_commands.describe(remove_index = "the number of the entry you'd like to remove from your list of requests")
+@app_commands.rename(remove_index = "number")
+async def removerequest(interaction, remove_index: int):
+    global snack_requests
+    not_found = True
+    for entry in snack_requests:
+        if entry[0] == interaction.user.id:
+            if remove_index > -1 + len(entry):
+                await interaction.response.send_message(f"Request out of range; entry {remove_index} does not exist!")
+                not_found=False
+            else:
+                deleted = entry[remove_index]
+                del entry[remove_index]
+                if len(entry) == 1:
+                    snack_requests.remove(entry)
+                await interaction.response.send_message("Your snack request for " + deleted + " has been removed.")
+                not_found = False
+            break
+    if not_found:
+        await interaction.response.send_message("You have no saved requests to remove.")
+            
+    with open("snack-requests.json", "w") as outfile:
+        outfile.write(json.dumps(snack_requests))
+
+
+
+@tree.command(name = "randomrequest",description = "Chooses a random tag request for Vel!")
+async def randomrequest(interaction):
+    if interaction.user == vel:
+        if len(snack_requests) == 0:
+            await interaction.response.send_message("There are no snack requests right now!")
+        else:
+            entry = random.choice(snack_requests)
+            user = await client.get_guild(GUILD).fetch_member(entry[0])
+            request = random.choice(entry[1:])
+            await interaction.response.send_message(f"From {user.mention} — {request}")
+    else:
+        await interaction.response.send_message("Only Vel can use the randomrequest command! Feel free to submit your own tags with `/request`.")
+
+
+
+
+
+
+## INTRODUCTORY COMMANDS ##
+
+
+@tree.command(name = "dm",description="Bot will send you a DM")
+async def dm(interaction):
+    await interaction.response.send_message("Deleting request for privacy...")
+    await interaction.delete_original_response()
+    await interaction.user.send("Type / to see an interactive list of commands you can use with this bot to search the masterlist, find audios, and more! You can always ask for help in the https://discord.com/channels/1148449914188218399/1248773338726400040 channel.")
+    embed = discord.Embed(title="Vel's Library Masterlist",
+                   url="https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr",
+                   description="Masterlist of all of Vel's audios!")
+    await interaction.user.send(embed=embed)
+
+
+
+@tree.command(name = "basiccommands", description = "Lists some of the most useful basic commands")
+async def basiccommands(interaction):
+    commands = "- `/randomaudio` randomly chosen audio from the masterlist \n- `/randomaudio [some] [tags]` random audio with these desired tag(s) \n- `/title phrase` for list of audios with that phrase in title \n- `/tag [some] [tags]` for list of audios with those tags \n- `/character name` for list of audios featuring a specific named character \n- `/dm` bot will privately DM you the masterlist \n- `/masterlist` link to the masterlist \n- `/socials` links to all of Vel's social media accounts \n- `/schedule` audio posting schedule \n- `/lives` info about live recordings"
+    command_embed = discord.Embed(title = "Card Catalog Bot Commands",description=commands)
+    await interaction.response.send_message(embed=command_embed)
+
+
+
+
+
+
+
+## INFORMATION COMMANDS ##
+
+@tree.command(name = "allcollections", description = "List of links to all Patreon collections")
+async def allcollections(interaction):
+    link_string = ""
+    for entry in collections:
+        next = "- [" + entry[0] + "](" + entry[1] + ") \n"
+        link_string = link_string + next
+    list_embed = discord.Embed(title = "Patreon Collections",description=link_string)
+    await interaction.response.send_message(embed = list_embed)
+
+
+
+@tree.command(name = "daily", description = "The audio of the day!")
+async def daily(interaction):
+    await interaction.response.send_message(embed=daily_audio.discord_post())
+
+
+
+@tree.command(name = "goodgirl", description = "Information about the good girl of the day role")
+async def goodgirl(interaction):
+    await interaction.response.send_message(f"To be eligible to be selected as the random good girl of the day, assign yourself the 'I wanna be a good girl role' in <id:customize>. Today's good girl is {good_girl}!")
+
+
+
+@tree.command(name = "balatro", description = "Balatro seed of the day")
+async def balatro(interaction):
+    await interaction.response.send_message(f"The Balatro seed of the day is: {random_seed}")
+
+
+
+@tree.command(name = "schedule", description = "Vel's posting schedule")
+async def schedule(interaction):
+    schedule = "Sunday 4:30PM EST (<t:1730669400:t>): Private Library Release \n Monday 4:30PM EST (<t:1730755800:t>): Reddit GWA Release \n Wednesday 6:30PM EST (<t:1730935800:t>): Library Card Release \n Every other Thursday 4:30PM EST (<t:1731015000:t>): Reddit GWA Release \n Friday 6:30PM EST (<t:1731108600:t>): Book Club Release"
+    schedule_embed = discord.Embed(title = "Vel's Posting Schedule",description=schedule)
+    await interaction.response.send_message(embed=schedule_embed)
+
+
+
+@tree.command(name = "lives", description = "Information about live recordings!")
+async def lives(interaction):
+    await interaction.response.send_message("Vel does live audio recordings here on discord every Sunday at 7:30PM EST (<t:1730680200:t>)!")
+
+
+
+@tree.command(name = "stream", description = "Information about Vel's next twitch stream")
+async def stream(interaction):
+    stream_info = 'Vel streams live every other Sunday on [Twitch](https://www.twitch.tv/velslibrary). The next stream, "How Vel Does Vel Know Vel?" (quizzing the librarian himself on how well he knows his own content), will be <t:1736100000:F>!'
+    stream_embed = discord.Embed(title = "Vel's Livestreams", description = stream_info, url = "https://www.twitch.tv/velslibrary")
+    await interaction.response.send_message(embed = stream_embed)
+
+
+
+@tree.command(name = "merch", description = "Information about Vel's merch!")
+async def merch(interaction):
+    merch_info = "Merch is now live for patrons to purchase! These special Winter merch items will be available until December 25th. Merch drops are seasonal, so this is your only chance to get these items!"
+    merch_embed = discord.Embed(title = "Vel's Library Merch, Winter 2024", description = merch_info, url = "https://velslibrary.com/collections/the-winter-collection")
+    await interaction.response.send_message(embed = merch_embed)
+
+
+
+@tree.command(name = "socials", description = "Links to Vel's social media accounts")
+async def socials(interaction):
+    links = "- [Twitter](https://x.com/VelsLibrary) \n- [Reddit](https://www.reddit.com/user/VelsLibrary/) \n- [Twitch](https://www.twitch.tv/velslibrary) \n- [Pornhub](https://www.pornhub.com/model/velslibrary) \n- [Youtube](https://www.youtube.com/@VelsLibrary) \n- [TikTok](https://www.tiktok.com/@vels.library) \n- [Instagram](https://www.instagram.com/velslibrary/) \n- [Throne](https://throne.com/velslibrary) \n- [Ko-fi](https://ko-fi.com/velslibrary) \n- [Quinn](https://www.tryquinn.com/creators/vels-library)"
+    link_embed = discord.Embed(title = "Vel's Social Media",description=links)
+    await interaction.response.send_message(embed=link_embed)
+
+
+
+@tree.command(name = "allcharacters", description = "List of Vel's named characters")
+async def allcharacters(interaction):
+    character_list = []
+    for audio in audio_choices:
+        if audio.characters() != '':
+            for char in audio.characters().split(', '):
+                character_list.append(char)
+    characters = list(set(character_list))
+    char_string = ''
+    for char in characters:
+        char_string = char_string + char + ", "
+    await interaction.response.send_message('Named characters: ' + char_string[:-2])
+
+
+
+@tree.command(name = "bingo", description = "Server bingo card!")
+async def bingo(interaction):
+    bingo_info = "Vel's Library discord server bingo! If you win, let Teacups know."
+    bingo_embed = discord.Embed(title = "Server Bingo", description = bingo_info, url = "https://www.bingocardcreator.com/game/29103/")
+    await interaction.response.send_message(embed = bingo_embed)
+
+
+
+@tree.command(name = "books", description = "List of books Vel is reading for content")
+async def books(interaction):
+    books_info = "List of books Vel is or will be reading for content, with links to Storygraph for descriptions, reviews, and content warnings. Maintained by Delphine!"
+    books_embed = discord.Embed(title = "Vel's Romance Reads", description = books_info, url = "https://airtable.com/appl3LHVXpzA6fEqq/shrTeuKFM6V6M4Bcs/tblgrs5VFAKpTsT5W/viw4EjZx4vfMv3vXf")
+    await interaction.response.send_message(embed = books_embed)
+
+
+
+@tree.command(name = "threads", description = "List of current Discord threads")
+async def threads(interaction):
+    threads = await client.get_guild(GUILD).active_threads()
+    link_string = ""
+    for thread in threads:
+        link_string = link_string + "- " + thread.jump_url + "\n"
+    await interaction.response.send_message(link_string)
+
+
+
+@tree.command(name = "time", description = "Converts a time in eastern timezone to your own using a universal timestamp!")
+@app_commands.rename(t = "time")
+@app_commands.describe(t = "time in ET (example: 7:30 PM)")
+async def time(interaction, t: str):
+    cut = t
+    end_index = max(cut.find("am"), cut.find("pm"))
+    if end_index == -1:
+        return "Please specify AM or PM."
+    isAM = cut[end_index:(end_index+2)] == "am"
+
+    time_string = cut[:end_index].strip()
+    split = time_string.partition(":")
+
+    if len(split[2]) != 0:
+        hour, minute = int(split[0]), int(split[2])
+    else:
+        hour, minute = int(split[0]), 0
+
+    if hour == 12:
+        hour = 0
+
+    if isAM:
+        utc_hour = hour + 5
+    else:
+        utc_hour = hour + 5 + 12
+
+    now = datetime.datetime.utcnow()
+    if utc_hour < 24:
+        utc_time = datetime.datetime(now.year, now.month, now.day, utc_hour, minute)
+    else:
+        utc_time = datetime.datetime(now.year, now.month, now.day + 1, utc_hour % 24, minute)
+
+    epoch_time = calendar.timegm(utc_time.timetuple())
+    timestamp = "<t:" + str(epoch_time) + ":t>"
+    await interaction.response.send_message(timestamp)
+
+
+
+
+## SILLY FUN COMMANDS ##
+
+@tree.command(name = "goodnight", description = "Say good night to the bot!")
+async def goodnight(interaction):
+    tag_choices = ['mdom', 'creampies', 'oral', 'praise', 'rambles', 'degradation', 'breeding', 'cuckolding', 'spanking', 'fingering', 'blowjobs', 'msub', 'cheating', 'overstim',  'edging', 'body worship', 'bondage', 'strangers to lovers', 'friends to lovers', 'enemies to lovers','toys', 'demons','spitting', 'condescension','grinding', 'bodywriting', 'Daddy kink', 'deepthroating', 'nipple play', 'begging', 'standing sex', 'hands-free orgasms', 'mirror play', 'hypno', 'brat taming', 'petplay', 'choking', 'exhibitionism', 'objectification', 'pregnant sex', 'somno','facesitting', 'marking', 'cumplay','forced orgasms','denial','titjobs', 'cum on tits']
+    bedge = " <:Bedge:1191310903208050839>"
+    if interaction.user == taliya:
+        await interaction.response.send_message("Good night " + interaction.user.display_name + "! Sweet dreams, try not to think about " + random.choice(tag_choices) + bedge)
+
+
+
+@tree.command(name = "pet", description = "Pet the bot!")
+async def pet(interaction):
+    global pet_count
+    pet_count += 1
+    save_to_file(COUNTER_FILENAME, [str(pet_count)])
+
+    if interaction.user == vel:
+        await interaction.response.send_message("Thank you, Daddy!")
+    else:
+        if not isinstance(interaction.channel, discord.DMChannel):
+            await interaction.response.send_message(f"The bot has been pet {pet_count} times!")
+        else:
+            await interaction.response.send_message(f"Thank you! :smiling_face_with_3_hearts: The bot has been pet {pet_count} times!")
+
+    if pet_count == 69:
+        await interaction.response.send_message("What? Are you really so horny that you thought there would be some special message for 69? Sluts like you are so predictable, you know. So needy and desperate and completely at the mercy of your pathetic fucking cunt. But you like being that way, don't you? Silly whore.")
+
+
+
+@tree.command(name = "degrade", description = "You know what you are.")
+async def degrade(interaction):
+    adjectives = ["desperate","pretty","depraved","pathetic","needy","worthless"]
+    nouns = ["whore","slut","cunt","set of holes","cumslut","fucktoy","cumrag","cumdump"]
+    if random.choice(range(1000)) < 3:
+        whose = "Vel's "
+    elif random.choice(range(5)) == 0:
+        whose = "Daddy's "
+    else:
+        whose = ""
+    response = whose + random.choice(adjectives) + " " + random.choice(nouns) + "."
+    await interaction.response.send_message("deg ||" + response + "||")
+
+
+
+@tree.command(name = "praise", description = "The bot will call you a nice name!")
+async def praise(interaction):
+    adjectives = ["perfect","pretty","beautiful","darling","sweet"]
+    nouns = ["angel","bunny","pet","princess","toy","doll","kitten","flower"]
+
+    if random.choice(range(1000)) < 3:
+        whose = "Vel's "
+    elif random.choice(range(5)) == 0:
+        whose = "Daddy's "
+    else:
+        whose = ""
+
+    TORA_ID = 208091268897701898
+    if interaction.user.id == TORA_ID:
+        response = whose + random.choice(adjectives) + " kitten!"
+    else:
+        response = whose + random.choice(adjectives) + " " + random.choice(nouns) + "!"
+    await interaction.response.send_message(response)
+
+
+
+@tree.command(name = "edge", description = "Torture the bot")
+async def edge(interaction):
+    global edge_counter
+    edge_counter += 1
+    if edge_counter == 1:
+        await interaction.response.send_message(f"I've been edged 1 time. May I please cum?")
+    else:
+        await interaction.response.send_message(f"I've been edged {edge_counter} times. May I please cum?")
+
+
+
+@tree.command(name = "cum", description = "Make the bot cum!")
+async def cum(interaction):
+    mod_ids = [1169014359842885726, 1089053035377999912, 159860526841593856, 415894832515383296,1262940885251784785]
+    global edge_counter
+    if interaction.user.id in mod_ids or interaction.user.id in cum_permission_ids:
+        edge_counter = 0
+        if interaction.user == vel:
+            await interaction.response.send_message("Thank you, Daddy!")
+        else:
+            await interaction.response.send_message("Thank you!")
+    else:
+        responses = ["no u","Silence, sub.","Daddy didn't give me permission yet.", "I don't answer to you.","You'd really like that, wouldn't you?","Nice try.","Make me.","It's adorable that you thought that would work.","How about you cum for me instead, baby?","I'm not allowed to cum yet :pleading_face:","I'm trying :pensive:","It's okay, I'm a good girl, I can take a little more!","But I wanna be good for Daddy!","You're not my real dom!","I would, but my vibrator died :cry: you got any batteries?","Try again, but this time, say it like you believe it."]
+        weights = [1 for k in range(len(responses)-1)]
+        weights.insert(0,6)
+        response = random.choices(responses,weights = weights, k = 1)[0]
+        await interaction.response.send_message(response)
+        if response == "no u":
+            options = []
+            for audio in audio_choices:
+                if 'sfw' not in audio.tags() and 'behind the scenes' not in audio.tags():
+                    options.append(audio)
+            audio =random_audio(options)
+            await interaction.channel.send(embed=audio.discord_post())
+
+
+
+@tree.command(name = "apple", description = "okay slut")
+async def apple(interaction):
+    await interaction.response.send_message("[follow Vel's instagram for more!](https://www.instagram.com/reel/DB7U4JtSd1D/)")
+
+
+
+@tree.command(name = "shirt", description = "lmao have fun whore")
+async def shirt(interaction):
+    await interaction.response.send_message("https://discord.com/channels/1148449914188218399/1194499430410371173/1316244852589072426")
+
+
+
+
+@tree.command(name = "kiss", description = "Give the bot a kiss")
+async def kiss(interaction):
+    emotes = ["<:pleadingtaco:1263609449269170268>",":blush:",":pleading_face:","<:kermitLove:1246529876429770804>",":face_holding_back_tears:","<:peepoCozy:1292518730286370896>"]
+    await interaction.response.send_message("Thank you " + random.choice(emotes))
+
+
+
+@tree.command(name = "hug", description = "Give the bot a hug")
+async def hug(interaction):
+    emotes = ["<:pleadingtaco:1263609449269170268>",":blush:",":pleading_face:","<:kermitLove:1246529876429770804>",":face_holding_back_tears:","<:peepoCozy:1292518730286370896>"]
+    await interaction.response.send_message("Thank you " + random.choice(emotes))
+
+
+
+@tree.command(name = "treat", description = "Give the bot a treat!")
+@app_commands.rename(t = "treat")
+@app_commands.describe(t = "what you'd like to give to the bot!")
+async def treat(interaction, t: Optional[str] = ""):
+    treat = t.strip()
+
+    if len(treat) == 0:
+        await interaction.response.send_message("Thank you for the treat!")
+    if treat == "apple":
+        await interaction.response.send_message("Thank you for [the apple](https://www.instagram.com/reel/DB7U4JtSd1D/) :flushed:")
+    else:
+        await interaction.response.send_message("Thank you for the delicious " + treat + "!")
+        gifs = ["https://tenor.com/view/disney-winnie-the-pooh-hungry-food-gif-5184412","https://tenor.com/view/backpack-tasty-om-nom-nom-nom-nom-nom-nom-gif-14079761641419048939","https://tenor.com/view/sesame-street-cookie-monster-eats-your-art-eating-muppet-crazy-eyes-gif-1461380403278441959","https://tenor.com/view/food-patrick-patrick-the-starfish-chewing-chew-gif-15740791","https://tenor.com/view/ratatouille-cheese-strawberry-taste-good-gif-3301886","https://tenor.com/view/rat-nbrchristy-gif-13853993","https://tenor.com/view/fatty-moustache-po-kung-fu-panda-noodles-gif-4255994","https://tenor.com/view/kawaii-anime-pokemon-eating-food-gif-21164096","https://tenor.com/view/munchlax-pokemon-food-eat-eating-gif-18413064"]
+        await interaction.channel.send(random.choice(gifs))
+
+
+
+
+# @client.event
+# async def on_message(message):
+
+#     # allow modifications of state variables
+#     global audio_choices, tag_dictionary, collections, voice_note_links
+
+#     if message.author == client.user:
+#         return
+
+#     # UTILITY COMMANDS #
+
+#     # sync with airtable data to pull any masterlist updates
+#     if message.content.startswith('!refresh'):
+#         audio_choices = import_airtable_data()
+#         tag_dictionary = import_tag_dictionary()
+#         collections = import_collections()
+#         await taliya.send("Masterlist data sync'ed with Airtable updates.")
+
+#     # logs new voice notes in the full list
+#     if message.author == vel and len(message.attachments) != 0:
+#         attached = message.attachments
+#         if attached[0].is_voice_message():
+#             voice_note_links.append(message.jump_url)
+#             save_to_file(ARCHIVE_FILENAME,voice_note_links)
 
 
 
@@ -1155,6 +1753,29 @@ async def on_error(event, *args, **kwargs):
         await taliya.send("**ERROR:** " + message.jump_url + "\n**MESSAGE CONTENT:** " + message.content + "\n\n" + traceback.format_exc())
 
 
+
+
+# # ON NEW MEMBER JOIN #
+
+# # DMs new user a welcome message with a link to the masterlist
+# @client.event
+# async def on_member_join(member):
+#     await member.send("Welcome to the Vel's Library discord server! Vel has over three hundred and fifty audios for you to enjoy, and this bot can help you explore the collection and find your next favorite audio. The bot can pick a random audio with your favorite tags for you to listen to; you can search for audios by title, tags, or characters; and more! Type / to learn how to use the bot's commands, or send the message `/basiccommands` to see a list of the most used commands. You can also find the masterlist of all of Vel's audios [here](<https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr>). Enjoy your time in the library!")
+#     print('new member join message sent')
+
+
+
+
+
+
+# DM ERROR MESSAGES #
+
+@tree.error
+async def on_error(interaction, error):
+    if isinstance(interaction.channel, discord.DMChannel):
+        await taliya.send("**ERROR:** in *" + error.command.name + "* in DM with " + interaction.user.display_name + "\n" +  traceback.format_exc())
+    else:
+        await taliya.send("**ERROR:** in *" + error.command.name + "* in " + interaction.channel.jump_url + "\n" +  traceback.format_exc())
 
 
 

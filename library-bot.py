@@ -1042,7 +1042,7 @@ async def on_message(message):
         for entry in snack_requests:
             try:
                 user = await client.get_guild(GUILD).fetch_member(entry[0])
-            except NotFound:
+            except:
                 snack_requests.remove(entry)
                 await taliya.send(f"removed requests from {entry[0]}")
         with open("snack-requests.json", "w") as outfile:

@@ -648,6 +648,72 @@ async def basiccommands(interaction):
 
 
 
+# # guides the user through a tutorial of basic bot functionality
+# if msg.startswith('!tutorial'):
+#     # delete the user's message requesting the DM 
+#     if not isinstance(message.channel, discord.DMChannel):
+#         await message.delete()
+    
+#     cont = True
+#     if cont:
+#         await message.author.send("The bot is primarily used to search through the masterlist of Vel's audios! If you don't know what you're in the mood for, search `!randomaudio` to have any of over three hundred audios chosen for you. Try it here: ")
+#         try:
+#             await client.wait_for('message',check = lambda m: m.content.startswith("!randomaudio") and m.author == message.author, timeout = 300)
+#             await asyncio.sleep(1)
+#             cont = True
+#         except:
+#             await message.author.send("Tutorial automatically ended after ten minutes of inactivity. If you want to finish the tutorial, send `!tutorial` to start again.")
+#             cont = False
+
+#     if cont:
+#         await message.author.send("You can also specify tags that you'd like the random audio to have by sending a message with the format `!randomaudio [tag one] [tag two]`. Try it here with one (or more!) of your favorite tags:")
+#         cont = False
+#         try:
+#             await client.wait_for('message',check = lambda m: m.content.startswith("!randomaudio") and m.author == message.author, timeout = 300)
+#             await asyncio.sleep(1)
+#             cont = True
+#         except:
+#             await message.author.send("Tutorial automatically ended after ten minutes of inactivity. If you want to finish the tutorial, send `!tutorial` to start again.")
+#             cont = False
+
+#     if cont:
+#         await message.author.send("Of course, you might already know which of Vel's audios you'd like to listen to! To get a link to a specific audio, all you need to know is part of the title. The bot will send a list of all audios that match your search. Vel has a lot of multi-part series, so this is great way to get a list of all audios in a specific series! \n \nTry sending a message with the format `!title phrase`, where `phrase` is what you remember being in the title of the audio (for example, you could try `!title academic` or `!title need you to be mine`):")
+#         cont = False
+#         try:
+#             await client.wait_for('message',check = lambda m: m.content.startswith("!title") and m.author == message.author, timeout = 300)
+#             await asyncio.sleep(1)
+#             cont = True
+#         except:
+#             await message.author.send("Tutorial automatically ended after ten minutes of inactivity. If you want to finish the tutorial, send `!tutorial` to start again.")
+#             cont = False
+
+#     if cont:
+#         await message.author.send("You can search for all audios with a given set of tags in the same way using `!tag [desired] [tags]`, or you can even search by character using `!character name`. If you aren't familiar with any of Vel's named characters yet, try searching for Sam: ")
+#         cont = False
+#         try:
+#             await client.wait_for('message',check = lambda m: m.content.startswith("!character") and m.author == message.author, timeout = 300)
+#             await asyncio.sleep(1)
+#             cont = True
+#         except:
+#             await message.author.send("Tutorial automatically ended after ten minutes of inactivity. If you want to finish the tutorial, send `!tutorial` to start again.")
+#             cont = False
+
+#     if cont:
+#         await message.author.send("Vel also records lots of voice notes as little audio 'snacks' for the discord to enjoy. To listen to a random voice note, send the command `!vn`:")
+#         cont = False
+#         try:
+#             await client.wait_for('message',check = lambda m: m.content.startswith("!vn") and m.author == message.author, timeout = 300)
+#             await asyncio.sleep(1)
+#             cont = True
+#         except:
+#             await message.author.send("Tutorial automatically ended after ten minutes of inactivity. If you want to finish the tutorial, send `!tutorial` to start again.")
+#             cont = False
+
+#     if cont: 
+#         await message.author.send("You can also put in suggestions for tags you'd like to see Vel use in future voice notes using `!request [any tags you want]`.")
+#         await message.author.send("The bot also has lots of helpful information for all things Vel. For example, you can type `!masterlist` to get a link to the list of all of his audios, or `!socials` for links to all of Vel's accounts on various platforms online. There are also some commands just for fun that you'll often see people using in the https://discord.com/channels/1148449914188218399/1248773338726400040 channel, like sending the message `!praise` to be called a random nice petname! \n \nTo see a full list of everything the bot can do (or just refresh your memory in the future), you can send the message `!allcommands` for a summary of bot features. Enjoy your time in the library!")
+
+
 
 
 
@@ -962,7 +1028,7 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if message.content.startswith('!') and not message.content.startswith('!refresh'):
+    if message.content.startswith('!') and not message.content.startswith('!!') and not message.content.startswith('!refresh'):
         await message.channel.send("The bot has been updated to use slash commands integrated into Discord! The commands have the same names as before, but with `/` at the beginning instead of `!`. This means that you won't need to remember the exact name or format of a command, just type / and a menu of options will pop up!")
 
     # sync with airtable data to pull any masterlist updates
@@ -971,6 +1037,16 @@ async def on_message(message):
         tag_dictionary = import_tag_dictionary()
         collections = import_collections()
         await taliya.send("Masterlist data sync'ed with Airtable updates.")
+
+    if message.content.startswith('!leftguild'):
+        for entry in snack_requests:
+            try:
+                user = await client.get_guild(GUILD).fetch_member(entry[0])
+            except NotFound:
+                snack_requests.remove(entry)
+                await taliya.send(f"removed requests from {entry[0]}")
+        with open("snack-requests.json", "w") as outfile:
+            outfile.write(json.dumps(snack_requests))
 
     # logs new voice notes in the full list
     if message.author == vel and len(message.attachments) != 0:
@@ -1133,6 +1209,16 @@ async def on_member_join(member):
     print('new member join message sent')
 
 
+
+@client.event
+async def on_raw_member_remove(payload):
+    remove_id = payload.user.id
+    for entry in snack_requests:
+        if entry[0] == remove_id:
+            snack_requests.remove(entry)
+            await taliya.send(f"requests removed for {payload.user.name}")  
+    with open("snack-requests.json", "w") as outfile:
+        outfile.write(json.dumps(snack_requests))
 
 
 

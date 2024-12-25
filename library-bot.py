@@ -608,14 +608,24 @@ async def removerequest(interaction, remove_index: int):
 
 @tree.command(name = "randomrequest",description = "Chooses a random tag request for Vel!")
 async def randomrequest(interaction):
-    if interaction.user == vel:
+    if interaction.user == vel or interaction.user == taliya:
         if len(snack_requests) == 0:
             await interaction.response.send_message("There are no snack requests right now!")
         else:
-            entry = random.choice(snack_requests)
-            user = await client.get_guild(GUILD).fetch_member(entry[0])
-            request = random.choice(entry[1:])
-            await interaction.response.send_message(f"From {user.mention} — {request}")
+            not_found = True
+            while not_found:
+                entry = random.choice(snack_requests)
+                try: 
+                    user = await client.get_guild(GUILD).fetch_member(entry[0])
+                except:
+                    # snack_requests.remove(entry)
+                    # with open("snack-requests.json", "w") as outfile:
+                    #     outfile.write(json.dumps(snack_requests))
+                    not_found = True
+                else:
+                    request = random.choice(entry[1:])
+                    await interaction.response.send_message(f"From {user.mention} — {request}")
+                    not_found = False
     else:
         await interaction.response.send_message("Only Vel can use the randomrequest command! Feel free to submit your own tags with `/request`.")
 
@@ -1208,17 +1218,6 @@ async def on_member_join(member):
     await member.send("Welcome to the Vel's Library discord server! Vel has over three hundred and fifty audios for you to enjoy, and this bot can help you explore the collection and find your next favorite audio. The bot can pick a random audio with your favorite tags for you to listen to; you can search for audios by title, tags, or characters; and more! Type / to learn how to use the bot's commands, or send the message `/basiccommands` to see a list of the most used commands. You can also find the masterlist of all of Vel's audios [here](<https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr>). Enjoy your time in the library!")
     print('new member join message sent')
 
-
-
-# @client.event
-# async def on_raw_member_remove(payload):
-#     remove_id = payload.user.id
-#     for entry in snack_requests:
-#         if entry[0] == remove_id:
-#             snack_requests.remove(entry)
-#             await taliya.send(f"requests removed for {payload.user.name}")  
-#     with open("snack-requests.json", "w") as outfile:
-#         outfile.write(json.dumps(snack_requests))
 
 
 

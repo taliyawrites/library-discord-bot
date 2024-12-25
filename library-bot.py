@@ -1210,15 +1210,15 @@ async def on_member_join(member):
 
 
 
-@client.event
-async def on_raw_member_remove(payload):
-    remove_id = payload.user.id
-    for entry in snack_requests:
-        if entry[0] == remove_id:
-            snack_requests.remove(entry)
-            await taliya.send(f"requests removed for {payload.user.name}")  
-    with open("snack-requests.json", "w") as outfile:
-        outfile.write(json.dumps(snack_requests))
+# @client.event
+# async def on_raw_member_remove(payload):
+#     remove_id = payload.user.id
+#     for entry in snack_requests:
+#         if entry[0] == remove_id:
+#             snack_requests.remove(entry)
+#             await taliya.send(f"requests removed for {payload.user.name}")  
+#     with open("snack-requests.json", "w") as outfile:
+#         outfile.write(json.dumps(snack_requests))
 
 
 

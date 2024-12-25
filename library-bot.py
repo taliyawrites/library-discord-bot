@@ -626,7 +626,7 @@ async def randomrequest(interaction):
                     request = random.choice(entry[1:])
                     await interaction.response.send_message(f"From {user.mention} — {request}")
                     not_found = False
-    else if interaction.user == taliya:
+    elif interaction.user == taliya:
         if len(snack_requests) == 0:
             await interaction.response.send_message("There are no snack requests right now!")
         else:

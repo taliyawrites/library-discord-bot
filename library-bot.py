@@ -626,24 +626,6 @@ async def randomrequest(interaction):
                     request = random.choice(entry[1:])
                     await interaction.response.send_message(f"From {user.mention} — {request}")
                     not_found = False
-    elif interaction.user == taliya:
-        if len(snack_requests) == 0:
-            await interaction.response.send_message("There are no snack requests right now!")
-        else:
-            not_found = True
-            while not_found:
-                entry = random.choice(snack_requests)
-                try: 
-                    user = await client.get_guild(GUILD).fetch_member(entry[0])
-                except:
-                    # snack_requests.remove(entry)
-                    # with open("snack-requests.json", "w") as outfile:
-                    #     outfile.write(json.dumps(snack_requests))
-                    not_found = True
-                else:
-                    request = random.choice(entry[1:])
-                    await interaction.response.send_message(f"From {user.display_name} — {request}")
-                    not_found = False
     else:
         await interaction.response.send_message("Only Vel can use the randomrequest command! Feel free to submit your own tags with `/request`.")
 

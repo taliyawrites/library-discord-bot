@@ -1011,12 +1011,12 @@ async def hug(interaction):
 @tree.command(name = "treat", description = "Give the bot a treat!")
 @app_commands.rename(t = "treat")
 @app_commands.describe(t = "what you'd like to give to the bot!")
-async def treat(interaction, t: Optional[str] = ""):
+async def treat(interaction, t: str):
     treat = t.strip()
 
-    if len(treat) == 0:
-        await interaction.response.send_message("Thank you for the treat!")
-    elif treat == "apple":
+    # if len(treat) == 0:
+    #     await interaction.response.send_message("Thank you for the treat!")
+    if treat == "apple":
         await interaction.response.send_message("Thank you for [the apple](https://www.instagram.com/reel/DB7U4JtSd1D/) :flushed:")
     else:
         await interaction.response.send_message("Thank you for the delicious " + treat + "!")

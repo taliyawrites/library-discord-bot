@@ -1023,6 +1023,14 @@ async def treat(interaction, t: str):
         gifs = ["https://tenor.com/view/disney-winnie-the-pooh-hungry-food-gif-5184412","https://tenor.com/view/backpack-tasty-om-nom-nom-nom-nom-nom-nom-gif-14079761641419048939","https://tenor.com/view/sesame-street-cookie-monster-eats-your-art-eating-muppet-crazy-eyes-gif-1461380403278441959","https://tenor.com/view/food-patrick-patrick-the-starfish-chewing-chew-gif-15740791","https://tenor.com/view/ratatouille-cheese-strawberry-taste-good-gif-3301886","https://tenor.com/view/rat-nbrchristy-gif-13853993","https://tenor.com/view/fatty-moustache-po-kung-fu-panda-noodles-gif-4255994","https://tenor.com/view/kawaii-anime-pokemon-eating-food-gif-21164096","https://tenor.com/view/munchlax-pokemon-food-eat-eating-gif-18413064"]
         await interaction.channel.send(random.choice(gifs))
 
+@tree.command(name = "hydrate", description = "Remind everyone to hydrate")
+@app_commands.describe(victim = "@ whomever you'd like the bot to remind")
+async def hydrate(interaction, victim: Optional[str] = ""):
+    if len(victim) == 0:
+        await interaction.response.send_message("Remember to hydrate, everyone!")
+    else:
+        await interaction.response.send_message(f"Reminder to be a good girl and drink some water, {victim}")
+
 
 
 

@@ -1016,7 +1016,7 @@ async def treat(interaction, t: Optional[str] = ""):
 
     if len(treat) == 0:
         await interaction.response.send_message("Thank you for the treat!")
-    if treat == "apple":
+    elif treat == "apple":
         await interaction.response.send_message("Thank you for [the apple](https://www.instagram.com/reel/DB7U4JtSd1D/) :flushed:")
     else:
         await interaction.response.send_message("Thank you for the delicious " + treat + "!")

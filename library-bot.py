@@ -884,8 +884,7 @@ async def time(interaction, t: str):
 async def goodnight(interaction):
     tag_choices = ['mdom', 'creampies', 'oral', 'praise', 'rambles', 'degradation', 'breeding', 'cuckolding', 'spanking', 'fingering', 'blowjobs', 'msub', 'cheating', 'overstim',  'edging', 'body worship', 'bondage', 'strangers to lovers', 'friends to lovers', 'enemies to lovers','toys', 'demons','spitting', 'condescension','grinding', 'bodywriting', 'Daddy kink', 'deepthroating', 'nipple play', 'begging', 'standing sex', 'hands-free orgasms', 'mirror play', 'hypno', 'brat taming', 'petplay', 'choking', 'exhibitionism', 'objectification', 'pregnant sex', 'somno','facesitting', 'marking', 'cumplay','forced orgasms','denial','titjobs', 'cum on tits']
     bedge = " <:Bedge:1191310903208050839>"
-    if interaction.user == taliya:
-        await interaction.response.send_message("Good night " + interaction.user.display_name + "! Sweet dreams, try not to think about " + random.choice(tag_choices) + bedge)
+    await interaction.response.send_message("Good night " + interaction.user.display_name + "! Sweet dreams, try not to think about " + random.choice(tag_choices) + bedge)
 
 
 
@@ -1072,6 +1071,7 @@ async def on_message(message):
         if attached[0].is_voice_message():
             voice_note_links.append(message.jump_url)
             save_to_file(ARCHIVE_FILENAME,voice_note_links)
+            print("Vel voice note logged")
 
 
 

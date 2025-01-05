@@ -776,7 +776,7 @@ async def lives(interaction):
 
 @tree.command(name = "stream", description = "Information about Vel's next twitch stream")
 async def stream(interaction):
-    stream_info = 'Vel streams live every other Sunday on [Twitch](https://www.twitch.tv/velslibrary). The next stream, "How Vel Does Vel Know Vel?" (quizzing the librarian himself on how well he knows his own content), will be <t:1736100000:F>!'
+    stream_info = 'Vel streams live every other Sunday on [Twitch](https://www.twitch.tv/velslibrary). The next stream, "How Vel Does Vel Know Vel?" (quizzing the librarian himself on how well he knows his own content), will be <t:1736103600:F>!'
     stream_embed = discord.Embed(title = "Vel's Livestreams", description = stream_info, url = "https://www.twitch.tv/velslibrary")
     await interaction.response.send_message(embed = stream_embed)
 

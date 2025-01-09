@@ -483,7 +483,7 @@ async def tag(interaction, taglist: str):
             next = str(i+1) + ". [" + matches[i].name() + "](" + matches[i].link() + ")" + '\n'
             link_string = link_string + next
 
-        matches_embed = discord.Embed(title = tagstring + "Results",description=link_string)
+        matches_embed = discord.Embed(title = tagstring + "Audios",description=link_string)
         try:
             await interaction.response.send_message(embed = matches_embed)
         except:

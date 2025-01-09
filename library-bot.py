@@ -460,6 +460,19 @@ async def tag(interaction, taglist: str):
     matches = tagged_options(audio_choices,tags)
     matches.sort(key = age_sort)
 
+    stripped = taglist.strip()
+    if stripped[0] != "[":
+        stripped = "[" + stripped + "]"
+
+    if taglist == '[':
+        tag_list = taglist[1:-1].split('] [')
+    else:
+        tag_list = [taglist]
+
+    formatted = ["[" + tag[0].upper() + tag[1:] + "] " for tag in tag_list]
+
+    tagstring = "".join(formatted)
+
     if len(matches) == 0:
         await interaction.response.send_message("No audios tagged with " + taglist + " found.")
     elif len(matches) == 1:
@@ -470,7 +483,7 @@ async def tag(interaction, taglist: str):
             next = str(i+1) + ". [" + matches[i].name() + "](" + matches[i].link() + ")" + '\n'
             link_string = link_string + next
 
-        matches_embed = discord.Embed(title = "Matching Results",description=link_string)
+        matches_embed = discord.Embed(title = tagstring + "Results",description=link_string)
         try:
             await interaction.response.send_message(embed = matches_embed)
         except:

@@ -460,21 +460,19 @@ async def tag(interaction, taglist: str):
     matches = tagged_options(audio_choices,tags)
     matches.sort(key = age_sort)
 
-    stripped = taglist.strip()
-    if stripped[0] != "[":
-        stripped = "[" + stripped + "]"
-
     if taglist[0] == '[':
         tag_list = taglist[1:-1].split('] [')
     else:
         tag_list = [taglist]
 
-    formatted = ["[" + tag[0].upper() + tag[1:] + "] " for tag in tag_list]
-
+    formatted = []
+    for tag in tag_list:
+        words = "".join([word[0].upper() + word[1:] + " " for word in tag.split()])
+        formatted.append("[" + words.strip() "] ")
     tagstring = "".join(formatted)
 
     if len(matches) == 0:
-        await interaction.response.send_message("No audios tagged with " + taglist + " found.")
+        await interaction.response.send_message("No audios tagged with " + tagstring.lower() + "found.")
     elif len(matches) == 1:
         await interaction.response.send_message(embed=matches[0].discord_post())     
     else:
@@ -487,7 +485,7 @@ async def tag(interaction, taglist: str):
         try:
             await interaction.response.send_message(embed = matches_embed)
         except:
-            await interaction.response.send_message("Vel has too many audios tagged [" + taglist + "] to display without exceeding the Discord character limit! Please try again with a more specific set of tags." )
+            await interaction.response.send_message("Vel has too many audios tagged " + tagstring + "to display without exceeding the Discord character limit! Please try again with a more specific set of tags." )
 
 
 

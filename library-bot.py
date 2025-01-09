@@ -485,7 +485,7 @@ async def tag(interaction, taglist: str):
         try:
             await interaction.response.send_message(embed = matches_embed)
         except:
-            await interaction.response.send_message("Vel has too many audios tagged " + tagstring + "to display without exceeding the Discord character limit! Please try again with a more specific set of tags." )
+            await interaction.response.send_message("Vel has too many audios tagged " + tagstring.lower() + "to display without exceeding the Discord character limit! Please try again with a more specific set of tags." )
 
 
 

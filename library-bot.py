@@ -468,7 +468,7 @@ async def tag(interaction, taglist: str):
     formatted = []
     for tag in tag_list:
         words = "".join([word[0].upper() + word[1:] + " " for word in tag.split()])
-        formatted.append("[" + words.strip() "] ")
+        formatted.append("[" + words.strip() +  "] ")
     tagstring = "".join(formatted)
 
     if len(matches) == 0:

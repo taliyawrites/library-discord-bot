@@ -464,7 +464,7 @@ async def tag(interaction, taglist: str):
     if stripped[0] != "[":
         stripped = "[" + stripped + "]"
 
-    if taglist == '[':
+    if taglist[0] == '[':
         tag_list = taglist[1:-1].split('] [')
     else:
         tag_list = [taglist]

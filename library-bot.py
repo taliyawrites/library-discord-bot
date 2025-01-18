@@ -382,6 +382,7 @@ async def setup_hook():
 
 
 ## AUDIO SEARCH COMMANDS ##
+# for second message, await interaction.channel.send() #
 
 
 @tree.command(name = "randomaudio", description = "Chooses a random audio from the masterlist")
@@ -393,14 +394,14 @@ async def randomaudio(interaction, taglist: Optional[str] = None):
         audio = random_audio(audio_choices,tags)
         string =  '] ['.join(tags)
         if audio is not None:
-            await interaction.response.send_message(f"Here's a random audio tagged [{string}]!")
-            await interaction.channel.send(embed=audio.discord_post())
+            # await interaction.response.send_message(f"Here's a random audio tagged [{string}]!")
+            await interaction.response.send_message(embed=audio.discord_post())
         else:
             await interaction.response.send_message("No audios tagged [" + string + "] were found")
     else:
         audio = random_audio(audio_choices)
-        await interaction.response.send_message(f"Here's a random audio!")
-        await interaction.channel.send(embed=audio.discord_post())
+        # await interaction.response.send_message(f"Here's a random audio!")
+        await interaction.response.send_message(embed = audio.discord_post())
 
 
 
@@ -420,10 +421,10 @@ async def title(interaction, title_phrase: str):
         if len(possible_matches) == 0:
             await interaction.response.send_message(f'No audios found with title including the phrase "{phrase}."')
         elif len(possible_matches) == 1:
-            await interaction.response.send_message('No exact matches found for "' + phrase + '." One partially matching result found.')
-            await interaction.channel.send(embed=possible_matches[0].discord_post())
+            # await interaction.response.send_message('No exact matches found for "' + phrase + '." One partially matching result found.')
+            await interaction.response.send_message(embed=possible_matches[0].discord_post())
         else:
-            await interaction.response.send_message('No exact matches found for "' + phrase + '."')
+            # await interaction.response.send_message('No exact matches found for "' + phrase + '."')
             link_string = ""
             for i in list(range(len(possible_matches))):
                 next = str(i+1) + ". [" + possible_matches[i].name() + "](" + possible_matches[i].link() + ")" + '\n'
@@ -431,9 +432,9 @@ async def title(interaction, title_phrase: str):
 
             matches_embed = discord.Embed(title = "Partially Matching Results",description=link_string)
             try:
-                await interaction.channel.send(embed = matches_embed)
+                await interaction.response.send_message(embed = matches_embed)
             except:
-                await interaction.channel.send('Partially matching results exceeded the Discord character limit, please try again with a different search!')
+                await interaction.response.send_message('Partially matching results exceeded the Discord character limit, please try again with a different search!')
     elif len(matches) == 1:
         await interaction.response.send_message(embed=matches[0].discord_post())     
     else:

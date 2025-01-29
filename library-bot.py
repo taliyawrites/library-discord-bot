@@ -588,7 +588,7 @@ async def myrequests(interaction):
             await interaction.response.send_message(req_string)
         except:
             lines = req_string.splitlines()
-            for i in range(0,len(lines))
+            for i in range(0,len(lines)):
                 length = sum([len(lines[j]) for j in range(0,i)])
                 if length >= 2000:
                     index = i-1 

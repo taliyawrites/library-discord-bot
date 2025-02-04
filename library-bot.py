@@ -839,8 +839,7 @@ async def allcharacters(interaction):
 async def bingo(interaction):
     bingo_info = "Vel's Library discord server bingo! If you win, let Teacups know."
     bingo_embed = discord.Embed(title = "Server Bingo", description = bingo_info, url = "https://www.bingocardcreator.com/game/29103/")
-    # await interaction.response.send_message(embed = bingo_embed)
-    await interaction.response.send_message(mark.name)
+    await interaction.response.send_message(embed = bingo_embed)
 
 
 
@@ -1068,7 +1067,7 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if message.content.startswith('!') and not message.content.startswith('!!') and not message.content.startswith('!refresh') and not message.content.startswith("!welcome") and not message.content.startswith("!errorbreak"):
+    if message.content.startswith('!') and not message.content.startswith('!!') and not message.content.startswith('!refresh') and not message.content.startswith("!welcome"):
         await message.channel.send("The bot has been updated to use slash commands integrated into Discord! The commands have the same names as before, but with `/` at the beginning instead of `!`. This means that you won't need to remember the exact name or format of a command, just type / and a menu of options will pop up!")
 
     # sync with airtable data to pull any masterlist updates
@@ -1093,9 +1092,6 @@ async def on_message(message):
         commands = "Type / to see a menu of all the available commands! Some commonly used ones are listed here.  \n- `/randomaudio` randomly chosen audio from the masterlist \n- `/randomaudio [some] [tags]` random audio with these desired tag(s) \n- `/title phrase` for list of audios with that phrase in the title \n- `/tag [some] [tags]` for list of audios with those tag(s) \n- `/character name` for list of audios featuring a specific named character \n- `/masterlist` link to the masterlist \n- `/request` to suggest tags for Vel's voice notes \n- `/vn` for a random voice note \nPlease always feel welcome to ask questions about using the bot in the  https://discord.com/channels/1148449914188218399/1248773338726400040 channel!"
         command_embed = discord.Embed(title = "Vel's Library Bot Commands",description=commands)
         await taliya.send(embed=command_embed)
-
-    if message.content.startswith("!errorbreak") and message.author == taliya:
-        await taliya.send(mark.name)
 
     # logs new voice notes in the full list
     if message.author == vel and len(message.attachments) != 0:

@@ -702,7 +702,7 @@ async def tutorial(interaction):
             cont = False
 
     if cont:
-        await interaction.user.send("You can also specify tags that you'd like the random audio to have by using the command `/randomaudio` and using the optiona; field for tags. If you have multiple tags you'd like, make sure to separate them like this: `[tag one] [tag two]`. Try it here with one (or more!) of your favorite tags:")
+        await interaction.user.send("You can also specify tags that you'd like the random audio to have by using the command `/randomaudio` and using the optional field for tags. If you have multiple tags you'd like, make sure to separate them like this: `[tag one] [tag two]`. Try it here with one (or more!) of your favorite tags:")
         cont = False
         try:
             await client.wait_for('interaction',check = lambda m: m.command.name == "randomaudio", timeout = 600)
@@ -1088,7 +1088,7 @@ async def on_message(message):
             outfile.write(json.dumps(snack_requests))
 
     if message.content.startswith("!welcome") and message.author == taliya:
-        await taliya.send("Welcome to the Vel's Library discord server! Vel has ***over four hundred audios*** for you to enjoy, and this bot can help you explore the collection and find your next favorite audio. The bot can pick a random audio with your favorite tags for you to listen to, you can search for audios by title or tags, and much more! Some example commands are listed below. You can also find the masterlist of all of Vel's audios [here](<https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr>). Enjoy your time in the library!")
+        await taliya.send("Welcome to the Vel's Library discord server! Vel has over four hundred audios for you to enjoy, and this bot can help you explore the collection and find your next favorite audio. The bot can pick a random audio with your favorite tags for you to listen to, you can search for audios by title or tags, and much more! Some example commands are listed below, or you can send the command `/tutorial` to learn the basics. You can also find the masterlist of all of Vel's audios [here](<https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr>). Enjoy your time in the library!")
         commands = "Type / to see a menu of all the available commands! Some commonly used ones are listed here.  \n- `/randomaudio` randomly chosen audio from the masterlist \n- `/randomaudio [some] [tags]` random audio with these desired tag(s) \n- `/title phrase` for list of audios with that phrase in the title \n- `/tag [some] [tags]` for list of audios with those tag(s) \n- `/character name` for list of audios featuring a specific named character \n- `/masterlist` link to the masterlist \n- `/request` to suggest tags for Vel's voice notes \n- `/vn` for a random voice note \nPlease always feel welcome to ask questions about using the bot in the  https://discord.com/channels/1148449914188218399/1248773338726400040 channel!"
         command_embed = discord.Embed(title = "Vel's Library Bot Commands",description=commands)
         await taliya.send(embed=command_embed)

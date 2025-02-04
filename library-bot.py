@@ -665,7 +665,7 @@ async def randomrequest(interaction):
 async def dm(interaction):
     await interaction.response.send_message("Deleting request for privacy...")
     await interaction.delete_original_response()
-    await interaction.user.send("Type / to see an interactive list of commands you can use with this bot to search the masterlist, find audios, and more! You can always ask for help in the https://discord.com/channels/1148449914188218399/1248773338726400040 channel.")
+    await interaction.user.send("Type / to see an interactive list of commands you can use with this bot to search the masterlist, find audios, and more! You can also send the command `/tutorial` to learn the basics. Always feel welcome to ask for help in the https://discord.com/channels/1148449914188218399/1248773338726400040 channel.")
     embed = discord.Embed(title="Vel's Library Masterlist",
                    url="https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr",
                    description="Masterlist of all of Vel's audios!")
@@ -687,9 +687,9 @@ async def tutorial(interaction):
     if not isinstance(interaction.channel, discord.DMChannel):
         await interaction.response.send_message("Deleting request for privacy...")
         await interaction.delete_original_response()
-        await interaction.user.send("The bot is primarily used to search through the masterlist of Vel's audios! If you don't know what you're in the mood for, use the command `/randomaudio` to have any of over four hundred audios chosen for you. Try it here: ")
+        await interaction.user.send("The bot is primarily used to search through the masterlist of Vel's audios! If you don't know what you're in the mood for, send the command `/randomaudio` to have any of over four hundred audios chosen for you. Try it here: ")
     else:
-        await interaction.response.send_message("The bot is primarily used to search through the masterlist of Vel's audios! If you don't know what you're in the mood for, use the command `/randomaudio` to have any of over four hundred audios chosen for you. Try it here: ")
+        await interaction.response.send_message("The bot is primarily used to search through the masterlist of Vel's audios! If you don't know what you're in the mood for, send the command `/randomaudio` to have any of over four hundred audios chosen for you. Try it here: ")
 
     cont = True
     if cont:
@@ -702,7 +702,7 @@ async def tutorial(interaction):
             cont = False
 
     if cont:
-        await interaction.user.send("You can also specify tags that you'd like the random audio to have by using the command `/randomaudio` and using the option field for tags. If you have multiple tags you'd like, make sure to separate them like this: `[tag one] [tag two]`. Try it here with one (or more!) of your favorite tags:")
+        await interaction.user.send("You can also specify tags that you'd like the random audio to have by using the command `/randomaudio` and using the optiona; field for tags. If you have multiple tags you'd like, make sure to separate them like this: `[tag one] [tag two]`. Try it here with one (or more!) of your favorite tags:")
         cont = False
         try:
             await client.wait_for('interaction',check = lambda m: m.command.name == "randomaudio", timeout = 600)
@@ -746,7 +746,7 @@ async def tutorial(interaction):
             cont = False
 
     if cont: 
-        await interaction.user.send("You can also put in suggestions for tags you'd like to see Vel use in future voice notes using `/request`! \n\nThe bot also has lots of helpful information for all things Vel. For example, you can type `/masterlist` to get a link to the list of all of his audios, or `/socials` for links to all of Vel's accounts on various platforms online. There are also some commands just for fun that you'll often see people using in the https://discord.com/channels/1148449914188218399/1248773338726400040 channel, like sending the message `/praise` to be called a random nice petname! You can use `/basiccommands` for a summary of bot features. Please feel free to ask any questions you have in the bot channel!")
+        await interaction.user.send("You can also put in suggestions for tags you'd like to see Vel use in future voice notes using `/request`! \n\nThe bot also has lots of helpful information for all things Vel. For example, you can type `/masterlist` to get a link to the list of all of his audios, or `/socials` for links to all of Vel's accounts on various platforms online. There are also some commands just for fun that you'll often see people using in the https://discord.com/channels/1148449914188218399/1248773338726400040 channel, like sending the message `/praise` to be called a random nice petname! You can use `/basiccommands` for a summary of bot features. Always feel welcome to ask any additional questions you have in the bot channel!")
 
 
 
@@ -1251,7 +1251,7 @@ async def daily_balatro():
 # DMs new user a welcome message with a link to the masterlist
 @client.event
 async def on_member_join(member):
-    await member.send("Welcome to the Vel's Library discord server! Vel has over four hundred audios for you to enjoy, and this bot can help you explore the collection and find your next favorite audio. The bot can pick a random audio with your favorite tags for you to listen to, you can search for audios by title or tags, and much more! Some example commands are listed below. You can also find the masterlist of all of Vel's audios [here](<https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr>). Enjoy your time in the library!")
+    await member.send("Welcome to the Vel's Library discord server! Vel has over four hundred audios for you to enjoy, and this bot can help you explore the collection and find your next favorite audio. The bot can pick a random audio with your favorite tags for you to listen to, you can search for audios by title or tags, and much more! Some example commands are listed below, or you can send the command `/tutorial` to learn the basics. You can also find the masterlist of all of Vel's audios [here](<https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr>). Enjoy your time in the library!")
     commands = "Type / to see a menu of all the available commands! Some commonly used ones are listed here.  \n- `/randomaudio` randomly chosen audio from the masterlist \n- `/randomaudio [some] [tags]` random audio with these desired tag(s) \n- `/title phrase` for list of audios with that phrase in the title \n- `/tag [some] [tags]` for list of audios with those tag(s) \n- `/character name` for list of audios featuring a specific named character \n- `/masterlist` link to the masterlist \n- `/request` to suggest tags for Vel's voice notes \n- `/vn` for a random voice note \nPlease always feel welcome to ask questions about using the bot in the  https://discord.com/channels/1148449914188218399/1248773338726400040 channel!"
     command_embed = discord.Embed(title = "Vel's Library Bot Commands",description=commands)
     await member.send(embed=command_embed)

@@ -685,19 +685,67 @@ async def tutorial(interaction):
     if not isinstance(message.channel, discord.DMChannel):
         await interaction.response.send_message("Deleting request for privacy...")
         await interaction.delete_original_response()
-        await interaction.user.send("The bot is primarily used to search through the masterlist of Vel's audios! If you don't know what you're in the mood for, search `!randomaudio` to have any of over three hundred audios chosen for you. Try it here: ")
+        await interaction.user.send("The bot is primarily used to search through the masterlist of Vel's audios! If you don't know what you're in the mood for, use the command `/randomaudio` to have any of over four hundred audios chosen for you. Try it here: ")
     else:
         await interaction.response.send_message("The bot is primarily used to search through the masterlist of Vel's audios! If you don't know what you're in the mood for, use the command `/randomaudio` to have any of over four hundred audios chosen for you. Try it here: ")
 
     cont = True
-    if cont: 
+    if cont:
         try:
-            await client.wait_for('interaction',check = lambda m: m.command.name == "randomaudio", timeout = 10)
+            await client.wait_for('interaction',check = lambda m: m.command.name == "randomaudio", timeout = 600)
             await asyncio.sleep(1)
             cont = True
         except:
             await interaction.user.send("Tutorial automatically ended after ten minutes of inactivity. If you want to finish the tutorial, send `/tutorial` to start again.")
             cont = False
+
+    if cont:
+        await interaction.user.send("You can also specify tags that you'd like the random audio to have by using the command `/randomaudio` and using the option field for tags. If you have multiple tags you'd like, make sure to separate them like this: `[tag one] [tag two]`. Try it here with one (or more!) of your favorite tags:")
+        cont = False
+        try:
+            await client.wait_for('interaction',check = lambda m: m.command.name == "randomaudio", timeout = 600)
+            await asyncio.sleep(1)
+            cont = True
+        except:
+            await interaction.user.send("Tutorial automatically ended after ten minutes of inactivity. If you want to finish the tutorial, send `/tutorial` to start again.")
+            cont = False
+
+    if cont:
+        await interaction.user.send("Of course, you might already know which of Vel's audios you'd like to listen to! To get a link to a specific audio, all you need to know is part of the title. The bot will send a list of all audios that match your search. Vel has a lot of multi-part series, so this is great way to get a list of all audios in a specific series! \n \nTry using the command `/title`, where `phrase` is what you remember being in the title of the audio (for example, you could try 'academic' or 'your needs are hot'):")
+        cont = False
+        try:
+            await client.wait_for('interaction',check = lambda m: m.command.name == "title", timeout = 600)
+            await asyncio.sleep(1)
+            cont = True
+        except:
+            await interaction.user.send("Tutorial automatically ended after ten minutes of inactivity. If you want to finish the tutorial, send `/tutorial` to start again.")
+            cont = False
+
+    if cont:
+        await interaction.user.send("You can search for all audios with a given tag (or set of tags) in the same way using `/tag`, or you can even search by character using `/character`. If you aren't familiar with any of Vel's named characters yet, try searching for Sam: ")
+        cont = False
+        try:
+            await client.wait_for('interaction',check = lambda m: m.command.name == "character", timeout = 600)
+            await asyncio.sleep(1)
+            cont = True
+        except:
+            await interaction.user.send("Tutorial automatically ended after ten minutes of inactivity. If you want to finish the tutorial, send `/tutorial` to start again.")
+            cont = False
+
+    if cont:
+        await interaction.user.send("Vel also records lots of voice notes as little audio 'snacks' for the discord to enjoy. To listen to a random voice note, send the command `/vn`:")
+        cont = False
+        try:
+            await client.wait_for('interaction',check = lambda m: m.command.name == "vn", timeout = 600)
+            await asyncio.sleep(1)
+            cont = True
+        except:
+            await interaction.user.send("Tutorial automatically ended after ten minutes of inactivity. If you want to finish the tutorial, send `/tutorial` to start again.")
+            cont = False
+
+    if cont: 
+        await interaction.user.send("You can also put in suggestions for tags you'd like to see Vel use in future voice notes using `/request`.")
+        await interaction.user.send("The bot also has lots of helpful information for all things Vel. For example, you can type `/masterlist` to get a link to the list of all of his audios, or `/socials` for links to all of Vel's accounts on various platforms online. There are also some commands just for fun that you'll often see people using in the https://discord.com/channels/1148449914188218399/1248773338726400040 channel, like sending the message `/praise` to be called a random nice petname! \n \nTo see a full list of everything the bot can do (or just refresh your memory in the future), type `/` to see all the commands described. You can also use `/basiccommands` for a summary of bot features. Enjoy your time in the library!")
 
 
 

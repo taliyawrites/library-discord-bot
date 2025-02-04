@@ -682,7 +682,7 @@ async def basiccommands(interaction):
 
 @tree.command(name = "tutorial",description = "Teaches you to use the bot with a basic tutorial in your DMs!")
 async def tutorial(interaction):
-    if not isinstance(message.channel, discord.DMChannel):
+    if not isinstance(interaction.channel, discord.DMChannel):
         await interaction.response.send_message("Deleting request for privacy...")
         await interaction.delete_original_response()
         await interaction.user.send("The bot is primarily used to search through the masterlist of Vel's audios! If you don't know what you're in the mood for, use the command `/randomaudio` to have any of over four hundred audios chosen for you. Try it here: ")

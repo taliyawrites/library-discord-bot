@@ -23,6 +23,7 @@ GUILD = int(os.getenv('GUILD_ID'))
 GENERAL = int(os.getenv('GENERAL_CHANNEL'))
 OPTIONS_ROLE = int(os.getenv('ROLE_ID_OPTIONS'))
 WINNER_ROLE = int(os.getenv('ROLE_ID_WINNER'))
+BIRTHDAY_CHANNEL = int(os.getenv('BIRTHDAY_CHANNEL'))
 airtable_api = Api(os.getenv('AIRTABLE_TOKEN'))
 
 WINNERS_FILENAME = "recentwinners.txt"
@@ -32,6 +33,7 @@ COUNTER_FILENAME = "count.txt"
 RECORD_FILENAME = "record.txt"
 ARCHIVE_FILENAME = "voice-note-archive.txt"
 REQUESTS_FILENAME = "snack-requests.json"
+BIRTHDAY_FILENAME = "birthdays.json"
 
 # run daily tasks at 1pm eastern time (6pm UTC+1)
 HOUR, MINUTE = 18, 0
@@ -350,7 +352,7 @@ async def setup_hook():
     collections = import_collections()
 
     # import current state variable values
-    global random_seed, good_girl, pet_count, edge_counter, cum_permission_ids, daily_audio, snack_requests
+    global random_seed, good_girl, pet_count, edge_counter, cum_permission_ids, daily_audio, snack_requests, birthdays
     random_seed = ''.join(random.choices(string.ascii_uppercase+string.digits, k=8))
     good_girl = read_from_file(WINNERS_FILENAME)[-1]
     pet_count = int(read_from_file(COUNTER_FILENAME)[-1])
@@ -360,6 +362,8 @@ async def setup_hook():
     daily_audio = list(filter(lambda a: a.name() == currentdaily, audio_choices))[0]
     with open(REQUESTS_FILENAME, "r") as read_file:
         snack_requests = json.load(read_file)
+    with open(BIRTHDAY_FILENAME, "r") as read_file:
+        birthdays = json.load(read_file)
 
     global voice_note_links
     voice_note_links = read_from_file(ARCHIVE_FILENAME)
@@ -371,6 +375,8 @@ async def setup_hook():
         choose_good_girl.start()
     if not daily_balatro.is_running():
         daily_balatro.start()
+    if not birthday_wishes.is_running():
+        birthday_wishes.start()
 
     global taliya, vel
     taliya = await client.fetch_user(1169014359842885726)
@@ -1052,6 +1058,34 @@ async def hydrate(interaction, victim: Optional[str] = ""):
     else:
         await interaction.response.send_message(f"Reminder to be a good girl and drink some water, {victim}")
 
+@tree.command(name = "birthday", description = "Save your birthday with the bot!")
+@app_commands.describe(month = "The number of the month of your birthday (Jan = 1, ..., Dec = 12)")
+@app_commands.describe(day = "The day of your birthday")
+async def birthday(interaction, month: int, day: int):
+    global birthdays
+    user_id = interaction.user.id
+    for entry in birthdays:
+        if entry[0] == user_id:
+            birthdays.remove(entry)
+    birthdays.append([user_id,month,day])
+    with open(BIRTHDAY_FILENAME, "w") as outfile:
+        outfile.write(json.dumps(birthdays))
+    await interaction.response.send_message("Your birthday has been saved with the bot!")
+
+
+@tree.command(name = "birthdayremove", description = "Remove your birthday from the bot's list.")
+async def birthdayremove(interaction):
+    global birthdays
+    user_id = interaction.user.id
+    for entry in birthdays:
+        if entry[0] == user_id:
+            birthdays.remove(entry)
+    with open(BIRTHDAY_FILENAME, "w") as outfile:
+        outfile.write(json.dumps(birthdays))
+    await interaction.response.send_message("Your birthday has been removed.")
+
+
+
 
 
 
@@ -1236,6 +1270,20 @@ async def daily_balatro():
 
 
 
+# wishes people a happy birthday!
+@tasks.loop(minutes = 1)
+async def birthday_wishes():
+    todays = []
+    if datetime.datetime.now().hour == (HOUR-2) and datetime.datetime.now().minute == MINUTE:
+        for entry in birthdays:
+            if datetime.datetime.now().month == entry[1] and datetime.datetime.now().day == entry[2]:
+                todays.append(entry[0])
+    for birthday_girl in todays:
+        try:
+            user = await client.get_guild(GUILD).fetch_member(birthday_girl)
+            await client.get_channel(BIRTHDAY_CHANNEL).send("Happy birthday, " + user.mention + "!")
+        except:
+            print('user no longer in server')
 
 
 

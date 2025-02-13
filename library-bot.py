@@ -47,7 +47,8 @@ intents.members = True
 client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
 
-global rerun_gg, rerun_daily 
+global rerun_gg
+global rerun_daily 
 rerun_gg = False
 rerun_daily = False
 
@@ -371,7 +372,8 @@ async def setup_hook():
 
     global voice_note_links
     voice_note_links = read_from_file(ARCHIVE_FILENAME)
-    global rerun_gg, rerun_daily 
+    global rerun_gg
+    global rerun_daily 
     rerun_gg = False
     rerun_daily = False
 

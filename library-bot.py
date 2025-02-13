@@ -367,6 +367,8 @@ async def setup_hook():
 
     global voice_note_links
     voice_note_links = read_from_file(ARCHIVE_FILENAME)
+    global rerun 
+    rerun = False
 
     # set all daily tasks running
     if not announce_daily_audio.is_running():
@@ -1096,12 +1098,12 @@ async def birthdayremove(interaction):
 async def on_message(message):
 
     # allow modifications of state variables
-    global audio_choices, tag_dictionary, collections, voice_note_links
+    global audio_choices, tag_dictionary, collections, voice_note_links, rerun 
 
     if message.author == client.user:
         return
 
-    if message.content.startswith('!') and not message.content.startswith('!!') and not message.content.startswith('!refresh') and not message.content.startswith("!welcome"):
+    if message.content.startswith('!') and not message.content.startswith('!!') and not message.content.startswith('!refresh') and not message.content.startswith("!welcome") and not message.content.startswith('!rerun'):
         await message.channel.send("The bot has been updated to use slash commands integrated into Discord! The commands have the same names as before, but with `/` at the beginning instead of `!`. This means that you won't need to remember the exact name or format of a command, just type / and a menu of options will pop up!")
 
     # sync with airtable data to pull any masterlist updates
@@ -1110,6 +1112,9 @@ async def on_message(message):
         tag_dictionary = import_tag_dictionary()
         collections = import_collections()
         await taliya.send("Masterlist data sync'ed with Airtable updates.")
+
+    if message.content.startswith('!rerun') and message.author == taliya:
+        rerun = True
 
     if message.content.startswith('!leftguild') and message.author == taliya:
         for entry in snack_requests:
@@ -1181,7 +1186,8 @@ def audio_of_the_day():
 # announce audio of the day
 @tasks.loop(minutes = 1)
 async def announce_daily_audio():
-    if datetime.datetime.now().hour == HOUR and datetime.datetime.now().minute == MINUTE:
+    if (datetime.datetime.now().hour == HOUR and datetime.datetime.now().minute == MINUTE) or rerun:
+        rerun = False
         guild = client.get_guild(GUILD)
         channel = client.get_channel(GENERAL)
 
@@ -1225,7 +1231,8 @@ def choose_next_winner(options):
 # announce good girl of the day and assign appropriate role
 @tasks.loop(minutes = 1)
 async def choose_good_girl():
-    if datetime.datetime.now().hour == HOUR and datetime.datetime.now().minute == MINUTE:
+    if (datetime.datetime.now().hour == HOUR and datetime.datetime.now().minute == MINUTE) or rerun:
+        rerun = False
         global good_girl
         guild = client.get_guild(GUILD)
         channel = client.get_channel(GENERAL)
@@ -1264,7 +1271,8 @@ async def choose_good_girl():
 # choose random balatro seed of the day
 @tasks.loop(minutes = 1)
 async def daily_balatro():
-    if datetime.datetime.now().hour == HOUR and datetime.datetime.now().minute == MINUTE:
+    if (datetime.datetime.now().hour == HOUR and datetime.datetime.now().minute == MINUTE) or rerun:
+        rerun = False
         global random_seed
         random_seed = ''.join(random.choices(string.ascii_uppercase+string.digits, k=8))
 

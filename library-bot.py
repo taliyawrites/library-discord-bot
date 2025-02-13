@@ -1196,8 +1196,8 @@ def audio_of_the_day():
 # announce audio of the day
 @tasks.loop(minutes = 1)
 async def announce_daily_audio():
+    global rerun_daily
     if (datetime.datetime.now().hour == HOUR and datetime.datetime.now().minute == MINUTE) or rerun_daily:
-        global rerun_daily
         rerun_daily = False
         guild = client.get_guild(GUILD)
         channel = client.get_channel(GENERAL)
@@ -1242,8 +1242,9 @@ def choose_next_winner(options):
 # announce good girl of the day and assign appropriate role
 @tasks.loop(minutes = 1)
 async def choose_good_girl():
+    global rerun_gg
     if (datetime.datetime.now().hour == HOUR and datetime.datetime.now().minute == MINUTE) or rerun_gg:
-        global good_girl, rerun_gg
+        global good_girl
         rerun_gg = False
         guild = client.get_guild(GUILD)
         channel = client.get_channel(GENERAL)

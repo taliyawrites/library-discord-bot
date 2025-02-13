@@ -47,11 +47,6 @@ intents.members = True
 client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
 
-global rerun_gg
-global rerun_daily 
-rerun_gg = False
-rerun_daily = False
-
 
 
 
@@ -372,10 +367,8 @@ async def setup_hook():
 
     global voice_note_links
     voice_note_links = read_from_file(ARCHIVE_FILENAME)
-    global rerun_gg
-    global rerun_daily 
-    rerun_gg = False
-    rerun_daily = False
+    global rerun_gg, rerun_daily, rerun_birthdays
+    rerun_gg, rerun_daily, rerun_birthdays = False, False, False
 
     # set all daily tasks running
     if not announce_daily_audio.is_running():
@@ -1105,7 +1098,7 @@ async def birthdayremove(interaction):
 async def on_message(message):
 
     # allow modifications of state variables
-    global audio_choices, tag_dictionary, collections, voice_note_links, rerun_gg, rerun_daily 
+    global audio_choices, tag_dictionary, collections, voice_note_links, rerun_gg, rerun_daily, rerun_birthdays
 
     if message.author == client.user:
         return
@@ -1125,6 +1118,9 @@ async def on_message(message):
 
     if message.content.startswith('!rerun_daily') and message.author == taliya:
         rerun_daily = True
+
+    if message.content.startswith('!rerun_birthdays') and message.author == taliya:
+        rerun_birthdays = True
 
     if message.content.startswith('!leftguild') and message.author == taliya:
         for entry in snack_requests:
@@ -1198,6 +1194,8 @@ def audio_of_the_day():
 async def announce_daily_audio():
     global rerun_daily
     if (datetime.datetime.now().hour == HOUR and datetime.datetime.now().minute == MINUTE) or rerun_daily:
+        if rerun_daily:
+            taliya.send("Re-running audio of the day.")
         rerun_daily = False
         guild = client.get_guild(GUILD)
         channel = client.get_channel(GENERAL)
@@ -1245,6 +1243,8 @@ async def choose_good_girl():
     global rerun_gg
     if (datetime.datetime.now().hour == HOUR and datetime.datetime.now().minute == MINUTE) or rerun_gg:
         global good_girl
+        if rerun_gg:
+            taliya.send("Re-running good girl of the day.")
         rerun_gg = False
         guild = client.get_guild(GUILD)
         channel = client.get_channel(GENERAL)
@@ -1293,7 +1293,11 @@ async def daily_balatro():
 @tasks.loop(minutes = 1)
 async def birthday_wishes():
     todays = []
-    if datetime.datetime.now().hour == (HOUR-2) and datetime.datetime.now().minute == MINUTE:
+    global rerun_birthdays
+    if (datetime.datetime.now().hour == (HOUR-2) and datetime.datetime.now().minute == MINUTE) or rerun_birthdays:
+        if rerun_birthdays:
+            taliya.send("Re-running birthday wishes.")
+        rerun_birthdays = False
         for entry in birthdays:
             if datetime.datetime.now().month == entry[1] and datetime.datetime.now().day == entry[2]:
                 todays.append(entry[0])

@@ -1195,7 +1195,7 @@ async def announce_daily_audio():
     global rerun_daily
     if (datetime.datetime.now().hour == HOUR and datetime.datetime.now().minute == MINUTE) or rerun_daily:
         if rerun_daily:
-            taliya.send("Re-running audio of the day.")
+            await taliya.send("Re-running audio of the day.")
         rerun_daily = False
         guild = client.get_guild(GUILD)
         channel = client.get_channel(GENERAL)
@@ -1244,7 +1244,7 @@ async def choose_good_girl():
     if (datetime.datetime.now().hour == HOUR and datetime.datetime.now().minute == MINUTE) or rerun_gg:
         global good_girl
         if rerun_gg:
-            taliya.send("Re-running good girl of the day.")
+            await taliya.send("Re-running good girl of the day.")
         rerun_gg = False
         guild = client.get_guild(GUILD)
         channel = client.get_channel(GENERAL)
@@ -1296,7 +1296,7 @@ async def birthday_wishes():
     global rerun_birthdays
     if (datetime.datetime.now().hour == (HOUR-2) and datetime.datetime.now().minute == MINUTE) or rerun_birthdays:
         if rerun_birthdays:
-            taliya.send("Re-running birthday wishes.")
+            await taliya.send("Re-running birthday wishes.")
         rerun_birthdays = False
         for entry in birthdays:
             if datetime.datetime.now().month == entry[1] and datetime.datetime.now().day == entry[2]:

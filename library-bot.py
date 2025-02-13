@@ -1113,8 +1113,10 @@ async def on_message(message):
         collections = import_collections()
         await taliya.send("Masterlist data sync'ed with Airtable updates.")
 
-    if message.content.startswith('!rerun') and message.author == taliya:
+    if message.content.startswith('!rerun_gg') and message.author == taliya:
         rerun_gg = True
+
+    if message.content.startswith('!rerun_daily') and message.author == taliya:
         rerun_daily = True
 
     if message.content.startswith('!leftguild') and message.author == taliya:

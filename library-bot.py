@@ -1305,8 +1305,7 @@ async def birthday_wishes():
             if datetime.datetime.now().month == entry[1] and datetime.datetime.now().day == entry[2]:
                 try:
                     user = await client.get_guild(GUILD).fetch_member(entry[0])
-                    print("issue")
-                    todays.append[user.mention]
+                    todays.append(user.mention)
                 except:
                     print('user no longer in server')
 

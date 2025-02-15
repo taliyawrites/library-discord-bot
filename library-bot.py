@@ -1300,13 +1300,19 @@ async def birthday_wishes():
         rerun_birthdays = False
         for entry in birthdays:
             if datetime.datetime.now().month == entry[1] and datetime.datetime.now().day == entry[2]:
-                todays.append(entry[0])
+                try:
+                    user = await client.get_guild(GUILD),fetch_member(entry[0])
+                    todays.append[user.mention]
+                except:
+                    print('user no longer in server')
+                    
+    if len(todays) != 0:
+        info = "Welcome to the birthday channel! you can register your birthday with the bot using the `/birthday` command. the bot will send a message in this channel on your birthday, so the rest of the server can celebrate with you! for privacy reasons, the channel will automatically clear all messages the next day. if you change your mind and want to remove your birthday so it isn't announced to the server, use the `/birthdayremove` command."
+        birthday_embed = discord.Embed(title = "Birthday Celebration Instructions!",description=info)
+        await client.get_channel(BIRTHDAY_CHANNEL).send(embed = birthday_embed)
+
     for birthday_girl in todays:
-        try:
-            user = await client.get_guild(GUILD).fetch_member(birthday_girl)
-            await client.get_channel(BIRTHDAY_CHANNEL).send("Happy birthday, " + user.mention + "!")
-        except:
-            print('user no longer in server')
+        await client.get_channel(BIRTHDAY_CHANNEL).send("Happy birthday, " + birthday_girl + "!")
 
 
 

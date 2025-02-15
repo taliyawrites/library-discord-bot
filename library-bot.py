@@ -1121,8 +1121,8 @@ async def on_message(message):
         print("force rerunning daily audio")
         rerun_daily = True
 
-    if message.content.startswith('!rerun_birthdays') and message.author == taliya
-    print("force rerunning birthdays"):
+    if message.content.startswith('!rerun_birthdays') and message.author == taliya:
+        print("force rerunning birthdays")
         rerun_birthdays = True
 
     if message.content.startswith('!leftguild') and message.author == taliya:

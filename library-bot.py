@@ -1103,7 +1103,7 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if message.content.startswith('!') and not message.content.startswith('!!') and not message.content.startswith('!refresh') and not message.content.startswith("!welcome") and not message.content.startswith('!rerun'):
+    if message.content.startswith('!') and not message.content.startswith('!!') and not message.author == taliya:
         await message.channel.send("The bot has been updated to use slash commands integrated into Discord! The commands have the same names as before, but with `/` at the beginning instead of `!`. This means that you won't need to remember the exact name or format of a command, just type / and a menu of options will pop up!")
 
     # sync with airtable data to pull any masterlist updates
@@ -1114,12 +1114,15 @@ async def on_message(message):
         await taliya.send("Masterlist data sync'ed with Airtable updates.")
 
     if message.content.startswith('!rerun_gg') and message.author == taliya:
+        print("force rerunning good girl")
         rerun_gg = True
 
     if message.content.startswith('!rerun_daily') and message.author == taliya:
+        print("force rerunning daily audio")
         rerun_daily = True
 
-    if message.content.startswith('!rerun_birthdays') and message.author == taliya:
+    if message.content.startswith('!rerun_birthdays') and message.author == taliya
+    print("force rerunning birthdays"):
         rerun_birthdays = True
 
     if message.content.startswith('!leftguild') and message.author == taliya:
@@ -1301,11 +1304,11 @@ async def birthday_wishes():
         for entry in birthdays:
             if datetime.datetime.now().month == entry[1] and datetime.datetime.now().day == entry[2]:
                 try:
-                    user = await client.get_guild(GUILD),fetch_member(entry[0])
+                    user = await client.get_guild(GUILD).fetch_member(entry[0])
                     todays.append[user.mention]
                 except:
                     print('user no longer in server')
-                    
+
     if len(todays) != 0:
         info = "Welcome to the birthday channel! you can register your birthday with the bot using the `/birthday` command. the bot will send a message in this channel on your birthday, so the rest of the server can celebrate with you! for privacy reasons, the channel will automatically clear all messages the next day. if you change your mind and want to remove your birthday so it isn't announced to the server, use the `/birthdayremove` command."
         birthday_embed = discord.Embed(title = "Birthday Celebration Instructions!",description=info)

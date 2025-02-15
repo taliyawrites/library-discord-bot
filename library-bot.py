@@ -1113,15 +1113,15 @@ async def on_message(message):
         collections = import_collections()
         await taliya.send("Masterlist data sync'ed with Airtable updates.")
 
-    if message.content.startswith('!rerun_gg') and message.author == taliya:
+    if message.content.startswith('!rerungg') and message.author == taliya:
         print("force rerunning good girl")
         rerun_gg = True
 
-    if message.content.startswith('!rerun_daily') and message.author == taliya:
+    if message.content.startswith('!rerundaily') and message.author == taliya:
         print("force rerunning daily audio")
         rerun_daily = True
 
-    if message.content.startswith('!rerun_birthdays') and message.author == taliya:
+    if message.content.startswith('!rerunbirthdays') and message.author == taliya:
         print("force rerunning birthdays")
         rerun_birthdays = True
 
@@ -1305,6 +1305,7 @@ async def birthday_wishes():
             if datetime.datetime.now().month == entry[1] and datetime.datetime.now().day == entry[2]:
                 try:
                     user = await client.get_guild(GUILD).fetch_member(entry[0])
+                    print("issue")
                     todays.append[user.mention]
                 except:
                     print('user no longer in server')

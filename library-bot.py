@@ -371,14 +371,9 @@ async def setup_hook():
     rerun_gg, rerun_daily, rerun_birthdays = False, False, False
 
     # set all daily tasks running
-    if not announce_daily_audio.is_running():
-        announce_daily_audio.start()
-    if not choose_good_girl.is_running():
-        choose_good_girl.start()
-    if not daily_balatro.is_running():
-        daily_balatro.start()
-    if not birthday_wishes.is_running():
-        birthday_wishes.start()
+    if not run_daily_loops.is_running():
+        run_daily_loops.start()
+        print("starting daily looping tasks")
 
     global taliya, vel
     taliya = await client.fetch_user(1169014359842885726)
@@ -1151,7 +1146,31 @@ async def on_message(message):
 
 
 
+
 # DAILY LOOPING TASKS #
+@tasks.loop(minutes = 1)
+async def run_daily_loops():
+    global rerun_daily, rerun_gg, rerun_birthdays
+    if (datetime.datetime.now().hour == 12 and datetime.datetime.now().minute == 46):
+        await announce_daily_audio()
+        await choose_good_girl()
+        await daily_balatro()
+    elif (datetime.datetime.now().hour == (HOUR-2) and datetime.datetime.now().minute == MINUTE):
+        await birthday_wishes()
+    elif rerun_daily:
+        await taliya.send("Re-running audio of the day.")
+        rerun_daily = False
+        await announce_daily_audio()
+    elif rerun_gg:
+        await taliya.send("Re-running good girl of the day.")
+        rerun_gg = False
+        await choose_good_girl()
+    elif rerun_birthdays:
+        await taliya.send("Re-running birthday wishes.")
+        rerun_birthdays = False
+        await birthday_wishes()
+
+
 
 
 # AUDIO OF THE DAY #
@@ -1193,24 +1212,18 @@ def audio_of_the_day():
     return choose_next(daily_audio_options)
 
 # announce audio of the day
-@tasks.loop(minutes = 1)
 async def announce_daily_audio():
-    global rerun_daily
-    if (datetime.datetime.now().hour == HOUR and datetime.datetime.now().minute == MINUTE) or rerun_daily:
-        if rerun_daily:
-            await taliya.send("Re-running audio of the day.")
-        rerun_daily = False
-        guild = client.get_guild(GUILD)
-        channel = client.get_channel(GENERAL)
+    guild = client.get_guild(GUILD)
+    channel = client.get_channel(GENERAL)
 
-        global daily_audio
-        daily_audio = audio_of_the_day()
+    global daily_audio
+    daily_audio = audio_of_the_day()
 
-        if daily_audio is not None: 
-            await channel.send(f"The audio of the day!")
-            await channel.send(embed=daily_audio.discord_post())
-        else:
-            await taliya.send("ERROR: no non-recent options for daily audio.")
+    if daily_audio is not None: 
+        await channel.send(f"The audio of the day!")
+        await channel.send(embed=daily_audio.discord_post())
+    else:
+        await taliya.send("ERROR: no non-recent options for daily audio.")
 
 
 
@@ -1241,73 +1254,59 @@ def choose_next_winner(options):
     return winner, len(remaining)
 
 # announce good girl of the day and assign appropriate role
-@tasks.loop(minutes = 1)
 async def choose_good_girl():
-    global rerun_gg
-    if (datetime.datetime.now().hour == HOUR and datetime.datetime.now().minute == MINUTE) or rerun_gg:
-        global good_girl
-        if rerun_gg:
-            await taliya.send("Re-running good girl of the day.")
-        rerun_gg = False
-        guild = client.get_guild(GUILD)
-        channel = client.get_channel(GENERAL)
-        good_girl_role = guild.get_role(WINNER_ROLE)
+    guild = client.get_guild(GUILD)
+    channel = client.get_channel(GENERAL)
+    good_girl_role = guild.get_role(WINNER_ROLE)
 
-        await asyncio.sleep(6)
-        for member in good_girl_role.members:
-            # remove good girl role from yesterday's winner
-            await member.remove_roles(good_girl_role)
+    await asyncio.sleep(6)
+    for member in good_girl_role.members:
+        # remove good girl role from yesterday's winner
+        await member.remove_roles(good_girl_role)
 
-        # choose new random winner for the day
-        options = guild.get_role(OPTIONS_ROLE).members
-        winner, remaining_number = choose_next_winner(options)
-        if remaining_number == 10: 
-            await taliya.send("Only ten remaining options for good girl of the day.")
+    # choose new random winner for the day
+    options = guild.get_role(OPTIONS_ROLE).members
+    winner, remaining_number = choose_next_winner(options)
+    if remaining_number == 10: 
+        await taliya.send("Only ten remaining options for good girl of the day.")
 
 
-        if datetime.datetime.now().month == 6 and datetime.datetime.now().day == 9:
-            winner = await client.fetch_user(1241573320114049078)
+    if datetime.datetime.now().month == 6 and datetime.datetime.now().day == 9:
+        winner = await client.fetch_user(1241573320114049078)
 
-        # send message and assign good girl role to winner
-        if winner is not None:
-            await channel.send(f'{winner.mention} is the good girl of the day!')
-            await winner.add_roles(good_girl_role)
-            good_girl = winner.display_name
-        else:
-            await taliya.send("ERROR: no non-recent options for good girl of the day.")
+    # send message and assign good girl role to winner
+    if winner is not None:
+        await channel.send(f'{winner.mention} is the good girl of the day!')
+        await winner.add_roles(good_girl_role)
+        good_girl = winner.display_name
+    else:
+        await taliya.send("ERROR: no non-recent options for good girl of the day.")
 
-        # randomly assign cum permissions
-        winners = random.sample(options, 6)
-        global cum_permission_ids
-        cum_permission_ids  = [user.id for user in winners]
-        print(f"daily permissions assigned to: {winners[0].display_name}, {winners[1].display_name}, {winners[2].display_name}, {winners[3].display_name}, {winners[4].display_name}, and {winners[5].display_name}")
-        save_to_file(RECORD_FILENAME,[str(ids) for ids in cum_permission_ids])
+    # randomly assign cum permissions
+    winners = random.sample(options, 6)
+    global cum_permission_ids
+    cum_permission_ids  = [user.id for user in winners]
+    print(f"daily permissions assigned to: {winners[0].display_name}, {winners[1].display_name}, {winners[2].display_name}, {winners[3].display_name}, {winners[4].display_name}, and {winners[5].display_name}")
+    save_to_file(RECORD_FILENAME,[str(ids) for ids in cum_permission_ids])
+
+
 
 # choose random balatro seed of the day
-@tasks.loop(minutes = 1)
 async def daily_balatro():
-    if (datetime.datetime.now().hour == HOUR and datetime.datetime.now().minute == MINUTE):
-        global random_seed
-        random_seed = ''.join(random.choices(string.ascii_uppercase+string.digits, k=8))
-
+    global random_seed
+    random_seed = ''.join(random.choices(string.ascii_uppercase+string.digits, k=8))
 
 
 # wishes people a happy birthday!
-@tasks.loop(minutes = 1)
 async def birthday_wishes():
     todays = []
-    global rerun_birthdays
-    if (datetime.datetime.now().hour == (HOUR-2) and datetime.datetime.now().minute == MINUTE) or rerun_birthdays:
-        if rerun_birthdays:
-            await taliya.send("Re-running birthday wishes.")
-        rerun_birthdays = False
-        for entry in birthdays:
-            if datetime.datetime.now().month == entry[1] and datetime.datetime.now().day == entry[2]:
-                try:
-                    user = await client.get_guild(GUILD).fetch_member(entry[0])
-                    todays.append(user.mention)
-                except:
-                    print('user no longer in server')
+    for entry in birthdays:
+        if datetime.datetime.now().month == entry[1] and datetime.datetime.now().day == entry[2]:
+            try:
+                user = await client.get_guild(GUILD).fetch_member(entry[0])
+                todays.append(user.mention)
+            except:
+                print('user no longer in server')
 
     if len(todays) != 0:
         info = "Welcome to the birthday channel! you can register your birthday with the bot using the `/birthday` command. the bot will send a message in this channel on your birthday, so the rest of the server can celebrate with you! for privacy reasons, the channel will automatically clear all messages the next day. if you change your mind and want to remove your birthday so it isn't announced to the server, use the `/birthdayremove` command."
@@ -1316,8 +1315,6 @@ async def birthday_wishes():
 
     for birthday_girl in todays:
         await client.get_channel(BIRTHDAY_CHANNEL).send("Happy birthday, " + birthday_girl + "!")
-
-
 
 
 

@@ -1213,17 +1213,20 @@ def audio_of_the_day():
 
 # announce audio of the day
 async def announce_daily_audio():
-    guild = client.get_guild(GUILD)
-    channel = client.get_channel(GENERAL)
+    try:
+        guild = client.get_guild(GUILD)
+        channel = client.get_channel(GENERAL)
 
-    global daily_audio
-    daily_audio = audio_of_the_day()
+        global daily_audio
+        daily_audio = audio_of_the_day()
 
-    if daily_audio is not None: 
-        await channel.send(f"The audio of the day!")
-        await channel.send(embed=daily_audio.discord_post())
-    else:
-        await taliya.send("ERROR: no non-recent options for daily audio.")
+        if daily_audio is not None: 
+            await channel.send(f"The audio of the day!")
+            await channel.send(embed=daily_audio.discord_post())
+        else:
+            await taliya.send("ERROR: no non-recent options for daily audio.")
+    except:
+        await taliya.send("Error in daily audio anouncement.")
 
 
 
@@ -1255,66 +1258,75 @@ def choose_next_winner(options):
 
 # announce good girl of the day and assign appropriate role
 async def choose_good_girl():
-    guild = client.get_guild(GUILD)
-    channel = client.get_channel(GENERAL)
-    good_girl_role = guild.get_role(WINNER_ROLE)
+    try:
+        guild = client.get_guild(GUILD)
+        channel = client.get_channel(GENERAL)
+        good_girl_role = guild.get_role(WINNER_ROLE)
 
-    await asyncio.sleep(6)
-    for member in good_girl_role.members:
-        # remove good girl role from yesterday's winner
-        await member.remove_roles(good_girl_role)
+        await asyncio.sleep(6)
+        for member in good_girl_role.members:
+            # remove good girl role from yesterday's winner
+            await member.remove_roles(good_girl_role)
 
-    # choose new random winner for the day
-    options = guild.get_role(OPTIONS_ROLE).members
-    winner, remaining_number = choose_next_winner(options)
-    if remaining_number == 10: 
-        await taliya.send("Only ten remaining options for good girl of the day.")
+        # choose new random winner for the day
+        options = guild.get_role(OPTIONS_ROLE).members
+        winner, remaining_number = choose_next_winner(options)
+        if remaining_number == 10: 
+            await taliya.send("Only ten remaining options for good girl of the day.")
 
 
-    if datetime.datetime.now().month == 6 and datetime.datetime.now().day == 9:
-        winner = await client.fetch_user(1241573320114049078)
+        if datetime.datetime.now().month == 6 and datetime.datetime.now().day == 9:
+            winner = await client.fetch_user(1241573320114049078)
 
-    # send message and assign good girl role to winner
-    if winner is not None:
-        await channel.send(f'{winner.mention} is the good girl of the day!')
-        await winner.add_roles(good_girl_role)
-        good_girl = winner.display_name
-    else:
-        await taliya.send("ERROR: no non-recent options for good girl of the day.")
+        # send message and assign good girl role to winner
+        if winner is not None:
+            await channel.send(f'{winner.mention} is the good girl of the day!')
+            await winner.add_roles(good_girl_role)
+            good_girl = winner.display_name
+        else:
+            await taliya.send("ERROR: no non-recent options for good girl of the day.")
 
-    # randomly assign cum permissions
-    winners = random.sample(options, 6)
-    global cum_permission_ids
-    cum_permission_ids  = [user.id for user in winners]
-    print(f"daily permissions assigned to: {winners[0].display_name}, {winners[1].display_name}, {winners[2].display_name}, {winners[3].display_name}, {winners[4].display_name}, and {winners[5].display_name}")
-    save_to_file(RECORD_FILENAME,[str(ids) for ids in cum_permission_ids])
+        # randomly assign cum permissions
+        winners = random.sample(options, 6)
+        global cum_permission_ids
+        cum_permission_ids  = [user.id for user in winners]
+        print(f"daily permissions assigned to: {winners[0].display_name}, {winners[1].display_name}, {winners[2].display_name}, {winners[3].display_name}, {winners[4].display_name}, and {winners[5].display_name}")
+        save_to_file(RECORD_FILENAME,[str(ids) for ids in cum_permission_ids])
+    except:
+        await taliya.send("Error in good girl of the day anouncement.")
 
 
 
 # choose random balatro seed of the day
 async def daily_balatro():
-    global random_seed
-    random_seed = ''.join(random.choices(string.ascii_uppercase+string.digits, k=8))
+    try:
+        global random_seed
+        random_seed = ''.join(random.choices(string.ascii_uppercase+string.digits, k=8))
+    except:
+        await taliya.send("Error in daily balatro seed.")
 
 
 # wishes people a happy birthday!
 async def birthday_wishes():
-    todays = []
-    for entry in birthdays:
-        if datetime.datetime.now().month == entry[1] and datetime.datetime.now().day == entry[2]:
-            try:
-                user = await client.get_guild(GUILD).fetch_member(entry[0])
-                todays.append(user.mention)
-            except:
-                print('user no longer in server')
+    try:
+        todays = []
+        for entry in birthdays:
+            if datetime.datetime.now().month == entry[1] and datetime.datetime.now().day == entry[2]:
+                try:
+                    user = await client.get_guild(GUILD).fetch_member(entry[0])
+                    todays.append(user.mention)
+                except:
+                    print('user no longer in server')
 
-    if len(todays) != 0:
-        info = "Welcome to the birthday channel! you can register your birthday with the bot using the `/birthday` command. the bot will send a message in this channel on your birthday, so the rest of the server can celebrate with you! for privacy reasons, the channel will automatically clear all messages the next day. if you change your mind and want to remove your birthday so it isn't announced to the server, use the `/birthdayremove` command."
-        birthday_embed = discord.Embed(title = "Birthday Celebration Instructions!",description=info)
-        await client.get_channel(BIRTHDAY_CHANNEL).send(embed = birthday_embed)
+        if len(todays) != 0:
+            info = "Welcome to the birthday channel! you can register your birthday with the bot using the `/birthday` command. the bot will send a message in this channel on your birthday, so the rest of the server can celebrate with you! for privacy reasons, the channel will automatically clear all messages the next day. if you change your mind and want to remove your birthday so it isn't announced to the server, use the `/birthdayremove` command."
+            birthday_embed = discord.Embed(title = "Birthday Celebration Instructions!",description=info)
+            await client.get_channel(BIRTHDAY_CHANNEL).send(embed = birthday_embed)
 
-    for birthday_girl in todays:
-        await client.get_channel(BIRTHDAY_CHANNEL).send("Happy birthday, " + birthday_girl + "!")
+        for birthday_girl in todays:
+            await client.get_channel(BIRTHDAY_CHANNEL).send("Happy birthday, " + birthday_girl + "!")
+    except:
+        await taliya.send("Error in daily birthday anouncements.")
 
 
 

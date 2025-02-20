@@ -1130,6 +1130,11 @@ async def on_message(message):
         with open("snack-requests.json", "w") as outfile:
             outfile.write(json.dumps(snack_requests))
 
+    if message.content.startswith('!birthdayinfo') and message.author == taliya:
+        info = "Welcome to the birthday channel! you can register your birthday with the bot using the `/birthday` command. the bot will send a message in this channel on your birthday, so the rest of the server can celebrate with you! for privacy reasons, the channel will automatically clear all messages the next day. if you change your mind and want to remove your birthday so it isn't announced to the server, use the `/birthdayremove` command."
+        birthday_embed = discord.Embed(title = "Birthday Celebration Instructions!",description=info)
+        await client.get_channel(BIRTHDAY_CHANNEL).send(embed = birthday_embed)
+
     if message.content.startswith("!welcome") and message.author == taliya:
         await taliya.send("Welcome to the Vel's Library discord server! Vel has over four hundred audios for you to enjoy, and this bot can help you explore the collection and find your next favorite audio. The bot can pick a random audio with your favorite tags for you to listen to, you can search for audios by title or tags, and much more! Some example commands are listed below, or you can send the command `/tutorial` to learn the basics. You can also find the masterlist of all of Vel's audios [here](<https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr>). Enjoy your time in the library!")
         commands = "Type / to see a menu of all the available commands! Some commonly used ones are listed here.  \n- `/randomaudio` randomly chosen audio from the masterlist \n- `/randomaudio [some] [tags]` random audio with these desired tag(s) \n- `/title phrase` for list of audios with that phrase in the title \n- `/tag [some] [tags]` for list of audios with those tag(s) \n- `/character name` for list of audios featuring a specific named character \n- `/masterlist` link to the masterlist \n- `/request` to suggest tags for Vel's voice notes \n- `/vn` for a random voice note \nPlease always feel welcome to ask questions about using the bot in the  https://discord.com/channels/1148449914188218399/1248773338726400040 channel!"
@@ -1309,6 +1314,7 @@ async def daily_balatro():
 # wishes people a happy birthday!
 async def birthday_wishes():
     try:
+        await client.get_channel(BIRTHDAY_CHANNEL).purge(check = lambda m : len(m.embeds) == 0)
         todays = []
         for entry in birthdays:
             if datetime.datetime.now().month == entry[1] and datetime.datetime.now().day == entry[2]:
@@ -1318,16 +1324,10 @@ async def birthday_wishes():
                 except:
                     print('user no longer in server')
 
-        if len(todays) != 0:
-            info = "Welcome to the birthday channel! you can register your birthday with the bot using the `/birthday` command. the bot will send a message in this channel on your birthday, so the rest of the server can celebrate with you! for privacy reasons, the channel will automatically clear all messages the next day. if you change your mind and want to remove your birthday so it isn't announced to the server, use the `/birthdayremove` command."
-            birthday_embed = discord.Embed(title = "Birthday Celebration Instructions!",description=info)
-            await client.get_channel(BIRTHDAY_CHANNEL).send(embed = birthday_embed)
-
         for birthday_girl in todays:
             await client.get_channel(BIRTHDAY_CHANNEL).send("Happy birthday, " + birthday_girl + "!")
     except:
         await taliya.send("Error in daily birthday anouncements.")
-
 
 
 

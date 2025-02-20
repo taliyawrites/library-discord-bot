@@ -1151,7 +1151,7 @@ async def on_message(message):
 @tasks.loop(minutes = 1)
 async def run_daily_loops():
     global rerun_daily, rerun_gg, rerun_birthdays
-    if (datetime.datetime.now().hour == 12 and datetime.datetime.now().minute == 46):
+    if (datetime.datetime.now().hour == HOUR and datetime.datetime.now().minute == MINUTE):
         await announce_daily_audio()
         await choose_good_girl()
         await daily_balatro()

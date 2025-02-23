@@ -868,7 +868,7 @@ async def threads(interaction):
 @app_commands.rename(t = "time")
 @app_commands.describe(t = "time in ET (example: 7:30 PM)")
 async def time(interaction, t: str):
-    cut = t
+    cut = t.lower()
     end_index = max(cut.find("am"), cut.find("pm"))
     if end_index == -1:
         return "Please specify AM or PM."

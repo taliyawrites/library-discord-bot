@@ -37,6 +37,7 @@ BIRTHDAY_FILENAME = "birthdays.json"
 
 # run daily tasks at 1pm eastern time (6pm UTC+1)
 HOUR, MINUTE = 18, 0
+MIDNIGHT = 5
 
 
 
@@ -1160,7 +1161,7 @@ async def run_daily_loops():
         await announce_daily_audio()
         await choose_good_girl()
         await daily_balatro()
-    elif (datetime.datetime.now().hour == (HOUR-2) and datetime.datetime.now().minute == MINUTE):
+    elif (datetime.datetime.now().hour == MIDNIGHT and datetime.datetime.now().minute == MINUTE):
         await birthday_wishes()
     elif rerun_daily:
         await taliya.send("Re-running audio of the day.")

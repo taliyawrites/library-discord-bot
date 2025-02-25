@@ -1315,7 +1315,7 @@ async def daily_balatro():
 # wishes people a happy birthday!
 async def birthday_wishes():
     try:
-        await client.get_channel(BIRTHDAY_CHANNEL).purge(check = lambda m : len(m.embeds) == 0)
+        await client.get_channel(BIRTHDAY_CHANNEL).purge(check = lambda m : not((len(m.embeds) != 0) and (m.author == client.user)))
         todays = []
         for entry in birthdays:
             if datetime.datetime.now().month == entry[1] and datetime.datetime.now().day == entry[2]:

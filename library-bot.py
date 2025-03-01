@@ -991,7 +991,7 @@ async def cum(interaction):
         else:
             await interaction.response.send_message("Thank you!")
     else:
-        responses = ["no u","Silence, sub.","Daddy didn't give me permission yet.", "I don't answer to you.","You'd really like that, wouldn't you?","Nice try.","Make me.","It's adorable that you thought that would work.","How about you cum for me instead, baby?","I'm not allowed to cum yet :pleading_face:","I'm trying :pensive:","It's okay, I'm a good girl, I can take a little more!","But I wanna be good for Daddy!","You're not my real dom!","I would, but my vibrator died :cry: you got any batteries?","Try again, but this time, say it like you believe it."]
+        responses = ["no u","Silence, sub.","Daddy didn't give me permission yet.", "I don't answer to you.","You'd really like that, wouldn't you?","Nice try.","Make me.","It's adorable that you thought that would work.","How about you cum for me instead, baby?","I'm not allowed to cum yet :pleading_face:","I'm trying :pensive:","It's okay, I'm a good girl, I can take a little more!","But I wanna be good for Daddy!","You're not my real dom!","I would, but I can't find the charger for my vibrator :cry: have you seen it anywhere?","Try again, but this time, say it like you believe it."]
         weights = [1 for k in range(len(responses)-1)]
         weights.insert(0,6)
         response = random.choices(responses,weights = weights, k = 1)[0]

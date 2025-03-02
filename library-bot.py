@@ -514,6 +514,8 @@ async def tag(interaction, character_name: str):
 
         matches_embed = discord.Embed(title = name.capitalize() + " Audios",description=link_string)
         await interaction.response.send_message(embed = matches_embed)
+        if name.lower() == "tex":
+            await interaction.channel.send("Good luck, godspeed, and remember to hydrate, " + interaction.user.mention + "!")
 
 
 

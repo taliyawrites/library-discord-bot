@@ -36,7 +36,7 @@ REQUESTS_FILENAME = "snack-requests.json"
 BIRTHDAY_FILENAME = "birthdays.json"
 
 # run daily tasks at 1pm eastern time (6pm UTC+1)
-HOUR, MINUTE = 18, 0
+HOUR, MINUTE = 17, 0
 MIDNIGHT = 5
 
 
@@ -790,7 +790,7 @@ async def balatro(interaction):
 
 @tree.command(name = "schedule", description = "Vel's posting schedule")
 async def schedule(interaction):
-    schedule = "Sunday 4:30PM EST (<t:1730669400:t>): Private Library Release \n Monday 4:30PM EST (<t:1730755800:t>): Reddit GWA Release \n Wednesday 6:30PM EST (<t:1730935800:t>): Library Card Release \n Every other Thursday 4:30PM EST (<t:1731015000:t>): Reddit GWA Release \n Friday 6:30PM EST (<t:1731108600:t>): Book Club Release"
+    schedule = "Sunday 4:30PM EST (<t:1742157000:t>): Private Library Release \n Monday 4:30PM EST (<t:1742243400:t>): Reddit GWA Release \n Wednesday 6:30PM EST (<t:1742423400:t>): Library Card Release \n Friday 6:30PM EST (<t:1742596200:t>): Book Club Release"
     schedule_embed = discord.Embed(title = "Vel's Posting Schedule",description=schedule)
     await interaction.response.send_message(embed=schedule_embed)
 
@@ -798,7 +798,7 @@ async def schedule(interaction):
 
 @tree.command(name = "lives", description = "Information about live recordings!")
 async def lives(interaction):
-    await interaction.response.send_message("Vel does live audio recordings here on discord every Sunday at 7:30PM EST (<t:1730680200:t>)!")
+    await interaction.response.send_message("Vel does live audio recordings here on discord every Sunday at 7:30PM EST (<t:1742167800:t>)!")
 
 
 
@@ -889,9 +889,9 @@ async def time(interaction, t: str):
         hour = 0
 
     if isAM:
-        utc_hour = hour + 5
+        utc_hour = hour + 4
     else:
-        utc_hour = hour + 5 + 12
+        utc_hour = hour + 4 + 12
 
     now = datetime.datetime.utcnow()
     if utc_hour < 24:

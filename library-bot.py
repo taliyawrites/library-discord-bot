@@ -1056,7 +1056,7 @@ async def hydrate(interaction, victim: Optional[str] = ""):
     if len(victim) == 0:
         await interaction.response.send_message("Remember to hydrate, everyone!")
     else:
-        await interaction.response.send_message(f"Reminder to be a good girl and drink some water, {victim}")
+        await interaction.response.send_message(f"Reminder to be a good girl and drink some water, {victim}!")
     if random.choice(range(0,4)) == 0:
         await interaction.channel.send("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQw4dIe87tpv0gK-1hTrDZHPYLowAY-uYj3FCLOKJwZNH6mb3YE9xzGCYGKv2YHTY-d6LM&usqp=CAU")
 

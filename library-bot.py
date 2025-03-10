@@ -1057,6 +1057,9 @@ async def hydrate(interaction, victim: Optional[str] = ""):
         await interaction.response.send_message("Remember to hydrate, everyone!")
     else:
         await interaction.response.send_message(f"Reminder to be a good girl and drink some water, {victim}")
+    if random.choice(range(0,4)) == 0:
+        await interaction.channel.send("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQw4dIe87tpv0gK-1hTrDZHPYLowAY-uYj3FCLOKJwZNH6mb3YE9xzGCYGKv2YHTY-d6LM&usqp=CAU")
+
 
 @tree.command(name = "birthday", description = "Save your birthday with the bot!")
 @app_commands.describe(month = "The number of the month of your birthday (Jan = 1, ..., Dec = 12)")

@@ -353,7 +353,7 @@ async def setup_hook():
     collections = import_collections()
 
     # import current state variable values
-    global random_seed, good_girl, pet_count, edge_counter, cum_permission_ids, daily_audio, snack_requests, birthdays
+    global random_seed, good_girl, pet_count, edge_counter, cum_permission_ids, daily_audio, snack_requests, birthdays, twitch_time
     random_seed = ''.join(random.choices(string.ascii_uppercase+string.digits, k=8))
     good_girl = read_from_file(WINNERS_FILENAME)[-1]
     pet_count = int(read_from_file(COUNTER_FILENAME)[-1])
@@ -365,6 +365,7 @@ async def setup_hook():
         snack_requests = json.load(read_file)
     with open(BIRTHDAY_FILENAME, "r") as read_file:
         birthdays = json.load(read_file)
+    twitch_time = "<t:1742151600:F>"
 
     global voice_note_links
     voice_note_links = read_from_file(ARCHIVE_FILENAME)
@@ -841,7 +842,7 @@ async def lives(interaction):
 @tree.command(name = "stream", description = "Information about Vel's next twitch stream")
 async def stream(interaction):
     await interaction.response.defer()
-    stream_info = 'Vel streams live every other Sunday on [Twitch](https://www.twitch.tv/velslibrary). The next stream will be <t:1742151600:F>!'
+    stream_info = 'Vel streams live every other Sunday on [Twitch](https://www.twitch.tv/velslibrary). The next stream will be ' + twitch_time + '!'
     stream_embed = discord.Embed(title = "Vel's Livestreams", description = stream_info, url = "https://www.twitch.tv/velslibrary")
     await interaction.followup.send(embed = stream_embed)
 
@@ -1157,7 +1158,7 @@ async def birthdayremove(interaction):
 async def on_message(message):
 
     # allow modifications of state variables
-    global audio_choices, tag_dictionary, collections, voice_note_links, rerun_gg, rerun_daily, rerun_birthdays
+    global audio_choices, tag_dictionary, collections, voice_note_links, rerun_gg, rerun_daily, rerun_birthdays, twitch_time
 
     if message.author == client.user:
         return
@@ -1199,11 +1200,8 @@ async def on_message(message):
         birthday_embed = discord.Embed(title = "Birthday Celebration Instructions!",description=info)
         await client.get_channel(BIRTHDAY_CHANNEL).send(embed = birthday_embed)
 
-    if message.content.startswith("!welcome") and message.author == taliya:
-        await taliya.send("Welcome to the Vel's Library discord server! Vel has over four hundred audios for you to enjoy, and this bot can help you explore the collection and find your next favorite audio. The bot can pick a random audio with your favorite tags for you to listen to, you can search for audios by title or tags, and much more! Some example commands are listed below, or you can send the command `/tutorial` to learn the basics. You can also find the masterlist of all of Vel's audios [here](<https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr>). Enjoy your time in the library!")
-        commands = "Type / to see a menu of all the available commands! Some commonly used ones are listed here.  \n- `/randomaudio` randomly chosen audio from the masterlist \n- `/randomaudio [some] [tags]` random audio with these desired tag(s) \n- `/title phrase` for list of audios with that phrase in the title \n- `/tag [some] [tags]` for list of audios with those tag(s) \n- `/character name` for list of audios featuring a specific named character \n- `/masterlist` link to the masterlist \n- `/request` to suggest tags for Vel's voice notes \n- `/vn` for a random voice note \nPlease always feel welcome to ask questions about using the bot in the  https://discord.com/channels/1148449914188218399/1248773338726400040 channel!"
-        command_embed = discord.Embed(title = "Vel's Library Bot Commands",description=commands)
-        await taliya.send(embed=command_embed)
+    if message.content.startswith('!updatetwitch') and message.author == taliya:
+        twitch_time = message.content[14:]
 
     # logs new voice notes in the full list
     if message.author == vel and len(message.attachments) != 0:
@@ -1212,7 +1210,6 @@ async def on_message(message):
             voice_note_links.append(message.jump_url)
             save_to_file(ARCHIVE_FILENAME,voice_note_links)
             print("Vel voice note logged")
-
 
 
 

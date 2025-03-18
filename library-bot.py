@@ -532,26 +532,29 @@ async def scriptwriter(interaction, writer: str):
     name = writer.lower().strip()
     matches = []
 
-    for audio in audio_choices:
-        if name in audio.writer().strip().lower():
-            matches.append(audio)
+    if 'vel' in name:
+        await interaction.followup.send("Too many results to display (every audio that isn't a script fill is original Vel improv!).")
+    else: 
+        for audio in audio_choices:
+            if name in audio.writer().strip().lower():
+                matches.append(audio)
 
-    matches.sort(key = age_sort)
+        matches.sort(key = age_sort)
 
-    if len(matches) == 0:
-        await interaction.followup.send(f"No audios found written by {writer}.")
-    elif len(matches) == 1:
-        await interaction.followup.send(embed = matches[0].discord_post())
-    else:
-        count = len(matches)
-        canonical_name = matches[0].writer()[14:]
-        link_string = ""
-        for i in list(range(count)):
-            next = str(i+1) + ". [" + matches[i].name() + "](" + matches[i].link() + ")" + '\n'
-            link_string = link_string + next
+        if len(matches) == 0:
+            await interaction.followup.send(f"No audios found written by {writer}.")
+        elif len(matches) == 1:
+            await interaction.followup.send(embed = matches[0].discord_post())
+        else:
+            count = len(matches)
+            canonical_name = matches[0].writer()[14:]
+            link_string = ""
+            for i in list(range(count)):
+                next = str(i+1) + ". [" + matches[i].name() + "](" + matches[i].link() + ")" + '\n'
+                link_string = link_string + next
 
-        matches_embed = discord.Embed(title = canonical_name.capitalize() + " Audios",description=link_string)
-        await interaction.followup.send(embed = matches_embed)
+            matches_embed = discord.Embed(title = canonical_name.capitalize() + " Audios",description=link_string)
+            await interaction.followup.send(embed = matches_embed)
 
 
 

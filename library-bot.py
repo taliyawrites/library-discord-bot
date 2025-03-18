@@ -544,12 +544,13 @@ async def scriptwriter(interaction, writer: str):
         await interaction.followup.send(embed = matches[0].discord_post())
     else:
         count = len(matches)
+        canonical_name = matches[0].writer()[14:]
         link_string = ""
         for i in list(range(count)):
             next = str(i+1) + ". [" + matches[i].name() + "](" + matches[i].link() + ")" + '\n'
             link_string = link_string + next
 
-        matches_embed = discord.Embed(title = matches[0].writer().capitalize() + " Audios",description=link_string)
+        matches_embed = discord.Embed(title = canonical_name.capitalize() + " Audios",description=link_string)
         await interaction.followup.send(embed = matches_embed)
 
 

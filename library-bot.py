@@ -353,7 +353,7 @@ async def setup_hook():
     collections = import_collections()
 
     # import current state variable values
-    global random_seed, good_girl, pet_count, edge_counter, cum_permission_ids, daily_audio, snack_requests, birthdays, twitch_time
+    global random_seed, good_girl, pet_count, edge_counter, cum_permission_ids, daily_audio, snack_requests, birthdays, twitch_time, live_time
     random_seed = ''.join(random.choices(string.ascii_uppercase+string.digits, k=8))
     good_girl = read_from_file(WINNERS_FILENAME)[-1]
     pet_count = int(read_from_file(COUNTER_FILENAME)[-1])
@@ -366,6 +366,7 @@ async def setup_hook():
     with open(BIRTHDAY_FILENAME, "r") as read_file:
         birthdays = json.load(read_file)
     twitch_time = "<t:1742151600:F>"
+    live_time = "<t:1742167800:t>"
 
     global voice_note_links
     voice_note_links = read_from_file(ARCHIVE_FILENAME)
@@ -501,7 +502,7 @@ async def tag(interaction, taglist: str):
 @tree.command(name = "character", description = "Lists all audios featuring a specific named character")
 @app_commands.describe(character_name= "character name (use /allcharacters to see a list of options)")
 @app_commands.rename(character_name = "character")
-async def tag(interaction, character_name: str):
+async def character(interaction, character_name: str):
     await interaction.response.defer()
     name = character_name.strip()
     matches = character_search(name)
@@ -521,6 +522,36 @@ async def tag(interaction, character_name: str):
         await interaction.followup.send(embed = matches_embed)
         if name.lower() == "tex":
             await interaction.followup.send("Good luck, godspeed, and remember to hydrate, " + interaction.user.mention + "!")
+
+
+
+@tree.command(name = "scriptwriter", description = "Provides a list of all of Vel's script fill audios written by a specified writer.")
+@app_commands.describe(writer = "name of the scriptwriter")
+async def scriptwriter(interaction, writer: str):
+    await interaction.response.defer()
+    name = writer.lower().strip()
+    matches = []
+
+    for audio in audio_choices:
+        if name in audio.writer().strip().lower():
+            matches.append(audio)
+
+    matches.sort(key = age_sort)
+
+    if len(matches) == 0:
+        await interaction.followup.send(f"No audios found written by {writer}.")
+    elif len(matches) == 1:
+        await interaction.followup.send(embed = matches[0].discord_post())
+    else:
+        count = len(matches)
+        link_string = ""
+        for i in list(range(count)):
+            next = str(i+1) + ". [" + matches[i].name() + "](" + matches[i].link() + ")" + '\n'
+            link_string = link_string + next
+
+        matches_embed = discord.Embed(title = matches[0].writer().capitalize() + " Audios",description=link_string)
+        await interaction.followup.send(embed = matches_embed)
+
 
 
 
@@ -835,7 +866,7 @@ async def schedule(interaction):
 @tree.command(name = "lives", description = "Information about live recordings!")
 async def lives(interaction):
     await interaction.response.defer()
-    await interaction.followup.send("Vel does live audio recordings here on discord every Sunday at 7:30PM EST (<t:1742167800:t>)!")
+    await interaction.followup.send("Vel does live audio recordings here on discord every Sunday at 7:30PM EST (" + live_time + ")!")
 
 
 
@@ -1158,7 +1189,7 @@ async def birthdayremove(interaction):
 async def on_message(message):
 
     # allow modifications of state variables
-    global audio_choices, tag_dictionary, collections, voice_note_links, rerun_gg, rerun_daily, rerun_birthdays, twitch_time
+    global audio_choices, tag_dictionary, collections, voice_note_links, rerun_gg, rerun_daily, rerun_birthdays, twitch_time, live_time
 
     if message.author == client.user:
         return
@@ -1202,6 +1233,9 @@ async def on_message(message):
 
     if message.content.startswith('!updatetwitch') and message.author == taliya:
         twitch_time = message.content[14:]
+
+    if message.content.startswith('!updatelive') and message.author == taliya: 
+        live_time = message.content[12:]
 
     # logs new voice notes in the full list
     if message.author == vel and len(message.attachments) != 0:

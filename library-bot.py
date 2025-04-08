@@ -1079,7 +1079,7 @@ async def cum(interaction):
         else:
             await interaction.followup.send("Thank you!")
     else:
-        responses = ["no u","Silence, sub.","Daddy didn't give me permission yet.", "I don't answer to you.","You'd really like that, wouldn't you?","Nice try.","Make me.","It's adorable that you thought that would work.","How about you cum for me instead, baby?","I'm not allowed to cum yet :pleading_face:","I'm trying :pensive:","It's okay, I'm a good girl, I can take a little more!","But I wanna be good for Daddy!","You're not my real dom!","I would, but I can't find the charger for my vibrator :cry: have you seen it anywhere?","Try again, but this time, say it like you believe it."]
+        responses = ["no u","Silence, sub.","Daddy didn't give me permission yet.", "I don't answer to you.","You'd really like that, wouldn't you?","Nice try.","Make me.","It's adorable that you thought that would work.","How about you cum for me instead, baby?","I'm not allowed to cum yet :pleading_face:","I'm trying :pensive:","It's okay, I'm a good girl, I can take a little more!","But I wanna be good for Daddy!","You're not my real dom!","I would, but the magnetic charging cable keeps falling off my vibrator :cry:","Try again, but this time, say it like you believe it."]
         weights = [1 for k in range(len(responses)-1)]
         weights.insert(0,6)
         response = random.choices(responses,weights = weights, k = 1)[0]
@@ -1189,6 +1189,20 @@ async def birthdayremove(interaction):
 # UTILITY ON MESSSAGE COMMANDS #
 
 
+# @tree.command(name = "refresh", description = "sync airtable updates")
+# @app_commands.check(lambda u: u.user.id == 1169014359842885726)
+# async def refresh(interaction):
+#     await interaction.response.defer()
+#     global audio_choices, tag_dictionary, collections
+
+#     audio_choices = import_airtable_data()
+#     tag_dictionary = import_tag_dictionary()
+#     collections = import_collections()
+#     await interaction.followup.send("Masterlist data sync'ed with Airtable updates.")
+
+
+
+
 @client.event
 async def on_message(message):
 
@@ -1225,10 +1239,10 @@ async def on_message(message):
             try:
                 user = await client.get_guild(GUILD).fetch_member(entry[0])
             except:
-                snack_requests.remove(entry)
-                await taliya.send(f"removed requests from {entry[0]}")
-        with open("snack-requests.json", "w") as outfile:
-            outfile.write(json.dumps(snack_requests))
+                # snack_requests.remove(entry)
+                await taliya.send(f"removed requests from {client.fetch_user(entry[0]).name}")
+        # with open("snack-requests.json", "w") as outfile:
+        #     outfile.write(json.dumps(snack_requests))
 
     if message.content.startswith('!birthdayinfo') and message.author == taliya:
         info = "Welcome to the birthday channel! you can register your birthday with the bot using the `/birthday` command. the bot will send a message in this channel on your birthday, so the rest of the server can celebrate with you! for privacy reasons, the channel will automatically clear all messages the next day. if you change your mind and want to remove your birthday so it isn't announced to the server, use the `/birthdayremove` command."
@@ -1240,6 +1254,11 @@ async def on_message(message):
 
     if message.content.startswith('!updatelive') and message.author == taliya: 
         live_time = message.content[12:]
+
+    if message.content.startswith('!utilitycommands') and message.author == taliya: 
+        description = "-`!refresh` to sync masterlist updates \n-`!rerungg`, `!rerundaily`, and `!rerunbirthdays` \n-`updatelive` and `updatetwitch`"
+        embed = discord.Embed(title = "Backend Commands",description = description)
+        await taliya.send(embed = embed) 
 
     # logs new voice notes in the full list
     if message.author == vel and len(message.attachments) != 0:

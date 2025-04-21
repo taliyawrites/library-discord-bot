@@ -1268,9 +1268,6 @@ async def on_message(message):
             save_to_file(ARCHIVE_FILENAME,voice_note_links)
             print("Vel voice note logged")
 
-    if message.author == taliya and message.content.startswith("forward"):
-        await message.forward(message.channel)
-
 
     # hornyjail = client.get_channel(1158145318781714493)
     # snack_channel = client.get_channel(1363978490436780214)

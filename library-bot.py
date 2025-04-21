@@ -1269,7 +1269,7 @@ async def on_message(message):
             print("Vel voice note logged")
 
     if message.author == taliya and message.content.startswith("forward"):
-        await message.pin()
+        await message.forward(message.channel)
 
 
 

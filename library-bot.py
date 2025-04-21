@@ -1291,8 +1291,7 @@ async def on_message(message):
             if msg.author == vel and len(msg.attachments) != 0:
                 attached = msg.attachments
                 if attached[0].is_voice_message():
-                    # await msg.forward(snack_channel)
-                    await msg.forward(taliya)
+                    await msg.forward(client.get_channel(VNS))
         await taliya.send("done searching horny jail")
 
 

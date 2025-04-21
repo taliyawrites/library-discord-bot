@@ -1267,22 +1267,7 @@ async def on_message(message):
             voice_note_links.append(message.jump_url)
             save_to_file(ARCHIVE_FILENAME,voice_note_links)
             print("Vel voice note logged")
-
-
-    if message.content.startswith("!hornyjail") and message.author == taliya:
-        counter = 0
-        await taliya.send("searching horny jail")
-        hornyjail = client.get_channel(1158145318781714493)
-        async for oldm in hornyjail.history(limit = 78000, after = datetime.datetime(year = 2024, month = 1, day = 1)):
-            counter += 1
-            if counter % 1000 == 0:
-                print(oldm.created_at.strftime("%x"))
-
-            if oldm.author == vel and len(oldm.attachments) != 0:
-                attached = oldm.attachments
-                if attached[0].is_voice_message():
-                    await oldm.forward(taliya)
-        await taliya.send("done searching horny jail")
+            
 
 
 

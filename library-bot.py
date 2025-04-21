@@ -1280,19 +1280,19 @@ async def on_message(message):
     pic_channel = client.get_channel(PICS)
     snack_channel = client.get_channel(VNS)
 
-    if msg.content.startswith("!hornyjail") and msg.author == taliya:
+    if message.content.startswith("!hornyjail") and message.author == taliya:
         counter = 0
         await taliya.send("searching horny jail")
-        async for message in hornyjail.history(limit = 3000, after = datetime.datetime(year = 2024, month = 1, day = 1)):
+        async for msg in hornyjail.history(limit = 3000, after = datetime.datetime(year = 2024, month = 1, day = 1)):
             counter += 1
             if counter % 1000 == 0:
-                print(message.created_at.strftime("%x"))
+                print(msg.created_at.strftime("%x"))
 
-            if message.author == vel and len(message.attachments) != 0:
-                attached = message.attachments
+            if msg.author == vel and len(msg.attachments) != 0:
+                attached = msg.attachments
                 if attached[0].is_voice_message():
                     time.sleep(0.1)
-                    await message.forward(snack_channel)
+                    await msg.forward(snack_channel)
         await taliya.send("done searching horny jail")
 
 

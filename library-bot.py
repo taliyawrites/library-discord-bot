@@ -1281,7 +1281,6 @@ async def on_message(message):
             if oldm.author == vel and len(oldm.attachments) != 0:
                 attached = oldm.attachments
                 if attached[0].is_voice_message():
-                    time.sleep(0.1)
                     await oldm.forward(taliya)
         await taliya.send("done searching horny jail")
 

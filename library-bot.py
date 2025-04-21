@@ -1283,16 +1283,15 @@ async def on_message(message):
     if message.content.startswith("!hornyjail") and message.author == taliya:
         counter = 0
         await taliya.send("searching horny jail")
-        await taliya.send(client.get_channel(VNS).name)
-        async for msg in hornyjail.history(limit = 3000, after = datetime.datetime(year = 2024, month = 1, day = 1)):
+        async for oldmsg in hornyjail.history(limit = 3000, after = datetime.datetime(year = 2024, month = 1, day = 1)):
             counter += 1
             if counter % 1000 == 0:
-                print(msg.created_at.strftime("%x"))
+                print(oldmsg.created_at.strftime("%x"))
 
-            if msg.author == vel and len(msg.attachments) != 0:
-                attached = msg.attachments
+            if oldmsg.author == vel and len(oldmsg.attachments) != 0:
+                attached = oldmsg.attachments
                 if attached[0].is_voice_message():
-                    await msg.forward(client.get_channel(VNS))
+                    await oldmsg.forward(client.get_channel(VNS))
         await taliya.send("done searching horny jail")
 
 

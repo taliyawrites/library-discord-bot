@@ -26,6 +26,12 @@ WINNER_ROLE = int(os.getenv('ROLE_ID_WINNER'))
 BIRTHDAY_CHANNEL = int(os.getenv('BIRTHDAY_CHANNEL'))
 airtable_api = Api(os.getenv('AIRTABLE_TOKEN'))
 
+ABYSS = int(os.getenv('ABYSS'))
+HORNYJAIL = int(os.getenv('HORNYJAIL'))
+GYM = int(os.getenv('GYM'))
+PICS = int(os.getenv('PICS'))
+VNS = int(os.getenv('VNS'))
+
 WINNERS_FILENAME = "recentwinners.txt"
 AUDIOS_FILENAME = "recentaudios.txt"
 OPTIONS_FILENAME = "remaining.txt"
@@ -1267,6 +1273,27 @@ async def on_message(message):
             voice_note_links.append(message.jump_url)
             save_to_file(ARCHIVE_FILENAME,voice_note_links)
             print("Vel voice note logged")
+
+    hornyjail = client.get_channel(HORNYJAIL)
+    abyss = client.get_channel(ABYSS)
+    gym_thread = client.get_guild(GUILD).get_channel_or_thread(GYM)
+    pic_channel = client.get_channel(PICS)
+    snack_channel = client.get_channel(VNS)
+
+    if msg.content.startswith("!hornyjail") and msg.author == taliya:
+        counter = 0
+        await taliya.send("searching horny jail")
+        async for message in hornyjail.history(limit = 3000, after = datetime.datetime(year = 2024, month = 1, day = 1)):
+            counter += 1
+            if counter % 1000 == 0:
+                print(message.created_at.strftime("%x"))
+
+            if message.author == vel and len(message.attachments) != 0:
+                attached = message.attachments
+                if attached[0].is_voice_message():
+                    time.sleep(0.1)
+                    await message.forward(snack_channel)
+        await taliya.send("done searching horny jail")
 
 
 

@@ -1272,6 +1272,24 @@ async def on_message(message):
         await message.forward(message.channel)
 
 
+    hornyjail = client.get_channel(1158145318781714493)
+    snack_channel = client.get_channel(1363978490436780214)
+
+    if message.content.startswith("!hornyjail") and message.author == taliya:
+        counter = 0
+        await taliya.send("searching horny jail")
+        async for oldm in hornyjail.history(limit = 3000, after = datetime.datetime(year = 2024, month = 1, day = 1)):
+            counter += 1
+            if counter % 1000 == 0:
+                print(oldm.created_at.strftime("%x"))
+
+            if oldm.author == vel and len(oldm.attachments) != 0:
+                attached = oldm.attachments
+                if attached[0].is_voice_message():
+                    await oldm.forward(snack_channel)
+        await taliya.send("done searching horny jail")
+
+
 
 # DAILY LOOPING TASKS #
 @tasks.loop(minutes = 1)

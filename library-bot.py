@@ -1267,7 +1267,9 @@ async def on_message(message):
             voice_note_links.append(message.jump_url)
             save_to_file(ARCHIVE_FILENAME,voice_note_links)
             print("Vel voice note logged")
-            
+
+    if message.author == taliya and message.content.startswith("forward"):
+        await message.forward(taliya)
 
 
 

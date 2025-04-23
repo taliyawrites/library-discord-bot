@@ -1236,6 +1236,10 @@ async def on_message(message):
                 if message.channel == hornyjail or message.channel == abyss:
                     await message.forward(pic_channel)
 
+    if message.author == taliya and message.content.startswith("!test"):
+        await message.forward(vn_channel)
+        await message.forward(pic_channel)
+
     if message.content.startswith('!') and not message.content.startswith('!!') and not message.author == taliya:
         await message.channel.send("The bot has been updated to use slash commands integrated into Discord! The commands have the same names as before, but with `/` at the beginning instead of `!`. This means that you won't need to remember the exact name or format of a command, just type / and a menu of options will pop up!")
 

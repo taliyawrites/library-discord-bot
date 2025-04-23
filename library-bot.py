@@ -1232,7 +1232,7 @@ async def on_message(message):
             print("Vel voice note logged")
             await message.forward(vn_channel)
         elif attached[0].content_type.startswith("image") or attached[0].content_type.startswith("video"):
-            if not "gif" in attachment[0].url and not "tenor" in attachment[0].url:
+            if not "gif" in attached[0].url and not "tenor" in attached[0].url:
                 if message.channel == hornyjail or message.channel == abyss:
                     await message.forward(pic_channel)
     

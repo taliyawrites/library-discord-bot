@@ -373,11 +373,6 @@ async def setup_hook():
     twitch_time = "<t:1742151600:F>"
     live_time = "<t:1742167800:t>"
 
-    global hornyjail, abyss, pic_channel, vn_channel
-    hornyjail = client.get_channel(HORNYJAIL)
-    abyss = client.get_channel(ABYSS)
-    pic_channel = client.get_channel(PICS)
-    vn_channel = client.get_channel(VNS)
 
     global voice_note_links
     voice_note_links = read_from_file(ARCHIVE_FILENAME)
@@ -1236,8 +1231,14 @@ async def on_message(message):
                 if message.channel == hornyjail or message.channel == abyss:
                     await message.forward(pic_channel)
 
+
+    hornyjail = client.get_channel(HORNYJAIL)
+    abyss = client.get_channel(ABYSS)
+    pic_channel = client.get_channel(PICS)
+    vn_channel = client.get_channel(VNS)
+    
+
     if message.author == taliya and message.content.startswith("!test"):
-        await pic_channel.send("testing")
         await message.forward(pic_channel)
         await message.forward(vn_channel)
 

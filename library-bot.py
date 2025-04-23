@@ -1220,6 +1220,11 @@ async def on_message(message):
 
     # logs new voice notes in the full list and forwards pics/videos to the pic channel
     if message.author == vel and len(message.attachments) != 0:
+        hornyjail = client.get_channel(HORNYJAIL)
+        abyss = client.get_channel(ABYSS)
+        pic_channel = client.get_channel(PICS)
+        vn_channel = client.get_channel(VNS)
+
         attached = message.attachments
         if attached[0].is_voice_message():
             voice_note_links.append(message.jump_url)
@@ -1230,17 +1235,7 @@ async def on_message(message):
             if not "gif" in attachment[0].url and not "tenor" in attachment[0].url:
                 if message.channel == hornyjail or message.channel == abyss:
                     await message.forward(pic_channel)
-
-
-    hornyjail = client.get_channel(HORNYJAIL)
-    abyss = client.get_channel(ABYSS)
-    pic_channel = client.get_channel(PICS)
-    vn_channel = client.get_channel(VNS)
     
-
-    if message.author == taliya and message.content.startswith("!test"):
-        await message.forward(pic_channel)
-        await message.forward(vn_channel)
 
     if message.content.startswith('!') and not message.content.startswith('!!') and not message.author == taliya:
         await message.channel.send("The bot has been updated to use slash commands integrated into Discord! The commands have the same names as before, but with `/` at the beginning instead of `!`. This means that you won't need to remember the exact name or format of a command, just type / and a menu of options will pop up!")

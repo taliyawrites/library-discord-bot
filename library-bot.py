@@ -373,11 +373,11 @@ async def setup_hook():
     twitch_time = "<t:1742151600:F>"
     live_time = "<t:1742167800:t>"
 
-    global hornyjail, abyss, pic_channel, vn_channel
-    hornyjail = await client.get_channel(HORNYJAIL)
-    abyss = await client.get_channel(ABYSS)
-    pic_channel = await client.get_channel(PICS)
-    vn_channel = await client.get_channel(VNS)
+    # global hornyjail, abyss, pic_channel, vn_channel
+    # hornyjail = await client.get_channel(HORNYJAIL)
+    # abyss = await client.get_channel(ABYSS)
+    # pic_channel = await client.get_channel(PICS)
+    # vn_channel = await client.get_channel(VNS)
 
     global voice_note_links
     voice_note_links = read_from_file(ARCHIVE_FILENAME)

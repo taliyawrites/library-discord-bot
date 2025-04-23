@@ -1237,6 +1237,7 @@ async def on_message(message):
                     await message.forward(pic_channel)
 
     if message.author == taliya and message.content.startswith("!test"):
+        await pic_channel.send("testing")
         await message.forward(pic_channel)
         await message.forward(vn_channel)
 

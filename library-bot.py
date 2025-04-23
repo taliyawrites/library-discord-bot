@@ -23,8 +23,13 @@ GUILD = int(os.getenv('GUILD_ID'))
 GENERAL = int(os.getenv('GENERAL_CHANNEL'))
 OPTIONS_ROLE = int(os.getenv('ROLE_ID_OPTIONS'))
 WINNER_ROLE = int(os.getenv('ROLE_ID_WINNER'))
-BIRTHDAY_CHANNEL = int(os.getenv('BIRTHDAY_CHANNEL'))
 airtable_api = Api(os.getenv('AIRTABLE_TOKEN'))
+
+ABYSS = int(os.getenv('ABYSS'))
+HORNYJAIL = int(os.getenv('HORNYJAIL'))
+PICS = int(os.getenv('PICS'))
+VNS = int(os.getenv('VNS'))
+BIRTHDAY_CHANNEL = int(os.getenv('BIRTHDAY_CHANNEL'))
 
 WINNERS_FILENAME = "recentwinners.txt"
 AUDIOS_FILENAME = "recentaudios.txt"
@@ -367,6 +372,12 @@ async def setup_hook():
         birthdays = json.load(read_file)
     twitch_time = "<t:1742151600:F>"
     live_time = "<t:1742167800:t>"
+
+    global hornyjail, abyss, pic_channel, vn_channel
+    hornyjail = client.get_channel(HORNYJAIL)
+    abyss = client.get_channel(ABYSS)
+    pic_channel = client.get_channel(PICS)
+    vn_channel = client.get_channel(VNS)
 
     global voice_note_links
     voice_note_links = read_from_file(ARCHIVE_FILENAME)
@@ -1212,6 +1223,19 @@ async def on_message(message):
     if message.author == client.user:
         return
 
+    # logs new voice notes in the full list and forwards pics/videos to the pic channel
+    if message.author == vel and len(message.attachments) != 0:
+        attached = message.attachments
+        if attached[0].is_voice_message():
+            voice_note_links.append(message.jump_url)
+            save_to_file(ARCHIVE_FILENAME,voice_note_links)
+            print("Vel voice note logged")
+            await message.forward(vn_channel)
+        elif attached[0].content_type.startswith("image") or attached[0].content_type.startswith("video"):
+            if not "gif" in attachment[0].url and not "tenor" in attachment[0].url:
+                if message.channel == hornyjail or message.channel == abyss:
+                    await message.forward(pic_channel)
+
     if message.content.startswith('!') and not message.content.startswith('!!') and not message.author == taliya:
         await message.channel.send("The bot has been updated to use slash commands integrated into Discord! The commands have the same names as before, but with `/` at the beginning instead of `!`. This means that you won't need to remember the exact name or format of a command, just type / and a menu of options will pop up!")
 
@@ -1255,36 +1279,10 @@ async def on_message(message):
     if message.content.startswith('!updatelive') and message.author == taliya: 
         live_time = message.content[12:]
 
-    if message.content.startswith('!utilitycommands') and message.author == taliya: 
-        description = "-`!refresh` to sync masterlist updates \n-`!rerungg`, `!rerundaily`, and `!rerunbirthdays` \n-`updatelive` and `updatetwitch`"
-        embed = discord.Embed(title = "Backend Commands",description = description)
-        await taliya.send(embed = embed) 
-
-    # logs new voice notes in the full list
-    if message.author == vel and len(message.attachments) != 0:
-        attached = message.attachments
-        if attached[0].is_voice_message():
-            voice_note_links.append(message.jump_url)
-            save_to_file(ARCHIVE_FILENAME,voice_note_links)
-            print("Vel voice note logged")
 
 
-    # hornyjail = client.get_channel(1158145318781714493)
-    # snack_channel = client.get_channel(1363978490436780214)
 
-    # if message.content.startswith("!hornyjail") and message.author == taliya:
-    #     counter = 0
-    #     await taliya.send("searching horny jail")
-    #     async for oldm in hornyjail.history(limit = 3000, after = datetime.datetime(year = 2024, month = 1, day = 1)):
-    #         counter += 1
-    #         if counter % 1000 == 0:
-    #             print(oldm.created_at.strftime("%x"))
 
-    #         if oldm.author == vel and len(oldm.attachments) != 0:
-    #             attached = oldm.attachments
-    #             if attached[0].is_voice_message():
-    #                 await oldm.forward(snack_channel)
-    #     await taliya.send("done searching horny jail")
 
 
 

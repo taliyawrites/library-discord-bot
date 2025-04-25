@@ -39,6 +39,7 @@ RECORD_FILENAME = "record.txt"
 ARCHIVE_FILENAME = "voice-note-archive.txt"
 REQUESTS_FILENAME = "snack-requests.json"
 BIRTHDAY_FILENAME = "birthdays.json"
+LIVETIMES_FILENAME = "livetimes.txt"
 
 # run daily tasks at 1pm eastern time (6pm UTC+1)
 HOUR, MINUTE = 17, 0
@@ -370,8 +371,8 @@ async def setup_hook():
         snack_requests = json.load(read_file)
     with open(BIRTHDAY_FILENAME, "r") as read_file:
         birthdays = json.load(read_file)
-    twitch_time = "<t:1742151600:F>"
-    live_time = "<t:1742167800:t>"
+    twitch_time = read_from_file(LIVETIMES_FILENAME)[1]
+    live_time = read_from_file(LIVETIMES_FILENAME)[0]
 
 
     global voice_note_links
@@ -1276,10 +1277,11 @@ async def on_message(message):
 
     if message.content.startswith('!updatetwitch') and message.author == taliya:
         twitch_time = message.content[14:]
+        save_to_file(LIVETIMES_FILENAME, [live_time, twitch_time])
 
     if message.content.startswith('!updatelive') and message.author == taliya: 
         live_time = message.content[12:]
-
+        save_to_file(LIVETIMES_FILENAME, [live_time, twitch_time])
 
 
 

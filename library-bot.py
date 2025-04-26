@@ -1208,16 +1208,16 @@ async def birthdayremove(interaction):
 # UTILITY ON MESSSAGE COMMANDS #
 
 
-# @tree.command(name = "refresh", description = "sync airtable updates")
+@tree.command(name = "refresh", description = "sync airtable updates", guild_ids = client.get_guild(1240366126190563418))
 # @app_commands.check(lambda u: u.user.id == 1169014359842885726)
-# async def refresh(interaction):
-#     await interaction.response.defer()
-#     global audio_choices, tag_dictionary, collections
+async def refresh(interaction):
+    await interaction.response.defer()
+    global audio_choices, tag_dictionary, collections
 
-#     audio_choices = import_airtable_data()
-#     tag_dictionary = import_tag_dictionary()
-#     collections = import_collections()
-#     await interaction.followup.send("Masterlist data sync'ed with Airtable updates.")
+    audio_choices = import_airtable_data()
+    tag_dictionary = import_tag_dictionary()
+    collections = import_collections()
+    await interaction.followup.send("Masterlist data sync'ed with Airtable updates.")
 
 
 

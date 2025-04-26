@@ -1294,9 +1294,9 @@ async def update_error(interaction, error):
 @tree.command(name = "botsend", description = "makes the bot send a specified message in given channel", guild = discord.Object(COMMAND_SERVER))
 @app_commands.check(lambda u: u.user == taliya)
 @app_commands.allowed_installs(guilds=True, users=False)
-async def botsend(interaction, channel_id: int, message: str):
+async def botsend(interaction, channel_id: str, message: str):
     await interaction.response.defer()
-    await client.get_channel(channel_id).send(message)
+    await client.get_channel(int(channel_id)).send(message)
     await interaction.followup.send("Message sent!")
 @botsend.error
 async def botsend_error(interaction, error):

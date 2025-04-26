@@ -43,7 +43,7 @@ LIVETIMES_FILENAME = "livetimes.txt"
 
 # run daily tasks at 1pm eastern time (6pm UTC+1)
 HOUR, MINUTE = 17, 0
-MIDNIGHT = 5
+MIDNIGHT = 4
 
 
 
@@ -1311,6 +1311,8 @@ async def run_daily_loops():
         await daily_balatro()
     elif (datetime.datetime.now().hour == MIDNIGHT and datetime.datetime.now().minute == MINUTE):
         await birthday_wishes()
+        if datetime.datetime.now().weekday() == 6:
+            await taliya.send("Remember to `!updatelive` to next Sunday at 6:30 and `!updatetwitch` to next Sunday at 1:30 using [universal timestamps](https://r.3v.fi/discord-timestamps/)!")
     elif rerun_daily:
         await taliya.send("Re-running audio of the day.")
         rerun_daily = False
@@ -1323,7 +1325,6 @@ async def run_daily_loops():
         await taliya.send("Re-running birthday wishes.")
         rerun_birthdays = False
         await birthday_wishes()
-
 
 
 

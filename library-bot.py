@@ -352,9 +352,8 @@ async def on_ready():
 async def setup_hook():
     print("setup hook running")
     await tree.sync()
-    command_guild = await client.fetch_guild(COMMAND_SERVER)
-    await tree.sync(guild = command_guild)
-    print("sync'ed")
+    await tree.sync(guild = discord.Object(COMMAND_SERVER))
+    print("command trees sync'ed")
 
 
     # import data from airtable

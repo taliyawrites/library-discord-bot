@@ -352,7 +352,6 @@ async def on_ready():
 async def setup_hook():
     print("setup hook running")
     await tree.sync()
-    global command_guild
     command_guild = await client.fetch_guild(COMMAND_SERVER)
     await tree.sync(guild = command_guild)
     print("sync'ed")
@@ -1232,7 +1231,7 @@ async def birthdayremove(interaction):
 
 
 
-@tree.command(name = "refresh", description = "sync airtable updates", guild = command_guild)
+@tree.command(name = "refresh", description = "sync airtable updates", guild = client.fetch_guild(COMMAND_SERVER))
 @app_commands.check(lambda u: u.user == taliya)
 @app_commands.allowed_installs(guilds=True, users=False)
 async def refresh(interaction):

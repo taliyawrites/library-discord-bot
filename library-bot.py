@@ -352,7 +352,7 @@ async def on_ready():
 async def setup_hook():
     print("setup hook running")
     await tree.sync()
-    # await tree.sync(guild = client.get_guild(COMMAND_SERVER))
+    await tree.sync(guild = client.get_guild(COMMAND_SERVER))
 
     print("synced")
 

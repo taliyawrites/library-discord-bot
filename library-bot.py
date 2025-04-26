@@ -1225,9 +1225,7 @@ async def birthdayremove(interaction):
 
 # # BACKEND COMMANDS
 
-print("sync")
-await tree.sync(guild = client.get_guild(COMMAND_SERVER))
-print("sync'ed")
+
 
 @tree.command(name = "refresh", description = "sync airtable updates", guild = client.get_guild(COMMAND_SERVER))
 @app_commands.check(lambda u: u.user == taliya)

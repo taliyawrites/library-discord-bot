@@ -924,19 +924,19 @@ async def socials(interaction):
 
 
 
-# @tree.command(name = "allcharacters", description = "List of Vel's named characters")
-# async def allcharacters(interaction):
-#     await interaction.response.defer()
-#     character_list = []
-#     for audio in audio_choices:
-#         if audio.characters() != '':
-#             for char in audio.characters().split(', '):
-#                 character_list.append(char)
-#     characters = list(set(character_list))
-#     char_string = ''
-#     for char in characters:
-#         char_string = char_string + char + ", "
-#     await interaction.followup.send('Named characters: ' + char_string[:-2])
+@tree.command(name = "allcharacters", description = "List of Vel's named characters")
+async def allcharacters(interaction):
+    await interaction.response.defer()
+    character_list = []
+    for audio in audio_choices:
+        if audio.characters() != '':
+            for char in audio.characters().split(', '):
+                character_list.append(char)
+    characters = list(set(character_list))
+    char_string = ''
+    for char in characters:
+        char_string = char_string + char + ", "
+    await interaction.followup.send('Named characters: ' + char_string[:-2])
 
 
 

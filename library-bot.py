@@ -792,7 +792,7 @@ async def tutorial(interaction):
             cont = False
 
     if cont:
-         await interaction.user.send("You can also get a list of **all** audios with the desired tags using the command `/tag`! Try searching for tag(s) you like (for example, [spanking] [praise]):")
+        await interaction.user.send("You can also get a list of **all** audios with the desired tags using the command `/tag`! Try searching for tag(s) you like (for example, [spanking] [praise]):")
         cont = False
         try:
             await client.wait_for('interaction',check = lambda m: m.command.name == "tag", timeout = 600)

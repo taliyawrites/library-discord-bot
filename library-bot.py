@@ -1291,17 +1291,16 @@ async def update_error(interaction, error):
 
 
 
-# @tree.command(name = "botsend", description = "makes the bot send a specified message in given channel", guild = discord.Object(COMMAND_SERVER))
-# @app_commands.check(lambda u: u.user == taliya)
-# @app_commands.allowed_installs(guilds=True, users=False)
-# async def botsend(interaction, channel: str, message: str):
-#     await interaction.response.defer()
-#     channelID = int(channel.strip()[49:])
-#     await client.get_channel(channelID).send(message)
-#     await interaction.followup.send("Message sent!")
-# @botsend.error
-# async def botsend_error(interaction, error):
-#     await interaction.response.send_message("Permissions denied.")
+@tree.command(name = "botsend", description = "makes the bot send a specified message in given channel", guild = discord.Object(COMMAND_SERVER))
+@app_commands.check(lambda u: u.user == taliya)
+@app_commands.allowed_installs(guilds=True, users=False)
+async def botsend(interaction, channelID: int, message: str):
+    await interaction.response.defer()
+    await client.get_channel(channelID).send(message)
+    await interaction.followup.send("Message sent!")
+@botsend.error
+async def botsend_error(interaction, error):
+    await interaction.response.send_message("Permissions denied.")
 
 
 
@@ -1335,21 +1334,10 @@ async def on_message(message):
                 if message.channel == hornyjail or message.channel == abyss:
                     await message.forward(pic_channel)
     
-
     if message.content.startswith('!') and not message.content.startswith('!!') and not message.author == taliya:
         await message.channel.send("The bot has been updated to use slash commands integrated into Discord! The commands have the same names as before, but with `/` at the beginning instead of `!`. This means that you won't need to remember the exact name or format of a command, just type / and a menu of options will pop up!")
 
 
-
-    if message.content.startswith('!leftguild') and message.author == taliya:
-        for entry in snack_requests:
-            try:
-                user = await client.get_guild(GUILD).fetch_member(entry[0])
-            except:
-                # snack_requests.remove(entry)
-                await taliya.send(f"removed requests from {client.fetch_user(entry[0]).name}")
-        # with open("snack-requests.json", "w") as outfile:
-        #     outfile.write(json.dumps(snack_requests))
 
     if message.content.startswith('!birthdayinfo') and message.author == taliya:
         info = "Welcome to the birthday channel! you can register your birthday with the bot using the `/birthday` command. the bot will send a message in this channel on your birthday, so the rest of the server can celebrate with you! for privacy reasons, the channel will automatically clear all messages the next day. if you change your mind and want to remove your birthday so it isn't announced to the server, use the `/birthdayremove` command."

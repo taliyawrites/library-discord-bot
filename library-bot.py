@@ -352,6 +352,10 @@ async def on_ready():
 async def setup_hook():
     print("setup hook running")
     await tree.sync()
+    command_guild = client.get_guild(COMMAND_SERVER)
+    print("try")
+    await tree.sync(guild = command_guild)
+    print("sync'ed")
 
     # import data from airtable
     global audio_choices, tag_dictionary, collections

@@ -1212,7 +1212,7 @@ async def birthdayremove(interaction):
 
 
 
-@tree.command(name = "refresh", description = "sync airtable updates", guild = client.get_guild(COMMAND_SERVER))
+@tree.command(name = "refresh", description = "sync airtable updates", guild = client.get_guild(COMMAND_SERVER), guild_only = True)
 async def refresh(interaction):
     await interaction.response.defer()
     global audio_choices, tag_dictionary, collections
@@ -1241,7 +1241,7 @@ async def refresh(interaction):
 
 
 
-@tree.command(name = "rerun", description = "manual force run daily loop function", guild = client.get_guild(COMMAND_SERVER))
+@tree.command(name = "rerun", description = "manual force run daily loop function", guild = client.get_guild(COMMAND_SERVER), guild_only = True)
 @app_commands.check(lambda u: u.user == taliya)
 @app_commands.describe(option = "select which function to trigger")
 async def rerun(interaction, option: str):

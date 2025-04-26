@@ -1339,12 +1339,6 @@ async def on_message(message):
 
 
 
-    if message.content.startswith('!birthdayinfo') and message.author == taliya:
-        info = "Welcome to the birthday channel! you can register your birthday with the bot using the `/birthday` command. the bot will send a message in this channel on your birthday, so the rest of the server can celebrate with you! for privacy reasons, the channel will automatically clear all messages the next day. if you change your mind and want to remove your birthday so it isn't announced to the server, use the `/birthdayremove` command."
-        birthday_embed = discord.Embed(title = "Birthday Celebration Instructions!",description=info)
-        await client.get_channel(BIRTHDAY_CHANNEL).send(embed = birthday_embed)
-
-
 
 
 

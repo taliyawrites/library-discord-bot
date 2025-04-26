@@ -756,7 +756,6 @@ async def dm(interaction):
 @tree.command(name = "basiccommands", description = "Lists some of the most useful basic commands")
 async def basiccommands(interaction):
     await interaction.response.defer()
-    # commands = "- `/randomaudio` randomly chosen audio from the masterlist \n- `/randomaudio [some] [tags]` random audio with these desired tag(s) \n- `/title phrase` for list of audios with that phrase in title \n- `/tag [some] [tags]` for list of audios with those tags \n- `/character name` for list of audios featuring a specific named character \n- `/dm` bot will privately DM you the masterlist \n- `/masterlist` link to the masterlist \n- `/socials` links to all of Vel's social media accounts \n- `/schedule` audio posting schedule \n- `/lives` info about live recordings"
     commands = "Type / to see a menu of all the available commands! Some commonly used ones are listed here.  \n- `/randomaudio` randomly chosen audio from the masterlist \n- `/randomaudio [some] [tags]` random audio with these desired tag(s) \n- `/title phrase` for list of audios with that phrase in title \n- `/tag [some] [tags]` for list of audios with those tags \n- `/character name` for list of audios featuring a specific named character \n- `/dm` bot will privately DM you the masterlist \n- `/masterlist` link to the masterlist \n- `/request` to suggest tags for Vel's voice notes \n- `/vn` for a random voice note \nNote: all commands have the same wording as before, now they just start with `/` instead of `!`."
     command_embed = discord.Embed(title = "Card Catalog Bot Basic Commands",description=commands)
     await interaction.followup.send(embed=command_embed)
@@ -925,19 +924,19 @@ async def socials(interaction):
 
 
 
-@tree.command(name = "allcharacters", description = "List of Vel's named characters")
-async def allcharacters(interaction):
-    await interaction.response.defer()
-    character_list = []
-    for audio in audio_choices:
-        if audio.characters() != '':
-            for char in audio.characters().split(', '):
-                character_list.append(char)
-    characters = list(set(character_list))
-    char_string = ''
-    for char in characters:
-        char_string = char_string + char + ", "
-    await interaction.followup.send('Named characters: ' + char_string[:-2])
+# @tree.command(name = "allcharacters", description = "List of Vel's named characters")
+# async def allcharacters(interaction):
+#     await interaction.response.defer()
+#     character_list = []
+#     for audio in audio_choices:
+#         if audio.characters() != '':
+#             for char in audio.characters().split(', '):
+#                 character_list.append(char)
+#     characters = list(set(character_list))
+#     char_string = ''
+#     for char in characters:
+#         char_string = char_string + char + ", "
+#     await interaction.followup.send('Named characters: ' + char_string[:-2])
 
 
 
@@ -1214,7 +1213,6 @@ async def birthdayremove(interaction):
 
 
 @tree.command(name = "refresh", description = "sync airtable updates", guild = client.get_guild(COMMAND_SERVER))
-# @app_commands.check(lambda u: u.user.id == 1169014359842885726)
 async def refresh(interaction):
     await interaction.response.defer()
     global audio_choices, tag_dictionary, collections
@@ -1243,31 +1241,31 @@ async def refresh(interaction):
 
 
 
-# @tree.command(name = "rerun", description = "manual force run daily loop function", guild = client.get_guild(COMMAND_SERVER))
-# @app_commands.check(lambda u: u.user == taliya)
-# @app_commands.describe(option = "select which function to trigger")
-# async def rerun(interaction, option: str):
-#     await interaction.response.defer()
-#     global rerun_gg, rerun_daily, rerun_birthdays
+@tree.command(name = "rerun", description = "manual force run daily loop function", guild = client.get_guild(COMMAND_SERVER))
+@app_commands.check(lambda u: u.user == taliya)
+@app_commands.describe(option = "select which function to trigger")
+async def rerun(interaction, option: str):
+    await interaction.response.defer()
+    global rerun_gg, rerun_daily, rerun_birthdays
 
-#     if option == "good girl":
-#         await interaction.followup.send("force rerunning good girl")
-#         rerun_gg = True
-#     elif option == "daily audio":
-#         await interaction.followup.send("force rerunning audio of the day")
-#         rerun_daily = True
-#     elif option == "birthdays":
-#         await interaction.followup.send("force rerunning birthdays")
-#         rerun_birthdays = True
-#     else:
-#         await interaction.followup.send("option not recognized")
-# @rerun.autocomplete('option')
-# async def rerun_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
-#     options = ['good girl','daily audio', 'birthdays']
-#     return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]
-# @rerun.error
-# async def rerun_error(interaction, error):
-#     await interaction.response.send_message("Permissions denied.")
+    if option == "good girl":
+        await interaction.followup.send("force rerunning good girl")
+        rerun_gg = True
+    elif option == "daily audio":
+        await interaction.followup.send("force rerunning audio of the day")
+        rerun_daily = True
+    elif option == "birthdays":
+        await interaction.followup.send("force rerunning birthdays")
+        rerun_birthdays = True
+    else:
+        await interaction.followup.send("option not recognized")
+@rerun.autocomplete('option')
+async def rerun_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
+    options = ['good girl','daily audio', 'birthdays']
+    return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]
+@rerun.error
+async def rerun_error(interaction, error):
+    await interaction.response.send_message("Permissions denied.")
 
 
 

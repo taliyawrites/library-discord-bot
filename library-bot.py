@@ -30,6 +30,7 @@ HORNYJAIL = int(os.getenv('HORNYJAIL'))
 PICS = int(os.getenv('PICS'))
 VNS = int(os.getenv('VNS'))
 BIRTHDAY_CHANNEL = int(os.getenv('BIRTHDAY_CHANNEL'))
+COMMAND_SERVER = int(os.getenv('COMMAND_GUILD'))
 
 WINNERS_FILENAME = "recentwinners.txt"
 AUDIOS_FILENAME = "recentaudios.txt"
@@ -1208,7 +1209,7 @@ async def birthdayremove(interaction):
 # UTILITY ON MESSSAGE COMMANDS #
 
 
-@tree.command(name = "refresh", description = "sync airtable updates", guild_ids = client.get_guild(1240366126190563418))
+@tree.command(name = "refresh", description = "sync airtable updates", guild = client.get_guild(COMMAND_SERVER))
 # @app_commands.check(lambda u: u.user.id == 1169014359842885726)
 async def refresh(interaction):
     await interaction.response.defer()

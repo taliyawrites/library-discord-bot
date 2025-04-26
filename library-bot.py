@@ -1236,6 +1236,7 @@ async def refresh_error(interaction, error):
 
 @tree.command(name = "rerun", description = "manual force run daily loop function", guild = discord.Object(COMMAND_SERVER))
 @app_commands.check(lambda u: u.user == taliya)
+@app_commands.allowed_installs(guilds=True, users=False)
 @app_commands.describe(option = "select which function to trigger")
 async def rerun(interaction, option: str):
     await interaction.response.defer()
@@ -1265,6 +1266,7 @@ async def rerun_error(interaction, error):
 
 @tree.command(name = "update", description = "updates times for upcoming events", guild = discord.Object(COMMAND_SERVER))
 @app_commands.check(lambda u: u.user == taliya)
+@app_commands.allowed_installs(guilds=True, users=False)
 @app_commands.describe(option = "select which event to update")
 @app_commands.describe(timestamp = "new updated universal timestamp")
 async def update(interaction, option: str, timestamp: str):
@@ -1273,12 +1275,12 @@ async def update(interaction, option: str, timestamp: str):
 
     if option == "twitch stream":
         twitch_time = timestamp
+        await interaction.followup.send("Twitch stream time updated!")
     elif option == "live recording":
         live_time = timestamp
+        await interaction.followup.send("Live recording time updated!")
     else:
         await interaction.followup.send("option not recognized")
-
-    await interaction.followup.send("Time updated!")
 @update.autocomplete('option')
 async def update_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
     options = ['twitch stream','live recording']
@@ -1289,6 +1291,17 @@ async def update_error(interaction, error):
 
 
 
+@tree.command(name = "botsend", description = "makes the bot send a specified message in given channel", guild = discord.Object(COMMAND_SERVER))
+@app_commands.check(lambda u: u.user == taliya)
+@app_commands.allowed_installs(guilds=True, users=False)
+async def botsend(interaction, channel: str, message: str):
+    await interaction.response.defer()
+    channelID = channel[49:]
+    await client.get_channel(channelID).send(message)
+    await interaction.followup.send("Message sent!")
+@botsend.error
+async def botsend_error(interaction, error):
+    await interaction.response.send_message("Permissions denied.")
 
 
 
@@ -1299,7 +1312,7 @@ async def update_error(interaction, error):
 async def on_message(message):
 
     # allow modifications of state variables
-    global audio_choices, tag_dictionary, collections, voice_note_links, rerun_gg, rerun_daily, rerun_birthdays, twitch_time, live_time
+    global voice_note_links
 
     if message.author == client.user:
         return
@@ -1326,24 +1339,7 @@ async def on_message(message):
     if message.content.startswith('!') and not message.content.startswith('!!') and not message.author == taliya:
         await message.channel.send("The bot has been updated to use slash commands integrated into Discord! The commands have the same names as before, but with `/` at the beginning instead of `!`. This means that you won't need to remember the exact name or format of a command, just type / and a menu of options will pop up!")
 
-    # sync with airtable data to pull any masterlist updates
-    if message.content.startswith('!refresh') and message.author == taliya:
-        audio_choices = import_airtable_data()
-        tag_dictionary = import_tag_dictionary()
-        collections = import_collections()
-        await taliya.send("Masterlist data sync'ed with Airtable updates.")
 
-    if message.content.startswith('!rerungg') and message.author == taliya:
-        print("force rerunning good girl")
-        rerun_gg = True
-
-    if message.content.startswith('!rerundaily') and message.author == taliya:
-        print("force rerunning daily audio")
-        rerun_daily = True
-
-    if message.content.startswith('!rerunbirthdays') and message.author == taliya:
-        print("force rerunning birthdays")
-        rerun_birthdays = True
 
     if message.content.startswith('!leftguild') and message.author == taliya:
         for entry in snack_requests:
@@ -1359,15 +1355,6 @@ async def on_message(message):
         info = "Welcome to the birthday channel! you can register your birthday with the bot using the `/birthday` command. the bot will send a message in this channel on your birthday, so the rest of the server can celebrate with you! for privacy reasons, the channel will automatically clear all messages the next day. if you change your mind and want to remove your birthday so it isn't announced to the server, use the `/birthdayremove` command."
         birthday_embed = discord.Embed(title = "Birthday Celebration Instructions!",description=info)
         await client.get_channel(BIRTHDAY_CHANNEL).send(embed = birthday_embed)
-
-    if message.content.startswith('!updatetwitch') and message.author == taliya:
-        twitch_time = message.content[14:]
-        save_to_file(LIVETIMES_FILENAME, [live_time, twitch_time])
-
-    if message.content.startswith('!updatelive') and message.author == taliya: 
-        live_time = message.content[12:]
-        save_to_file(LIVETIMES_FILENAME, [live_time, twitch_time])
-
 
 
 
@@ -1385,6 +1372,7 @@ async def run_daily_loops():
     elif (datetime.datetime.now().hour == MIDNIGHT and datetime.datetime.now().minute == MINUTE):
         await birthday_wishes()
         if datetime.datetime.now().weekday() == 6:
+            # make this in the command channel, also do "bot send" with channel options 
             await taliya.send("Remember to `!updatelive` to next Sunday at 6:30 and `!updatetwitch` to next Sunday at 1:30 using [universal timestamps](https://r.3v.fi/discord-timestamps/)!")
     elif rerun_daily:
         await taliya.send("Re-running audio of the day.")

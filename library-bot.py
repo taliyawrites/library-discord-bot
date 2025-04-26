@@ -1231,7 +1231,7 @@ async def birthdayremove(interaction):
 
 
 
-@tree.command(name = "refresh", description = "sync airtable updates", guild = await client.fetch_guild(COMMAND_SERVER))
+@tree.command(name = "refresh", description = "sync airtable updates", guild = discord.Object(COMMAND_SERVER))
 @app_commands.check(lambda u: u.user == taliya)
 @app_commands.allowed_installs(guilds=True, users=False)
 async def refresh(interaction):

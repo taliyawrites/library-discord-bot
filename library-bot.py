@@ -792,7 +792,18 @@ async def tutorial(interaction):
             cont = False
 
     if cont:
-        await interaction.user.send("You can also get a list of **all** audios with the desired tags using the command `/tag`! \n\nOf course, you might already know which of Vel's audios you'd like to listen to! To get a link to a specific audio, all you need to know is part of the title. The bot will send a list of all audios that match your search. Vel has a lot of multi-part series, so this is great way to get a list of all audios in a specific series! Try using the command `/title` (for example, you could search for 'academic' or 'your needs are hot'):")
+         await interaction.user.send("You can also get a list of **all** audios with the desired tags using the command `/tag`! Try searching for tag(s) you like (for example, [spanking] [praise]):")
+        cont = False
+        try:
+            await client.wait_for('interaction',check = lambda m: m.command.name == "tag", timeout = 600)
+            await asyncio.sleep(1)
+            cont = True
+        except:
+            await interaction.user.send("Tutorial automatically ended after ten minutes of inactivity. If you want to finish the tutorial, send `/tutorial` to start again.")
+            cont = False
+
+    if cont:
+        await interaction.user.send("Of course, you might already know which of Vel's audios you'd like to listen to! To get a link to a specific audio, all you need to know is part of the title. The bot will send a list of all audios that match your search. Vel has a lot of multi-part series, so this is great way to get a list of all audios in a specific series! Try using the command `/title` (for example, you could search for 'academic' or 'your needs are hot'):")
         cont = False
         try:
             await client.wait_for('interaction',check = lambda m: m.command.name == "title", timeout = 600)
@@ -803,7 +814,7 @@ async def tutorial(interaction):
             cont = False
 
     if cont:
-        await interaction.user.send("You can even search by character using `/character`. If you aren't familiar with any of Vel's named characters yet, try searching for Sam: ")
+        await interaction.user.send("You can also use `/character` to get a list of all audios featuring a specific named character. If you aren't familiar with any of Vel's characters yet, try Max or Sam:")
         cont = False
         try:
             await client.wait_for('interaction',check = lambda m: m.command.name == "character", timeout = 600)
@@ -825,7 +836,8 @@ async def tutorial(interaction):
             cont = False
 
     if cont: 
-        await interaction.user.send("You can also put in suggestions for tags you'd like to see Vel use in future voice notes using `/request`! \n\nThe bot also has lots of helpful information for all things Vel. For example, you can type `/masterlist` to get a link to the list of all of his audios, or `/socials` for links to all of Vel's accounts on various platforms online. There are also some commands just for fun that you'll often see people using in the https://discord.com/channels/1148449914188218399/1248773338726400040 channel, like sending the message `/praise` to be called a random nice petname! You can use `/basiccommands` for a summary of bot features. Always feel welcome to ask any additional questions you have in the bot channel!")
+        await interaction.user.send("You can even request voice notes featuring specific tags by suggesting them using the `/request` command! Whenever Vel wants to record a voice note, the bot picks a random request for him. Feel free to suggest your favorite horny tags!")
+        await interaction.user.send("The bot also has lots of helpful information for all things Vel. For example, you can type `/masterlist` to get a link to the list of all of his audios, or `/socials` for links to all of Vel's accounts on various platforms online. There are also some commands just for fun that you'll often see people using in the https://discord.com/channels/1148449914188218399/1248773338726400040 channel, like sending the message `/praise` to be called a random nice petname! That's it for this tutorial, but you can always use `/basiccommands` for a summary of bot features, or type `/` to see a full list of commands and their descriptions. And as always, please feel welcome to ask any additional questions you have in the bot channel. Enjoy exploring the library!")
 
 
 

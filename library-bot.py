@@ -1225,19 +1225,20 @@ async def birthdayremove(interaction):
 
 # # BACKEND COMMANDS
 
-# @tree.command(name = "refresh", description = "sync airtable updates", guild = client.get_guild(COMMAND_SERVER))
-# @app_commands.check(lambda u: u.user == taliya)
-# async def refresh(interaction):
-#     await interaction.response.defer()
-#     global audio_choices, tag_dictionary, collections
+@tree.command(name = "refresh", description = "sync airtable updates", guild = client.get_guild(COMMAND_SERVER))
+@app_commands.check(lambda u: u.user == taliya)
+@app_commands.allowed_installs(guilds=True, users=False)
+async def refresh(interaction):
+    await interaction.response.defer()
+    global audio_choices, tag_dictionary, collections
 
-#     audio_choices = import_airtable_data()
-#     tag_dictionary = import_tag_dictionary()
-#     collections = import_collections()
-#     await interaction.followup.send("Masterlist data sync'ed with Airtable updates.")
-# @refresh.error
-# async def refresh_error(interaction, error):
-#     await interaction.response.send_message("Permissions denied.")
+    audio_choices = import_airtable_data()
+    tag_dictionary = import_tag_dictionary()
+    collections = import_collections()
+    await interaction.followup.send("Masterlist data sync'ed with Airtable updates.")
+@refresh.error
+async def refresh_error(interaction, error):
+    await interaction.response.send_message("Permissions denied.")
 
 
 

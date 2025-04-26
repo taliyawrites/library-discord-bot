@@ -1291,17 +1291,17 @@ async def update_error(interaction, error):
 
 
 
-@tree.command(name = "botsend", description = "makes the bot send a specified message in given channel", guild = discord.Object(COMMAND_SERVER))
-@app_commands.check(lambda u: u.user == taliya)
-@app_commands.allowed_installs(guilds=True, users=False)
-async def botsend(interaction, channelID: int, message: str):
-    await interaction.response.defer()
-    channel = client.get_channel(channelID)
-    await channel.send(message)
-    await interaction.followup.send("Message sent!")
-@botsend.error
-async def botsend_error(interaction, error):
-    await interaction.response.send_message("Permissions denied.")
+# @tree.command(name = "botsend", description = "makes the bot send a specified message in given channel", guild = discord.Object(COMMAND_SERVER))
+# @app_commands.check(lambda u: u.user == taliya)
+# @app_commands.allowed_installs(guilds=True, users=False)
+# async def botsend(interaction, channelID: int, message: str):
+#     await interaction.response.defer()
+#     channel = client.get_channel(channelID)
+#     await channel.send(message)
+#     await interaction.followup.send("Message sent!")
+# @botsend.error
+# async def botsend_error(interaction, error):
+#     await interaction.response.send_message("Permissions denied.")
 
 
 

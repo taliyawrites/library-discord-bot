@@ -1213,19 +1213,6 @@ async def birthdayremove(interaction):
 
 
 
-
-
-# @tree.command(name = "refresh", description = "sync airtable updates", guild = client.get_guild(COMMAND_SERVER))
-# async def refresh(interaction):
-#     await interaction.response.defer()
-#     global audio_choices, tag_dictionary, collections
-
-#     audio_choices = import_airtable_data()
-#     tag_dictionary = import_tag_dictionary()
-#     collections = import_collections()
-#     await interaction.followup.send("Masterlist data sync'ed with Airtable updates.")
-
-
 # # BACKEND COMMANDS
 
 
@@ -1247,58 +1234,58 @@ async def refresh_error(interaction, error):
 
 
 
-# @tree.command(name = "rerun", description = "manual force run daily loop function", guild = client.get_guild(COMMAND_SERVER))
-# @app_commands.check(lambda u: u.user == taliya)
-# @app_commands.describe(option = "select which function to trigger")
-# async def rerun(interaction, option: str):
-#     await interaction.response.defer()
-#     global rerun_gg, rerun_daily, rerun_birthdays
+@tree.command(name = "rerun", description = "manual force run daily loop function", guild = discord.Object(COMMAND_SERVER))
+@app_commands.check(lambda u: u.user == taliya)
+@app_commands.describe(option = "select which function to trigger")
+async def rerun(interaction, option: str):
+    await interaction.response.defer()
+    global rerun_gg, rerun_daily, rerun_birthdays
 
-#     if option == "good girl":
-#         await interaction.followup.send("force rerunning good girl")
-#         rerun_gg = True
-#     elif option == "daily audio":
-#         await interaction.followup.send("force rerunning audio of the day")
-#         rerun_daily = True
-#     elif option == "birthdays":
-#         await interaction.followup.send("force rerunning birthdays")
-#         rerun_birthdays = True
-#     else:
-#         await interaction.followup.send("option not recognized")
-# @rerun.autocomplete('option')
-# async def rerun_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
-#     options = ['good girl','daily audio', 'birthdays']
-#     return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]
-# @rerun.error
-# async def rerun_error(interaction, error):
-#     await interaction.response.send_message("Permissions denied.")
-
-
+    if option == "good girl":
+        await interaction.followup.send("force rerunning good girl")
+        rerun_gg = True
+    elif option == "daily audio":
+        await interaction.followup.send("force rerunning audio of the day")
+        rerun_daily = True
+    elif option == "birthdays":
+        await interaction.followup.send("force rerunning birthdays")
+        rerun_birthdays = True
+    else:
+        await interaction.followup.send("option not recognized")
+@rerun.autocomplete('option')
+async def rerun_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
+    options = ['good girl','daily audio', 'birthdays']
+    return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]
+@rerun.error
+async def rerun_error(interaction, error):
+    await interaction.response.send_message("Permissions denied.")
 
 
-# @tree.command(name = "update", description = "updates times for upcoming events", guild = client.get_guild(COMMAND_SERVER))
-# @app_commands.check(lambda u: u.user == taliya)
-# @app_commands.describe(option = "select which event to update")
-# @app_commands.describe(timestamp = "new updated universal timestamp")
-# async def update(interaction, option: str, timestamp: str):
-#     await interaction.response.defer()
-#     global twitch_time, live_time
 
-#     if option == "twitch stream":
-#         twitch_time = timestamp
-#     elif option == "live recording":
-#         live_time = timestamp
-#     else:
-#         await interaction.followup.send("option not recognized")
 
-#     await interaction.followup.send("Time updated!")
-# @update.autocomplete('option')
-# async def update_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
-#     options = ['twitch stream','live recording']
-#     return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]
-# @update.error
-# async def update_error(interaction, error):
-#     await interaction.response.send_message("Permissions denied.")
+@tree.command(name = "update", description = "updates times for upcoming events", guild = discord.Object(COMMAND_SERVER))
+@app_commands.check(lambda u: u.user == taliya)
+@app_commands.describe(option = "select which event to update")
+@app_commands.describe(timestamp = "new updated universal timestamp")
+async def update(interaction, option: str, timestamp: str):
+    await interaction.response.defer()
+    global twitch_time, live_time
+
+    if option == "twitch stream":
+        twitch_time = timestamp
+    elif option == "live recording":
+        live_time = timestamp
+    else:
+        await interaction.followup.send("option not recognized")
+
+    await interaction.followup.send("Time updated!")
+@update.autocomplete('option')
+async def update_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
+    options = ['twitch stream','live recording']
+    return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]
+@update.error
+async def update_error(interaction, error):
+    await interaction.response.send_message("Permissions denied.")
 
 
 

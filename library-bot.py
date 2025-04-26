@@ -1296,7 +1296,7 @@ async def update_error(interaction, error):
 @app_commands.allowed_installs(guilds=True, users=False)
 async def botsend(interaction, channel: str, message: str):
     await interaction.response.defer()
-    channelID = channel[49:]
+    channelID = int(channel[49:])
     await client.get_channel(channelID).send(message)
     await interaction.followup.send("Message sent!")
 @botsend.error

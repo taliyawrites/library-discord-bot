@@ -1305,6 +1305,18 @@ async def botsend_error(interaction, error):
     await interaction.response.send_message("Permissions denied.")
 
 
+@tree.command(name = "embedsend", description = "makes the bot send a specified message in given channel", guild = discord.Object(COMMAND_SERVER))
+@app_commands.check(lambda u: u.user == taliya)
+@app_commands.allowed_installs(guilds=True, users=False)
+async def embedsend(interaction, channel_id: str, message: str):
+    await interaction.response.defer()
+    commands = "Type / to see a menu of all the available commands! Some commonly used ones are listed here.  \n- `/randomaudio` randomly chosen audio from the masterlist \n- `/randomaudio [some] [tags]` random audio with these desired tag(s) \n- `/title phrase` for list of audios with that phrase in title \n- `/tag [some] [tags]` for list of audios with those tags \n- `/character name` for list of audios featuring a specific named character \n- `/dm` bot will privately DM you the masterlist \n- `/masterlist` link to the masterlist \n- `/request` to suggest tags for Vel's voice notes \n- `/vn` for a random voice note \nFor further details, use `/tutorial` to walk through these bot functions. Please always feel welcome to ask questions about using the bot in the  https://discord.com/channels/1148449914188218399/1248773338726400040 channel!"
+    command_embed = discord.Embed(title = "Card Catalog Bot Basic Commands",description=commands)
+    await client.get_channel(int(channel_id)).send(embed=command_embed)
+    await interaction.followup.send("Message sent!")
+@embed.error
+async def embed_error(interaction, error):
+    await interaction.response.send_message("Permissions denied.")
 
 
 # ON MESSSAGE ACTIONS #
@@ -1345,6 +1357,7 @@ async def on_message(message):
 
 
 
+
 # DAILY LOOPING TASKS #
 @tasks.loop(minutes = 1)
 async def run_daily_loops():
@@ -1356,10 +1369,7 @@ async def run_daily_loops():
     elif (datetime.datetime.now().hour == MIDNIGHT and datetime.datetime.now().minute == MINUTE):
         await birthday_wishes()
         if datetime.datetime.now().weekday() == 0:
-            # make this in the command channel, also do "bot send" with channel options 
-            COMMAND_CHANNEL_ID = 1365724468332204113
-            command_channel = client.get_channel(COMMAND_CHANNEL_ID)
-            await command_channel.send("Remember to `/update` the live time to next Sunday at 6:30 and the stream time to next Sunday at 1:30 using [universal timestamps](https://r.3v.fi/discord-timestamps/), " + taliya.mention + "!")
+            await client.get_channel(COMMAND_CHANNEL_ID).send("Remember to `/update` the live time to next Sunday at 6:30 and the stream time to next Sunday at 1:30 using [universal timestamps](https://r.3v.fi/discord-timestamps/), " + taliya.mention + "!")
     elif rerun_daily:
         await taliya.send("Re-running audio of the day.")
         rerun_daily = False

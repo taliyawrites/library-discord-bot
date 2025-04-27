@@ -31,6 +31,8 @@ PICS = int(os.getenv('PICS'))
 VNS = int(os.getenv('VNS'))
 BIRTHDAY_CHANNEL = int(os.getenv('BIRTHDAY_CHANNEL'))
 COMMAND_SERVER = int(os.getenv('COMMAND_GUILD'))
+COMMAND_CHANNEL_ID = int(os.getenv('COMMAND_CHANNEL')) 
+
 
 WINNERS_FILENAME = "recentwinners.txt"
 AUDIOS_FILENAME = "recentaudios.txt"
@@ -1213,7 +1215,7 @@ async def birthdayremove(interaction):
 
 
 
-# # BACKEND COMMANDS
+# BACKEND UTILITY COMMANDS #
 
 
 
@@ -1353,9 +1355,11 @@ async def run_daily_loops():
         await daily_balatro()
     elif (datetime.datetime.now().hour == MIDNIGHT and datetime.datetime.now().minute == MINUTE):
         await birthday_wishes()
-        if datetime.datetime.now().weekday() == 6:
+        if datetime.datetime.now().weekday() == 0:
             # make this in the command channel, also do "bot send" with channel options 
-            await taliya.send("Remember to `!updatelive` to next Sunday at 6:30 and `!updatetwitch` to next Sunday at 1:30 using [universal timestamps](https://r.3v.fi/discord-timestamps/)!")
+            COMMAND_CHANNEL_ID = 1365724468332204113
+            command_channel = client.get_channel(COMMAND_CHANNEL_ID)
+            await command_channel.send("Remember to `/update` the live time to next Sunday at 6:30 and the stream time to next Sunday at 1:30 using [universal timestamps](https://r.3v.fi/discord-timestamps/), " + taliya.mention + "!")
     elif rerun_daily:
         await taliya.send("Re-running audio of the day.")
         rerun_daily = False

@@ -1314,8 +1314,8 @@ async def embedsend(interaction, channel_id: str, message: str):
     command_embed = discord.Embed(title = "Card Catalog Bot Basic Commands",description=commands)
     await client.get_channel(int(channel_id)).send(embed=command_embed)
     await interaction.followup.send("Message sent!")
-@embed.error
-async def embed_error(interaction, error):
+@embedsend.error
+async def embedsend_error(interaction, error):
     await interaction.response.send_message("Permissions denied.")
 
 

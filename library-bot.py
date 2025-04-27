@@ -1298,8 +1298,8 @@ async def update_error(interaction, error):
 @app_commands.allowed_installs(guilds=True, users=False)
 async def botsend(interaction, channel_id: str, message: str):
     await interaction.response.defer()
-    await client.get_channel(int(channel_id)).send(message)
-    await interaction.followup.send("Message sent!")
+    sent = await client.get_channel(int(channel_id)).send(message)
+    await interaction.followup.send("Message sent! " + sent.jump_url)
 @botsend.error
 async def botsend_error(interaction, error):
     await interaction.response.send_message("Permissions denied.")
@@ -1308,12 +1308,12 @@ async def botsend_error(interaction, error):
 @tree.command(name = "embedsend", description = "makes the bot send a specified message in given channel", guild = discord.Object(COMMAND_SERVER))
 @app_commands.check(lambda u: u.user == taliya)
 @app_commands.allowed_installs(guilds=True, users=False)
-async def embedsend(interaction, channel_id: str, message: str):
+async def embedsend(interaction, channel_id: str):
     await interaction.response.defer()
     commands = "Type / to see a menu of all the available commands! Some commonly used ones are listed here.  \n- `/randomaudio` randomly chosen audio from the masterlist \n- `/randomaudio [some] [tags]` random audio with these desired tag(s) \n- `/title phrase` for list of audios with that phrase in title \n- `/tag [some] [tags]` for list of audios with those tags \n- `/character name` for list of audios featuring a specific named character \n- `/dm` bot will privately DM you the masterlist \n- `/masterlist` link to the masterlist \n- `/request` to suggest tags for Vel's voice notes \n- `/vn` for a random voice note \nFor further details, use `/tutorial` to walk through these bot functions. Please always feel welcome to ask questions about using the bot in the  https://discord.com/channels/1148449914188218399/1248773338726400040 channel!"
     command_embed = discord.Embed(title = "Card Catalog Bot Basic Commands",description=commands)
-    await client.get_channel(int(channel_id)).send(embed=command_embed)
-    await interaction.followup.send("Message sent!")
+    sent = await client.get_channel(int(channel_id)).send(embed=command_embed)
+    await interaction.followup.send("Message sent! " + sent.jump_url)
 @embedsend.error
 async def embedsend_error(interaction, error):
     await interaction.response.send_message("Permissions denied.")

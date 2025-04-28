@@ -1323,9 +1323,15 @@ async def embedsend_error(interaction, error):
 @tree.command(name = "mod_embed", guild = discord.Object(COMMAND_SERVER))
 @app_commands.check(lambda u: u.user == taliya)
 @app_commands.allowed_installs(guilds=True, users=False)
-async def mod_embed(interaction, user_id: str, name: str, intro: str):
+async def mod_embed(interaction, user_id: str, name: str, intro: str, embed_color: Optional[str] = "magenta"):
     await interaction.response.defer()
-    mod_embed = discord.Embed(title = name, color = discord.Colour.magenta(), description = intro)
+    if embed_color == "magenta":
+        custom_color = discord.Colour.magenta()
+    elif embed_color == "gold":
+        custom_color = discord.Colour.dark_gold()
+    elif embed_color == "purple":
+        custom_color = discord.Colour.dark_purple()
+    mod_embed = discord.Embed(title = name, color = custom_color, description = intro)
     profile = await client.get_guild(GUILD).fetch_member(user_id)
     mod_embed.set_thumbnail(url = profile.display_avatar.url)
     sent = await client.get_channel(1337426936435310754).send(embed=mod_embed)

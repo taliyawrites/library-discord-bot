@@ -1327,7 +1327,7 @@ async def mod_embed(interaction, user_id: str, channel_id: str, name: str, intro
     await interaction.response.defer()
     mod_embed = discord.Embed(title = name, color = discord.Colour.magenta(), description = intro)
     profile = await client.get_guild(GUILD).fetch_member(user_id)
-    mod_embed.set_thumbnail(url = profile.guild_avatar.url)
+    mod_embed.set_thumbnail(url = profile.display_name.url)
     sent = await client.get_channel(int(channel_id)).send(embed=mod_embed)
     await interaction.followup.send("Message sent! " + sent.jump_url)
 

@@ -1319,6 +1319,21 @@ async def embedsend_error(interaction, error):
     await interaction.response.send_message("Permissions denied.")
 
 
+
+@tree.command(name = "mod_embed", guild = discord.Object(COMMAND_SERVER))
+@app_commands.check(lambda u: u.user == taliya)
+@app_commands.allowed_installs(guilds=True, users=False)
+async def mod_embed(interaction, user_id: str, channel_id: str, name: str, intro: str)
+    await interaction.response.defer()
+    mod_embed = discord.Embed(title = name, color = discord.Colour.magenta(), description = intro)
+    profile = client.get_guild(GUILD).get_member(user_id)
+    mod_embed.set_thumbnail(url = profile.guild_avatar.url)
+    sent = await client.get_channel(int(channel_id)).send(embed=mod_embed)
+    await interaction.followup.send("Message sent! " + sent.jump_url)
+
+
+
+
 # ON MESSSAGE ACTIONS #
 
 @client.event

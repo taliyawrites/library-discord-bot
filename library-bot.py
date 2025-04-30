@@ -982,34 +982,35 @@ async def time(interaction, t: str):
     cut = t.lower()
     end_index = max(cut.find("am"), cut.find("pm"))
     if end_index == -1:
-        return "Please specify AM or PM."
-    isAM = cut[end_index:(end_index+2)] == "am"
+        await interaction.followup.send("Please try again and specify AM or PM.")
+    else: 
+        isAM = cut[end_index:(end_index+2)] == "am"
 
-    time_string = cut[:end_index].strip()
-    split = time_string.partition(":")
+        time_string = cut[:end_index].strip()
+        split = time_string.partition(":")
 
-    if len(split[2]) != 0:
-        hour, minute = int(split[0]), int(split[2])
-    else:
-        hour, minute = int(split[0]), 0
+        if len(split[2]) != 0:
+            hour, minute = int(split[0]), int(split[2])
+        else:
+            hour, minute = int(split[0]), 0
 
-    if hour == 12:
-        hour = 0
+        if hour == 12:
+            hour = 0
 
-    if isAM:
-        utc_hour = hour + 4
-    else:
-        utc_hour = hour + 4 + 12
+        if isAM:
+            utc_hour = hour + 4
+        else:
+            utc_hour = hour + 4 + 12
 
-    now = datetime.datetime.utcnow()
-    if utc_hour < 24:
-        utc_time = datetime.datetime(now.year, now.month, now.day, utc_hour, minute)
-    else:
-        utc_time = datetime.datetime(now.year, now.month, now.day + 1, utc_hour % 24, minute)
+        now = datetime.datetime.utcnow()
+        if utc_hour < 24:
+            utc_time = datetime.datetime(now.year, now.month, now.day, utc_hour, minute)
+        else:
+            utc_time = datetime.datetime(now.year, now.month, now.day + 1, utc_hour % 24, minute)
 
-    epoch_time = calendar.timegm(utc_time.timetuple())
-    timestamp = "<t:" + str(epoch_time) + ":t>"
-    await interaction.followup.send(timestamp)
+        epoch_time = calendar.timegm(utc_time.timetuple())
+        timestamp = "<t:" + str(epoch_time) + ":t>"
+        await interaction.followup.send(timestamp)
 
 
 

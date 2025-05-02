@@ -1343,6 +1343,49 @@ async def mod_embed(interaction, user_id: str, name: str, intro: str, embed_colo
 
 
 
+@tree.command(name = "mod_embed_edits", guild = discord.Object(COMMAND_SERVER))
+@app_commands.check(lambda u: u.user == taliya)
+@app_commands.allowed_installs(guilds=True, users=False)
+async def mod_embed_edits(interaction, name: str, channel_id: Optional[str] = "1365724468332204113"):
+    await interaction.response.defer()
+
+    taliya_info = ["Taliya — Bot Mod","Hey, I'm Taliya! I wrote and maintain the code that runs the Card Catalog bot we use in the server to find audios and search the masterlist. I'm also a nsfw scriptwriter, so you'll see my name on some of Vel's audios! Please feel free to come to me for any questions about using the bot or about Vel's content in general.","https://cdn.discordapp.com/avatars/1169014359842885726/5644f89f84149e7b87cfd3591cbe30e6.png?size=1024"]
+    nyx_info = ["Nyx — Mod","Heyyyyyyy it’s meeeee. I’m Nyx. I’m the devil on your shoulder telling you to be more horny <:cowboystrap:1346304015150878813>. You’ll often find me nuking ⁠https://discord.com/channels/1148449914188218399/1194499430410371173 or https://discord.com/channels/1148449914188218399/1185454347555983421 ⁠with reccs although I always encourage others to spread the chaos. I’m here to keep the libido up and the charge on your vibrator low tehee <:elmofiredraw:1208608109904396328>","https://cdn.discordapp.com/avatars/1082532069420314687/f4e48681cc306d52fc356034e6e1e39c.png?size=1024"]
+    del_info = ["Del — Community Mod","Hey there! I'm Delphine but everyone calls me Del. I'm the community mod for the server and help to run and organize events. You'll see me active often chatting it up about romance novels and my husband, Mr D. Please feel free to ping me or DM if you ever have questions about the server!","https://cdn.discordapp.com/avatars/1262940885251784785/927ece4c59c5bc572c5ac5c2ef3bcf82.png?size=1024"]
+    roxx_info = ["Roxx — Mod","<:molotov_cocktail:1322408878389858437> Hiya! I’m Roxx. <:molotov_cocktail:1322408878389858437> And I’m not a Regular Mod, I’m a Cool Mod, aka The Peacekeeper. My job is to keep the space welcoming and safe for everyone. You’ll usually see me playing video games and helping out in twitch streams. If you ever have anything that makes you feel uncomfy or observe some less than friendly behavior, please reach out to me through our ticketing system and I’ll be happy to help out with the situation! <:petme:1269752590967504957>","https://cdn.discordapp.com/avatars/415894832515383296/9e073813b64fcbcb021a1407f73ddd82.png?size=1024"]
+    vel_info = ["Vel — Head Mod, Librarian","You know who Vel is LMAO.",vel.display_avatar.url]
+
+
+    if name.lower() == "taliya":
+        mod_embed = discord.Embed(title = taliya_info[0], color = discord.Colour.magenta(), description = taliya_info[1])
+        mod_embed.set_thumbnail(url = taliya_info[2])
+        sent = await client.get_channel(int(channel_id)).send(embed=mod_embed)
+        await interaction.followup.send("Message sent! " + sent.jump_url)
+    elif name.lower() == "nyx":
+        mod_embed = discord.Embed(title = nyx_info[0], color = discord.Colour.magenta(), description = nyx_info[1])
+        mod_embed.set_thumbnail(url = nyx_info[2])
+        sent = await client.get_channel(int(channel_id)).send(embed=mod_embed)
+        await interaction.followup.send("Message sent! " + sent.jump_url)
+    elif name.lower() == "del":
+        mod_embed = discord.Embed(title = del_info[0], color = discord.Colour.magenta(), description = del_info[1])
+        mod_embed.set_thumbnail(url = del_info[2])
+        sent = await client.get_channel(int(channel_id)).send(embed=mod_embed)
+        await interaction.followup.send("Message sent! " + sent.jump_url)
+    elif name.lower() == "roxx":
+        mod_embed = discord.Embed(title = roxx_info[0], color = discord.Colour.magenta(), description = roxx_info[1])
+        mod_embed.set_thumbnail(url = roxx_info[2])
+        sent = await client.get_channel(int(channel_id)).send(embed=mod_embed)
+        await interaction.followup.send("Message sent! " + sent.jump_url)
+    elif name.lower() == "vel":
+        mod_embed = discord.Embed(title = vel_info[0], color = discord.Colour.dark_gold(), description = vel_info[1])
+        mod_embed.set_thumbnail(url = vel_info[2])
+        sent = await client.get_channel(int(channel_id)).send(embed=mod_embed)
+        await interaction.followup.send("Message sent! " + sent.jump_url)
+
+
+
+
+
 
 # ON MESSSAGE ACTIONS #
 

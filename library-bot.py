@@ -379,6 +379,7 @@ async def setup_hook():
         birthdays = json.load(read_file)
     twitch_time = read_from_file(LIVETIMES_FILENAME)[1]
     live_time = read_from_file(LIVETIMES_FILENAME)[0]
+    save_to_file(LIVETIMES_FILENAME,[live_time,twitch_time])
 
 
     global voice_note_links
@@ -1278,9 +1279,11 @@ async def update(interaction, option: str, timestamp: str):
 
     if option == "twitch stream":
         twitch_time = timestamp
+        save_to_file(LIVETIMES_FILENAME,[live_time,twitch_time])
         await interaction.followup.send("Twitch stream time updated!")
     elif option == "live recording":
         live_time = timestamp
+        save_to_file(LIVETIMES_FILENAME,[live_time,twitch_time])
         await interaction.followup.send("Live recording time updated!")
     else:
         await interaction.followup.send("option not recognized")

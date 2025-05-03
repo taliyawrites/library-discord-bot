@@ -538,7 +538,7 @@ async def character(interaction, character_name: str):
             await interaction.followup.send("Good luck, godspeed, and remember to hydrate, " + interaction.user.mention + "!")
 @character.autocomplete('character_name')
 async def character_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
-    options = ["Tex", "Max", "Sam", "Derek", "Finn", "Alastair", "Arwen", "Jason", "Dean", "Isaac", "Mike", "Asher", "Monsieur Dumas", "Charles"]
+    options = ["Tex", "Max", "Sam", "Derek", "Finn", "Malachi" "Alastair", "Arwen", "Jason", "Dean", "Isaac", "Mike", "Asher", "Monsieur Dumas", "Charles", "Kel"]
     return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]
 
 
@@ -1419,6 +1419,8 @@ async def mod_embed_edits(interaction, channel_id: Optional[str] = "136572446833
     await client.get_channel(int(channel_id)).send(embed=del_embed)
     await client.get_channel(int(channel_id)).send(embed=nyx_embed)
     await client.get_channel(int(channel_id)).send(embed=roxx_embed)
+
+    await interaction.followup.send("Messages sent!")
 
 
 

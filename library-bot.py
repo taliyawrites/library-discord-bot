@@ -1399,12 +1399,20 @@ async def mod_embed_edits(interaction, channel_id: Optional[str] = "136572446833
     vel_info = ["Vel — Head Mod, Librarian","You know who Vel is LMAO.",vel.display_avatar.url]
 
 
-    vel_embed = discord.Embed(title = vel_info[0], color = discord.Colour.dark_gold(), description = vel_info[1], thumbnail = vel_info[2])
-    taliya_embed = discord.Embed(title = taliya_info[0], color = discord.Colour.magenta(), description = taliya_info[1], thumbnail = taliya_info[2])
-    del_embed = discord.Embed(title = del_info[0], color = discord.Colour.magenta(), description = del_info[1], thumbnail = del_info[2])
-    nyx_embed = discord.Embed(title = nyx_info[0], color = discord.Colour.magenta(), description = nyx_info[1], thumbnail = nyx_info[2])
-    roxx_embed = discord.Embed(title = roxx_info[0], color = discord.Colour.magenta(), description = roxx_info[1], thumbnail = roxx_info[2])
+    vel_embed = discord.Embed(title = vel_info[0], color = discord.Colour.dark_gold(), description = vel_info[1])
+    vel_embed.set_thumbnail(url = vel_info[2])
 
+    taliya_embed = discord.Embed(title = taliya_info[0], color = discord.Colour.magenta(), description = taliya_info[1])
+    taliya_embed.set_thumbnail(url = taliya_info[2])
+
+    del_embed = discord.Embed(title = del_info[0], color = discord.Colour.magenta(), description = del_info[1])
+    del_embed.set_thumbnail(url = del_info[2])
+
+    nyx_embed = discord.Embed(title = nyx_info[0], color = discord.Colour.magenta(), description = nyx_info[1])
+    nyx_embed.set_thumbnail(url = nyx_info[2])
+
+    roxx_embed = discord.Embed(title = roxx_info[0], color = discord.Colour.magenta(), description = roxx_info[1])
+    roxx_embed.set_thumbnail(url = roxx_info[2])
 
     await client.get_channel(int(channel_id)).send(embed=vel_embed)
     await client.get_channel(int(channel_id)).send(embed=taliya_embed)

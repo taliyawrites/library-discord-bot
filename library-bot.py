@@ -60,7 +60,7 @@ tree = app_commands.CommandTree(client)
 
 
 
-# AUDIO FUNCTIONS #
+# AUDIO FUNCTIONS here #
 
 
 # AUDIO OBJECTS #

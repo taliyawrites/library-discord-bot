@@ -915,8 +915,8 @@ async def stream(interaction):
 @tree.command(name = "merch", description = "Information about Vel's merch!")
 async def merch(interaction):
     await interaction.response.defer()
-    merch_info = "Merch is now live for patrons to purchase! These special Winter merch items will be available until December 25th. Merch drops are seasonal, so this is your only chance to get these items!"
-    merch_embed = discord.Embed(title = "Vel's Library Merch, Winter 2024", description = merch_info, url = "https://velslibrary.com/collections/the-winter-collection")
+    merch_info = "Merch is now live for patrons to purchase! This is a special collection with art by our very own Teddy! Merch drops are seasonal, so this is your only chance to get these items."
+    merch_embed = discord.Embed(title = "Vel's Library Merch, Spring 2025", description = merch_info, url = "https://velslibrary.com/collections/the-vl-x-tm-collectionn")
     await interaction.followup.send(embed = merch_embed)
 
 

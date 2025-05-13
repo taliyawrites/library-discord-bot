@@ -441,7 +441,7 @@ async def title(interaction, title_phrase: str):
     if len(matches) == 0:
         possible_matches = inexact_matches(phrase)
         if len(possible_matches) == 0:
-            await interaction.followup.send(f'No audios found with title including the phrase "{phrase}. Consider using a `/tag` search instead, as tags are often more descriptive than titles and make audios easier to find!"')
+            await interaction.followup.send(f'No audios found with title including the phrase "{phrase}."" Consider using a `/tag` search instead, as tags are often more descriptive than titles and make audios easier to find!')
         elif len(possible_matches) == 1:
             # await interaction.followup.send('No exact matches found for "' + phrase + '." One partially matching result found.')
             await interaction.followup.send(embed=possible_matches[0].discord_post())

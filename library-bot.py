@@ -396,10 +396,6 @@ async def setup_hook():
     taliya = await client.fetch_user(1169014359842885726)
     vel = await client.fetch_user(1089053035377999912)
 
-    # global library_guild, mod_role
-    # library_guild = client.get_guild(GUILD)
-    # mod_role = library_guild.get_role(1239743183617790015)
-
 
     await taliya.send(f"Card Catalog bot restarted successfully!")
     print(f"bot local time: {datetime.datetime.now().hour}h{datetime.datetime.now().minute}.")
@@ -1470,6 +1466,7 @@ async def on_message(message):
 @client.event
 async def on_guild_channel_create(channel):
     if channel.category_id == 1178075874906624140:
+        mod_role = client.get_guild(GUILD).get_role(1239743183617790015)
         channel.send(f"This is an automated message to make sure {mod_role.mention} see your ticket!")
 
 

@@ -1467,7 +1467,7 @@ async def on_message(message):
 async def on_guild_channel_create(channel):
     if channel.category_id == 1178075874906624140:
         mod_role = client.get_guild(GUILD).get_role(1239743183617790015)
-        await channel.send(f"This is an automated message to make sure mods see your ticket! {mod_role.mention} ")
+        await channel.send(f"This is an automated message to make sure the mods see your ticket! {mod_role.mention}")
 
 
 

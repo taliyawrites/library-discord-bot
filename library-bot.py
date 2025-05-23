@@ -395,6 +395,12 @@ async def setup_hook():
     global taliya, vel
     taliya = await client.fetch_user(1169014359842885726)
     vel = await client.fetch_user(1089053035377999912)
+
+    global library_guild, mod_role
+    library_guild = client.get_guild(GUILD)
+    mod_role = library_guild.get_role(1239743183617790015)
+
+
     await taliya.send(f"Card Catalog bot restarted successfully!")
     print(f"bot local time: {datetime.datetime.now().hour}h{datetime.datetime.now().minute}.")
 
@@ -1461,8 +1467,10 @@ async def on_message(message):
         await message.channel.send("The bot has been updated to use slash commands integrated into Discord! The commands have the same names as before, but with `/` at the beginning instead of `!`. This means that you won't need to remember the exact name or format of a command, just type / and a menu of options will pop up!")
 
 
-
-
+@client.event
+async def on_guild_channel_create(channel):
+    if channel.category_id == 1178075874906624140:
+        channel.send(f"This is an automated message to make sure {mod_role.mention} see your ticket!")
 
 
 
@@ -1664,7 +1672,6 @@ async def on_member_join(member):
         print(f'new member welcome message sent to {member.name}')
     except:
         print(f'new member {member.name} has closed DMs, welcome message could not be sent')
-
 
 
 

@@ -1185,6 +1185,13 @@ async def hydrate(interaction, victim: Optional[str] = ""):
         await interaction.followup.send("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQw4dIe87tpv0gK-1hTrDZHPYLowAY-uYj3FCLOKJwZNH6mb3YE9xzGCYGKv2YHTY-d6LM&usqp=CAU")
 
 
+@tree.command(name = "count", description = "Returns the number of audios Vel has made so far!")
+async def count(interaction):
+    await interaction.response.defer()
+    await interaction.followup.send(f"Vel has made {len(audio_choices)} audios!")
+    await interaction.followup.send("https://tenor.com/view/sesame-street-the-count-the-count-sesame-street-laughing-laugh-gif-15452219526891068818")
+
+
 @tree.command(name = "birthday", description = "Save your birthday with the bot!")
 @app_commands.describe(month = "The number of the month of your birthday (Jan = 1, ..., Dec = 12)")
 @app_commands.describe(day = "The day of your birthday")

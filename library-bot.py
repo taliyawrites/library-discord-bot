@@ -1490,7 +1490,7 @@ async def run_daily_loops():
     elif (datetime.datetime.now().hour == MIDNIGHT and datetime.datetime.now().minute == MINUTE):
         await birthday_wishes()
         if datetime.datetime.now().weekday() == 0:
-            await client.get_channel(COMMAND_CHANNEL_ID).send("Remember to `/update` the live time to next Sunday at 6:30 and the stream time to next Sunday at 1:30 using [universal timestamps](https://r.3v.fi/discord-timestamps/), " + taliya.mention + "!")
+            await client.get_channel(COMMAND_CHANNEL_ID).send("Remember to `/update` the live time to next Sunday at 4:30 and the stream time to next Sunday at 11:30 using [universal timestamps](https://r.3v.fi/discord-timestamps/), " + taliya.mention + "!")
     elif rerun_daily:
         await taliya.send("Re-running audio of the day.")
         rerun_daily = False

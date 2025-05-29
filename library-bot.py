@@ -979,7 +979,7 @@ async def threads(interaction):
 @tree.command(name = "rules", description = "Links to the server rules")
 async def rules(interaction):
     await interaction.response.defer()
-    await interaction.followup.send("The server rules for the library can be found at " + client.get_guild(GUILD).rules_channel.jump_url + ". For more information, see the resources available in the <id:customize>!")
+    await interaction.followup.send("The server rules for the library can be found at " + client.get_guild(GUILD).rules_channel.jump_url + ". For more information, see the resources available in the <id:guide>!")
 
 
 

@@ -1352,48 +1352,6 @@ async def mod_embed(interaction, user_id: str, name: str, intro: str, embed_colo
 
 
 
-@tree.command(name = "mod_embed_edits", guild = discord.Object(COMMAND_SERVER))
-@app_commands.check(lambda u: u.user == taliya)
-@app_commands.allowed_installs(guilds=True, users=False)
-async def mod_embed_edits(interaction, name: str, channel_id: Optional[str] = "1365724468332204113"):
-    await interaction.response.defer()
-
-    taliya_info = ["Taliya — Bot Mod","Hey, I'm Taliya (she/her)! I wrote and maintain the code that runs the Card Catalog bot we use in the server to find audios and search the masterlist. I'm also a nsfw scriptwriter, so you'll see my name on some of Vel's audios! Please feel free to come to me for any questions about using the bot or about Vel's content in general.","https://cdn.discordapp.com/avatars/1169014359842885726/5644f89f84149e7b87cfd3591cbe30e6.png?size=1024"]
-    nyx_info = ["Nyx — Mod","Heyyyyyyy it’s meeeee. I’m Nyx (she/they). I’m the devil on your shoulder telling you to be more horny <:cowboystrap:1346304015150878813>. You’ll often find me nuking ⁠https://discord.com/channels/1148449914188218399/1194499430410371173 or https://discord.com/channels/1148449914188218399/1185454347555983421 ⁠with reccs although I always encourage others to spread the chaos. I’m here to keep the libido up and the charge on your vibrator low tehee <:elmofiredraw:1208608109904396328>","https://cdn.discordapp.com/avatars/1082532069420314687/f4e48681cc306d52fc356034e6e1e39c.png?size=1024"]
-    del_info = ["Del — Community Mod","Hey there! I'm Delphine (she/her) but everyone calls me Del. I'm the community mod for the server and help to run and organize events. You'll see me active often chatting it up about romance novels and my husband, Mr D. Please feel free to ping me or DM if you ever have questions about the server!","https://cdn.discordapp.com/avatars/1262940885251784785/927ece4c59c5bc572c5ac5c2ef3bcf82.png?size=1024"]
-    roxx_info = ["Roxx — Mod","<:molotov_cocktail:1322408878389858437> Hiya! I’m Roxx (they/them). <:molotov_cocktail:1322408878389858437> And I’m not a Regular Mod, I’m a Cool Mod, aka The Peacekeeper. My job is to keep the space welcoming and safe for everyone. You’ll usually see me playing video games and helping out in twitch streams. If you ever have anything that makes you feel uncomfy or observe some less than friendly behavior, please reach out to me through our ticketing system and I’ll be happy to help out with the situation! <:petme:1269752590967504957>","https://cdn.discordapp.com/avatars/415894832515383296/9e073813b64fcbcb021a1407f73ddd82.png?size=1024"]
-    vel_info = ["Vel — Head Mod, Librarian","You know who Vel is LMAO.",vel.display_avatar.url]
-
-
-    if name.lower() == "taliya":
-        mod_embed = discord.Embed(title = taliya_info[0], color = discord.Colour.magenta(), description = taliya_info[1])
-        mod_embed.set_thumbnail(url = taliya_info[2])
-        sent = await client.get_channel(int(channel_id)).send(embed=mod_embed)
-        await interaction.followup.send("Message sent! " + sent.jump_url)
-    elif name.lower() == "nyx":
-        mod_embed = discord.Embed(title = nyx_info[0], color = discord.Colour.magenta(), description = nyx_info[1])
-        mod_embed.set_thumbnail(url = nyx_info[2])
-        sent = await client.get_channel(int(channel_id)).send(embed=mod_embed)
-        await interaction.followup.send("Message sent! " + sent.jump_url)
-    elif name.lower() == "del":
-        mod_embed = discord.Embed(title = del_info[0], color = discord.Colour.magenta(), description = del_info[1])
-        mod_embed.set_thumbnail(url = del_info[2])
-        sent = await client.get_channel(int(channel_id)).send(embed=mod_embed)
-        await interaction.followup.send("Message sent! " + sent.jump_url)
-    elif name.lower() == "roxx":
-        mod_embed = discord.Embed(title = roxx_info[0], color = discord.Colour.magenta(), description = roxx_info[1])
-        mod_embed.set_thumbnail(url = roxx_info[2])
-        sent = await client.get_channel(int(channel_id)).send(embed=mod_embed)
-        await interaction.followup.send("Message sent! " + sent.jump_url)
-    elif name.lower() == "vel":
-        mod_embed = discord.Embed(title = vel_info[0], color = discord.Colour.dark_gold(), description = vel_info[1])
-        mod_embed.set_thumbnail(url = vel_info[2])
-        sent = await client.get_channel(int(channel_id)).send(embed=mod_embed)
-        await interaction.followup.send("Message sent! " + sent.jump_url)
-
-
-
-
 
 @tree.command(name = "all_mod_embeds", guild = discord.Object(COMMAND_SERVER))
 @app_commands.check(lambda u: u.user == taliya)
@@ -1431,28 +1389,6 @@ async def mod_embed_edits(interaction, channel_id: Optional[str] = "136572446833
 
     await interaction.followup.send("Messages sent!")
 
-
-
-
-@tree.command(name = "send_rules", guild = discord.Object(COMMAND_SERVER))
-@app_commands.check(lambda u: u.user == taliya)
-@app_commands.allowed_installs(guilds=True, users=False)
-async def mod_embed_edits(interaction):
-    await interaction.response.defer()
-    channel_id = 1374549206286733322
-
-    rule_intro = "Please read and familiarize yourself with the rules of the Vel's Library server! If these rules are updated, you will be notified, but you will be responsible for learning and abiding by any such additions or revisions. \n\u200b"
-    rule_block_a = "1. **Respect Vel's privacy about his real life.** Doxxing or any attempts to identify details about Vel's identity or personal life are strictly prohibited. Even if this behavior occurs outside the server, it will absolutely NOT be tolerated. This is non-negotiable; his two lives are separate for his safety. Vel's Library can't be evicted if his landlord finds out he does porn and doesn't like it, but real world Vel can. \n\n2. **Be respectful. **You must respect all users, regardless of whether or not you like them personally. Do not shame anyone's kinks (or lack thereof), even if you don't share those interests yourself. No shaming or negative comments about ANY bodies/body types will be tolerated, even if they are directed toward yourself. \n\n3. **No discriminatory or hateful language. ** No slurs, excessive insults, derogatory terms, or hate speech are allowed. This includes intentional usage of incorrect pronouns and any other such harassing language toward any marginalized communities, as well as offensive display names or profile pictures. \n\n4. **No threats.** Threats (direct or indirect) to other users of DOXXING, violence, rape, death, abuse, and other malicious intent are absolutely prohibited and will result in immediate action. \n\n5. **No sexualizing each other without consent.** Do not sexualize, flirt, or comment on the bodies of any community members without obtaining consent first. While we can't monitor this actively, if it is brought to our attention that people are receiving unwanted attention/advances (real or in jest), it will be considered a violation unless unrevoked consent can be verified. \n\u200b"
-    rule_block_b = "6. **No selfies or photos/videos of your body.** We do not allow any photos of any members to be posted publicly in the server, even if your face is censored. Face cams are *not* permitted in VCs (but you may still do hand cams for activities like drawing or cooking). This is both for your own privacy and to remove the potential for judgement or body shaming. This rule applies even to cropped pictures meant solely to showcase tattoos or piercings; however, we do permit photos of your nails in the fashion channel. \n\n7. **Keep conversations about audios focused on Vel.** Please save discussion of other VAs and their audios for those creators’ own community spaces or your private DMs. \n\n8. **No advertisements without authorization.** Please do not advertise for other creators. You may share your own creative work in appropriate channels provided it does not violate rule 6, but do not advertise your own commissionable services or solicit engagement for your own content. \n\n9. **No pornographic material outside of NSFW channels.** Porn and other adult/sexual material and discussions are only allowed in the appropriate age-restricted channels. \n\n10. **No AI.** The use of any of Vel's content in generative AI is strictly prohibited. \n\n11. **Listen to moderators.** If a moderator tags or DMs you in their official capacity, you are expected to address the message by replying and/or taking the action they recommended. Please refrain from blocking moderators. \n\n12. **No spoiling Vel’s content.** For recently released audios, please keep discussion in the https://discord.com/channels/1148449914188218399/1150656210341732393 channel and use [spoiler text](https://support.discord.com/hc/en-us/articles/360022320632-Spoiler-Tags) as a courtesy. Spoilers (including memes, fanart, and teasing hints) about yet-to-be released audios recorded during weekly lives should only be shared in https://discord.com/channels/1148449914188218399/1274877049118396416. \n\u200b"
-    rule_conclusion = "For more information, please feel free to reference https://discord.com/channels/1148449914188218399/1366039740301840405 and https://discord.com/channels/1148449914188218399/1365495051676946505, or ask anytime in the general channel! We're always happy to answer questions and clear up confusion so everyone can have a fun, safe, and relaxing time enjoying the horny merriment of the library."
-
-
-    await client.get_channel(int(channel_id)).send(rule_intro)
-    await client.get_channel(int(channel_id)).send(rule_block_a)
-    await client.get_channel(int(channel_id)).send(rule_block_b)
-    await client.get_channel(int(channel_id)).send(rule_conclusion)
-
-    await interaction.followup.send("Messages sent!")
 
 
 

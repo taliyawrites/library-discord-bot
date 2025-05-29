@@ -976,6 +976,12 @@ async def threads(interaction):
     await interaction.followup.send(link_string)
 
 
+@tree.command(name = "rules", description = "Links to the server rules")
+async def rules(interaction):
+    await interaction.response.defer()
+    await interaction.followup.send("The server rules for the library can be found at " + client.get_guild(GUILD).rules_channel.jump_url + ". For more information, see the resources available in the <id:customize>!")
+
+
 
 @tree.command(name = "time", description = "Converts a time in eastern timezone to your own using a universal timestamp!")
 @app_commands.rename(t = "time")

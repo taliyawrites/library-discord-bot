@@ -597,7 +597,8 @@ async def collection(interaction, name: str):
 @collection.autocomplete('name')
 async def collection_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
     # figure out way to autopull these from airtable okay thanks bye 
-    options = ["Classes in the Library","Cuckolding & Cheating","Darker Themes","Fantasy, Monsters, and Demons","JOIs","Kink Calendar Challenges","MSub Audios","Petplay Audios","Rambles & HFOs","SFW Audios","Sleep Aids","Soft Audios","Workplace & Deskpet","A Butler's Responsibilities","A Friendly Local Mechanic","A New Lineage","Academic Rivals","AMAs","Bred & Breakfast","Catching Up With Your Ex","How to Unsummon a Demon","New Girl to Head Girl","NNN: Nonstop Nut November","O Knight of Mine","Tex & Vel: More Than Roommates","The Breeding Clinic","Toxic Male Monday","Your Brother's Best Friend"]
+    # options = ["Classes in the Library","Cuckolding & Cheating","Darker Themes","Fantasy, Monsters, and Demons","JOIs","Kink Calendar Challenges","MSub Audios","Petplay Audios","Rambles & HFOs","SFW Audios","Sleep Aids","Soft Audios","Workplace & Deskpet","A Butler's Responsibilities","A Friendly Local Mechanic","A New Lineage","Academic Rivals","AMAs","Bred & Breakfast","Catching Up With Your Ex","How to Unsummon a Demon","New Girl to Head Girl","NNN: Nonstop Nut November","O Knight of Mine","Tex & Vel: More Than Roommates","The Breeding Clinic","Toxic Male Monday","Your Brother's Best Friend"]
+    options = [coll[0] for coll in collections]
     return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()][:25]
 
 

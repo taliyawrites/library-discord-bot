@@ -306,6 +306,27 @@ def import_collections():
 
     return collections
 
+def write_data_lists():
+    character_list = []
+    for audio in audio_choices:
+        if audio.characters() != '':
+            for char in audio.characters().split(', '):
+                character_list.append(char)
+    all_characters = list(set(character_list))
+
+    tag_list = []
+    table = airtable_api.table('appeb72XP6YJzGRyY', 'tbltF1MithqYynsdU')
+    for entry in table.all():
+        fields = list(entry.items())[2][1]
+        data = list(fields.items())
+        tag_list.append(data[1][1].strip())
+    all_tags = list(set(tag_list))
+
+    all_collections = [coll[0] for coll in collections]
+    return all_characters, all_tags, all_collections
+
+
+
 
 
 
@@ -363,6 +384,8 @@ async def setup_hook():
     audio_choices = import_airtable_data()
     tag_dictionary = import_tag_dictionary()
     collections = import_collections()
+    print("data pulled from airtable")
+
 
     # import current state variable values
     global random_seed, good_girl, pet_count, edge_counter, cum_permission_ids, daily_audio, snack_requests, birthdays, twitch_time, live_time
@@ -380,6 +403,9 @@ async def setup_hook():
     twitch_time = read_from_file(LIVETIMES_FILENAME)[1]
     live_time = read_from_file(LIVETIMES_FILENAME)[0]
     save_to_file(LIVETIMES_FILENAME,[live_time,twitch_time])
+
+    global all_characters, all_tags, all_collections
+    all_characters, all_tags, all_collections = write_data_lists()
 
 
     global voice_note_links
@@ -512,6 +538,10 @@ async def tag(interaction, taglist: str):
             await interaction.followup.send(embed = matches_embed)
         except:
             await interaction.followup.send("Vel has too many audios tagged " + tagstring.lower() + "to display without exceeding the Discord character limit! Please try again with a more specific set of tags." )
+@tag.autocomplete('taglist')
+async def tag_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
+    options = all_tags
+    return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()][:25]
 
 
 
@@ -540,7 +570,8 @@ async def character(interaction, character_name: str):
             await interaction.followup.send("Good luck, godspeed, and remember to hydrate, " + interaction.user.mention + "!")
 @character.autocomplete('character_name')
 async def character_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
-    options = ["Tex", "Max", "Sam", "Derek", "Finn", "Malachi", "Alastair", "Arwen", "Jason", "Dean", "Isaac", "Mike", "Asher", "Monsieur Dumas", "Charles", "Kel"]
+    # options = ["Tex", "Max", "Sam", "Derek", "Finn", "Malachi", "Alastair", "Arwen", "Jason", "Dean", "Isaac", "Mike", "Asher", "Monsieur Dumas", "Charles", "Kel"]
+    options = all_characters
     return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]
 
 
@@ -596,10 +627,9 @@ async def collection(interaction, name: str):
         await interaction.followup.send("No matching collection found.")
 @collection.autocomplete('name')
 async def collection_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
-    # figure out way to autopull these from airtable okay thanks bye 
-    # options = ["Classes in the Library","Cuckolding & Cheating","Darker Themes","Fantasy, Monsters, and Demons","JOIs","Kink Calendar Challenges","MSub Audios","Petplay Audios","Rambles & HFOs","SFW Audios","Sleep Aids","Soft Audios","Workplace & Deskpet","A Butler's Responsibilities","A Friendly Local Mechanic","A New Lineage","Academic Rivals","AMAs","Bred & Breakfast","Catching Up With Your Ex","How to Unsummon a Demon","New Girl to Head Girl","NNN: Nonstop Nut November","O Knight of Mine","Tex & Vel: More Than Roommates","The Breeding Clinic","Toxic Male Monday","Your Brother's Best Friend"]
-    options = [coll[0] for coll in collections]
+    options = all_collections
     return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()][:25]
+
 
 
 @tree.command(name = "masterlist",description = "Sends a link to the masterlist of Vel's audios")
@@ -941,14 +971,14 @@ async def socials(interaction):
 @tree.command(name = "allcharacters", description = "List of Vel's named characters")
 async def allcharacters(interaction):
     await interaction.response.defer()
-    character_list = []
-    for audio in audio_choices:
-        if audio.characters() != '':
-            for char in audio.characters().split(', '):
-                character_list.append(char)
-    characters = list(set(character_list))
+    # character_list = []
+    # for audio in audio_choices:
+    #     if audio.characters() != '':
+    #         for char in audio.characters().split(', '):
+    #             character_list.append(char)
+    # characters = list(set(character_list))
     char_string = ''
-    for char in characters:
+    for char in all_characters:
         char_string = char_string + char + ", "
     await interaction.followup.send('Named characters: ' + char_string[:-2])
 

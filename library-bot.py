@@ -541,7 +541,7 @@ async def tag(interaction, taglist: str):
 @tag.autocomplete('taglist')
 async def tag_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
     options = all_tags
-    return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()][:25]
+    return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]
 
 
 

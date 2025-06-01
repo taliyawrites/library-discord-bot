@@ -406,6 +406,7 @@ async def setup_hook():
 
     global all_characters, all_tags, all_collections
     all_characters, all_tags, all_collections = write_data_lists()
+    print(len(all_tags))
 
 
     global voice_note_links

@@ -1492,6 +1492,7 @@ async def on_scheduled_event_create(event):
             event_times.append([event.id,[start.year, start.month,start.day, -1 + start.hour, start.minute]])
         with open(EVENTS_FILENAME, "w") as outfile:
             outfile.write(json.dumps(event_times))
+        await client.get_channel(1382188782907822131).send(event.url)
 
 @client.event
 async def on_scheduled_event_delete(event):

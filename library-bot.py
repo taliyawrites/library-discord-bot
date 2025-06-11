@@ -1538,6 +1538,7 @@ async def run_daily_loops():
     global event_times
     for event in event_times:
         utc = datetime.datetime.now(datetime.timezone.utc)
+        print(event)
         print(utc)
         if (utc.month == event[1][0] and utc.day == event[1][1] and utc.hour == event[1][2] and utc.minute == event[1][3]):
             print("now")

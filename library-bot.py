@@ -1517,7 +1517,7 @@ async def on_scheduled_event_update(before, after):
         event_times.append([after.id,[start.month,start.day, -1 + start.hour, start.minute]])
     with open(EVENTS_FILENAME, "w") as outfile:
         outfile.write(json.dumps(event_times))
-    await client.get_channel(1382188782907822131).send(f"[{after.name}]({after.url})  has been re-scheduled!")
+    await client.get_channel(1382188782907822131).send(f"[{after.name}]({after.url}) has been re-scheduled!")
 
 
 
@@ -1734,14 +1734,15 @@ async def birthday_wishes():
 # DMs new user a welcome message with a link to the masterlist
 @client.event
 async def on_member_join(member):
-    commands = "Type / to see a menu of all the available commands! Some commonly used ones are listed here.\n- `/randomaudio` randomly chosen audio from the masterlist \n- `/randomaudio [some] [tags]` random audio with these desired tag(s) \n- `/title phrase` for list of audios with that phrase in the title \n- `/tag [some] [tags]` for list of audios with those tag(s) \n- `/character name` for list of audios featuring a specific named character \n- `/masterlist` link to the masterlist \n- `/request` to suggest tags for Vel's voice notes \n- `/vn` for a random voice note \nPlease always feel welcome to ask questions about using the bot in the  https://discord.com/channels/1148449914188218399/1248773338726400040 channel!"
-    command_embed = discord.Embed(title = "Vel's Library Bot Commands",description=commands)
-    try: 
-        await member.send("Welcome to the Vel's Library discord server! Vel has over four hundred audios for you to enjoy, and this bot can help you explore the collection and find your next favorite audio. The bot can pick a random audio with your favorite tags for you to listen to, you can search for audios by title or tags, and much more! Some example commands are listed below, or you can send the command `/tutorial` to learn the basics. You can also find the masterlist of all of Vel's audios [here](<https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr>). Enjoy your time in the library!")
-        await member.send(embed=command_embed)
-        print(f'new member welcome message sent to {member.name}')
-    except:
-        print(f'new member {member.name} has closed DMs, welcome message could not be sent')
+    if member.guild.id == GUILD: 
+        commands = "Type / to see a menu of all the available commands! Some commonly used ones are listed here.\n- `/randomaudio` randomly chosen audio from the masterlist \n- `/randomaudio [some] [tags]` random audio with these desired tag(s) \n- `/title phrase` for list of audios with that phrase in the title \n- `/tag [some] [tags]` for list of audios with those tag(s) \n- `/character name` for list of audios featuring a specific named character \n- `/masterlist` link to the masterlist \n- `/request` to suggest tags for Vel's voice notes \n- `/vn` for a random voice note \nPlease always feel welcome to ask questions about using the bot in the  https://discord.com/channels/1148449914188218399/1248773338726400040 channel!"
+        command_embed = discord.Embed(title = "Vel's Library Bot Commands",description=commands)
+        try: 
+            await member.send("Welcome to the Vel's Library discord server! Vel has over four hundred audios for you to enjoy, and this bot can help you explore the collection and find your next favorite audio. The bot can pick a random audio with your favorite tags for you to listen to, you can search for audios by title or tags, and much more! Some example commands are listed below, or you can send the command `/tutorial` to learn the basics. You can also find the masterlist of all of Vel's audios [here](<https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr>). Enjoy your time in the library!")
+            await member.send(embed=command_embed)
+            print(f'new member welcome message sent to {member.name}')
+        except:
+            print(f'new member {member.name} has closed DMs, welcome message could not be sent')
 
 
 

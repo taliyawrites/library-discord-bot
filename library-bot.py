@@ -1744,6 +1744,7 @@ async def on_member_join(member):
         except:
             print(f'new member {member.name} has closed DMs, welcome message could not be sent')
     elif member.guild.id == 1382085398292856903:
+        print(GUILD)
         await client.get_channel(1382085398779527180).send(f"Welcome, {member.name}!")
 
 

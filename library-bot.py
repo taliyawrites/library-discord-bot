@@ -43,6 +43,7 @@ ARCHIVE_FILENAME = "voice-note-archive.txt"
 REQUESTS_FILENAME = "snack-requests.json"
 BIRTHDAY_FILENAME = "birthdays.json"
 LIVETIMES_FILENAME = "livetimes.txt"
+EVENTS_FILENAME = "event-schedule.json"
 
 # run daily tasks at 1pm eastern time (6pm UTC+1)
 HOUR, MINUTE = 17, 0
@@ -388,7 +389,7 @@ async def setup_hook():
 
 
     # import current state variable values
-    global random_seed, good_girl, pet_count, edge_counter, cum_permission_ids, daily_audio, snack_requests, birthdays, twitch_time, live_time
+    global random_seed, good_girl, pet_count, edge_counter, cum_permission_ids, daily_audio, snack_requests, birthdays, twitch_time, live_time, event_times
     random_seed = ''.join(random.choices(string.ascii_uppercase+string.digits, k=8))
     good_girl = read_from_file(WINNERS_FILENAME)[-1]
     pet_count = int(read_from_file(COUNTER_FILENAME)[-1])
@@ -400,6 +401,8 @@ async def setup_hook():
         snack_requests = json.load(read_file)
     with open(BIRTHDAY_FILENAME, "r") as read_file:
         birthdays = json.load(read_file)
+    with open(EVENTS_FILENAME, "r") as read_file:
+        event_times = json.load(read_file)
     twitch_time = read_from_file(LIVETIMES_FILENAME)[1]
     live_time = read_from_file(LIVETIMES_FILENAME)[0]
     save_to_file(LIVETIMES_FILENAME,[live_time,twitch_time])
@@ -1476,6 +1479,19 @@ async def on_guild_channel_create(channel):
         await channel.send(f"This is an automated message to make sure the mods see your ticket! {mod_role.mention}")
 
 
+@client.event
+async def on_scheduled_event_create(event):
+    global event_times
+    if event.guild.id == 1382085398292856903:
+        start = event.start_time
+        # save update time 
+        if start.hour == 0:
+            event_times.append([event.id,[start.year, -1 + start.month,start.day, 23, start.minute]])
+        else:
+            event_times.append([event.id,[start.year, start.month,start.day, -1 + start.hour, start.minute]])
+        with open(EVENTS_FILENAME, "w") as outfile:
+            outfile.write(json.dumps(event_times))
+
 
 
 # DAILY LOOPING TASKS #
@@ -1502,6 +1518,15 @@ async def run_daily_loops():
         await taliya.send("Re-running birthday wishes.")
         rerun_birthdays = False
         await birthday_wishes()
+
+    global event_times
+    for event in event_times:
+        if (datetime.datetime.now().month == event[1,0] and datetime.datetime.now().day == event[1,1] and datetime.datetime.now().hour == event[1,2] and datetime.datetime.now().minute == event[1,3]):
+            event_ref = client.get_guild(1382085398292856903).get_scheduled_event(event[0])
+            await client.get_channel(1382188782907822131).send(f"Reminder that {event_ref.name} starts in one hour! {event.url}")
+            event_times.remove(event)
+            with open(EVENTS_FILENAME, "w") as outfile:
+                outfile.write(json.dumps(event_times))
 
 
 

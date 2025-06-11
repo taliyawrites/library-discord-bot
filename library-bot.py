@@ -1536,7 +1536,9 @@ async def run_daily_loops():
     global event_times
     for event in event_times:
         utc = datetime.datetime.now(datetime.timezone.utc)
+        print(utc)
         if (utc.month == event[1][0] and utc.day == event[1][1] and utc.hour == event[1][2] and utc.minute == event[1][3]):
+            print("now")
             event_ref = client.get_guild(1382085398292856903).get_scheduled_event(event[0])
             await client.get_channel(1382188782907822131).send(f"Reminder that {event_ref.name} starts in one hour! {event.url}")
             event_times.remove(event)

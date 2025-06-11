@@ -1507,9 +1507,6 @@ async def on_scheduled_event_delete(event):
 @client.event
 async def on_scheduled_event_update(before, after):
     global event_times
-    print("starting")
-    print(before.id)
-    print(after.id)
     for entry in event_times: 
         if entry[0] == before.id:
             event_times.remove(entry)

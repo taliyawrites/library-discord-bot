@@ -1491,7 +1491,15 @@ async def on_scheduled_event_create(event):
             event_times.append([event.id,[start.year, start.month,start.day, -1 + start.hour, start.minute]])
         with open(EVENTS_FILENAME, "w") as outfile:
             outfile.write(json.dumps(event_times))
-
+            
+@client.event
+async def on_scheduled_event_delete(event):
+    global event_times
+    for entry in event_times: 
+        if entry[0] == event.id:
+            event_times.remove(entry)
+            with open(EVENTS_FILENAME, "w") as outfile:
+                outfile.write(json.dumps(event_times))
 
 
 # DAILY LOOPING TASKS #
@@ -1521,7 +1529,7 @@ async def run_daily_loops():
 
     global event_times
     for event in event_times:
-        if (datetime.datetime.now().month == event[1][0] and datetime.datetime.now().day == event[1][1] and datetime.datetime.now().hour == event[1][2] and datetime.datetime.now().minute == event[1][3]):
+        if (datetime.datetime.utcnow().month == event[1][0] and datetime.datetime.utcnow().day == event[1][1] and datetime.datetime.utcnow().hour == event[1][2] and datetime.datetime.utcnow().minute == event[1][3]):
             event_ref = client.get_guild(1382085398292856903).get_scheduled_event(event[0])
             await client.get_channel(1382188782907822131).send(f"Reminder that {event_ref.name} starts in one hour! {event.url}")
             event_times.remove(event)

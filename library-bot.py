@@ -1502,6 +1502,7 @@ async def on_scheduled_event_delete(event):
             event_times.remove(entry)
             with open(EVENTS_FILENAME, "w") as outfile:
                 outfile.write(json.dumps(event_times))
+        print("event deleted")
 
 
 

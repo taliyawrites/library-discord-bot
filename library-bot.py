@@ -1538,9 +1538,10 @@ async def run_daily_loops():
     global event_times
     for event in event_times:
         utc = datetime.datetime.now(datetime.timezone.utc)
-        va_role = client.get_guild(1382085398292856903).get_role(1382088337497788528)
+        dnd_guild = client.get_guild(1382085398292856903)
+        va_role = dnd_guild.get_role(1382088337497788528)
         if (utc.month == event[1][0] and utc.day == event[1][1] and utc.hour == event[1][2] and utc.minute == event[1][3]):
-            event_ref = client.get_guild(1382085398292856903).get_scheduled_event(event[0])
+            event_ref = dnd_guild.get_scheduled_event(event[0])
             await client.get_channel(1382188782907822131).send(f"Reminder for that [{event_ref.name}]({event_ref.url}) starts in one hour! {va_role.mention}")
             event_times.remove(event)
             with open(EVENTS_FILENAME, "w") as outfile:

@@ -1504,6 +1504,20 @@ async def on_scheduled_event_delete(event):
                 outfile.write(json.dumps(event_times))
         print("event deleted")
 
+@client.event
+async def on_scheduled_event_update(before, after):
+    global event_times
+    for entry in event_times: 
+        if entry[0] == before.id:
+            event_times.remove(entry)
+    start = after.start_time
+    if start.hour == 0:
+        event_times.append([event.id,[start.month, -1 + start.day, 23, start.minute]])
+    else:
+        event_times.append([event.id,[start.month,start.day, -1 + start.hour, start.minute]])
+    with open(EVENTS_FILENAME, "w") as outfile:
+        outfile.write(json.dumps(event_times))
+    await client.get_channel(1382188782907822131).send(f"[{after.name} has been re-scheduled!]({event.url})")
 
 
 
@@ -1540,6 +1554,11 @@ async def run_daily_loops():
         utc = datetime.datetime.now(datetime.timezone.utc)
         if (utc.month == event[1][0] and utc.day == event[1][1] and utc.hour == event[1][2] and utc.minute == event[1][3]):
             await event_reminder(event)
+
+
+
+
+
 
 async def event_reminder(event):
     global event_times

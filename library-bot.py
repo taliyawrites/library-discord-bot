@@ -1487,9 +1487,9 @@ async def on_scheduled_event_create(event):
         start = event.start_time
         # save update time 
         if start.hour == 0:
-            event_times.append([event.id,[start.year, -1 + start.month,start.day, 23, start.minute]])
+            event_times.append([event.id,[start.month, -1 + start.day, 23, start.minute]])
         else:
-            event_times.append([event.id,[start.year, start.month,start.day, -1 + start.hour, start.minute]])
+            event_times.append([event.id,[start.month,start.day, -1 + start.hour, start.minute]])
         with open(EVENTS_FILENAME, "w") as outfile:
             outfile.write(json.dumps(event_times))
         await client.get_channel(1382188782907822131).send(event.url)

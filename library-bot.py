@@ -1564,7 +1564,7 @@ async def event_reminder(event):
     global event_times
     va_role = client.get_guild(1382085398292856903).get_role(1382088337497788528)
     event_ref = client.get_guild(1382085398292856903).get_scheduled_event(event[0])
-    await client.get_channel(1382188782907822131).send(f"Reminder for {taliya.mention} that [{event_ref.name}]({event_ref.url}) starts in one hour!")
+    await client.get_channel(1382188782907822131).send(f"Reminder for {va_role.mention} that [{event_ref.name}]({event_ref.url}) starts in one hour!")
     event_times.remove(event)
     with open(EVENTS_FILENAME, "w") as outfile:
         outfile.write(json.dumps(event_times))

@@ -1492,7 +1492,7 @@ async def on_scheduled_event_create(event):
             event_times.append([event.id,[start.month,start.day, -1 + start.hour, start.minute]])
         with open(EVENTS_FILENAME, "w") as outfile:
             outfile.write(json.dumps(event_times))
-        await client.get_channel(1382188782907822131).send(f"[New event scheduled!]({event.url})")
+        await client.get_channel(1382188782907822131).send(f"[New event]({event.url}) scheduled!")
 
 @client.event
 async def on_scheduled_event_delete(event):
@@ -1517,7 +1517,7 @@ async def on_scheduled_event_update(before, after):
         event_times.append([after.id,[start.month,start.day, -1 + start.hour, start.minute]])
     with open(EVENTS_FILENAME, "w") as outfile:
         outfile.write(json.dumps(event_times))
-    await client.get_channel(1382188782907822131).send(f"[{after.name} has been re-scheduled!]({after.url})")
+    await client.get_channel(1382188782907822131).send(f"[{after.name}]({after.url})  has been re-scheduled!")
 
 
 

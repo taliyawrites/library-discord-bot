@@ -1497,27 +1497,29 @@ async def on_scheduled_event_create(event):
 @client.event
 async def on_scheduled_event_delete(event):
     global event_times
-    for entry in event_times: 
-        if entry[0] == event.id:
-            event_times.remove(entry)
-            with open(EVENTS_FILENAME, "w") as outfile:
-                outfile.write(json.dumps(event_times))
-        print("event deleted")
+    if event.guild.id == 1382085398292856903:
+        for entry in event_times: 
+            if entry[0] == event.id:
+                event_times.remove(entry)
+                with open(EVENTS_FILENAME, "w") as outfile:
+                    outfile.write(json.dumps(event_times))
+            print("event deleted")
 
 @client.event
 async def on_scheduled_event_update(before, after):
     global event_times
-    for entry in event_times: 
-        if entry[0] == before.id:
-            event_times.remove(entry)
-    start = after.start_time
-    if start.hour == 0:
-        event_times.append([after.id,[start.month, -1 + start.day, 23, start.minute]])
-    else:
-        event_times.append([after.id,[start.month,start.day, -1 + start.hour, start.minute]])
-    with open(EVENTS_FILENAME, "w") as outfile:
-        outfile.write(json.dumps(event_times))
-    await client.get_channel(1382188782907822131).send(f"[{after.name}]({after.url}) has been re-scheduled!")
+    if event.guild.id == 1382085398292856903 and before.start_time != after.start_time: 
+        for entry in event_times: 
+            if entry[0] == before.id:
+                event_times.remove(entry)
+        start = after.start_time
+        if start.hour == 0:
+            event_times.append([after.id,[start.month, -1 + start.day, 23, start.minute]])
+        else:
+            event_times.append([after.id,[start.month,start.day, -1 + start.hour, start.minute]])
+        with open(EVENTS_FILENAME, "w") as outfile:
+            outfile.write(json.dumps(event_times))
+        await client.get_channel(1382188782907822131).send(f"[{after.name}]({after.url}) has been re-scheduled!")
 
 
 

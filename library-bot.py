@@ -953,14 +953,12 @@ async def stream(interaction):
     await interaction.response.defer()
     stream_info = "Vel will be streaming all week, come by, enjoy the streams, and help Vel reach twitch partner! \n<t:1750203000:F>: Taking Apart a Watch! \n<t:1750289400:F>: Orba Dinn Blind Playthrough \n<t:1750451400:F>: Taco Bell and AMA \n<t:1750530600:F>: Vel's Book Reading \n<t:1750617000:F>: Truck Sim and Y'Appalachian"
 
-    
     stream_embed = discord.Embed(title = "Vel's Livestreams", description = stream_info, url = "https://www.twitch.tv/velslibrary")
-    # file = discord.File("schedule.webp", filename="schedule.webp")
+    file = discord.File("schedule.webp", filename="schedule.webp")
     # stream_embed.set_image(url="attachment://image.png")
     # await interaction.followup.send(file=file, embed=stream_embed)
-    stream_embed.set_image(url="https://cdn.discordapp.com/attachments/1187670992131194951/1384054402444169356/Green_and_Pink_Fitness_Run_Club_Schedule_Instagram_Post.png?ex=6851089c&is=684fb71c&hm=b140ce8a85bf0fa715f504e537c5a502531a105e7e9b39219314a522ba4bc943&")
     await interaction.followup.send(embed=stream_embed)
-
+    await interaction.followup.send(file = file)
 
 
 @tree.command(name = "merch", description = "Information about Vel's merch!")

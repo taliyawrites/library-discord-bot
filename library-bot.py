@@ -955,7 +955,6 @@ async def stream(interaction):
 
     stream_embed = discord.Embed(title = "Vel's Livestreams", description = stream_info, url = "https://www.twitch.tv/velslibrary")
     file = discord.File("schedule.webp", filename="schedule.webp")
-    stream_embed.set_image(url="attachment://schedule.webp")
     await interaction.followup.send(file = file, embed=stream_embed)
 
 

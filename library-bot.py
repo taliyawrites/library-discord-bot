@@ -1513,7 +1513,7 @@ async def on_scheduled_event_delete(event):
 @client.event
 async def on_scheduled_event_update(before, after):
     global event_times
-    if event.guild.id == 1382085398292856903:
+    if before.guild.id == 1382085398292856903:
         if before.start_time != after.start_time: 
             for entry in event_times: 
                 if entry[0] == before.id:

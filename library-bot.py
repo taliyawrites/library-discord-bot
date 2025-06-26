@@ -1664,6 +1664,7 @@ def choose_next_winner(options):
 
 # announce good girl of the day and assign appropriate role
 async def choose_good_girl():
+    global good_girl
     try:
         guild = client.get_guild(GUILD)
         channel = client.get_channel(GENERAL)

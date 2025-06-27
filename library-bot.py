@@ -952,7 +952,7 @@ async def stream(interaction):
     # file = discord.File("schedule.webp", filename="schedule.webp")
     # await interaction.followup.send(file = file, embed=stream_embed)
     await interaction.response.defer()
-    stream_info = 'Vel streams live every other Sunday on [Twitch](https://www.twitch.tv/velslibrary). The next stream will be ' + twitch_time + '!'
+    stream_info = 'Vel streams live every Sunday on [Twitch](https://www.twitch.tv/velslibrary). The next stream will be ' + twitch_time + '!'
     stream_embed = discord.Embed(title = "Vel's Livestreams", description = stream_info, url = "https://www.twitch.tv/velslibrary")
     await interaction.followup.send(embed = stream_embed)
 

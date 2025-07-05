@@ -1283,7 +1283,9 @@ async def birthdayremove(interaction):
 async def count(interaction):
     await interaction.response.defer()
     image = discord.File("just_the_top.webp")
-    await interaction.followup.send(content = "You can see Vel's full official tier list of all his audios here! https://discord.com/channels/1148449914188218399/1194499430410371173/1391176460781359224 This was done live on twitch stream (use `/stream` for  more details on how to join us next time). If you'd like to do your own tierlist, you can [make your own here](https://tiermaker.com/create/vels-library-audio-tierlist-18367623-2), courtesy of Kayla! ",file = image)
+    embed = discord.Embed(title = "Vel's Library Full Audio Tierlist!", url = "https://tiermaker.com/create/vels-library-audio-tierlist-18367623-2", description = "You can see Vel's full official tier list of all his audios here! https://discord.com/channels/1148449914188218399/1194499430410371173/1391176460781359224 This was done live on twitch stream (use `/stream` for  more details on how to join us next time). If you'd like to do your own tierlist, you can [make your own here](https://tiermaker.com/create/vels-library-audio-tierlist-18367623-2), courtesy of Kayla!")
+    embed.set_image(url="attachment://just_the_top.webp")
+    await interaction.followup.send(file = image, embed=embed)
 
 
 

@@ -504,7 +504,7 @@ async def title(interaction, title_phrase: str):
         except:
             await interaction.followup.send("Too many results found to display without exceeding Discord character limit, please try again with a more specific search term.")
 
-    if interaction.user.id == 1185405398883258369 or interaction.user.id == taliya.id:
+    if interaction.user.id == 1185405398883258369:
         if len(matches) == 0: 
             if len(possible_matches) == 1 and "A Gooner's JOI" == possible_matches[0].name():
                 await interaction.followup.send(f"Back again, slut?")

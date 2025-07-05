@@ -475,6 +475,7 @@ async def title(interaction, title_phrase: str):
             await interaction.followup.send(f'No audios found with title including the phrase "{phrase}." Consider using a `/tag` search instead, as tags are often more descriptive than titles and make audios easier to find!')
         elif len(possible_matches) == 1:
             # await interaction.followup.send('No exact matches found for "' + phrase + '." One partially matching result found.')
+            name = possible_matches[0].name
             await interaction.followup.send(embed=possible_matches[0].discord_post())
         else:
             # await interaction.followup.send('No exact matches found for "' + phrase + '."')
@@ -502,6 +503,13 @@ async def title(interaction, title_phrase: str):
             await interaction.followup.send(embed = matches_embed)
         except:
             await interaction.followup.send("Too many results found to display without exceeding Discord character limit, please try again with a more specific search term.")
+
+    if interaction.user.id == 1185405398883258369 or interaction.user.id == taliya.id:
+        if len(matches) == 0: 
+            if len(possible_matches) == 1 and possible_matches[0].name == "A Gooner's JOI":
+                await interaction.user.send("Back again, slut?")
+        elif len(matches) == 1 and matches[0].name == "A Gooner's JOI":
+            await interaction.user.send("Back again, slut?")
 
 
 

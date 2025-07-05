@@ -506,9 +506,9 @@ async def title(interaction, title_phrase: str):
 
     if interaction.user.id == 1185405398883258369 or interaction.user.id == taliya.id:
         if len(matches) == 0: 
-            if len(possible_matches) == 1 and possible_matches[0].name == "A Gooner's JOI":
+            if len(possible_matches) == 1 and "Gooner" in possible_matches[0].name and "JOI" in possible_matches[0].name:
                 await interaction.user.send("Back again, slut?")
-        elif len(matches) == 1 and matches[0].name == "A Gooner's JOI":
+        elif len(matches) == 1 and "Gooner" in matches[0].name and "JOI" in matches[0].name:
             await interaction.user.send("Back again, slut?")
 
 

@@ -1289,6 +1289,20 @@ async def count(interaction):
 
 
 
+@tree.command(name = "toy", description = "fuckboy fucktoy fucks fuck toy. more at eleven")
+@app_commands.describe(victim = "@ whomever you'd like the bot to target")
+async def toy(interaction, victim: Optional[str] = ""):
+    await interaction.response.defer()
+    video_ids = ["1368418333224996917", "1368418159857766431", "1296562227553370183", "1296561480984035389"]
+    video = client.get_channel(ABYSS).get_partial_message(int(random.choice(video_ids)))
+    await video.forward(interaction.channel)
+    if len(victim) == 0:
+        await interaction.followup.send(f"Have fun, {interaction.user.mention}!")
+    else:
+        await interaction.followup.send(f"Have fun, {victim}!")
+
+
+
 # BACKEND UTILITY COMMANDS #
 
 

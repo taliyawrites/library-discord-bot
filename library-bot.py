@@ -1295,14 +1295,16 @@ async def toy(interaction, victim: Optional[str] = ""):
     await interaction.response.defer()
     video_ids = ["1296562227553370183", "1296561480984035389", "1368418159857766431", "1368418333224996917"]
     if len(victim) != 0:
+        link_list = f"Have fun, {victim}! <:Smile:1325629637799182357>"
         for msg in video_ids:
-            await client.get_channel(ABYSS).get_partial_message(int(msg)).forward(interaction.channel)
-        await interaction.followup.send(f"Have fun, {victim}! <:Smile:1325629637799182357>")
+            link_list += "\n" + client.get_channel(ABYSS).get_partial_message(int(msg)).jump_url
+        await interaction.followup.send(link_list)
     else:
-        await client.get_channel(ABYSS).get_partial_message(int(random.choice(video_ids))).forward(interaction.channel)
+        link = client.get_channel(ABYSS).get_partial_message(int(random.choice(video_ids))).jump_url
         if isinstance(interaction.channel, discord.DMChannel):
-            await interaction.followup.send("Have fun <:Smile:1325629637799182357>")
+            await interaction.followup.send(f"Have fun <:Smile:1325629637799182357> {link}")
         else:
+            await interaction.followup.send(link)
             await interaction.followup.send(f"-# You do know he can see this, right? <:Smile:1325629637799182357>")
 
 

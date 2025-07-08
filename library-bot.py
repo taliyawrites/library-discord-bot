@@ -1304,8 +1304,7 @@ async def toy(interaction, victim: Optional[str] = ""):
         if isinstance(interaction.channel, discord.DMChannel):
             await interaction.followup.send(f"Have fun <:Smile:1325629637799182357> {link}")
         else:
-            await interaction.followup.send(link)
-            await interaction.followup.send(f"-# You do know he can see this, right? <:Smile:1325629637799182357>")
+            await interaction.followup.send(f"{link} \n-# You do know he can see this, right? <:Smile:1325629637799182357>")
 
 
 

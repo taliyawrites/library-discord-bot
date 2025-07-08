@@ -1293,13 +1293,17 @@ async def count(interaction):
 @app_commands.describe(victim = "@ whomever you'd like the bot to target")
 async def toy(interaction, victim: Optional[str] = ""):
     await interaction.response.defer()
-    video_ids = ["1368418333224996917", "1368418159857766431", "1296562227553370183", "1296561480984035389"]
-    video = client.get_channel(ABYSS).get_partial_message(int(random.choice(video_ids)))
-    await video.forward(interaction.channel)
-    if len(victim) == 0:
-        await interaction.followup.send(f"Have fun, {interaction.user.mention}!")
+    video_ids = ["1296562227553370183", "1296561480984035389", "1368418159857766431", "1368418333224996917"]
+    if len(victim) != 0:
+        for msg in video_ids:
+            await client.get_channel(ABYSS).get_partial_message(int(msg)).forward(interaction.channel)
+        await interaction.followup.send(f"Have fun, {victim}! <:Smile:1325629637799182357>")
     else:
-        await interaction.followup.send(f"Have fun, {victim}!")
+        await client.get_channel(ABYSS).get_partial_message(int(random.choice(video_ids))).forward(interaction.channel)
+        if isinstance(interaction.channel, discord.DMChannel):
+            await interaction.followup.send("Have fun <:Smile:1325629637799182357>")
+        else:
+            await interaction.followup.send(f"-# You do know he can see this, right? <:Smile:1325629637799182357>")
 
 
 

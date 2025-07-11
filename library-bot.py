@@ -1510,17 +1510,6 @@ async def on_message(message):
 
 
 
-    if message.content.startswith('!welcome'):
-        commands = "Type / to see a menu of all the available commands! Some commonly used ones are listed here.\n- `/randomaudio` randomly chosen audio from the masterlist \n- `/randomaudio [some] [tags]` random audio with these desired tag(s) \n- `/title phrase` for list of audios with that phrase in the title \n- `/tag [some] [tags]` for list of audios with those tag(s) \n- `/character name` for list of audios featuring a specific named character \n- `/masterlist` link to the masterlist \n- `/request` to suggest tags for Vel's voice notes \n- `/vn` for a random voice note \nPlease always feel welcome to ask questions about using the bot in the  https://discord.com/channels/1148449914188218399/1248773338726400040 channel!"
-        command_embed = discord.Embed(title = "Vel's Library Bot Commands",description=commands)
-        member = taliya
-        try: 
-            await member.send("Welcome to the Vel's Library discord server! (Note, due to syncing issues between Patreon and Discord, it may take up to an hour for the server to become visible to you). \n\nThis account is the 'Card Catalog' bot that we use to search through Vel's content. Vel has over four hundred audios for you to enjoy, and the bot can help you explore the collection and find your next favorite audio. The bot can pick a random audio with your favorite tags for you to listen to, you can search for audios by title or tags, and much more! Some example commands are listed below, or you can send the command `/tutorial` to learn the basics. You can also find the masterlist of all of Vel's audios [here](<https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr>). \n\nEnjoy your time in the library!")
-            await member.send(embed=command_embed)
-            print(f'new member welcome message sent to {member.name}')
-        except:
-            print(f'new member {member.name} has closed DMs, welcome message could not be sent')
-
 
 @client.event
 async def on_guild_channel_create(channel):

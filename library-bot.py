@@ -548,7 +548,8 @@ async def tag(interaction, taglist: str):
         try:
             await interaction.followup.send(embed = matches_embed)
         except:
-            await interaction.followup.send("Vel has too many audios tagged " + tagstring.lower() + "to display without exceeding the Discord character limit! Please try again with a more specific set of tags (for instance, try adding another tag you enjoy, like '"+ tagstring.lower() +"[creampie]' or '"+ tagstring.lower() +"[praise]')." )
+            # await interaction.followup.send("Vel has too many audios tagged " + tagstring.lower() + "to display without exceeding the Discord character limit! Please try again with a more specific set of tags (for instance, try adding another tag you enjoy, like '"+ tagstring.lower() +"[creampie]' or '"+ tagstring.lower() +"[praise]')." )
+            await interaction.followup.send("Vel has too many audios tagged " + tagstring.lower() + "to display without exceeding the Discord character limit! You can limit results by adding another tag you enjoy, or find a random audio with the tag " + tagstring.lower() + "with the `/randomaudio` command by using the tag option!" )
 # @tag.autocomplete('taglist')
 # async def tag_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
 #     options = all_tags.sort()

@@ -163,6 +163,19 @@ class Audio:
             return True
 
 
+class Button(discord.ui.View):
+    def __init__(self, response, timeout=180):
+        super().__init__(timeout=timeout)
+        self.response = response
+    @discord.ui.button(label = "See Full Results", style = discord.ButtonStyle.blurple)
+    async def this_button(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await interaction.response.send_message(embed = self.response[0])
+        for msg in self.response[1:]:
+            await interaction.channel.send(embed = msg)
+
+
+
+
 
 
 # FILTERING AUDIOS BY TAG #
@@ -351,7 +364,28 @@ def save_to_file(filename, list):
     f.close()
     return None
 
+# DISCORD POST CHARACTER LIMIT
 
+def msg_split(string, listname, embed = True):
+    lines = string.split('\n')
+    char_limit = 2000 - (20 + len(listname))
+    message_strings = [""]
+    index = 0
+    for line in lines:
+        if (len(message_strings[index]) + len(line)) > char_limit:
+            index += 1
+            message_strings.append(line + '\n')
+        else:
+            message_strings[index] += line + '\n'
+    if embed: 
+        embeds = []
+        for i in range(len(message_strings)):
+            title = listname + ", Part " + str(i+1) + " of " + str(len(message_strings))
+            new_embed = discord.Embed(title = title, description = message_strings[i])
+            embeds.append(new_embed)
+        return embeds
+    else:
+        return message_strings
 
 
 
@@ -503,6 +537,11 @@ async def title(interaction, title_phrase: str):
             await interaction.followup.send(embed = matches_embed)
         except:
             await interaction.followup.send("Too many results found to display without exceeding Discord character limit, please try again with a more specific search term.")
+            return_all = False
+            if return_all: 
+                msg_list = msg_split(link_string, "Matching Results")
+                for msg in msg_list:
+                    await interaction.channel.send(embed = msg)
 
     if interaction.user.id == 1185405398883258369:
         if len(matches) == 0: 
@@ -548,8 +587,12 @@ async def tag(interaction, taglist: str):
         try:
             await interaction.followup.send(embed = matches_embed)
         except:
-            # await interaction.followup.send("Vel has too many audios tagged " + tagstring.lower() + "to display without exceeding the Discord character limit! Please try again with a more specific set of tags (for instance, try adding another tag you enjoy, like '"+ tagstring.lower() +"[creampie]' or '"+ tagstring.lower() +"[praise]')." )
-            await interaction.followup.send("Vel has too many audios tagged " + tagstring.lower() + "to display without exceeding the Discord character limit! You can limit results by adding another tag you enjoy, or find a random audio with the tag " + tagstring.lower() + "by using the `/randomaudio` command with the tag option!" )
+            msg_list = msg_split(link_string, tagstring + "Audios")
+            await interaction.followup.send("Vel has too many audios tagged " + tagstring.lower() + "to display without exceeding the Discord character limit! You can limit results by adding another tag you enjoy, or find a random audio with the tag " + tagstring.lower() + "by using the `/randomaudio` command with the tag option! \n\nTo see a full list of all " + str(len(matches)) + " audios tagged " + tagstring.lower() + ", press the button below (note, the result will be multiple messages long)!",view =  Button(response = msg_list))
+
+
+            # \n\nPress the button below to see all list of results (" + str(len(matches)) + " audios)." 
+            # do autocomplete
 # @tag.autocomplete('taglist')
 # async def tag_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
 #     options = all_tags.sort()
@@ -711,19 +754,9 @@ async def myrequests(interaction):
         try:
             await interaction.followup.send(req_string)
         except:
-            lines = req_string.splitlines()
-            req_msgs = [""]
-            current_string_index = 0
-            for line in lines:
-                if (len(req_msgs[current_string_index]) + len(line)) < 2000:
-                    req_msgs[current_string_index] += '\n' + line
-                else:
-                    current_string_index += 1
-                    req_msgs.append(line)
-            await interaction.followup.send(req_msgs[0])
-            for msg in req_msgs[1:]:
+            msg_list = msg_split(req_string, "Request", False)
+            for msg in msg_list:
                 await interaction.followup.send(msg)
-
     else:
         await interaction.followup.send("You have no recorded snack requests! Use the command `/request` to add desired tags.")
 
@@ -1281,7 +1314,7 @@ async def birthdayremove(interaction):
 
 
 @tree.command(name = "tierlist", description = "Links to Vel's official tier list of all his audios!")
-async def count(interaction):
+async def tierlist(interaction):
     await interaction.response.defer()
     image = discord.File("just_the_top.webp")
     embed = discord.Embed(title = "Vel's Library Full Audio Tierlist!", url = "https://tiermaker.com/create/vels-library-audio-tierlist-18367623-2", description = "You can see Vel's full official tier list of all his audios here! https://discord.com/channels/1148449914188218399/1194499430410371173/1391176460781359224 This was done live on twitch stream (use `/stream` for  more details on how to join us next time). If you'd like to do your own tierlist, you can [make your own here](https://tiermaker.com/create/vels-library-audio-tierlist-18367623-2), courtesy of Kayla!")

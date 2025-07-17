@@ -44,6 +44,7 @@ REQUESTS_FILENAME = "snack-requests.json"
 BIRTHDAY_FILENAME = "birthdays.json"
 LIVETIMES_FILENAME = "livetimes.txt"
 EVENTS_FILENAME = "event-schedule.json"
+TAGS_FILENAME = "updatedtags.txt"
 
 # run daily tasks at 1pm eastern time (6pm UTC+1)
 HOUR, MINUTE = 17, 0
@@ -423,7 +424,7 @@ async def setup_hook():
 
 
     # import current state variable values
-    global random_seed, good_girl, pet_count, edge_counter, cum_permission_ids, daily_audio, snack_requests, birthdays, twitch_time, live_time, event_times
+    global random_seed, good_girl, pet_count, edge_counter, cum_permission_ids, daily_audio, snack_requests, birthdays, twitch_time, live_time, event_times, sorted_tag_list
     random_seed = ''.join(random.choices(string.ascii_uppercase+string.digits, k=8))
     good_girl = read_from_file(WINNERS_FILENAME)[-1]
     pet_count = int(read_from_file(COUNTER_FILENAME)[-1])
@@ -439,6 +440,7 @@ async def setup_hook():
         event_times = json.load(read_file)
     twitch_time = read_from_file(LIVETIMES_FILENAME)[1]
     live_time = read_from_file(LIVETIMES_FILENAME)[0]
+    sorted_tag_list = read_from_file(TAGS_FILENAME)
     save_to_file(LIVETIMES_FILENAME,[live_time,twitch_time])
 
     global all_characters, all_tags, all_collections
@@ -588,15 +590,11 @@ async def tag(interaction, taglist: str):
             await interaction.followup.send(embed = matches_embed)
         except:
             msg_list = msg_split(link_string, tagstring + "Audios")
-            await interaction.followup.send("Vel has too many audios tagged " + tagstring.lower() + "to display without exceeding the Discord character limit! You can limit results by adding another tag you enjoy, or find a random audio with the tag " + tagstring.lower() + "by using the `/randomaudio` command with the tag option! \n\nTo see a full list of all " + str(len(matches)) + " audios tagged " + tagstring.lower() + ", press the button below (note, the result will be multiple messages long)!",view =  Button(response = msg_list))
-
-
-            # \n\nPress the button below to see all list of results (" + str(len(matches)) + " audios)." 
-            # do autocomplete
-# @tag.autocomplete('taglist')
-# async def tag_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
-#     options = all_tags.sort()
-#     return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()][:25]
+            await interaction.followup.send("Vel has too many audios tagged " + tagstring.lower() + "to display without exceeding the Discord character limit! You can limit results by adding another tag you enjoy, or find a random audio with the tag " + tagstring.lower() + "by using the `/randomaudio` command with the tag option! \n\nTo see a full list of all " + str(len(matches)) + " audios tagged " + tagstring.lower()[:-1] + ", press the button below (note, the result will be multiple messages long)!",view =  Button(response = msg_list))
+@tag.autocomplete('taglist')
+async def tag_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
+    options = sorted_tag_list
+    return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()][:25]
 
 
 

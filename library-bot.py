@@ -1142,7 +1142,7 @@ async def pet(interaction):
 async def degrade(interaction):
     await interaction.response.defer()
     adjectives = ["desperate","pretty","depraved","pathetic","needy","worthless"]
-    nouns = ["whore","slut","cunt","set of holes","cumslut","fucktoy","cumrag","cumdump"]
+    nouns = ["whore","slut","cunt","set of holes","cumslut","fucktoy","cumrag","cumdump","cocksleeve", "hole"]
     if random.choice(range(1000)) < 3:
         whose = "Vel's "
     elif random.choice(range(5)) == 0:
@@ -1158,7 +1158,7 @@ async def degrade(interaction):
 async def praise(interaction):
     await interaction.response.defer()
     adjectives = ["perfect","pretty","beautiful","darling","sweet"]
-    nouns = ["angel","bunny","pet","princess","toy","doll","kitten","flower"]
+    nouns = ["angel","bunny","pet","princess","toy","doll","kitten","flower","puppy"]
 
     if random.choice(range(1000)) < 3:
         whose = "Vel's "
@@ -1610,6 +1610,11 @@ async def run_daily_loops():
         await birthday_wishes()
         if datetime.datetime.now().weekday() == 0:
             await client.get_channel(COMMAND_CHANNEL_ID).send("Remember to `/update` the live time to next Sunday at 4:30 PM and the stream time to next Sunday at 11:30 AM using [universal timestamps](https://r.3v.fi/discord-timestamps/), " + taliya.mention + "!")
+            threads = await client.get_guild(GUILD).active_threads()
+            link_string = "Reminder that we have the following threads you can join!\n"
+            for thread in threads:
+                link_string = link_string + "- " + thread.jump_url + "\n"
+            await client.get_channel(GENERAL).send(link_string)
     elif rerun_daily:
         await taliya.send("Re-running audio of the day.")
         rerun_daily = False

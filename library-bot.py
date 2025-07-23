@@ -775,9 +775,10 @@ async def removerequest(interaction, remove_index: int):
                 not_found=False
             else:
                 deleted = entry[remove_index]
-                del entry[remove_index]
-                if len(entry) == 1:
+                if len(entry) == 2:
                     snack_requests.remove(entry)
+                else:
+                    del entry[remove_index]
                 await interaction.followup.send("Your snack request for " + deleted + " has been removed.")
                 not_found = False
             break
@@ -798,7 +799,8 @@ async def randomrequest(interaction):
         else:
             not_found = True
             while not_found:
-                entry = random.choice(snack_requests)
+                user_index = random.choice(range(len(snack_requests)))
+                entry = snack_requests[user_index]
                 try: 
                     user = await client.get_guild(GUILD).fetch_member(entry[0])
                 except:
@@ -807,8 +809,14 @@ async def randomrequest(interaction):
                     #     outfile.write(json.dumps(snack_requests))
                     not_found = True
                 else:
-                    request = random.choice(entry[1:])
-                    await interaction.followup.send(f"From {user.mention} — {request}")
+                    request_index = random.choice(range(1,len(entry)))
+                    await interaction.followup.send(f"From {user.mention} — {entry[request_index]}")
+                    if len(entry) == 2:
+                        del snack_requests[user_index]
+                    else:
+                        del snack_requests[user_index][request_index]
+                    with open("snack-requests.json", "w") as outfile:
+                        outfile.write(json.dumps(snack_requests))
                     not_found = False
     else:
         await interaction.followup.send("Only Vel can use the randomrequest command! Feel free to submit your own tags with `/request`.")

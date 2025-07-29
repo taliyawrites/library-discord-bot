@@ -705,6 +705,7 @@ async def photoshoots(interaction):
     embed.set_image(url="attachment://photoshootpreviewpic.jpg")
     await interaction.followup.send(file = image, embed=embed)
     await interaction.followup.send("See the pictures from Vel's photoshoot [here!](https://www.patreon.com/posts/june-photoshoot-135185141)", file = image)
+    await interaction.followup.send("See the pictures from Vel's photoshoot [here!](https://www.patreon.com/posts/june-photoshoot-135185141)")
 
 
 

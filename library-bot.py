@@ -699,7 +699,7 @@ async def masterlist(interaction):
 @tree.command(name = "photoshoots", description = "Links to Vel's photoshoot pics!")
 async def photoshoots(interaction):
     await interaction.response.defer()
-    link_string = "Here are links to all of Vel's photoshoots!\n-[Spring 2025](https://www.patreon.com/posts/june-photoshoot-135185141)"
+    link_string = "Here are links to all of Vel's photoshoots!\n- [June 2025](https://www.patreon.com/posts/june-photoshoot-135185141)"
     embed = discord.Embed(title = "Vel's Photoshoots!", description = link_string)
     image = discord.File("photoshootpreviewpic.jpg")
     embed.set_image(url="attachment://photoshootpreviewpic.jpg")

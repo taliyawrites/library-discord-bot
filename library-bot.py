@@ -703,16 +703,16 @@ async def photoshoots(interaction):
     image_url = "attachment://photoshootpreviewpic.jpg"
 
     # link_string = "Here are links to all of Vel's photoshoots!\n- [June 2025](https://www.patreon.com/posts/june-photoshoot-135185141)"
-    # full_embed = discord.Embed(title = "Vel's Photoshoots <3", description = link_string)
+    # full_embed = discord.Embed(title = "Vel's Photoshoots <3", description = link_string, url = COLLECTION_URL_INSERT_HERE)
     # full_embed.set_image(url=image_url)
     # await interaction.followup.send(file = image, embed=full_embed)
 
-    
+
     embed = discord.Embed(title = "Vel's June Photoshoot <3", url = "https://www.patreon.com/posts/june-photoshoot-135185141", description = "You can see the pictures from Vel's photoshoot [here!](https://www.patreon.com/posts/june-photoshoot-135185141)")
     embed.set_image(url=image_url)
     await interaction.followup.send(file = image, embed=embed)
 
-    await interaction.followup.send("See the pictures from Vel's photoshoot [here!](https://www.patreon.com/posts/june-photoshoot-135185141)")
+    # await interaction.followup.send("See the pictures from Vel's photoshoot [here!](https://www.patreon.com/posts/june-photoshoot-135185141)")
 
 
 

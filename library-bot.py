@@ -701,7 +701,7 @@ async def photoshoots(interaction):
     await interaction.response.defer()
     # link_string = "Here are links to all of Vel's photoshoots:\n- [June 2025](https://www.patreon.com/posts/june-photoshoot-135185141)"
     # embed = discord.Embed(title = "Vel's Photoshoots!", description = link_string)
-    embed = discord.Embed(title = "Vel's Photoshoot!", url = "https://www.patreon.com/posts/june-photoshoot-135185141")
+    embed = discord.Embed(title = "Vel's Photoshoot!", url = "https://www.patreon.com/posts/june-photoshoot-135185141", description = "You can see the pictures from Vel's photoshoot [here.](https://www.patreon.com/posts/june-photoshoot-135185141)")
     image = discord.File("photoshootpreviewpic.jpg")
     embed.set_image(url="attachment://photoshootpreviewpic.jpg")
     await interaction.followup.send(file = image, embed=embed)

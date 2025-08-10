@@ -1575,7 +1575,7 @@ async def on_message(message):
 async def on_guild_channel_create(channel):
     if channel.category_id == 1178075874906624140:
         mod_role = client.get_guild(GUILD).get_role(1239743183617790015)
-        await asyncio.sleep(2)
+        await asyncio.sleep(1)
         await channel.send(f"Thank you for opening a ticket! Please let us know what we can help you with. If you're reporting an incident or raising a concern, it helps us to have as much information as possible, so feel free to include as much as you remember and are comfortable sharing (for instance, it's helpful and completely allowed to name names of the relevant folks involved, include screenshots, or type out specific quotes you can recall). The more specific you are, the more quickly we can address the issue and help everyone involved! \n\nFor your privacy, everything discussed in this ticket is 100% confidential and only ever discussed with other moderators. If we need to ask other people questions about their involvement, we will get your permission first, and also do our best to keep your role in this anonymous! Finally, if your issue concerns the actions of a moderator and you do not feel comfortable with them being present in the channel while you discuss it, this can absolutely be arranged, just say the word. \n\nOnce you ask your question, make your suggestion, or tell us about the issue/concern, a {mod_role.mention} will respond to help!")
         # await channel.send(f"This is an automated message to make sure the mods see your ticket! {mod_role.mention}")
 
@@ -1772,7 +1772,7 @@ async def choose_good_girl():
         channel = client.get_channel(GENERAL)
         good_girl_role = guild.get_role(WINNER_ROLE)
 
-        await asyncio.sleep(6)
+        await asyncio.sleep(4)
         for member in good_girl_role.members:
             # remove good girl role from yesterday's winner
             await member.remove_roles(good_girl_role)

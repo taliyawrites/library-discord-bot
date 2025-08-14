@@ -1068,7 +1068,7 @@ async def bingo(interaction):
 
 
 
-@tree.command(name = "books", description = "List of books Vel is reading for content")
+@tree.command(name = "books", description = "Community-made list of book recommendations!")
 async def books(interaction):
     await interaction.response.defer()
     books_info = "Running list of book recommendations maintained by Del and Quin! Feel free to recommend your favorites using the forms available here: https://discord.com/channels/1148449914188218399/1185454347555983421/1405321524428279990!"

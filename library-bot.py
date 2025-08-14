@@ -1071,8 +1071,8 @@ async def bingo(interaction):
 @tree.command(name = "books", description = "List of books Vel is reading for content")
 async def books(interaction):
     await interaction.response.defer()
-    books_info = "List of books Vel is or will be reading for content, with links to Storygraph for descriptions, reviews, and content warnings. Maintained by Delphine!"
-    books_embed = discord.Embed(title = "Vel's Romance Reads", description = books_info, url = "https://airtable.com/appl3LHVXpzA6fEqq/shrTeuKFM6V6M4Bcs/tblgrs5VFAKpTsT5W/viw4EjZx4vfMv3vXf")
+    books_info = "Running list of book recommendations maintained by Del and Quin! Feel free to recommend your favorites using the forms available here: https://discord.com/channels/1148449914188218399/1185454347555983421/1405321524428279990!"
+    books_embed = discord.Embed(title = "Server Book Recommendations", description = books_info, url = "https://airtable.com/app2hy65VVe9BEVXi/shroKKK0IJ0ly0ZgQ")
     await interaction.followup.send(embed = books_embed)
 
 
@@ -1578,10 +1578,8 @@ async def on_guild_channel_create(channel):
             if user.top_role.id == 1148454184824360990 or user.top_role.id == 1248762871073210441:
                 nonmods = True
                 break 
-
         if nonmods: 
             await asyncio.sleep(0.5)
-            # await channel.send(f"This is an automated message to make sure the mods see your ticket! {mod_role.mention}")
             await channel.send(f"Thank you for opening a ticket! Please let us know what we can help you with. If you're reporting an incident or raising a concern, it helps us to have as much information as possible, so feel free to include as much as you remember and are comfortable sharing (for instance, it's helpful and completely allowed to name names of the relevant folks involved, include screenshots, or type out specific quotes you can recall). The more specific you are, the more quickly we can address the issue and help everyone involved! \n\nFor your privacy, everything discussed in this ticket is 100% confidential and only ever discussed with other moderators. If we need to ask other people questions about their involvement, we will get your permission first, and also do our best to keep your role in this anonymous! Finally, if your issue concerns the actions of a moderator and you do not feel comfortable with them being present in the channel while you discuss it, this can absolutely be arranged, just say the word. \n\nOnce you ask your question, make your suggestion, or tell us about the issue/concern, a {mod_role.mention} will respond to help!")
 
 

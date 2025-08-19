@@ -1460,6 +1460,9 @@ async def botsend_error(interaction, error):
     await interaction.response.send_message("Permissions denied.")
 
 
+
+ # WILL BE DELETABLE
+
 @tree.command(name = "embedsend", description = "makes the bot send a specified message in given channel", guild = discord.Object(COMMAND_SERVER))
 @app_commands.check(lambda u: u.user == taliya)
 @app_commands.allowed_installs(guilds=True, users=False)
@@ -1530,6 +1533,20 @@ async def mod_embed_edits(interaction, channel_id: Optional[str] = "136572446833
     await client.get_channel(int(channel_id)).send(embed=roxx_embed)
 
     await interaction.followup.send("Messages sent!")
+
+
+# WILL BE DELETABLE
+
+
+# @tree.command(name = "updatetags", description = "Command for maintenance by our tag team; please ignore!")
+# async def updatetags(interaction, audio : str, tags : str):
+#     await interaction.response.defer()
+#     allowed_users = [1185405398883258369, 490759913757212672, 1169014359842885726, 1089053035377999912]
+#     if interaction.user.id not in allowed_users:
+#         await interaction.followup.send("Sorry, you do not have access to this command! The team behind the masterlist uses this to update tags quickly and efficiently, but unfortunately it can't be hidden from the full list. You might have been looking for the `/tag` command to search for an audio by its tags.")
+#     else:
+        
+
 
 
 
@@ -1675,8 +1692,9 @@ async def run_daily_loops():
 async def event_reminder(event):
     global event_times
     va_role = client.get_guild(1382085398292856903).get_role(1382088337497788528)
+    everyone = client.get_guild(1382085398292856903).default_role
     event_ref = client.get_guild(1382085398292856903).get_scheduled_event(event[0])
-    await client.get_channel(1382188782907822131).send(f"Reminder for {va_role.mention} that [{event_ref.name}]({event_ref.url}) starts in one hour!")
+    await client.get_channel(1382188782907822131).send(f"Reminder for {everyone.mention} that [{event_ref.name}]({event_ref.url}) starts in one hour!")
     event_times.remove(event)
     with open(EVENTS_FILENAME, "w") as outfile:
         outfile.write(json.dumps(event_times))

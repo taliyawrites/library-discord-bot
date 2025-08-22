@@ -1511,7 +1511,7 @@ async def updatetags(interaction, record : str, tags : str):
     else:
         corrected_tags = get_tags(tags.lower().replace("’","'").strip())
         corrected_string = "[" + '] ['.join(corrected_tags) + "]"
-        await interaction.followup.send(f"Tags corrected to canonical form as: {corrected_string}", view = TagButton(tags = corrected_string, audioID = record))
+        await interaction.followup.send(f"Tags written in canonical form as: {corrected_string}", view = TagButton(tags = corrected_string, audioID = record))
 
 
 def push_masterlist_update(interaction, audioID, tags):

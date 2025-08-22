@@ -173,7 +173,8 @@ class Button(discord.ui.View):
         self.response = response
     @discord.ui.button(label = "See Full Results", style = discord.ButtonStyle.blurple)
     async def this_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.response.send_message(embed = self.response[0])
+        await interaction.response.defer()
+        await interaction.followup.send(embed = self.response[0])
         for msg in self.response[1:]:
             await interaction.channel.send(embed = msg)
 

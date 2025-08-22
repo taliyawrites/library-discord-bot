@@ -1504,7 +1504,6 @@ async def mod_embed(interaction, user_id: str, name: str, intro: str, embed_colo
 @app_commands.describe(record = "From the record ID field on the masterlist!")
 async def updatetags(interaction, record : str, tags : str):
     await interaction.response.defer()
-    await interaction.followup.send()
     allowed_users = [1185405398883258369, 490759913757212672, 1169014359842885726, 1089053035377999912]
 
     if interaction.user.id not in allowed_users:

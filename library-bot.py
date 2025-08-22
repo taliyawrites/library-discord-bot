@@ -1474,24 +1474,6 @@ async def botsend_error(interaction, error):
     await interaction.response.send_message("Permissions denied.")
 
 
-
- # WILL BE DELETABLE
-
-@tree.command(name = "embedsend", description = "makes the bot send a specified message in given channel", guild = discord.Object(COMMAND_SERVER))
-@app_commands.check(lambda u: u.user == taliya)
-@app_commands.allowed_installs(guilds=True, users=False)
-async def embedsend(interaction, channel_id: str):
-    await interaction.response.defer()
-    commands = "Type / to see a menu of all the available commands! Some commonly used ones are listed here.\n- `/randomaudio` randomly chosen audio from the masterlist \n- `/randomaudio [some] [tags]` random audio with these desired tag(s) \n- `/title phrase` for list of audios with that phrase in title \n- `/tag [some] [tags]` for list of audios with those tags \n- `/character name` for list of audios featuring a specific named character \n- `/dm` bot will privately DM you the masterlist \n- `/masterlist` link to the masterlist \n- `/request` to suggest tags for Vel's voice notes \n- `/vn` for a random voice note \nFor further details, use `/tutorial` to walk through these bot functions. Please always feel welcome to ask questions about using the bot in the  https://discord.com/channels/1148449914188218399/1248773338726400040 channel!"
-    command_embed = discord.Embed(title = "Card Catalog Bot Basic Commands",description=commands)
-    sent = await client.get_channel(int(channel_id)).send(embed=command_embed)
-    await interaction.followup.send("Message sent! " + sent.jump_url)
-@embedsend.error
-async def embedsend_error(interaction, error):
-    await interaction.response.send_message("Permissions denied.")
-
-
-
 @tree.command(name = "mod_embed", guild = discord.Object(COMMAND_SERVER))
 @app_commands.check(lambda u: u.user == taliya)
 @app_commands.allowed_installs(guilds=True, users=False)
@@ -1501,8 +1483,8 @@ async def mod_embed(interaction, user_id: str, name: str, intro: str, embed_colo
         custom_color = discord.Colour.magenta()
     elif embed_color == "gold":
         custom_color = discord.Colour.dark_gold()
-    elif embed_color == "purple":
-        custom_color = discord.Colour.dark_purple()
+    elif embed_color == "blue":
+        custom_color = discord.Colour.blurple()
     mod_embed = discord.Embed(title = name, color = custom_color, description = intro)
     profile = await client.get_guild(GUILD).fetch_member(user_id)
     mod_embed.set_thumbnail(url = profile.display_avatar.url)
@@ -1510,46 +1492,6 @@ async def mod_embed(interaction, user_id: str, name: str, intro: str, embed_colo
     await interaction.followup.send("Message sent! " + sent.jump_url)
 
 
-
-
-@tree.command(name = "all_mod_embeds", guild = discord.Object(COMMAND_SERVER))
-@app_commands.check(lambda u: u.user == taliya)
-@app_commands.allowed_installs(guilds=True, users=False)
-async def mod_embed_edits(interaction, channel_id: Optional[str] = "1365724468332204113"):
-    await interaction.response.defer()
-
-    taliya_info = ["Taliya — Bot Mod","Hey, I'm Taliya (she/her)! I wrote and maintain the code that runs the Card Catalog bot we use in the server to find audios and search the masterlist. I'm also a nsfw scriptwriter, so you'll see my name on some of Vel's audios! Please feel free to come to me for any questions about using the bot or about Vel's content in general.","https://cdn.discordapp.com/avatars/1169014359842885726/5644f89f84149e7b87cfd3591cbe30e6.png?size=1024"]
-    nyx_info = ["Nyx — Mod","Heyyyyyyy it’s meeeee. I’m Nyx (she/they). I’m the devil on your shoulder telling you to be more horny <:cowboystrap:1346304015150878813>. You’ll often find me nuking ⁠https://discord.com/channels/1148449914188218399/1194499430410371173 or https://discord.com/channels/1148449914188218399/1185454347555983421 ⁠with reccs although I always encourage others to spread the chaos. I’m here to keep the libido up and the charge on your vibrator low tehee <:elmofiredraw:1208608109904396328>","https://cdn.discordapp.com/avatars/1082532069420314687/f4e48681cc306d52fc356034e6e1e39c.png?size=1024"]
-    del_info = ["Del — Community Mod","Hey there! I'm Delphine (she/her) but everyone calls me Del. I'm the community mod for the server and help to run and organize events. You'll see me active often chatting it up about romance novels and my husband, Mr D. Please feel free to ping me or DM if you ever have questions about the server!","https://cdn.discordapp.com/avatars/1262940885251784785/927ece4c59c5bc572c5ac5c2ef3bcf82.png?size=1024"]
-    roxx_info = ["Roxx — Mod","<:molotov_cocktail:1322408878389858437> Hiya! I’m Roxx (they/them). <:molotov_cocktail:1322408878389858437> And I’m not a Regular Mod, I’m a Cool Mod, aka The Peacekeeper. My job is to keep the space welcoming and safe for everyone. You’ll usually see me playing video games and helping out in twitch streams. If you ever have anything that makes you feel uncomfy or observe some less than friendly behavior, please reach out to me through our ticketing system and I’ll be happy to help out with the situation! <:petme:1269752590967504957>","https://cdn.discordapp.com/avatars/415894832515383296/9e073813b64fcbcb021a1407f73ddd82.png?size=1024"]
-    vel_info = ["Vel — Head Mod, Librarian","You know who Vel is LMAO.",vel.display_avatar.url]
-
-
-    vel_embed = discord.Embed(title = vel_info[0], color = discord.Colour.dark_gold(), description = vel_info[1])
-    vel_embed.set_thumbnail(url = vel_info[2])
-
-    taliya_embed = discord.Embed(title = taliya_info[0], color = discord.Colour.magenta(), description = taliya_info[1])
-    taliya_embed.set_thumbnail(url = taliya_info[2])
-
-    del_embed = discord.Embed(title = del_info[0], color = discord.Colour.magenta(), description = del_info[1])
-    del_embed.set_thumbnail(url = del_info[2])
-
-    nyx_embed = discord.Embed(title = nyx_info[0], color = discord.Colour.magenta(), description = nyx_info[1])
-    nyx_embed.set_thumbnail(url = nyx_info[2])
-
-    roxx_embed = discord.Embed(title = roxx_info[0], color = discord.Colour.magenta(), description = roxx_info[1])
-    roxx_embed.set_thumbnail(url = roxx_info[2])
-
-    await client.get_channel(int(channel_id)).send(embed=vel_embed)
-    await client.get_channel(int(channel_id)).send(embed=taliya_embed)
-    await client.get_channel(int(channel_id)).send(embed=del_embed)
-    await client.get_channel(int(channel_id)).send(embed=nyx_embed)
-    await client.get_channel(int(channel_id)).send(embed=roxx_embed)
-
-    await interaction.followup.send("Messages sent!")
-
-
-# WILL BE DELETABLE
 
 
 
@@ -1562,9 +1504,9 @@ async def updatetags(interaction, record : str, tags : str):
     allowed_users = [1185405398883258369, 490759913757212672, 1169014359842885726, 1089053035377999912]
 
     if interaction.user.id not in allowed_users:
-        await interaction.followup.send("Sorry, you do not have access to this command! The team behind the masterlist uses this to update tags quickly and efficiently, but unfortunately it can't be hidden from the full list. You might have been looking for the `/tag` command to search for an audio by its tags.")
+        await interaction.followup.send("Sorry, you do not have access to this command! The team behind the masterlist uses this to update tags quickly and efficiently, but unfortunately it can't be hidden from the full list of commands. You might have been looking for the `/tag` command to search for an audio by its tags.")
     else:
-        corrected_tags = get_tags(tags)
+        corrected_tags = get_tags(tags.lower().replace("’","'").strip())
         corrected_string = "[" + '] ['.join(corrected_tags) + "]"
         await interaction.followup.send(f"Tags corrected to canonical form as: {corrected_string}", view = TagButton(tags = corrected_string, audioID = record))
 

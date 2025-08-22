@@ -186,14 +186,14 @@ class TagButton(discord.ui.View):
         self.audioID = audioID
     @discord.ui.button(label = "Accept Tags", style = discord.ButtonStyle.blurple)
     async def this_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-        responsechannel = interaction.channel
+        await interaction.response.defer()
         taggedaudio = push_masterlist_update(interaction, self.audioID, self.tags)
-        await interaction.response.send_message("Tags successfully updated!")
-        await interaction.response.send_message(embed = taggedaudio.discord_post())
+        await interaction.followup.send("Tags successfully updated!")
+        await interaction.channel.send(embed = taggedaudio.discord_post())
     @discord.ui.button(label = "Reject Tags", style = discord.ButtonStyle.blurple)
     async def this_button_2(self, interaction: discord.Interaction, button: discord.ui.Button):
-        responsechannel = interaction.channel
-        await interaction.response.send_message("Tags not updated — edit tag dictionary or discuss in channel to resolve the issue!")
+        await interaction.response.defer()
+        await interaction.followup.send("Tags not updated — edit tag dictionary or discuss in channel to resolve the issue!")
 
 
 

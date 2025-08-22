@@ -190,7 +190,6 @@ class TagButton(discord.ui.View):
         await interaction.response.defer()
         taggedaudio = push_masterlist_update(interaction, self.audioID, self.tags)
         await interaction.followup.send(content = "Tags successfully updated!",embed = taggedaudio.discord_post())
-        # await interaction.channel.send(embed = taggedaudio.discord_post())
     @discord.ui.button(label = "Reject Tags", style = discord.ButtonStyle.blurple)
     async def this_button_2(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()

@@ -186,9 +186,10 @@ class TagButton(discord.ui.View):
         self.audioID = audioID
     @discord.ui.button(label = "Accept Tags", style = discord.ButtonStyle.blurple)
     async def this_button(self, interaction: discord.Interaction, button: discord.ui.Button):
+        responsechannel = interaction.channel
         taggedaudio = push_masterlist_update(interaction, self.audioID, self.tags)
-        await interaction.followup.send("Tags successfully updated!")
-        await interaction.channel.send(embed = taggedaudio.discord_post())
+        await responsechannel.send("Tags successfully updated!")
+        await responsechannel.send(embed = taggedaudio.discord_post())
     @discord.ui.button(label = "Reject Tags", style = discord.ButtonStyle.blurple)
     async def this_button_2(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.followup.send("Tags not updated — edit tag dictionary or discuss in channel to resolve the issue!")
@@ -1511,6 +1512,7 @@ async def updatetags(interaction, record : str, tags : str):
     else:
         corrected_tags = get_tags(tags.lower().replace("’","'").strip())
         corrected_string = "[" + '] ['.join(corrected_tags) + "]"
+        await interaction.followup.send("Updating tags!")
         await interaction.followup.send(f"Tags written in canonical form as: {corrected_string}", view = TagButton(tags = corrected_string, audioID = record))
 
 

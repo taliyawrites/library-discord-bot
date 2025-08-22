@@ -176,6 +176,20 @@ class Button(discord.ui.View):
 
 
 
+class TagButton(discord.ui.View):
+    def __init__(self, tags, audioID, timeout=180):
+        super().__init__(timeout=timeout)
+        self.tags = tags
+        self.audioID = audioID
+    @discord.ui.button(label = "Accept Tags", style = discord.ButtonStyle.blurple)
+    async def this_button(self, interaction: discord.Interaction, button: discord.ui.Button):
+        taggedaudio = push_masterlist_update(interaction, self.audioID, self.tags)
+        await interaction.channel.send("Tags successfully updated!")
+        await interaction.channel.send(embed = taggedaudio.discord_post())
+    @discord.ui.button(label = "Reject Tags", style = discord.ButtonStyle.blurple)
+    async def this_button_2(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await interaction.channel.send("Tags not updated — edit tag dictionary or discuss in channel to resolve the issue!")
+
 
 
 
@@ -1538,15 +1552,35 @@ async def mod_embed_edits(interaction, channel_id: Optional[str] = "136572446833
 # WILL BE DELETABLE
 
 
-# @tree.command(name = "updatetags", description = "Command for maintenance by our tag team; please ignore!")
-# async def updatetags(interaction, audio : str, tags : str):
-#     await interaction.response.defer()
-#     allowed_users = [1185405398883258369, 490759913757212672, 1169014359842885726, 1089053035377999912]
-#     if interaction.user.id not in allowed_users:
-#         await interaction.followup.send("Sorry, you do not have access to this command! The team behind the masterlist uses this to update tags quickly and efficiently, but unfortunately it can't be hidden from the full list. You might have been looking for the `/tag` command to search for an audio by its tags.")
-#     else:
-        
 
+# TAGGING COMMANDS
+
+@tree.command(name = "updatetags", description = "Command for maintenance by our tag team; please ignore!")
+@app_commands.describe(record = "From the record ID field on the masterlist!")
+async def updatetags(interaction, record : str, tags : str):
+    await interaction.response.defer()
+    allowed_users = [1185405398883258369, 490759913757212672, 1169014359842885726, 1089053035377999912]
+
+    if interaction.user.id not in allowed_users:
+        await interaction.followup.send("Sorry, you do not have access to this command! The team behind the masterlist uses this to update tags quickly and efficiently, but unfortunately it can't be hidden from the full list. You might have been looking for the `/tag` command to search for an audio by its tags.")
+    else:
+        corrected_tags = get_tags(tags)
+        corrected_string = "[" + '] ['.join(corrected_tags) + "]"
+        await interaction.followup.send(f"Tags corrected to canonical form as: {corrected_string}", view = TagButton(tags = corrected_string, audioID = record))
+
+
+def push_masterlist_update(interaction, audioID, tags):
+    global audio_choices
+    table = airtable_api.table('apprrNWlCwDHYj4wW', 'tblqwSpe5CdMuWHW6')
+
+    # UPDATE MASTERLIST
+    table.update(audioID, {"Tags" : tags, "Tagged?" : True})
+    audio_choices = import_airtable_data()
+
+    # PULL NEW ENTRY
+    for entry in audio_choices:
+        if entry.recordID() == audioID:
+            return entry
 
 
 
@@ -1694,7 +1728,7 @@ async def event_reminder(event):
     va_role = client.get_guild(1382085398292856903).get_role(1382088337497788528)
     everyone = client.get_guild(1382085398292856903).default_role
     event_ref = client.get_guild(1382085398292856903).get_scheduled_event(event[0])
-    await client.get_channel(1382188782907822131).send(f"Reminder for {everyone.mention} that [{event_ref.name}]({event_ref.url}) starts in one hour!")
+    await client.get_channel(1382188782907822131).send(f"Reminder for {everyone} that [{event_ref.name}]({event_ref.url}) starts in one hour!")
     event_times.remove(event)
     with open(EVENTS_FILENAME, "w") as outfile:
         outfile.write(json.dumps(event_times))

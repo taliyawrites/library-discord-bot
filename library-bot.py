@@ -75,6 +75,9 @@ class Audio:
         fields = list(self.raw_data.items())[2][1]
         return list(fields.items())
 
+    def recordID(self):
+        return list(self.raw_data.items())[0][1]
+
     def name(self):
         for entry in self.parsed_data():
             if entry[0]=='Title':

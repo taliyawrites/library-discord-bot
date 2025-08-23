@@ -1387,6 +1387,44 @@ async def toy(interaction, victim: Optional[str] = ""):
 
 
 
+
+
+# TAGGING COMMANDS
+
+@tree.command(name = "updatetags", description = "Command for maintenance by our tag team; please ignore!")
+@app_commands.describe(record = "From the record ID field on the masterlist!")
+async def updatetags(interaction, record : str, tags : str):
+    await interaction.response.defer()
+    allowed_users = [1185405398883258369, 490759913757212672, 1169014359842885726, 1089053035377999912]
+
+    if interaction.user.id not in allowed_users:
+        await interaction.followup.send("Sorry, you do not have access to this command! The team behind the masterlist uses this to update tags quickly and efficiently, but unfortunately it can't be hidden from the full list of commands. You might have been looking for the `/tag` command to search for an audio by its tags.")
+    else:
+        corrected_tags = get_tags(tags.lower().replace("’","'").strip())
+        corrected_string = "[" + '] ['.join(corrected_tags) + "]"
+        title = ""
+        for entry in audio_choices:
+            if entry.recordID() == record:
+                title = entry.name()
+        await interaction.followup.send(f'Tags for "{title}" written in canonical form as: {corrected_string}', view = TagButton(tags = corrected_string, audioID = record))
+
+
+def push_masterlist_update(interaction, audioID, tags):
+    global audio_choices
+    table = airtable_api.table('apprrNWlCwDHYj4wW', 'tblqwSpe5CdMuWHW6')
+
+    # UPDATE MASTERLIST
+    table.update(audioID, {"Tags" : tags, "Tagged?" : True})
+    audio_choices = import_airtable_data()
+
+    # PULL NEW ENTRY
+    for entry in audio_choices:
+        if entry.recordID() == audioID:
+            return entry
+
+
+
+
 # BACKEND UTILITY COMMANDS #
 
 
@@ -1497,37 +1535,6 @@ async def mod_embed(interaction, user_id: str, name: str, intro: str, embed_colo
     await interaction.followup.send("Message sent! " + sent.jump_url)
 
 
-
-
-
-# TAGGING COMMANDS
-
-@tree.command(name = "updatetags", description = "Command for maintenance by our tag team; please ignore!")
-@app_commands.describe(record = "From the record ID field on the masterlist!")
-async def updatetags(interaction, record : str, tags : str):
-    await interaction.response.defer()
-    allowed_users = [1185405398883258369, 490759913757212672, 1169014359842885726, 1089053035377999912]
-
-    if interaction.user.id not in allowed_users:
-        await interaction.followup.send("Sorry, you do not have access to this command! The team behind the masterlist uses this to update tags quickly and efficiently, but unfortunately it can't be hidden from the full list of commands. You might have been looking for the `/tag` command to search for an audio by its tags.")
-    else:
-        corrected_tags = get_tags(tags.lower().replace("’","'").strip())
-        corrected_string = "[" + '] ['.join(corrected_tags) + "]"
-        await interaction.followup.send(f"Tags written in canonical form as: {corrected_string}", view = TagButton(tags = corrected_string, audioID = record))
-
-
-def push_masterlist_update(interaction, audioID, tags):
-    global audio_choices
-    table = airtable_api.table('apprrNWlCwDHYj4wW', 'tblqwSpe5CdMuWHW6')
-
-    # UPDATE MASTERLIST
-    table.update(audioID, {"Tags" : tags, "Tagged?" : True})
-    audio_choices = import_airtable_data()
-
-    # PULL NEW ENTRY
-    for entry in audio_choices:
-        if entry.recordID() == audioID:
-            return entry
 
 
 

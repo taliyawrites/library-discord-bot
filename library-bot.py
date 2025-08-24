@@ -1441,6 +1441,10 @@ async def refresh(interaction):
     audio_choices = import_airtable_data()
     tag_dictionary = import_tag_dictionary()
     collections = import_collections()
+
+    global all_characters, all_tags, all_collections
+    all_characters, all_tags, all_collections = write_data_lists()
+    
     await interaction.followup.send("Masterlist data sync'ed with Airtable updates.")
 @refresh.error
 async def refresh_error(interaction, error):

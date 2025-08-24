@@ -348,13 +348,12 @@ def write_data_lists():
                 character_list.append(char)
     all_characters = list(set(character_list))
 
-    tag_list = []
+    all_tags = []
     table = airtable_api.table('appeb72XP6YJzGRyY', 'tbltF1MithqYynsdU')
     for entry in table.all():
         fields = list(entry.items())[2][1]
         data = list(fields.items())
-        tag_list.append(data[1][1].strip())
-    all_tags = list(set(tag_list))
+        all_tags.append(data[0][1].strip())
 
     all_collections = [coll[0] for coll in collections]
     return all_characters, all_tags, all_collections
@@ -610,10 +609,13 @@ async def tag(interaction, taglist: str):
         except:
             msg_list = msg_split(link_string, tagstring + "Audios")
             await interaction.followup.send("Vel has too many audios tagged " + tagstring.lower() + "to display without exceeding the Discord character limit! You can limit results by adding another tag you enjoy, or find a random audio with the tag " + tagstring.lower() + "by using the `/randomaudio` command with the tag option! \n\nTo see a full list of all " + str(len(matches)) + " audios tagged " + tagstring.lower()[:-1] + ", press the button below (note, the result will be multiple messages long)!",view =  Button(response = msg_list))
-# @tag.autocomplete('taglist')
-# async def tag_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
-#     options = sorted_tag_list
-#     return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()][:25]
+@tag.autocomplete('taglist')
+async def tag_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
+    canonical_matches = [app_commands.Choice(name=opt, value=opt) for opt in sorted_tag_list if current.lower() in opt.lower()][:25]
+    if len(canonical_matches) != 0:
+        return canonical_matches
+    else:
+        return [app_commands.Choice(name=tag_dictionary[opt], value=tag_dictionary[opt]) for opt in all_tags if current.lower() in opt.lower()][:25]
 
 
 

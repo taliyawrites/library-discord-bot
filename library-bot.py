@@ -615,7 +615,7 @@ async def tag_autocomplete(interaction: discord.Interaction, current: str) -> li
     if len(canonical_matches) != 0:
         return canonical_matches
     else:
-        return [app_commands.Choice(name=tag_dictionary[opt], value=tag_dictionary[opt]) for opt in all_tags if current.lower() in opt.lower()][:25]
+        return list(set([app_commands.Choice(name=tag_dictionary[opt], value=tag_dictionary[opt]) for opt in all_tags if current.lower() in opt.lower()][:25]))
 
 
 

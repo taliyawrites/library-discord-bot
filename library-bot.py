@@ -610,10 +610,10 @@ async def tag(interaction, taglist: str):
         except:
             msg_list = msg_split(link_string, tagstring + "Audios")
             await interaction.followup.send("Vel has too many audios tagged " + tagstring.lower() + "to display without exceeding the Discord character limit! You can limit results by adding another tag you enjoy, or find a random audio with the tag " + tagstring.lower() + "by using the `/randomaudio` command with the tag option! \n\nTo see a full list of all " + str(len(matches)) + " audios tagged " + tagstring.lower()[:-1] + ", press the button below (note, the result will be multiple messages long)!",view =  Button(response = msg_list))
-# @tag.autocomplete('taglist')
-# async def tag_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
-#     options = sorted_tag_list
-#     return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()][:25]
+@tag.autocomplete('taglist')
+async def tag_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
+    options = sorted_tag_list
+    return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()][:25]
 
 
 

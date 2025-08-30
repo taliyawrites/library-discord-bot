@@ -1444,6 +1444,7 @@ async def addaudio(interaction, title : str, tags : str, url : str, description 
         if entry.recordID() == record['id']:
             await interaction.followup.send(entry.discord_post())
             break
+@addaudio.autocomplete('exclusive')
 async def addaudio_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
     options = ["Patreon Exclusive","Public"]
     return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]

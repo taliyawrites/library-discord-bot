@@ -1427,26 +1427,26 @@ def push_masterlist_update(interaction, audioID, tags):
 
 
 
-@tree.command(name = "addaudio", description = "Add a new entry to the masterlist",  guild = discord.Object(COMMAND_SERVER))
-@app_commands.describe(date = "In form MM-DD")
-async def addaudio(interaction, title : str, tags : str, url : str, description : str, date : str, scriptwriter: Optional[str] = "Vel", date : str, series: Optional[str] = "", exclusive : str, collection : Optional[str] = "", character : Optional[str] = ""):
-    await interaction.response.defer()
+# @tree.command(name = "addaudio", description = "Add a new entry to the masterlist",  guild = discord.Object(COMMAND_SERVER))
+# @app_commands.describe(date = "In form MM-DD")
+# async def addaudio(interaction, title : str, tags : str, url : str, description : str, date : str, scriptwriter: Optional[str] = "Vel", date : str, series: Optional[str] = "", exclusive : str, collection : Optional[str] = "", character : Optional[str] = ""):
+#     await interaction.response.defer()
 
-    corrected = get_tags(tags.lower().replace("’","'").strip())
-    corrected_tags = "[" + '] ['.join(corrected) + "]"
+#     corrected = get_tags(tags.lower().replace("’","'").strip())
+#     corrected_tags = "[" + '] ['.join(corrected) + "]"
 
-    table = airtable_api.table('apprrNWlCwDHYj4wW', 'tblqwSpe5CdMuWHW6')
-    record = table.create({"Title": title, "Tags": corrected_tags, "Post Link": url,"Description": description,"Scriptwriter": scriptwriter,"General Date": "2025-" + date,"Series Name (if applicable)": series, "Public/Patreon": exclusive, "Collections (Patreon)": collection,"Recurring Characters": character})
+#     table = airtable_api.table('apprrNWlCwDHYj4wW', 'tblqwSpe5CdMuWHW6')
+#     record = table.create({"Title": title, "Tags": corrected_tags, "Post Link": url,"Description": description,"Scriptwriter": scriptwriter,"General Date": "2025-" + date,"Series Name (if applicable)": series, "Public/Patreon": exclusive, "Collections (Patreon)": collection,"Recurring Characters": character})
 
-    global audio_choices
-    audio_choices = import_airtable_data()
-    for entry in audio_choices:
-        if entry.recordID() == record['id']:
-            await interaction.followup.send(entry.discord_post())
-            break
-async def addaudio_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
-    options = ["Patreon Exclusive","Public"]
-    return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]
+#     global audio_choices
+#     audio_choices = import_airtable_data()
+#     for entry in audio_choices:
+#         if entry.recordID() == record['id']:
+#             await interaction.followup.send(entry.discord_post())
+#             break
+# async def addaudio_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
+#     options = ["Patreon Exclusive","Public"]
+#     return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]
 
 
 

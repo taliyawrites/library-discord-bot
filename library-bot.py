@@ -1442,7 +1442,7 @@ async def addaudio(interaction, title : str, tags : str, url : str, description 
     audio_choices = import_airtable_data()
     for entry in audio_choices:
         if entry.recordID() == record['id']:
-            await interaction.followup.send(entry.discord_post())
+            await interaction.followup.send(embed = entry.discord_post())
             break
 @addaudio.autocomplete('exclusive')
 async def addaudio_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:

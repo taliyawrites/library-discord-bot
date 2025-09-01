@@ -1402,7 +1402,6 @@ async def updatetags(interaction, record : str, tags : str, mode : str):
     if interaction.user.id not in allowed_users:
         await interaction.followup.send("Sorry, you do not have access to this command! The team behind the masterlist uses this to update tags quickly and efficiently, but unfortunately it can't be hidden from the full list of commands. You might have been looking for the `/tag` command to search for an audio by its tags.")
     else:
-        this_audio = None
         for entry in audio_choices:
             if entry.recordID() == record:
                     this_audio = entry

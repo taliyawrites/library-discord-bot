@@ -1412,7 +1412,7 @@ async def updatetags(interaction, record : str, tags : str, mode : str):
 
         if mode == "complete tags":
             await interaction.followup.send(f'Tags for "{title}" written in canonical form as: {corrected_string}', view = TagButton(tags = corrected_string, audioID = record))
-            mark_as_tagged(audioID)
+            mark_as_tagged(record)
         elif mode == "extra tags":
             current_tags = this_audio.tag_string()[:-1]
             all_tags = current_tags.strip() + " " + corrected_string

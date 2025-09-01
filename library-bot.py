@@ -1395,20 +1395,35 @@ async def toy(interaction, victim: Optional[str] = ""):
 
 @tree.command(name = "updatetags", description = "Command for maintenance by our tag team; please ignore!")
 @app_commands.describe(record = "From the record ID field on the masterlist!")
-async def updatetags(interaction, record : str, tags : str):
+async def updatetags(interaction, record : str, tags : str, mode : str):
     await interaction.response.defer()
     allowed_users = [1185405398883258369, 490759913757212672, 1169014359842885726, 1089053035377999912]
 
     if interaction.user.id not in allowed_users:
         await interaction.followup.send("Sorry, you do not have access to this command! The team behind the masterlist uses this to update tags quickly and efficiently, but unfortunately it can't be hidden from the full list of commands. You might have been looking for the `/tag` command to search for an audio by its tags.")
     else:
-        corrected_tags = get_tags(tags.lower().replace("’","'").strip())
-        corrected_string = "[" + '] ['.join(corrected_tags) + "]"
-        title = ""
+        this_audio = None
         for entry in audio_choices:
             if entry.recordID() == record:
-                title = entry.name()
-        await interaction.followup.send(f'Tags for "{title}" written in canonical form as: {corrected_string}', view = TagButton(tags = corrected_string, audioID = record))
+                    this_audio = entry
+        title = this_audio.name()
+
+        corrected_tags = get_tags(tags.lower().replace("’","'").strip())
+        corrected_string = "[" + '] ['.join(corrected_tags) + "]"
+
+        if mode == "complete tags":
+            await interaction.followup.send(f'Tags for "{title}" written in canonical form as: {corrected_string}', view = TagButton(tags = corrected_string, audioID = record))
+            mark_as_tagged(audioID)
+        elif mode == "extra tags":
+            current_tags = this_audio.tag_string()[:-1]
+            all_tags = current_tags.strip() + " " + corrected_string
+            await interaction.followup.send(f'Adding tags to "{title}" written in canonical form as: {corrected_string}', view = TagButton(tags = all_tags, audioID = record))
+        else: 
+            await interaction.followup.send("Invalid choice for mode.")
+@updatetags.autocomplete('mode')
+async def addaudio_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
+    options = ["complete tags","extra tags"]
+    return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]
 
 
 def push_masterlist_update(interaction, audioID, tags):
@@ -1416,7 +1431,7 @@ def push_masterlist_update(interaction, audioID, tags):
     table = airtable_api.table('apprrNWlCwDHYj4wW', 'tblqwSpe5CdMuWHW6')
 
     # UPDATE MASTERLIST
-    table.update(audioID, {"Tags" : tags, "Tagged?" : True})
+    table.update(audioID, {"Tags" : tags})
     audio_choices = import_airtable_data()
 
     # PULL NEW ENTRY
@@ -1424,7 +1439,11 @@ def push_masterlist_update(interaction, audioID, tags):
         if entry.recordID() == audioID:
             return entry
 
-
+def mark_as_tagged(audioID):
+    global audio_choices
+    table = airtable_api.table('apprrNWlCwDHYj4wW', 'tblqwSpe5CdMuWHW6')
+    table.update(audioID, {"Tagged?" : True})
+    audio_choices = import_airtable_data()
 
 
 @tree.command(name = "addaudio", description = "Add a new entry to the masterlist",  guild = discord.Object(COMMAND_SERVER))

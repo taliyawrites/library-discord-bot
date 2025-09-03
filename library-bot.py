@@ -1207,7 +1207,7 @@ async def degrade(interaction):
 async def praise(interaction):
     await interaction.response.defer()
     adjectives = ["perfect","pretty","beautiful","darling","sweet"]
-    nouns = ["angel","bunny","pet","princess","toy","doll","kitten","flower","puppy"]
+    nouns = ["angel","bunny","pet","princess","toy","doll","kitten","flower","puppy", "sunshine"]
 
     if random.choice(range(1000)) < 3:
         whose = "Vel's "

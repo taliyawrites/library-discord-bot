@@ -475,10 +475,11 @@ async def setup_hook():
         run_daily_loops.start()
         print("starting daily looping tasks")
 
-    global taliya, vel
+    global taliya, vel, mod_ids
     taliya = await client.fetch_user(1169014359842885726)
     vel = await client.fetch_user(1089053035377999912)
-
+    mod_ids = [mod.id for mod in client.get_guild(GUILD).get_role(1239743183617790015).members]
+    print(mod_ids)
 
     await taliya.send(f"Card Catalog bot restarted successfully!")
     print(f"bot local time: {datetime.datetime.now().hour}h{datetime.datetime.now().minute}.")
@@ -1240,7 +1241,6 @@ async def edge(interaction):
 @tree.command(name = "cum", description = "Make the bot cum!")
 async def cum(interaction):
     await interaction.response.defer()
-    mod_ids = [1169014359842885726, 1089053035377999912, 159860526841593856, 415894832515383296,1262940885251784785]
     global edge_counter
     if interaction.user.id in mod_ids or interaction.user.id in cum_permission_ids:
         edge_counter = 0

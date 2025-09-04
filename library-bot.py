@@ -478,7 +478,7 @@ async def setup_hook():
     global taliya, vel, mod_ids
     taliya = await client.fetch_user(1169014359842885726)
     vel = await client.fetch_user(1089053035377999912)
-    mods = await client.fetch_guild(GUILD).get_role(1239743183617790015).members
+    mods = await client.fetch_guild(GUILD).fetch_role(1239743183617790015).members
     mod_ids = [mod.id for mod in mods]
     print(mod_ids)
 

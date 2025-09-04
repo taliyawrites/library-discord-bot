@@ -478,9 +478,9 @@ async def setup_hook():
     global taliya, vel, mod_ids
     taliya = await client.fetch_user(1169014359842885726)
     vel = await client.fetch_user(1089053035377999912)
-    mods = client.get_guild(1148449914188218399).get_role(1239743183617790015).members
-    mod_ids = [mod.id for mod in mods]
-    print(mod_ids)
+    # mods = client.get_guild(1148449914188218399).get_role(1239743183617790015).members
+    # mod_ids = [mod.id for mod in mods]
+    # print(mod_ids)
 
     await taliya.send(f"Card Catalog bot restarted successfully!")
     print(f"bot local time: {datetime.datetime.now().hour}h{datetime.datetime.now().minute}.")

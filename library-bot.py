@@ -1243,6 +1243,7 @@ async def edge(interaction):
 async def cum(interaction):
     await interaction.response.defer()
     global edge_counter
+    mod_ids = [1169014359842885726, 1089053035377999912, 1082532069420314687,1262940885251784785]
     if interaction.user.id in mod_ids or interaction.user.id in cum_permission_ids:
         edge_counter = 0
         if interaction.user == vel:

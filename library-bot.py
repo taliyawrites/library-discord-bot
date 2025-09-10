@@ -1619,7 +1619,7 @@ async def on_message(message):
                     await message.forward(pic_channel)
 
     if message.author.id == 1262940885251784785 and message.content.startswith("!move"):
-        await message.channel.move(category = client.get_channel(1405614176952389643))
+        await message.channel.edit(category = client.get_channel(1405614176952389643))
     
     # if message.content.startswith('!') and not message.content.startswith('!!') and not message.author == taliya:
     #     await message.channel.send("The bot has been updated to use slash commands integrated into Discord! The commands have the same names as before, but with `/` at the beginning instead of `!`. This means that you won't need to remember the exact name or format of a command, just type / and a menu of options will pop up!")

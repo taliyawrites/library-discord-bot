@@ -1617,6 +1617,9 @@ async def on_message(message):
             if not "gif" in attached[0].url and not "tenor" in attached[0].url:
                 if message.channel == hornyjail or message.channel == abyss:
                     await message.forward(pic_channel)
+
+    if message.author.id == 1262940885251784785 and message.content.startswith("!move"):
+        await message.channel.move(category = client.get_channel(1405614176952389643))
     
     # if message.content.startswith('!') and not message.content.startswith('!!') and not message.author == taliya:
     #     await message.channel.send("The bot has been updated to use slash commands integrated into Discord! The commands have the same names as before, but with `/` at the beginning instead of `!`. This means that you won't need to remember the exact name or format of a command, just type / and a menu of options will pop up!")
@@ -1625,15 +1628,17 @@ async def on_message(message):
 @client.event
 async def on_guild_channel_create(channel):
     if channel.category_id == 1178075874906624140:
-        mod_role = client.get_guild(GUILD).get_role(1239743183617790015)
+        staff_role = client.get_guild(GUILD).get_role(1203228614414573633)
         nonmods = False
         for user in channel.members:
+            # CHANGE FOR PATREON SUBS 
             if user.top_role.id == 1148454184824360990 or user.top_role.id == 1248762871073210441:
                 nonmods = True
                 break 
         if nonmods: 
             await asyncio.sleep(0.5)
-            await channel.send(f"Thank you for opening a ticket! Please let us know what we can help you with. If you're reporting an incident or raising a concern, it helps us to have as much information as possible, so feel free to include as much as you remember and are comfortable sharing (for instance, it's helpful and completely allowed to name names of the relevant folks involved, include screenshots, or type out specific quotes you can recall). The more specific you are, the more quickly we can address the issue and help everyone involved! \n\nFor your privacy, everything discussed in this ticket is 100% confidential and only ever discussed with other moderators. If we need to ask other people questions about their involvement, we will get your permission first, and also do our best to keep your role in this anonymous! Finally, if your issue concerns the actions of a moderator and you do not feel comfortable with them being present in the channel while you discuss it, this can absolutely be arranged, just say the word. \n\nOnce you ask your question, make your suggestion, or tell us about the issue/concern, a {mod_role.mention} will respond to help!")
+            await channel.send(f"Thank you for opening a ticket! Please let us know what we can help you with. If you're reporting an incident or raising a concern, it helps us to have as much information as possible, so feel free to include as much as you remember and are comfortable sharing (for instance, it's helpful and completely allowed to name names of the relevant folks involved, include screenshots, or type out specific quotes you can recall). The more specific you are, the more quickly we can address the issue and help everyone involved! \n\nFor your privacy, everything discussed in this ticket is 100% confidential and only ever discussed with other moderators. If we need to ask other people questions about their involvement, we will get your permission first, and also do our best to keep your role in this anonymous! Finally, if your issue concerns the actions of a moderator and you do not feel comfortable with them being present in the channel while you discuss it, this can absolutely be arranged, just say the word. \n\nOnce you ask your question, make your suggestion, or tell us about the issue/concern, a member of our {staff_role.mention} will respond to help!")
+
 
 
 

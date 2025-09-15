@@ -1416,7 +1416,7 @@ async def updatetags(interaction, record : str, tags : str, mode : str):
         elif mode == "extra tags":
             current_tags = this_audio.tag_string()[:-1]
             all_tags = current_tags.strip() + " " + corrected_string
-            await interaction.followup.send(f'Adding tags to "{title}" written in canonical form as: {corrected_string}', view = TagButton(tags = all_tags, audioID = record))
+            await interaction.followup.send(f'Adding tags to "{title}" (Record ID: {record}) written in canonical form as: {corrected_string}', view = TagButton(tags = all_tags, audioID = record))
         else: 
             await interaction.followup.send("Invalid choice for mode.")
 @updatetags.autocomplete('mode')

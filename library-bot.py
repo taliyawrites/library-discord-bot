@@ -335,9 +335,11 @@ def import_collections():
         url = data[1][1].strip()
         description = data[2][1].strip()
         style = data[3][1].strip()
-        coll_data = [title,url,description,style]
+        order = int(data[4][1].strip())
+        coll_data = [title,url,description,style,order]
         collections.append(coll_data)
 
+    collections.sort(key = lambda c: c[-1])
     return collections
 
 def write_data_lists():
@@ -994,8 +996,8 @@ async def allcollections(interaction):
         else:
             next_coll = "- [" + entry[0] + "](" + entry[1] + ") \n"
             series_link_string = series_link_string + next_coll
-    theme_embed = discord.Embed(title = "Themed Patreon Collections",description=theme_link_string, url = "https://www.patreon.com/cw/velslibrary/collections")
-    series_embed = discord.Embed(title = "Monthly Series Patreon Collections",description=series_link_string, url = "https://www.patreon.com/cw/velslibrary/collections")
+    theme_embed = discord.Embed(title = "Themed Patreon Collections",description=theme_link_string)
+    series_embed = discord.Embed(title = "Monthly Series Patreon Collections",description=series_link_string)
     await interaction.followup.send(embed = theme_embed)
     await interaction.followup.send(embed = series_embed)
 

@@ -334,8 +334,8 @@ def import_collections():
         title = data[0][1].strip()
         url = data[1][1].strip()
         description = data[2][1].strip()
-        search_terms = data[3][1].strip()
-        coll_data = [title,url,description,search_terms]
+        style = data[3][1].strip()
+        coll_data = [title,url,description,style]
         collections.append(coll_data)
 
     return collections
@@ -687,10 +687,9 @@ async def scriptwriter(interaction, writer: str):
 @app_commands.describe(name="name of the collection")
 async def collection(interaction, name: str):
     await interaction.response.defer()
-    query = name.lower().replace("’","'").strip()
     collection = None
     for coll in collections:
-        if query in coll[3]:
+        if name.strip() == coll[0].strip():
             collection = coll
             break
     if collection is not None:
@@ -986,12 +985,19 @@ async def tutorial(interaction):
 @tree.command(name = "allcollections", description = "List of links to all Patreon collections")
 async def allcollections(interaction):
     await interaction.response.defer()
-    link_string = ""
+    series_link_string = ""
+    theme_link_string = ""
     for entry in collections:
-        next = "- [" + entry[0] + "](" + entry[1] + ") \n"
-        link_string = link_string + next
-    list_embed = discord.Embed(title = "Patreon Collections",description=link_string)
-    await interaction.followup.send(embed = list_embed)
+        if entry[3] == "Theme":
+            next_coll = "- [" + entry[0] + "](" + entry[1] + ") \n"
+            theme_link_string = theme_link_string + next_coll
+        else:
+            next_coll = "- [" + entry[0] + "](" + entry[1] + ") \n"
+            series_link_string = series_link_string + next_coll
+    theme_embed = discord.Embed(title = "Themed Patreon Collections",description=theme_link_string, url = "https://www.patreon.com/cw/velslibrary/collections")
+    series_embed = discord.Embed(title = "Monthly Series Patreon Collections",description=series_link_string, url = "https://www.patreon.com/cw/velslibrary/collections")
+    await interaction.followup.send(embed = theme_embed)
+    await interaction.followup.send(embed = series_embed)
 
 
 

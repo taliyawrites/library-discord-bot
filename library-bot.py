@@ -1672,6 +1672,22 @@ async def on_guild_channel_create(channel):
 
 
 
+
+@client.event
+async def on_member_update(before, after):
+    if before.roles != after.roles:
+        patron = client.get_guild(GUILD).get_role(1154619473773465610)
+        if patron in after.roles and patron not in before.roles:
+            not_patron = client.get_guild(GUILD).get_role(1417728496825794642)
+            after.remove_roles(not_patron)
+            print(f"Active Patreon membership role added for {member.name}")
+        elif patron in before.roles and patron not in after.roles:
+            not_patron = client.get_guild(GUILD).get_role(1417728496825794642)
+            after.add_roles(not_patron)
+            print(f"Active Patreon membership role removed for {member.name}")
+
+
+
 @client.event
 async def on_scheduled_event_create(event):
     global event_times

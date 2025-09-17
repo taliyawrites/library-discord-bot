@@ -1593,6 +1593,28 @@ async def mod_embed(interaction, user_id: str, name: str, intro: str, embed_colo
 
 
 
+@tree.command(name = "send_rules", guild = discord.Object(COMMAND_SERVER))
+@app_commands.check(lambda u: u.user == taliya)
+@app_commands.allowed_installs(guilds=True, users=False)
+async def mod_embed_edits(interaction, channelid: Optional[str] = "1374549206286733322"):
+    await interaction.response.defer()
+    channel_id = int(channelid)
+
+
+    rule_intro = "Please read and familiarize yourself with the rules of the Vel's Library server! If these rules are updated, you will be notified, but you will be responsible for learning and abiding by any such additions or revisions. \n\u200b"
+    rule_block_a = "1. **Respect Vel's privacy about his real life.** Doxxing or any attempts to identify details about Vel's identity or personal life are strictly prohibited. Even if this behavior occurs outside the server, it will absolutely NOT be tolerated. This is non-negotiable; his two lives are separate for his safety. Vel's Library can't be evicted if his landlord finds out he does porn and doesn't like it, but real world Vel can. \n\n2. **Be respectful. **You must respect all users, regardless of whether or not you like them personally. Do not shame anyone's kinks (or lack thereof), even if you don't share those interests yourself. No shaming or negative comments about ANY bodies/body types will be tolerated, even if they are directed toward yourself. \n\n3. **No discriminatory or hateful language. ** No slurs, excessive insults, derogatory terms, or hate speech are allowed. This includes intentional usage of incorrect pronouns and any other such harassing language toward any marginalized communities, as well as offensive display names or profile pictures. \n\n4. **No threats.** Threats (direct or indirect) to other users of DOXXING, violence, rape, death, abuse, and other malicious intent are absolutely prohibited and will result in immediate action. \n\n5. **No sexualizing each other without consent.** Do not sexualize, flirt, or comment on the bodies of any community members without obtaining consent first. While we can't monitor this actively, if it is brought to our attention that people are receiving unwanted attention/advances (real or in jest), it will be considered a violation unless unrevoked consent can be verified. \n\u200b"
+    rule_block_b = "6. **No selfies or photos/videos of your body.** We do not allow any photos of any members to be posted publicly in the server, even if your face is censored. Face cams are *not* permitted in VCs (but you may still do hand cams for activities like drawing or cooking). This is both for your own privacy and to remove the potential for judgement or body shaming. This rule applies even to cropped pictures meant solely to showcase tattoos or piercings; however, we do permit photos of your nails in the fashion channel. \n\n7. **Keep conversations about audios focused on Vel.** Please save discussion of other VAs and their audios for those creators’ own community spaces or your private DMs. \n\n8. **No advertisements without authorization.** Please do not advertise for other creators. You may share your own creative work in appropriate channels provided it does not violate rule 6, but do not advertise your own commissionable services or solicit engagement for your own content. \n\n9. **No pornographic material outside of NSFW channels.** Porn and other adult/sexual material and discussions are only allowed in the appropriate age-restricted channels. \n\n10. **No AI.** The use of any of Vel's content in generative AI is strictly prohibited. \n\n11. **Listen to moderators.** If a moderator tags or DMs you in their official capacity, you are expected to address the message by replying and/or taking the action they recommended. Please refrain from blocking moderators. \n\n12. **No spoiling Vel’s content.** For recently released audios, please keep discussion in the https://discord.com/channels/1148449914188218399/1150656210341732393 channel and use [spoiler text](https://support.discord.com/hc/en-us/articles/360022320632-Spoiler-Tags) as a courtesy. Spoilers (including memes, fanart, and teasing hints) about yet-to-be released audios recorded during weekly lives should only be shared in https://discord.com/channels/1148449914188218399/1274877049118396416. \n\n13. **No outright intoxication allowed in VCs** We allow a drink or the equivalent of that for other substances but anything further is not allowed. Be sure to inform the people in vc of your intake of these substances. But most especially be responsible with your intake amount as to not cause discomfort with the people you join in vc. \n\u200b"
+    rule_conclusion = "For more information, please feel free to reference https://discord.com/channels/1148449914188218399/1366039740301840405 and https://discord.com/channels/1148449914188218399/1365495051676946505, or ask anytime in the general channel! We're always happy to answer questions and clear up confusion so everyone can have a fun, safe, and relaxing time enjoying the horny merriment of the library."
+
+
+    await client.get_channel(int(channel_id)).send(rule_intro)
+    await client.get_channel(int(channel_id)).send(rule_block_a)
+    await client.get_channel(int(channel_id)).send(rule_block_b)
+    await client.get_channel(int(channel_id)).send(rule_conclusion)
+
+    await interaction.followup.send("Messages sent!")
+
+
 
 
 

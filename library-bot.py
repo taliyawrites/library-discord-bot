@@ -1677,14 +1677,16 @@ async def on_guild_channel_create(channel):
 async def on_member_update(before, after):
     if before.roles != after.roles:
         patron = client.get_guild(GUILD).get_role(1154619473773465610)
+        not_patron = client.get_guild(GUILD).get_role(1417728496825794642)
+        # library_card = client.get_guild(GUILD).get_role(1148454184824360990)
         if patron in after.roles and patron not in before.roles:
-            not_patron = client.get_guild(GUILD).get_role(1417728496825794642)
-            after.remove_roles(not_patron)
-            print(f"Active Patreon membership role added for {member.name}")
+            await after.remove_roles(not_patron)
+            # after.add_roles(library_card)
+            print(f"Active Patreon membership role added for {after.name}")
         elif patron in before.roles and patron not in after.roles:
-            not_patron = client.get_guild(GUILD).get_role(1417728496825794642)
-            after.add_roles(not_patron)
-            print(f"Active Patreon membership role removed for {member.name}")
+            await after.add_roles(not_patron)
+            # after.remove_roles(library_card)
+            print(f"Active Patreon membership role removed for {after.name}")
 
 
 

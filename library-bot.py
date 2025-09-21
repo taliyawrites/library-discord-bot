@@ -181,7 +181,7 @@ class Button(discord.ui.View):
 
 
 class TagButton(discord.ui.View):
-    def __init__(self, tags, audioID, tagQ timeout=180):
+    def __init__(self, tags, audioID, tagQ, timeout=180):
         super().__init__(timeout=timeout)
         self.tags = tags
         self.audioID = audioID

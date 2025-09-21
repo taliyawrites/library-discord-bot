@@ -181,14 +181,15 @@ class Button(discord.ui.View):
 
 
 class TagButton(discord.ui.View):
-    def __init__(self, tags, audioID, timeout=180):
+    def __init__(self, tags, audioID, tagQ timeout=180):
         super().__init__(timeout=timeout)
         self.tags = tags
         self.audioID = audioID
+        self.tagQ = tagQ
     @discord.ui.button(label = "Accept Tags", style = discord.ButtonStyle.blurple)
     async def this_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
-        taggedaudio = push_masterlist_update(interaction, self.audioID, self.tags)
+        taggedaudio = push_masterlist_update(interaction, self.audioID, self.tags, self.tagQ)
         await interaction.followup.send(content = "Tags successfully updated!",embed = taggedaudio.discord_post())
     @discord.ui.button(label = "Reject Tags", style = discord.ButtonStyle.blurple)
     async def this_button_2(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -843,6 +844,7 @@ async def randomrequest(interaction):
                 user_index = random.choice(range(len(snack_requests)))
                 entry = snack_requests[user_index]
                 try: 
+                    # UPDATE TO ONLY THOSE WITH PATRON ROLE
                     user = await client.get_guild(GUILD).fetch_member(entry[0])
                 except:
                     # snack_requests.remove(entry)
@@ -1419,26 +1421,28 @@ async def updatetags(interaction, record : str, tags : str, mode : str):
         corrected_string = "[" + '] ['.join(corrected_tags) + "]"
 
         if mode == "complete tags":
-            await interaction.followup.send(f'Tags for "{title}" (Record ID: {record}) written in canonical form as: {corrected_string}', view = TagButton(tags = corrected_string, audioID = record))
-            mark_as_tagged(record)
+            await interaction.followup.send(f'Tags for "{title}" (Record ID: {record}) written in canonical form as: {corrected_string}', view = TagButton(tags = corrected_string, audioID = record, tagQ = True))
+            # mark_as_tagged(record)
         elif mode == "extra tags":
             current_tags = this_audio.tag_string()[:-1]
             all_tags = current_tags.strip() + " " + corrected_string
-            await interaction.followup.send(f'Adding tags to "{title}" (Record ID: {record}) written in canonical form as: {corrected_string}', view = TagButton(tags = all_tags, audioID = record))
+            await interaction.followup.send(f'Adding tags to "{title}" (Record ID: {record}) written in canonical form as: {corrected_string}', view = TagButton(tags = all_tags, audioID = record, tagQ = False))
         else: 
             await interaction.followup.send("Invalid choice for mode.")
 @updatetags.autocomplete('mode')
-async def addaudio_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
+async def updatetags_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
     options = ["complete tags","extra tags"]
     return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]
 
 
-def push_masterlist_update(interaction, audioID, tags):
+def push_masterlist_update(interaction, audioID, tags, tagQ):
     global audio_choices
     table = airtable_api.table('apprrNWlCwDHYj4wW', 'tblqwSpe5CdMuWHW6')
 
     # UPDATE MASTERLIST
     table.update(audioID, {"Tags" : tags})
+    if tagQ:
+        table.update(audioID, {"Tagged?" : True})
     audio_choices = import_airtable_data()
 
     # PULL NEW ENTRY
@@ -1446,11 +1450,11 @@ def push_masterlist_update(interaction, audioID, tags):
         if entry.recordID() == audioID:
             return entry
 
-def mark_as_tagged(audioID):
-    global audio_choices
-    table = airtable_api.table('apprrNWlCwDHYj4wW', 'tblqwSpe5CdMuWHW6')
-    table.update(audioID, {"Tagged?" : True})
-    audio_choices = import_airtable_data()
+# def mark_as_tagged(audioID):
+#     global audio_choices
+#     table = airtable_api.table('apprrNWlCwDHYj4wW', 'tblqwSpe5CdMuWHW6')
+#     table.update(audioID, {"Tagged?" : True})
+#     audio_choices = import_airtable_data()
 
 
 @tree.command(name = "addaudio", description = "Add a new entry to the masterlist",  guild = discord.Object(COMMAND_SERVER))
@@ -1678,14 +1682,11 @@ async def on_member_update(before, after):
     if before.roles != after.roles:
         patron = client.get_guild(GUILD).get_role(1154619473773465610)
         not_patron = client.get_guild(GUILD).get_role(1417728496825794642)
-        # library_card = client.get_guild(GUILD).get_role(1148454184824360990)
         if patron in after.roles and patron not in before.roles:
             await after.remove_roles(not_patron)
-            # after.add_roles(library_card)
             print(f"Active Patreon membership role added for {after.name}")
         elif patron in before.roles and patron not in after.roles:
             await after.add_roles(not_patron)
-            # after.remove_roles(library_card)
             print(f"Active Patreon membership role removed for {after.name}")
 
 
@@ -1888,6 +1889,7 @@ async def choose_good_girl():
             await member.remove_roles(good_girl_role)
 
         # choose new random winner for the day
+        # UPDATE TO ONLY THOSE WITH PATRON ROLE
         options = guild.get_role(OPTIONS_ROLE).members
         winner, remaining_number = choose_next_winner(options)
         if remaining_number == 10: 

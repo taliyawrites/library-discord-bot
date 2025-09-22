@@ -1114,7 +1114,9 @@ async def threads(interaction):
     link_string = ""
     for thread in threads:
         link_string = link_string + "- " + thread.jump_url + "\n"
-    await interaction.followup.send(link_string)
+    msg_list = msg_split(link_string, "Matching Results")
+    for msg in msg_list:
+        await interaction.followup.send(msg)
 
 
 @tree.command(name = "rules", description = "Links to the server rules")
@@ -1754,12 +1756,21 @@ async def run_daily_loops():
             link_string = "Reminder that we have the following threads you can join!\n"
             for thread in threads:
                 link_string = link_string + "- " + thread.jump_url + "\n"
-            await client.get_channel(GENERAL).send(link_string)
-    elif rerun_daily:
+            msg_list = msg_split(link_string, "Matching Results")
+            for msg in msg_list:
+                await client.get_channel(GENERAL).send(msg)
+    elif rerun_daily and rerun_gg:
         await taliya.send("Re-running audio of the day.")
         rerun_daily = False
         await announce_daily_audio()
-    elif rerun_gg:
+        await taliya.send("Re-running good girl of the day.")
+        rerun_gg = False
+        await choose_good_girl()
+    elif rerun_daily and not rerun_gg:
+        await taliya.send("Re-running audio of the day.")
+        rerun_daily = False
+        await announce_daily_audio()
+    elif rerun_gg and not rerun_daily:
         await taliya.send("Re-running good girl of the day.")
         rerun_gg = False
         await choose_good_girl()

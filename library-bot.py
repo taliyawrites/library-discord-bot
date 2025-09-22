@@ -1114,7 +1114,7 @@ async def threads(interaction):
     link_string = ""
     for thread in threads:
         link_string = link_string + "- " + thread.jump_url + "\n"
-    msg_list = msg_split(link_string, "Matching Results")
+    msg_list = msg_split(link_string, "Matching Results", False)
     for msg in msg_list:
         await interaction.followup.send(msg)
 
@@ -1756,7 +1756,7 @@ async def run_daily_loops():
             link_string = "Reminder that we have the following threads you can join!\n"
             for thread in threads:
                 link_string = link_string + "- " + thread.jump_url + "\n"
-            msg_list = msg_split(link_string, "Matching Results")
+            msg_list = msg_split(link_string, "Matching Results", False)
             for msg in msg_list:
                 await client.get_channel(GENERAL).send(msg)
     elif rerun_daily and rerun_gg:

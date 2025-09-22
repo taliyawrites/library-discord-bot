@@ -1111,7 +1111,7 @@ async def books(interaction):
 async def threads(interaction):
     await interaction.response.defer()
     threads = await client.get_guild(GUILD).active_threads()
-    link_string = ""
+    link_string = "Here's a list of all the active threads in the server!\n"
     for thread in threads:
         link_string = link_string + "- " + thread.jump_url + "\n"
     msg_list = msg_split(link_string, "Matching Results", False)

@@ -1338,6 +1338,7 @@ async def hydrate(interaction, victim: Optional[str] = ""):
         elif random_num == 1:
             try:
                 await msg.forward(interaction.channel)
+                await interaction.followup.send("Remember to hydrate, everyone!")
             except:
                 await interaction.followup.send(f"Remember to hydrate, everyone! {msg.jump_url}")
         else:

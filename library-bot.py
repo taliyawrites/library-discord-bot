@@ -1336,7 +1336,10 @@ async def hydrate(interaction, victim: Optional[str] = ""):
         await interaction.followup.send("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQw4dIe87tpv0gK-1hTrDZHPYLowAY-uYj3FCLOKJwZNH6mb3YE9xzGCYGKv2YHTY-d6LM&usqp=CAU")
     elif random_num == 1: 
         msg = client.get_channel(1158145318781714493).get_partial_message(1187442200980766940)
-        await msg.forward(interaction.channel)
+        try:
+            await msg.forward(interaction.channel)
+        except: 
+            await interaction.channel.send(msg.jump_url)
 
 
 @tree.command(name = "count", description = "Returns the number of audios Vel has made so far!")

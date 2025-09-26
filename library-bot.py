@@ -1327,19 +1327,32 @@ async def treat(interaction, t: str):
 @app_commands.describe(victim = "@ whomever you'd like the bot to remind")
 async def hydrate(interaction, victim: Optional[str] = ""):
     await interaction.response.defer()
-    if len(victim) == 0:
-        await interaction.followup.send("Remember to hydrate, everyone!")
-    else:
-        await interaction.followup.send(f"Reminder to be a good girl and drink some water, {victim}!")
     random_num = random.choice(range(0,4))
-    if random_num == 0:
-        await interaction.followup.send("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQw4dIe87tpv0gK-1hTrDZHPYLowAY-uYj3FCLOKJwZNH6mb3YE9xzGCYGKv2YHTY-d6LM&usqp=CAU")
-    elif random_num == 1: 
-        msg = client.get_channel(1158145318781714493).get_partial_message(1187442200980766940)
-        try:
-            await msg.forward(interaction.channel)
-        except: 
-            await interaction.channel.send(msg.jump_url)
+    msg = client.get_channel(1158145318781714493).get_partial_message(1187442200980766940)
+    esnupi = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQw4dIe87tpv0gK-1hTrDZHPYLowAY-uYj3FCLOKJwZNH6mb3YE9xzGCYGKv2YHTY-d6LM&usqp=CAU"
+
+    if len(victim) == 0:
+        if random_num == 0:
+            await interaction.followup.send("Remember to hydrate, everyone! " + esnupi)
+        elif random_num == 1:
+            try:
+                await msg.forward(interaction.channel)
+            except:
+                await interaction.followup.send(f"Remember to hydrate, everyone! {msg.jump_url}")
+        else:
+            await interaction.followup.send("Remember to hydrate, everyone!")
+    else:
+        if random_num == 0:
+            await interaction.followup.send(f"Reminder to be a good girl and drink some water, {victim}! " + esnupi)
+        elif random_num == 1:
+            try:
+                await msg.forward(interaction.channel)
+                await interaction.followup.send(f"Reminder to be a good girl and drink some water, {victim}!")
+            except:
+                await interaction.followup.send(f"Reminder to be a good girl and drink some water, {victim}! {msg.jump_url}")
+        else:
+            await interaction.followup.send(f"Reminder to be a good girl and drink some water, {victim}!")
+
 
 
 @tree.command(name = "count", description = "Returns the number of audios Vel has made so far!")

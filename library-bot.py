@@ -1330,10 +1330,11 @@ async def hydrate(interaction, victim: Optional[str] = ""):
     random_num = random.choice(range(0,4))
     msg = client.get_channel(1158145318781714493).get_partial_message(1187442200980766940)
     esnupi = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQw4dIe87tpv0gK-1hTrDZHPYLowAY-uYj3FCLOKJwZNH6mb3YE9xzGCYGKv2YHTY-d6LM&usqp=CAU"
+    image = discord.File("esnunpi.jpg")
 
     if len(victim) == 0:
         if random_num == 0:
-            await interaction.followup.send("Remember to hydrate, everyone! " + esnupi)
+            await interaction.followup.send(content = "Remember to hydrate, everyone!", file = image)
         elif random_num == 1:
             try:
                 await msg.forward(interaction.channel)
@@ -1343,7 +1344,7 @@ async def hydrate(interaction, victim: Optional[str] = ""):
             await interaction.followup.send("Remember to hydrate, everyone!")
     else:
         if random_num == 0:
-            await interaction.followup.send(f"Reminder to be a good girl and drink some water, {victim}! " + esnupi)
+            await interaction.followup.send(content = f"Reminder to be a good girl and drink some water, {victim}!", file = image)
         elif random_num == 1:
             try:
                 await msg.forward(interaction.channel)

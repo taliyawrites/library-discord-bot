@@ -1459,11 +1459,14 @@ async def updatetags(interaction, record : str, tags : str, mode : str, petnames
             current_tags = this_audio.tag_string()[:-1]
             all_tags = current_tags.strip() + " " + corrected_string
             await interaction.followup.send(f'Adding tags to "{title}" (Record ID: {record}) written in canonical form as: {corrected_string}', view = TagButton(tags = all_tags, audioID = record, names = petnames, tagQ = False))
+        elif mode == "petnames only":
+            current_tags = this_audio.tag_string()[:-1].strip()
+            await interaction.followup.send(f'Adding petnames to "{title}" (Record ID: {record}): {petnames}', view = TagButton(tags = current_tags, audioID = record, names = petnames, tagQ = False))
         else: 
             await interaction.followup.send("Invalid choice for mode.")
 @updatetags.autocomplete('mode')
 async def updatetags_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
-    options = ["complete tags","extra tags"]
+    options = ["complete tags","extra tags","petnames only"]
     return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]
 
 

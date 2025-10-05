@@ -27,8 +27,15 @@ airtable_api = Api(os.getenv('AIRTABLE_TOKEN'))
 
 ABYSS = int(os.getenv('ABYSS'))
 HORNYJAIL = int(os.getenv('HORNYJAIL'))
+VSPOT = int(os.getenv('VSPOT'))
+PETS = int(os.getenv('PETS'))
+GYM = int(os.getenv('GYM'))
+RR = int(os.getenv('RR'))
+GEN = int(os.getenv('GEN'))
 PICS = int(os.getenv('PICS'))
 VNS = int(os.getenv('VNS'))
+
+
 BIRTHDAY_CHANNEL = int(os.getenv('BIRTHDAY_CHANNEL'))
 COMMAND_SERVER = int(os.getenv('COMMAND_GUILD'))
 COMMAND_CHANNEL_ID = int(os.getenv('COMMAND_CHANNEL')) 
@@ -181,15 +188,16 @@ class Button(discord.ui.View):
 
 
 class TagButton(discord.ui.View):
-    def __init__(self, tags, audioID, tagQ, timeout=180):
+    def __init__(self, tags, audioID, names, tagQ, timeout=180):
         super().__init__(timeout=timeout)
         self.tags = tags
         self.audioID = audioID
         self.tagQ = tagQ
+        self.names = names
     @discord.ui.button(label = "Accept Tags", style = discord.ButtonStyle.blurple)
     async def this_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
-        taggedaudio = push_masterlist_update(interaction, self.audioID, self.tags, self.tagQ)
+        taggedaudio = push_masterlist_update(interaction, self.audioID, self.tags, self.names, self.tagQ)
         await interaction.followup.send(content = "Tags successfully updated!",embed = taggedaudio.discord_post())
     @discord.ui.button(label = "Reject Tags", style = discord.ButtonStyle.blurple)
     async def this_button_2(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -1429,7 +1437,7 @@ async def toy(interaction, victim: Optional[str] = ""):
 
 @tree.command(name = "updatetags", description = "Command for maintenance by our tag team; please ignore!")
 @app_commands.describe(record = "From the record ID field on the masterlist!")
-async def updatetags(interaction, record : str, tags : str, mode : str):
+async def updatetags(interaction, record : str, tags : str, mode : str, petnames: Optional[str] = ""):
     await interaction.response.defer()
     allowed_users = [1185405398883258369, 490759913757212672, 1169014359842885726, 1089053035377999912]
 
@@ -1445,12 +1453,12 @@ async def updatetags(interaction, record : str, tags : str, mode : str):
         corrected_string = "[" + '] ['.join(corrected_tags) + "]"
 
         if mode == "complete tags":
-            await interaction.followup.send(f'Tags for "{title}" (Record ID: {record}) written in canonical form as: {corrected_string}', view = TagButton(tags = corrected_string, audioID = record, tagQ = True))
+            await interaction.followup.send(f'Tags for "{title}" (Record ID: {record}) written in canonical form as: {corrected_string}', view = TagButton(tags = corrected_string, audioID = record, names = petnames, tagQ = True))
             # mark_as_tagged(record)
         elif mode == "extra tags":
             current_tags = this_audio.tag_string()[:-1]
             all_tags = current_tags.strip() + " " + corrected_string
-            await interaction.followup.send(f'Adding tags to "{title}" (Record ID: {record}) written in canonical form as: {corrected_string}', view = TagButton(tags = all_tags, audioID = record, tagQ = False))
+            await interaction.followup.send(f'Adding tags to "{title}" (Record ID: {record}) written in canonical form as: {corrected_string}', view = TagButton(tags = all_tags, audioID = record, names = petnames, tagQ = False))
         else: 
             await interaction.followup.send("Invalid choice for mode.")
 @updatetags.autocomplete('mode')
@@ -1459,12 +1467,14 @@ async def updatetags_autocomplete(interaction: discord.Interaction, current: str
     return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]
 
 
-def push_masterlist_update(interaction, audioID, tags, tagQ):
+def push_masterlist_update(interaction, audioID, tags, petnames, tagQ):
     global audio_choices
     table = airtable_api.table('apprrNWlCwDHYj4wW', 'tblqwSpe5CdMuWHW6')
 
     # UPDATE MASTERLIST
     table.update(audioID, {"Tags" : tags})
+    if len(petnames) != 0:
+        table.update(audioID, {"Petnames Used" : petnames})
     if tagQ:
         table.update(audioID, {"Tagged?" : True})
     audio_choices = import_airtable_data()
@@ -1660,20 +1670,22 @@ async def on_message(message):
 
     # logs new voice notes in the full list and forwards pics/videos to the pic channel
     if message.author == vel and len(message.attachments) != 0:
-        hornyjail = client.get_channel(HORNYJAIL)
-        abyss = client.get_channel(ABYSS)
+        allowed_pic_channels = [VSPOT, PETS, GYM]
+        allowed_vn_channels = [VSPOT, RR, GEN]
+
         pic_channel = client.get_channel(PICS)
         vn_channel = client.get_channel(VNS)
 
         attached = message.attachments
         if attached[0].is_voice_message():
-            voice_note_links.append(message.jump_url)
-            save_to_file(ARCHIVE_FILENAME,voice_note_links)
-            print("Vel voice note logged")
-            await message.forward(vn_channel)
+            if message.channel.id in allowed_vn_channels:
+                voice_note_links.append(message.jump_url)
+                save_to_file(ARCHIVE_FILENAME,voice_note_links)
+                print("Vel voice note logged")
+                await message.forward(vn_channel)
         elif attached[0].content_type.startswith("image") or attached[0].content_type.startswith("video"):
             if not "gif" in attached[0].url and not "tenor" in attached[0].url:
-                if message.channel == hornyjail or message.channel == abyss:
+                if message.channel.id in allowed_pic_channels:
                     await message.forward(pic_channel)
 
     if message.author.id == 1262940885251784785 and message.content.startswith("!move"):

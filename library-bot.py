@@ -1712,17 +1712,6 @@ async def on_message(message):
                     save_to_file(PIPPIN_FILENAME,pippin_ids)
                     print("Pippin picture logged!")
 
-        # logs new voice notes in the full list and forwards pics/videos to the pic channel
-    if message.author == taliya:
-        allowed_pic_channels = [VSPOT, GYM]
-        allowed_vn_channels = [VSPOT, RR, GEN]
-
-        if message.channel.id in allowed_vn_channels:
-            print("working")
-
-        if message.channel.id == RR:
-            print("working")
-
 
     if message.author.id == 1262940885251784785 and message.content.startswith("!move"):
         await message.channel.edit(category = client.get_channel(1405614176952389643))

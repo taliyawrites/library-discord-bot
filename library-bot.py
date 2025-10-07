@@ -1414,11 +1414,11 @@ async def tierlist(interaction):
 
 
 
-# @tree.command(name = "calendar", description = "This month's calendar of events!")
-# async def calendar(interaction):
-#     await interaction.response.defer()
-#     image = discord.File("current_calendar.png")
-#     await interaction.followup.send("Upcoming calendar of server events! See the Events tab and https://discord.com/channels/1148449914188218399/1153466557524082771 for further details.", file = image)
+@tree.command(name = "calendar", description = "This month's calendar of events!")
+async def calendar(interaction):
+    await interaction.response.defer()
+    image = discord.File("current_calendar.webp")
+    await interaction.followup.send("Upcoming calendar of server events! See the Events tab and https://discord.com/channels/1148449914188218399/1153466557524082771 for further details.", file = image)
 
 
 @tree.command(name = "pippin", description = "Forwards a random pipture!")

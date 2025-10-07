@@ -1421,7 +1421,7 @@ async def calendar(interaction):
     await interaction.followup.send("Upcoming calendar of server events! See the Events tab and https://discord.com/channels/1148449914188218399/1153466557524082771 for further details.", file = image)
 
 
-@tree.command(name = "pippin", description = "Forwards a random pipture!")
+@tree.command(name = "pippin", description = "Forwards a random pipture of Vel's cat Pippin!")
 async def pippin(interaction):
     await interaction.response.defer()
     url = random.choice(pippin_ids)

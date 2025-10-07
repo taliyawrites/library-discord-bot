@@ -1424,9 +1424,8 @@ async def tierlist(interaction):
 @tree.command(name = "pippin", description = "Forwards a random pipture!")
 async def pippin(interaction):
     await interaction.response.defer()
-    message_id = random.choice(pippin_ids)
-    message = client.get_channel(PETS).get_partial_message(int(message_id))
-    await interaction.followup.send(f"Here's a random picture of Pippin! {message.jump_url}")
+    url = random.choice(pippin_ids)
+    await interaction.followup.send(f"Here's a random picture of Pippin! {url}")
 
 
 
@@ -1709,7 +1708,7 @@ async def on_message(message):
                 if message.channel.id in allowed_pic_channels:
                     await message.forward(pic_channel)
                 if message.channel.id == PETS:
-                    pippin_ids.append(message.id)
+                    pippin_ids.append(message.jump_url)
                     save_to_file(PIPPIN_FILENAME,pippin_ids)
                     print("Pippin picture logged!")
 

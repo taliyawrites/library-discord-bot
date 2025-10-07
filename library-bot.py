@@ -1422,7 +1422,7 @@ async def tierlist(interaction):
 
 
 @tree.command(name = "pippin", description = "Forwards a random pipture!")
-async def vn(interaction):
+async def pippin(interaction):
     await interaction.response.defer()
     message_id = random.choice(pippin_ids)
     message = client.get_channel(PETS).get_partial_message(int(message_id))

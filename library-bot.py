@@ -52,6 +52,7 @@ BIRTHDAY_FILENAME = "birthdays.json"
 LIVETIMES_FILENAME = "livetimes.txt"
 EVENTS_FILENAME = "event-schedule.json"
 TAGS_FILENAME = "updatedtags.txt"
+PIPPIN_FILENAME = "pippin-pics.txt"
 
 # run daily tasks at 1pm eastern time (6pm UTC+1)
 HOUR, MINUTE = 17, 0
@@ -476,8 +477,9 @@ async def setup_hook():
     all_characters, all_tags, all_collections = write_data_lists()
 
 
-    global voice_note_links
+    global voice_note_links, pippin_ids
     voice_note_links = read_from_file(ARCHIVE_FILENAME)
+    pippin_ids = read_from_file(PIPPIN_FILENAME)
     global rerun_gg, rerun_daily, rerun_birthdays
     rerun_gg, rerun_daily, rerun_birthdays = False, False, False
 
@@ -1412,6 +1414,23 @@ async def tierlist(interaction):
 
 
 
+# @tree.command(name = "calendar", description = "This month's calendar of events!")
+# async def calendar(interaction):
+#     await interaction.response.defer()
+#     image = discord.File("current_calendar.png")
+#     await interaction.followup.send("Upcoming calendar of server events! See the Events tab and https://discord.com/channels/1148449914188218399/1153466557524082771 for further details.", file = image)
+
+
+@tree.command(name = "pippin", description = "Forwards a random pipture!")
+async def vn(interaction):
+    await interaction.response.defer()
+    message_id = random.choice(pippin_ids)
+    message = client.get_channel(PETS).get_partial_message(int(message_id))
+    await interaction.followup.send("Here's a random picture of Pippin!")
+    await message.forward(interaction.channel)
+
+
+
 @tree.command(name = "toy", description = "fuckboy fucktoy fucks fuck toy. more at eleven")
 @app_commands.describe(victim = "@ whomever you'd like the bot to target")
 async def toy(interaction, victim: Optional[str] = ""):
@@ -1666,7 +1685,7 @@ async def mod_embed_edits(interaction, channelid: Optional[str] = "1374549206286
 async def on_message(message):
 
     # allow modifications of state variables
-    global voice_note_links
+    global voice_note_links, pippin_ids
 
     if message.author == client.user:
         return
@@ -1690,6 +1709,10 @@ async def on_message(message):
             if not "gif" in attached[0].url and not "tenor" in attached[0].url:
                 if message.channel.id in allowed_pic_channels:
                     await message.forward(pic_channel)
+                if message.channel.id == PETS:
+                    pippin_ids.append(message.id)
+                    save_to_file(PIPPIN_FILENAME,pippin_ids)
+                    print("Pippin picture logged!")
 
     if message.author.id == 1262940885251784785 and message.content.startswith("!move"):
         await message.channel.edit(category = client.get_channel(1405614176952389643))

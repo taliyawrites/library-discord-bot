@@ -1426,8 +1426,7 @@ async def vn(interaction):
     await interaction.response.defer()
     message_id = random.choice(pippin_ids)
     message = client.get_channel(PETS).get_partial_message(int(message_id))
-    await interaction.followup.send("Here's a random picture of Pippin!")
-    await message.forward(interaction.channel)
+    await interaction.followup.send(f"Here's a random picture of Pippin! {message.jump_url}")
 
 
 
@@ -1692,7 +1691,7 @@ async def on_message(message):
 
     # logs new voice notes in the full list and forwards pics/videos to the pic channel
     if message.author == vel and len(message.attachments) != 0:
-        allowed_pic_channels = [VSPOT, PETS, GYM]
+        allowed_pic_channels = [VSPOT, GYM]
         allowed_vn_channels = [VSPOT, RR, GEN]
 
         pic_channel = client.get_channel(PICS)

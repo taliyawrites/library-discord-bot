@@ -53,6 +53,7 @@ LIVETIMES_FILENAME = "livetimes.txt"
 EVENTS_FILENAME = "event-schedule.json"
 TAGS_FILENAME = "updatedtags.txt"
 PIPPIN_FILENAME = "pippin-pics.txt"
+GULL_FILENAME = "abode.txt"
 
 # run daily tasks at 1pm eastern time (6pm UTC+1)
 HOUR, MINUTE = 17, 0
@@ -454,10 +455,11 @@ async def setup_hook():
 
 
     # import current state variable values
-    global random_seed, good_girl, pet_count, edge_counter, cum_permission_ids, daily_audio, snack_requests, birthdays, twitch_time, live_time, event_times, sorted_tag_list
+    global random_seed, good_girl, pet_count, edge_counter, cum_permission_ids, daily_audio, snack_requests, birthdays, twitch_time, live_time, event_times, sorted_tag_list, gull_counter
     random_seed = ''.join(random.choices(string.ascii_uppercase+string.digits, k=8))
     good_girl = read_from_file(WINNERS_FILENAME)[-1]
     pet_count = int(read_from_file(COUNTER_FILENAME)[-1])
+    gull_counter = int(read_from_file(GULL_FILENAME)[-1])
     edge_counter = 0
     cum_permission_ids = [int(value) for value in read_from_file(RECORD_FILENAME)]
     currentdaily = read_from_file(AUDIOS_FILENAME)[-1]
@@ -1446,6 +1448,18 @@ async def toy(interaction, victim: Optional[str] = ""):
         else:
             await interaction.followup.send(f"{link} \n-# You do know he can see this, right? <:Smile:1325629637799182357>")
 
+
+
+@tree.command(name = "gull", description = "Gull his abode!")
+async def gull(interaction):
+    await interaction.response.defer()
+    image = discord.File("esnupi.jpg")
+
+    global gull_counter
+    gull_counter += 1
+    save_to_file(GULL_FILENAME, [str(gull_counter)])
+
+    await interaction.followup.send(content = f"{interaction.user.display_name} has sent another gull! There are now {gull_counter} gulls in Vel's abode.", file = image)
 
 
 

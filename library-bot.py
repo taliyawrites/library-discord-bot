@@ -1453,13 +1453,12 @@ async def toy(interaction, victim: Optional[str] = ""):
 @tree.command(name = "gull", description = "Gull his abode!")
 async def gull(interaction):
     await interaction.response.defer()
-    image = discord.File("esnupi.jpg")
 
     global gull_counter
     gull_counter += 1
     save_to_file(GULL_FILENAME, [str(gull_counter)])
 
-    await interaction.followup.send(content = f"{interaction.user.display_name} has sent another gull! There are now {gull_counter} gulls in Vel's abode.", file = image)
+    await interaction.followup.send(content = f"{interaction.user.display_name} has sent another gull! There are now {gull_counter} gulls in Vel's abode.", file = discord.File("gull.png"))
 
 
 

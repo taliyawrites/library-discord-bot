@@ -1460,6 +1460,9 @@ async def gull(interaction):
 
     await interaction.followup.send(content = f"{interaction.user.display_name} has sent another gull! There are now {gull_counter} gulls in Vel's abode.", file = discord.File("gull.png"))
 
+    if gull_counter == 100: 
+        await interaction.channel.send("Vel’s abode now contains a - combined and condensed - gull volume of ~10.6 cubic meters (or roughly the volume of two ovens)!")
+
 
 # TAGGING COMMANDS
 

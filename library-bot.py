@@ -1461,8 +1461,6 @@ async def gull(interaction):
     await interaction.followup.send(content = f"{interaction.user.display_name} has sent another gull! There are now {gull_counter} gulls in Vel's abode.", file = discord.File("gull.png"))
 
 
-
-
 # TAGGING COMMANDS
 
 @tree.command(name = "updatetags", description = "Command for maintenance by our tag team; please ignore!")

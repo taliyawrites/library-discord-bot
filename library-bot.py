@@ -1877,16 +1877,12 @@ async def track_patrons():
     PATRON_ROLE = 1154619473773465610
     NOT_PATRON_ROLE = 1417728496825794642
     BOT_ROLE = 1155697576230781079
-    LIBRARIAN_ROLE = 1148451019542499368
-    ADMIN_ROLE = 1148452325539713114
 
     library = client.get_guild(GUILD)
     lib_card = library.get_role(LIBRARY_CARD)
     patreon = library.get_role(PATRON_ROLE)
     not_patreon = library.get_role(NOT_PATRON_ROLE)
     bots = library.get_role(BOT_ROLE)
-    librarian = library.get_role(LIBRARIAN_ROLE)
-    admin = library.get_role(ADMIN_ROLE)
 
     all_members = library.members
 
@@ -1904,8 +1900,10 @@ async def track_patrons():
             neither += 1
             if bots in member.roles:
                 bot_count += 1
+            else:
+                print(member.display_name)
 
-    await taliya.send(str(len(all_members)) + " members \n" + str(patron_count) + " patrons \n" + str(non_patron_count) + " non-patrons \n" + str(neither) + " neither? (" + str(bot_count) +" bots) \n" + str(count) + " both?")
+    await taliya.send(str(len(all_members)) + " members \n" + str(patron_count) + " patrons \n" + str(non_patron_count) + " non-patrons \n" + str(neither) + " neither? (" + str(bot_count) +" bots) \n" + str(both) + " both?")
    
 
 

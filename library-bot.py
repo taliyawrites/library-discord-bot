@@ -583,6 +583,13 @@ async def title(interaction, title_phrase: str):
                 await interaction.followup.send(f"Back again, slut?")
         elif len(matches) == 1 and "A Gooner's JOI" == matches[0].name():
             await interaction.followup.send(f"Back again, slut?")
+    # if interaction.user.id == 490759913757212672: 
+    #     if len(matches) == 0: 
+    #         if len(possible_matches) == 1 and "His Girlfriend, My Kitten" == possible_matches[0].name():
+    #             await interaction.followup.send(f"You really are insatiable, aren't you, kitten.")
+    #     elif len(matches) == 1 and "His Girlfriend, My Kitten" == matches[0].name():
+    #         await interaction.followup.send(f"You really are insatiable, aren't you, kitten.")
+
 
 
 
@@ -1726,6 +1733,8 @@ async def on_message(message):
                     save_to_file(PIPPIN_FILENAME,pippin_ids)
                     print("Pippin picture logged!")
 
+    if message.author == taliya and message.content.startswith("!track"):
+        await track_patrons()
 
     if message.author.id == 1262940885251784785 and message.content.startswith("!move"):
         await message.channel.edit(category = client.get_channel(1405614176952389643))
@@ -1821,6 +1830,8 @@ async def run_daily_loops():
         await announce_daily_audio()
         await choose_good_girl()
         await daily_balatro()
+        if datetime.datetime.now().weekday() == 1:
+            await track_patrons()
     elif (datetime.datetime.now().hour == MIDNIGHT and datetime.datetime.now().minute == MINUTE):
         await birthday_wishes()
         if datetime.datetime.now().weekday() == 0:
@@ -1860,6 +1871,42 @@ async def run_daily_loops():
 
 
 
+
+async def track_patrons():
+    LIBRARY_CARD = 1148454184824360990
+    PATRON_ROLE = 1154619473773465610
+    NOT_PATRON_ROLE = 1417728496825794642
+    BOT_ROLE = 1155697576230781079
+    LIBRARIAN_ROLE = 1148451019542499368
+    ADMIN_ROLE = 1148452325539713114
+
+    library = client.get_guild(GUILD)
+    lib_card = library.get_role(LIBRARY_CARD)
+    patreon = library.get_role(PATRON_ROLE)
+    not_patreon = library.get_role(NOT_PATRON_ROLE)
+    bots = library.get_role(BOT_ROLE)
+    librarian = library.get_role(LIBRARIAN_ROLE)
+    admin = library.get_role(ADMIN_ROLE)
+
+    all_members = library.members
+
+    patron_count, non_patron_count, neither, bot_count, both = 0, 0, 0, 0, 0
+    for member in all_members:
+        if patreon in member.roles:
+            if not_patreon not in member.roles:
+                patron_count += 1
+            else:
+                both += 1
+        elif not_patreon in member.roles:
+            if patreon not in member.roles:
+                non_patron_count += 1
+        else:
+            neither += 1
+            if bots in member.roles:
+                bot_count += 1
+
+    await taliya.send(str(len(all_members)) + " members \n" + str(patron_count) + " patrons \n" + str(non_patron_count) + " non-patrons \n" + str(neither) + " neither? (" + str(bot_count) +" bots) \n" + str(count) + " both?")
+   
 
 
 

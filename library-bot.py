@@ -1766,10 +1766,14 @@ async def on_member_update(before, after):
     if before.roles != after.roles:
         patron = client.get_guild(GUILD).get_role(1154619473773465610)
         not_patron = client.get_guild(GUILD).get_role(1417728496825794642)
+        librarycard = client.get_guild(GUILD).get_role(1148454184824360990)
+        
         if patron in after.roles and patron not in before.roles:
             await after.remove_roles(not_patron)
+            # await after.add_roles(librarycard)
             print(f"Active Patreon membership role added for {after.name}")
         elif patron in before.roles and patron not in after.roles:
+            # await after.remove_roles(after.roles[1:])
             await after.add_roles(not_patron)
             print(f"Active Patreon membership role removed for {after.name}")
 
@@ -1830,7 +1834,7 @@ async def run_daily_loops():
         await announce_daily_audio()
         await choose_good_girl()
         await daily_balatro()
-        if datetime.datetime.now().weekday() == 1:
+        if datetime.datetime.now().weekday() == 0:
             await track_patrons()
     elif (datetime.datetime.now().hour == MIDNIGHT and datetime.datetime.now().minute == MINUTE):
         await birthday_wishes()

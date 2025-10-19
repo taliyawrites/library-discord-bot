@@ -1766,16 +1766,49 @@ async def on_member_update(before, after):
     if before.roles != after.roles:
         patron = client.get_guild(GUILD).get_role(1154619473773465610)
         not_patron = client.get_guild(GUILD).get_role(1417728496825794642)
-        librarycard = client.get_guild(GUILD).get_role(1148454184824360990)
         
         if patron in after.roles and patron not in before.roles:
             await after.remove_roles(not_patron)
-            # await after.add_roles(librarycard)
             print(f"Active Patreon membership role added for {after.name}")
+            try:
+                with open('audit_log.txt', 'a') as file:
+                    file.write(f"Patreon membership renewed for User {after.id} (after.name). Roles updated from {[role.name for role in before.roles]} to {[role.name for role in after.roles]} \n")
+            except:
+                await taliya.send("error in role recording")
         elif patron in before.roles and patron not in after.roles:
-            # await after.remove_roles(after.roles[1:])
             await after.add_roles(not_patron)
             print(f"Active Patreon membership role removed for {after.name}")
+            try:
+                with open('audit_log.txt', 'a') as file:
+                    file.write(f"Patreon membership removed for User {after.id} (after.name). Roles updated from {[role.name for role in before.roles]} to {[role.name for role in after.roles]} \n")
+            except:
+                await taliya.send("error in role recording")
+
+
+
+# @client.event
+# async def on_member_update(before, after):
+#     if before.roles != after.roles:
+#         patron = client.get_guild(GUILD).get_role(1154619473773465610)
+#         not_patron = client.get_guild(GUILD).get_role(1417728496825794642)
+#         librarycard = client.get_guild(GUILD).get_role(1148454184824360990)
+        
+#         if patron in after.roles and patron not in before.roles:
+#             lib_card_roles = [1148454184824360990, 1200985641689817168, 1200985797818585208, 1200986718917107913, 1200987519056101436]
+#             returning_roles = [client.get_guild(GUILD).get_role(role_id) for role_id in lib_card_roles]
+#             await after.remove_roles(not_patron)
+#             await after.add_roles(returning_roles, reason = "Patreon membership renewed.")
+
+#             with open('audit-log.txt', 'a') as file:
+#                 file.write(f"Patreon membership renewed for User {after.id} (after.name). Roles updated from {[role.name for role in before.roles]} to {[role.name for role in after.roles]} \n")
+
+
+#         elif patron in before.roles and patron not in after.roles:
+#             await after.remove_roles(after.roles[1:], reason = "No longer an active Patron.")
+#             await after.add_roles(not_patron)
+
+#             with open('audit-log.txt', 'a') as file:
+#                 file.write(f"Patreon membership removed for User {after.id} (after.name). Roles updated from {[role.name for role in before.roles]} to {[role.name for role in after.roles]} \n")
 
 
 

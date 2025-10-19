@@ -1771,12 +1771,14 @@ async def on_member_update(before, after):
             await after.remove_roles(not_patron)
             print(f"Active Patreon membership role added for {after.name}")
             with open('audit-log.txt', 'a') as file:
-                file.write(f"Patreon membership renewed for User {after.id} ({after.name}). Roles updated from {[role.name for role in before.roles]} to {[role.name for role in after.roles]} \n")
+                now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")
+                file.write(f"{now} Patreon membership renewed for User {after.id} ({after.name}). Roles updated from {[role.name for role in before.roles]} to {[role.name for role in after.roles]} \n")
         elif patron in before.roles and patron not in after.roles:
             await after.add_roles(not_patron)
             print(f"Active Patreon membership role removed for {after.name}")
             with open('audit-log.txt', 'a') as file:
-                file.write(f"Patreon membership removed for User {after.id} ({after.name}). Roles updated from {[role.name for role in before.roles]} to {[role.name for role in after.roles]} \n")
+                now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")
+                file.write(f"{now} Patreon membership removed for User {after.id} ({after.name}). Roles updated from {[role.name for role in before.roles]} to {[role.name for role in after.roles]} \n")
 
 
 
@@ -1794,7 +1796,7 @@ async def on_member_update(before, after):
 #             await after.add_roles(returning_roles, reason = "Patreon membership renewed.")
 
 #             with open('audit-log.txt', 'a') as file:
-#                 file.write(f"{datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")} Patreon membership renewed for User {after.id} ({after.name}). Roles updated from {[role.name for role in before.roles]} to {[role.name for role in after.roles]} \n")
+#                 file.write(f"{now} Patreon membership renewed for User {after.id} ({after.name}). Roles updated from {[role.name for role in before.roles]} to {[role.name for role in after.roles]} \n")
 
 
 #         elif patron in before.roles and patron not in after.roles:
@@ -1802,7 +1804,7 @@ async def on_member_update(before, after):
 #             await after.add_roles(not_patron)
 
 #             with open('audit-log.txt', 'a') as file:
-#                 file.write(f"{datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")} Patreon membership removed for User {after.id} ({after.name}). Roles updated from {[role.name for role in before.roles]} to {[role.name for role in after.roles]} \n")
+#                 file.write(f"{now} Patreon membership removed for User {after.id} ({after.name}). Roles updated from {[role.name for role in before.roles]} to {[role.name for role in after.roles]} \n")
 
 
 

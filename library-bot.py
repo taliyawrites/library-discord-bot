@@ -288,11 +288,21 @@ def inexact_matches(phrase):
 
     if len(closer_matches) != 0:
         closer_matches.sort(key = age_sort)
-        return closer_matches
-    else:
-        matching.sort(key = age_sort)
-        return matching
-        
+    matching.sort(key = age_sort)
+    return matching,closer_matches
+
+
+# search to see if any part of the phrase appears in any titles
+def closest_match(phrase, choices):
+    current_max = 0
+    best_match = None
+    for audio in choices:
+        score = jaro.jaro_winkler_metric(audio.name().lower(), phrase)
+        if score > current_max:
+            current_max = score
+            best_match = audio
+    return best_match
+
 
 # search for matching character names
 def character_search(name):
@@ -536,29 +546,57 @@ async def title(interaction, title_phrase: str):
     phrase = phrase.strip()
 
     matches = title_matches(phrase)
+    check_id = "none"
 
     if len(matches) == 0:
-        possible_matches = inexact_matches(phrase)
-        if len(possible_matches) == 0:
-            await interaction.followup.send(f'No audios found with title including the phrase "{phrase}." Consider using a `/tag` search instead, as tags are often more descriptive than titles and make audios easier to find!')
-        elif len(possible_matches) == 1:
-            # await interaction.followup.send('No exact matches found for "' + phrase + '." One partially matching result found.')
-            name = possible_matches[0].name
-            await interaction.followup.send(embed=possible_matches[0].discord_post())
-        else:
-            # await interaction.followup.send('No exact matches found for "' + phrase + '."')
-            link_string = ""
-            for i in list(range(len(possible_matches))):
-                next = str(i+1) + ". [" + possible_matches[i].name() + "](" + possible_matches[i].link() + ")" + '\n'
-                link_string = link_string + next
+        possible_matches, full_overlap_matches = inexact_matches(phrase)
+        if len(full_overlap_matches) == 0: 
+            if len(possible_matches) == 0:
+                await interaction.followup.send(f'No audios found with title including the phrase "{phrase}." Consider using a `/tag` search instead, as tags are often more descriptive than titles and make audios easier to find!')
+            elif len(possible_matches) == 1:
+                # await interaction.followup.send('No exact matches found for "' + phrase + '." One partially matching result found.')
+                name = possible_matches[0].name
+                check_id = possible_matches[0].recordID
+                await interaction.followup.send(embed=possible_matches[0].discord_post())
+            else:
+                link_string = ""
+                for i in list(range(len(possible_matches))):
+                    next = str(i+1) + ". [" + possible_matches[i].name() + "](" + possible_matches[i].link() + ")" + '\n'
+                    link_string = link_string + next
+                match_embeds = msg_split(link_string,"Partially Matching Results")
 
-            matches_embed = discord.Embed(title = "Partially Matching Results",description=link_string)
+                best_match = closest_match(phrase, possible_matches)
+                await interaction.followup.send(embed=best_match.discord_post())
+                await interaction.channel.send(content = f'This was the closest match found for your "{phrase}" search. Not the audio you were looking for? Press the button below to see all audios that partially match your query!', view =  Button(response = match_embeds))
+
+                await interaction.followup.send(embed = match_embeds[0])
+                if len(match_embeds) > 1:
+                    for embed in match_embeds[1:]:
+                        await interaction.channel.send(embed = embed)
+
+
+        elif len(full_overlap_matches) == 1:
+            check_id = possible_matches[0].recordID
+            await interaction.followup.send(embed = full_overlap_matches[0].discord_post())
+        else:
+            link_string = ""
+            for i in list(range(len(full_overlap_matches))):
+                    next = str(i+1) + ". [" + full_overlap_matches[i].name() + "](" + full_overlap_matches[i].link() + ")" + '\n'
+                    link_string = link_string + next
             try:
-                await interaction.followup.send(embed = matches_embed)
+                await interaction.followup.send(embed = discord.Embed(title = "Matching Results",description=link_string))
             except:
-                await interaction.followup.send('Partially matching results exceeded the Discord character limit, please try again with a different search!')
+                match_embeds = msg_split(link_string,"Matching Results")
+                await interaction.followup.send(embed = match_embeds[0])
+                if len(match_embeds) > 1:
+                    for embed in match_embeds[1:]:
+                        await interaction.channel.send(embed = embed)
+
+
     elif len(matches) == 1:
-        await interaction.followup.send(embed=matches[0].discord_post())     
+        check_id = possible_matches[0].recordID
+        await interaction.followup.send(embed=matches[0].discord_post())
+
     else:
         count = len(matches)
         link_string = ""
@@ -577,18 +615,11 @@ async def title(interaction, title_phrase: str):
                 for msg in msg_list:
                     await interaction.channel.send(embed = msg)
 
-    if interaction.user.id == 1185405398883258369:
-        if len(matches) == 0: 
-            if len(possible_matches) == 1 and "A Gooner's JOI" == possible_matches[0].name():
-                await interaction.followup.send(f"Back again, slut?")
-        elif len(matches) == 1 and "A Gooner's JOI" == matches[0].name():
-            await interaction.followup.send(f"Back again, slut?")
-    # if interaction.user.id == 490759913757212672: 
-    #     if len(matches) == 0: 
-    #         if len(possible_matches) == 1 and "His Girlfriend, My Kitten" == possible_matches[0].name():
-    #             await interaction.followup.send(f"You really are insatiable, aren't you, kitten.")
-    #     elif len(matches) == 1 and "His Girlfriend, My Kitten" == matches[0].name():
-    #         await interaction.followup.send(f"You really are insatiable, aren't you, kitten.")
+    if interaction.user.id == 1185405398883258369 and check_id == "recvWJsn8b3BPnSzG": 
+        await interaction.followup.send("Back again, slut?")
+    # if interaction.user.id == 490759913757212672 and check_id == "recdatlFnyuOU1sze":
+    #     if isinstance(interaction.channel, discord.DMChannel):
+    #         await interaction.followup.send("You really are insatiable, aren't you, kitten.")
 
 
 
@@ -1738,9 +1769,35 @@ async def on_message(message):
 
     if message.author.id == 1262940885251784785 and message.content.startswith("!move"):
         await message.channel.edit(category = client.get_channel(1405614176952389643))
+
+    # if msg.content.startswith('!purge') and msg.author == taliya: 
+    #     patreon = client.get_guild(GUILD).get_role(1154619473773465610)
+    #     not_patreon = client.get_guild(GUILD).get_role(1417728496825794642)
+
+    #     not_patron_count = 0
+    #     for member in library.members: 
+    #         if not_patreon in member.roles:
+    #             if patreon not in member.roles: 
+    #                 not_patron_count += 1
+    #                 before_roles = [role.name for role in member.roles]
+    #                 await member.remove_roles(member.roles[1:])
+    #                 await member.add_roles(not_patreon)
+    #                 with open('audit-log.txt', 'a') as file:
+    #                     now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")
+    #                     file.write(f"[{now}] Patreon membership removed for User {member.id} ({member.name}). Roles updated from {before_roles} to {[role.name for role in member.roles]} \n")
+
+    #     await msg.channel.send(f"Permissions removed for {not_patron_count} users.")
+
+    #     check_sum = 0
+    #     for member in library.members: 
+    #         if not_patreon in member.roles:
+    #             if len(member.roles) != 2:
+    #                 check_sum += 1
+
+    #     await msg.channel.send(f"Check: {check_sum == 0}")
     
-    # if message.content.startswith('!') and not message.content.startswith('!!') and not message.author == taliya:
-    #     await message.channel.send("The bot has been updated to use slash commands integrated into Discord! The commands have the same names as before, but with `/` at the beginning instead of `!`. This means that you won't need to remember the exact name or format of a command, just type / and a menu of options will pop up!")
+
+
 
 
 @client.event

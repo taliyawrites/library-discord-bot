@@ -1679,17 +1679,13 @@ async def update_error(interaction, error):
 @tree.command(name = "status", description = "makes the bot send a specified message in given channel", guild = discord.Object(COMMAND_SERVER))
 @app_commands.check(lambda u: u.user == taliya)
 @app_commands.allowed_installs(guilds=True, users=False)
-async def status(interaction, option: str, status: str):
+async def status(interaction, status: Optional[str] = ""):
     await interaction.response.defer()
-    if option == "custom":
+    if len(status) != 0:
         await client.change_presence(activity = discord.Activity(type=discord.ActivityType.custom, name="custom", state=status))
     else:
         await client.change_presence(activity = discord.Activity(type=discord.ActivityType.custom, name="custom", state=daily_audio.name()))
     await interaction.followup.send("Status updated!")
-@status.autocomplete('option')
-async def status_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
-    options = ['daily audio', 'custom']
-    return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]
 @status.error
 async def status_error(interaction, error):
     await interaction.response.send_message("Permissions denied.")

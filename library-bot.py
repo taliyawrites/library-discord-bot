@@ -596,7 +596,7 @@ async def title(interaction, title_phrase: str):
 
 
     elif len(matches) == 1:
-        check_id = possible_matches[0].recordID
+        check_id = matches[0].recordID
         await interaction.followup.send(embed=matches[0].discord_post())
 
     else:
@@ -619,9 +619,9 @@ async def title(interaction, title_phrase: str):
 
     if interaction.user.id == 1185405398883258369 and check_id == "recvWJsn8b3BPnSzG": 
         await interaction.followup.send("Back again, slut?")
-    # if interaction.user.id == 490759913757212672 and check_id == "recdatlFnyuOU1sze":
-    #     if isinstance(interaction.channel, discord.DMChannel):
-    #         await interaction.followup.send("You really are insatiable, aren't you, kitten.")
+    if interaction.user.id == 490759913757212672 and check_id == "recdatlFnyuOU1sze":
+        if isinstance(interaction.channel, discord.DMChannel):
+            await interaction.followup.send("You really are insatiable, aren't you, kitten.")
 
 
 

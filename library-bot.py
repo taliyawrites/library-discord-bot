@@ -556,8 +556,7 @@ async def title(interaction, title_phrase: str):
                 await interaction.followup.send(f'No audios found with title including the phrase "{phrase}." Consider using a `/tag` search instead, as tags are often more descriptive than titles and make audios easier to find!')
             elif len(possible_matches) == 1:
                 # await interaction.followup.send('No exact matches found for "' + phrase + '." One partially matching result found.')
-                name = possible_matches[0].name
-                check_id = possible_matches[0].recordID
+                check_id = possible_matches[0].recordID()
                 await interaction.followup.send(embed=possible_matches[0].discord_post())
             else:
                 link_string = ""
@@ -578,7 +577,7 @@ async def title(interaction, title_phrase: str):
 
 
         elif len(full_overlap_matches) == 1:
-            check_id = possible_matches[0].recordID
+            check_id = possible_matches[0].recordID()
             await interaction.followup.send(embed = full_overlap_matches[0].discord_post())
         else:
             link_string = ""

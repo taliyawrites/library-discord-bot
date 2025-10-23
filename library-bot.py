@@ -1684,7 +1684,7 @@ async def status(interaction, status: Optional[str] = ""):
     if len(status) != 0:
         await client.change_presence(activity = discord.Activity(type=discord.ActivityType.custom, name="custom", state=status))
     else:
-        await client.change_presence(activity = discord.Activity(type=discord.ActivityType.listening, name = daily_audio.name()), state_url = daily_audio.link())
+        await client.change_presence(activity = discord.Activity(type=discord.ActivityType.listening, name = daily_audio.name(), state_url = daily_audio.link()))
     await interaction.followup.send("Status updated!")
 @status.error
 async def status_error(interaction, error):

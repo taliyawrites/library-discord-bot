@@ -1684,7 +1684,7 @@ async def status(interaction, status: Optional[str] = ""):
     if len(status) != 0:
         await client.change_presence(activity = discord.Activity(type=discord.ActivityType.custom, name="custom", state=status))
     else:
-        await client.change_presence(activity = discord.Activity(type=discord.ActivityType.listening, nname = daily_audio.name()))
+        await client.change_presence(activity = discord.Activity(type=discord.ActivityType.listening, name = daily_audio.name()))
     await interaction.followup.send("Status updated!")
 @status.error
 async def status_error(interaction, error):
@@ -2084,7 +2084,7 @@ async def announce_daily_audio():
         if daily_audio is not None: 
             await channel.send(f"The audio of the day!")
             await channel.send(embed=daily_audio.discord_post())
-            await client.change_presence(activity = discord.Activity(type=discord.ActivityType.listening, nname = daily_audio.name()))
+            await client.change_presence(activity = discord.Activity(type=discord.ActivityType.listening, name = daily_audio.name()))
         else:
             await taliya.send("ERROR: no non-recent options for daily audio.")
     except:

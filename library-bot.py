@@ -578,7 +578,7 @@ async def title(interaction, title_phrase: str):
 
 
         elif len(full_overlap_matches) == 1:
-            check_id = possible_matches[0].recordID()
+            check_id = full_overlap_matches[0].recordID()
             print(check_id)
             await interaction.followup.send(embed = full_overlap_matches[0].discord_post())
         else:

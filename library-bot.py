@@ -566,9 +566,9 @@ async def title(interaction, title_phrase: str):
                     link_string = link_string + next
                 match_embeds = msg_split(link_string,"Partially Matching Results")
 
-                best_match = closest_match(phrase, possible_matches)
-                await interaction.followup.send(embed=best_match.discord_post())
-                await interaction.channel.send(content = f'This was the closest match found for your "{phrase}" search. Not the audio you were looking for? Press the button below to see all audios that partially match your query!', view =  Button(response = match_embeds))
+                # best_match = closest_match(phrase, possible_matches)
+                # await interaction.followup.send(embed=best_match.discord_post())
+                # await interaction.channel.send(content = f'This was the closest match found for your "{phrase}" search. Not the audio you were looking for? Press the button below to see all audios that partially match your query!', view =  Button(response = match_embeds))
 
                 await interaction.followup.send(embed = match_embeds[0])
                 if len(match_embeds) > 1:

@@ -597,6 +597,7 @@ async def title(interaction, title_phrase: str):
 
     elif len(matches) == 1:
         check_id = matches[0].recordID
+        print(check_id)
         await interaction.followup.send(embed=matches[0].discord_post())
 
     else:

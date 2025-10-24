@@ -506,7 +506,7 @@ async def setup_hook():
     vel = await client.fetch_user(1089053035377999912)
 
 
-    await taliya.send(f"Card Catalog bot restarted successfully!")
+    await taliya.send(f"Card Catalog bot restarted successfully! Update the status here https://discord.com/channels/1240366126190563418/1365724468332204113.")
     print(f"bot local time: {datetime.datetime.now().hour}h{datetime.datetime.now().minute}.")
 
 

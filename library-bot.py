@@ -505,7 +505,6 @@ async def setup_hook():
     taliya = await client.fetch_user(1169014359842885726)
     vel = await client.fetch_user(1089053035377999912)
 
-    await client.change_presence(activity = discord.Activity(type=discord.ActivityType.listening, name = daily_audio.name(), details_url = daily_audio.link()))
 
     await taliya.send(f"Card Catalog bot restarted successfully!")
     print(f"bot local time: {datetime.datetime.now().hour}h{datetime.datetime.now().minute}.")

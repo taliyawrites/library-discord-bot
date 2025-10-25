@@ -62,15 +62,6 @@ MIDNIGHT = 4
 
 
 
-intents = discord.Intents.default()
-intents.message_content = True
-intents.members = True
-
-client = discord.Client(intents=intents)
-tree = app_commands.CommandTree(client)
-
-
-
 
 # AUDIO FUNCTIONS here #
 
@@ -437,6 +428,17 @@ def msg_split(string, listname, embed = True):
 ### BOT FUNCTIONS ###
 
 
+# INITIALIZE BOT #
+
+
+intents = discord.Intents.default()
+intents.message_content = True
+intents.members = True
+
+client = discord.Client(intents=intents, activity = discord.Activity(type=discord.ActivityType.listening, name = read_from_file(AUDIOS_FILENAME)[-1]))
+tree = app_commands.CommandTree(client)
+
+
 
 
 # LOGIN #
@@ -463,6 +465,7 @@ async def setup_hook():
     tag_dictionary = import_tag_dictionary()
     collections = import_collections()
     print("data pulled from airtable")
+
 
 
     # import current state variable values
@@ -506,7 +509,7 @@ async def setup_hook():
     vel = await client.fetch_user(1089053035377999912)
 
 
-    await taliya.send(f"Card Catalog bot restarted successfully! Update the status here https://discord.com/channels/1240366126190563418/1365724468332204113.")
+    await taliya.send(f"Card Catalog bot restarted successfully!")
     print(f"bot local time: {datetime.datetime.now().hour}h{datetime.datetime.now().minute}.")
 
 

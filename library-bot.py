@@ -2240,6 +2240,10 @@ async def on_error(interaction, error):
         await taliya.send("**ERROR:** in *" + error.command.name + "* in DM with " + interaction.user.display_name + "\n" +  str(error))
     else:
         await taliya.send("**ERROR:** in *" + error.command.name + "* in " + interaction.channel.jump_url + "\n" +  str(error))
+    if isinstance(error, NotFound):
+        await taliya.send("not found error again")
+    elif isinstance(error, ValueError):
+        await taliya.send("nope")
     print(traceback.format_exc())
 
 

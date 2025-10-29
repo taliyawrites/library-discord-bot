@@ -2239,15 +2239,16 @@ async def on_error(interaction, error):
     print(str(error))
     unknown = "404 Not Found (error code: 10062): Unknown interaction"
     response_string = ""
+    trce = "[Traceback](https://panel.pebblehost.com/server/91ec3214/files/edit/error-log.txt)"
 
     if unknown in str(error):
         msg = await interaction.channel.send("Temporary server error: please wait a minute and then try again!")
         response_string += f"\nResponded: {msg.jump_url} ('{msg.content}')"
 
     if isinstance(interaction.channel, discord.DMChannel):
-        await taliya.send("**ERROR:** in *" + error.command.name + "* in DM with " + interaction.user.display_name + "\n" +  str(error) + response_string)
+        await taliya.send("**ERROR:** in *" + error.command.name + "* in DM with " + interaction.user.display_name + " (" + trce + ")" + "\n" +  str(error) + response_string)
     else:
-        await taliya.send("**ERROR:** in *" + error.command.name + "* in " + interaction.channel.jump_url + "\n" +  str(error) + response_string)
+        await taliya.send("**ERROR:** in *" + error.command.name + "* in " + interaction.channel.jump_url + " (" + trce + ")" + "\n" +  str(error) + response_string)
 
     with open('error-log.txt', 'a') as file:
         now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")

@@ -425,6 +425,19 @@ def msg_split(string, listname, embed = True):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 ### BOT FUNCTIONS ###
 
 
@@ -2224,9 +2237,10 @@ async def on_member_join(member):
 @tree.error
 async def on_error(interaction, error):
     if isinstance(interaction.channel, discord.DMChannel):
-        await taliya.send("**ERROR:** in *" + error.command.name + "* in DM with " + interaction.user.display_name + "\n" +  traceback.format_exc())
+        await taliya.send("**ERROR:** in *" + error.command.name + "* in DM with " + interaction.user.display_name + "\n" +  error)
     else:
-        await taliya.send("**ERROR:** in *" + error.command.name + "* in " + interaction.channel.jump_url + "\n" +  traceback.format_exc())
+        await taliya.send("**ERROR:** in *" + error.command.name + "* in " + interaction.channel.jump_url + "\n" +  error)
+    print(traceback.format_exc())
 
 
 
@@ -2237,6 +2251,7 @@ async def on_error(event, *args, **kwargs):
         await taliya.send("**ERROR:** DM with " + message.author.display_name + "\n**MESSAGE CONTENT:** " + message.content + "\n\n" + traceback.format_exc())
     else:
         await taliya.send("**ERROR:** " + message.jump_url + "\n**MESSAGE CONTENT:** " + message.content + "\n\n" + traceback.format_exc())
+
 
 
 

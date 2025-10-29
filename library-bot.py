@@ -2251,7 +2251,7 @@ async def on_error(interaction, error):
 
     with open('error-log.txt', 'a') as file:
         now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")
-        file.write(f"[{now}] {str(error)} \n {traceback.format_exc()}")
+        file.write(f"[{now}] {str(error)} \n {traceback.format_exc()} \n")
 
 
 
@@ -2262,6 +2262,10 @@ async def on_error(event, *args, **kwargs):
         await taliya.send("**ERROR:** DM with " + message.author.display_name + "\n**MESSAGE CONTENT:** " + message.content + "\n\n" + traceback.format_exc())
     else:
         await taliya.send("**ERROR:** " + message.jump_url + "\n**MESSAGE CONTENT:** " + message.content + "\n\n" + traceback.format_exc())
+
+    with open('error-log.txt', 'a') as file:
+        now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")
+        file.write(f"[{now}] on_error \n {traceback.format_exc()} \n")
 
 
 

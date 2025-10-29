@@ -2236,6 +2236,7 @@ async def on_member_join(member):
 
 @tree.error
 async def on_error(interaction, error):
+    print(str(error))
     unknown = "404 Not Found (error code: 10062): Unknown interaction"
     response_string = ""
 
@@ -2247,7 +2248,10 @@ async def on_error(interaction, error):
         await taliya.send("**ERROR:** in *" + error.command.name + "* in DM with " + interaction.user.display_name + "\n" +  str(error) + response_string)
     else:
         await taliya.send("**ERROR:** in *" + error.command.name + "* in " + interaction.channel.jump_url + "\n" +  str(error) + response_string)
-    print(traceback.format_exc())
+
+    with open('error-log.txt', 'a') as file:
+        now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")
+        file.write(f"[{now}] {str(error)} \n {traceback.format_exc()}")
 
 
 

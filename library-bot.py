@@ -2236,14 +2236,13 @@ async def on_member_join(member):
 
 @tree.error
 async def on_error(interaction, error):
+    unknown = "404 Not Found (error code: 10062): Unknown interaction"
     if isinstance(interaction.channel, discord.DMChannel):
         await taliya.send("**ERROR:** in *" + error.command.name + "* in DM with " + interaction.user.display_name + "\n" +  str(error))
     else:
         await taliya.send("**ERROR:** in *" + error.command.name + "* in " + interaction.channel.jump_url + "\n" +  str(error))
-    if isinstance(error, NotFound):
-        await taliya.send("not found error again")
-    elif isinstance(error, ValueError):
-        await taliya.send("nope")
+    if unknown in str(error) or "ValueError" in str(error):
+        await interaction.channel.send("Error encountered! Please try again in a second.")
     print(traceback.format_exc())
 
 

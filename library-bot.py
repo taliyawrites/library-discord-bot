@@ -2251,7 +2251,7 @@ async def on_error(interaction, error):
 
     with open('error-log.txt', 'a') as file:
         now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")
-        file.write(f"[{now}] {str(error)} \n {traceback.format_exc()} \n")
+        file.write(f"\n\n[{now}] {str(error)} \n {traceback.format_exc()}")
 
 
 
@@ -2265,7 +2265,7 @@ async def on_error(event, *args, **kwargs):
 
     with open('error-log.txt', 'a') as file:
         now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")
-        file.write(f"[{now}] on_error \n {traceback.format_exc()} \n")
+        file.write(f"\n\n[{now}] on_error \n {traceback.format_exc()} \n")
 
 
 

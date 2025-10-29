@@ -2242,7 +2242,7 @@ async def on_error(interaction, error):
     else:
         await taliya.send("**ERROR:** in *" + error.command.name + "* in " + interaction.channel.jump_url + "\n" +  str(error))
     if unknown in str(error):
-        msg = await interaction.channel.send("Temporary server error: please try again in a second!")
+        msg = await interaction.channel.send("Temporary server error: please wait a minute and then try again!")
         await taliya.send(f"Responded: {msg.jump_url}")
     print(traceback.format_exc())
 

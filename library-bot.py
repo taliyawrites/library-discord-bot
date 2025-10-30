@@ -574,7 +574,6 @@ async def title(interaction, title_phrase: str):
             elif len(possible_matches) == 1:
                 # await interaction.followup.send('No exact matches found for "' + phrase + '." One partially matching result found.')
                 check_id = possible_matches[0].recordID()
-                print(check_id)
                 await interaction.followup.send(embed=possible_matches[0].discord_post())
             else:
                 link_string = ""
@@ -596,7 +595,6 @@ async def title(interaction, title_phrase: str):
 
         elif len(full_overlap_matches) == 1:
             check_id = full_overlap_matches[0].recordID()
-            print(check_id)
             await interaction.followup.send(embed = full_overlap_matches[0].discord_post())
         else:
             link_string = ""
@@ -615,7 +613,6 @@ async def title(interaction, title_phrase: str):
 
     elif len(matches) == 1:
         check_id = matches[0].recordID()
-        print(check_id)
         await interaction.followup.send(embed=matches[0].discord_post())
 
     else:
@@ -641,6 +638,7 @@ async def title(interaction, title_phrase: str):
     if interaction.user.id == 490759913757212672 and check_id == "recdatlFnyuOU1sze":
         if isinstance(interaction.channel, discord.DMChannel):
             await interaction.followup.send("You really are insatiable, aren't you, kitten.")
+            await taliya.send("gottem")
 
 
 
@@ -2246,9 +2244,9 @@ async def on_error(interaction, error):
         response_string += f"\nResponded: {msg.jump_url} ('{msg.content}')"
 
     if isinstance(interaction.channel, discord.DMChannel):
-        await taliya.send("**ERROR:** in *" + error.command.name + "* in DM with " + interaction.user.display_name + " (" + trce + ")" + "\n" +  str(error) + response_string)
+        await taliya.send("**ERROR:** in *" + error.command.name + "* in DM with " + interaction.user.display_name + " (" + trce + ")\n" +  str(error) + response_string)
     else:
-        await taliya.send("**ERROR:** in *" + error.command.name + "* in " + interaction.channel.jump_url + " (" + trce + ")" + "\n" +  str(error) + response_string)
+        await taliya.send("**ERROR:** in *" + error.command.name + "* in " + interaction.channel.jump_url + " (" + trce + ")\n" +  str(error) + response_string)
 
     with open('error-log.txt', 'a') as file:
         now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")

@@ -1548,9 +1548,12 @@ async def updatetags(interaction, record : str, tags : str, mode : str, petnames
             current_tags = this_audio.tag_string()[:-1]
             all_tags = current_tags.strip() + " " + corrected_string
             await interaction.followup.send(f'Adding tags to "{title}" (Record ID: {record}) written in canonical form as: {corrected_string}', view = TagButton(tags = all_tags, audioID = record, names = petnames, wallbreak = fourthwallbreak, tagQ = False))
-        elif mode == "petnames only" or mode == "fourth wall break only":
+        elif mode == "petnames only":
             current_tags = this_audio.tag_string()[:-1].strip()
             await interaction.followup.send(f'Adding petnames to "{title}" (Record ID: {record}): {petnames}', view = TagButton(tags = current_tags, audioID = record, names = petnames, wallbreak = fourthwallbreak, tagQ = False))
+        elif mode == "fourth wall break only":
+            current_tags = this_audio.tag_string()[:-1].strip()
+            await interaction.followup.send(f'Updating fourth wall break for "{title}" (Record ID: {record}): {fourthwallbreak}', view = TagButton(tags = current_tags, audioID = record, names = petnames, wallbreak = fourthwallbreak, tagQ = False))
         else: 
             await interaction.followup.send("Invalid choice for mode.")
 @updatetags.autocomplete('mode')

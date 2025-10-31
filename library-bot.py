@@ -182,16 +182,17 @@ class Button(discord.ui.View):
 
 
 class TagButton(discord.ui.View):
-    def __init__(self, tags, audioID, names, tagQ, timeout=180):
+    def __init__(self, tags, audioID, names, wallbreak, tagQ, timeout=180):
         super().__init__(timeout=timeout)
         self.tags = tags
         self.audioID = audioID
         self.tagQ = tagQ
         self.names = names
+        self.wallbreak = wallbreak
     @discord.ui.button(label = "Accept Tags", style = discord.ButtonStyle.blurple)
     async def this_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
-        taggedaudio = push_masterlist_update(interaction, self.audioID, self.tags, self.names, self.tagQ)
+        taggedaudio = push_masterlist_update(interaction, self.audioID, self.tags, self.names, self.wallbreak, self.tagQ)
         await interaction.followup.send(content = "Tags successfully updated!",embed = taggedaudio.discord_post())
     @discord.ui.button(label = "Reject Tags", style = discord.ButtonStyle.blurple)
     async def this_button_2(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -1525,7 +1526,7 @@ async def gull(interaction):
 
 @tree.command(name = "updatetags", description = "Command for maintenance by our tag team; please ignore!")
 @app_commands.describe(record = "From the record ID field on the masterlist!")
-async def updatetags(interaction, record : str, tags : str, mode : str, petnames: Optional[str] = ""):
+async def updatetags(interaction, record : str, tags : str, mode : str, petnames: Optional[str] = "", fourthwallbreak: Optional[str] = "no"):
     await interaction.response.defer()
     allowed_users = [1185405398883258369, 490759913757212672, 1169014359842885726, 1089053035377999912]
 
@@ -1541,24 +1542,28 @@ async def updatetags(interaction, record : str, tags : str, mode : str, petnames
         corrected_string = "[" + '] ['.join(corrected_tags) + "]"
 
         if mode == "complete tags":
-            await interaction.followup.send(f'Tags for "{title}" (Record ID: {record}) written in canonical form as: {corrected_string}', view = TagButton(tags = corrected_string, audioID = record, names = petnames, tagQ = True))
+            await interaction.followup.send(f'Tags for "{title}" (Record ID: {record}) written in canonical form as: {corrected_string}', view = TagButton(tags = corrected_string, audioID = record, names = petnames, wallbreak = fourthwallbreak, tagQ = True))
             # mark_as_tagged(record)
         elif mode == "extra tags":
             current_tags = this_audio.tag_string()[:-1]
             all_tags = current_tags.strip() + " " + corrected_string
-            await interaction.followup.send(f'Adding tags to "{title}" (Record ID: {record}) written in canonical form as: {corrected_string}', view = TagButton(tags = all_tags, audioID = record, names = petnames, tagQ = False))
-        elif mode == "petnames only":
+            await interaction.followup.send(f'Adding tags to "{title}" (Record ID: {record}) written in canonical form as: {corrected_string}', view = TagButton(tags = all_tags, audioID = record, names = petnames, wallbreak = fourthwallbreak, tagQ = False))
+        elif mode == "petnames only" or mode == "fourth wall break only":
             current_tags = this_audio.tag_string()[:-1].strip()
-            await interaction.followup.send(f'Adding petnames to "{title}" (Record ID: {record}): {petnames}', view = TagButton(tags = current_tags, audioID = record, names = petnames, tagQ = False))
+            await interaction.followup.send(f'Adding petnames to "{title}" (Record ID: {record}): {petnames}', view = TagButton(tags = current_tags, audioID = record, names = petnames, wallbreak = fourthwallbreak, tagQ = False))
         else: 
             await interaction.followup.send("Invalid choice for mode.")
 @updatetags.autocomplete('mode')
 async def updatetags_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
-    options = ["complete tags","extra tags","petnames only"]
+    options = ["complete tags","extra tags","petnames only","fourth wall break only"]
+    return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]
+@updatetags.autocomplete('fourthwallbreak')
+async def updatetags_autocomplete_2(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
+    options = ["yes","no"]
     return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]
 
 
-def push_masterlist_update(interaction, audioID, tags, petnames, tagQ):
+def push_masterlist_update(interaction, audioID, tags, petnames, wallbreak, tagQ):
     global audio_choices
     table = airtable_api.table('apprrNWlCwDHYj4wW', 'tblqwSpe5CdMuWHW6')
 
@@ -1568,6 +1573,8 @@ def push_masterlist_update(interaction, audioID, tags, petnames, tagQ):
         table.update(audioID, {"Petnames Used" : petnames})
     if tagQ:
         table.update(audioID, {"Tagged?" : True})
+    if wallbreak == "yes":
+        table.update(audioID, {"Fourth Wall Break?" : True})
     audio_choices = import_airtable_data()
 
     # PULL NEW ENTRY

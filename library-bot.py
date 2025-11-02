@@ -1853,7 +1853,9 @@ async def on_guild_channel_create(channel):
         nonmods = False
         for user in channel.members:
             # CHANGE FOR PATREON SUBS 
-            if user.top_role.id == 1148454184824360990 or user.top_role.id == 1248762871073210441:
+            regular_roles = [1148454184824360990,1154619473773465610,1417728496825794642]
+            special_roles = [1248762871073210441,1425196847047245855, 1432534631844151306,1432534814757752902]
+            if user.top_role.id in regular_roles or user.top_role.id in special_roles:
                 nonmods = True
                 break 
         if nonmods: 

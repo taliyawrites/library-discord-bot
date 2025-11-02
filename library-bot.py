@@ -1220,9 +1220,9 @@ async def time(interaction, t: str):
             hour = 0
 
         if isAM:
-            utc_hour = hour + 4
+            utc_hour = hour + 5
         else:
-            utc_hour = hour + 4 + 12
+            utc_hour = hour + 5 + 12
 
         now = datetime.datetime.utcnow()
         if utc_hour < 24:

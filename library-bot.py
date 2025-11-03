@@ -57,8 +57,8 @@ PIPPIN_FILENAME = "pippin-pics.txt"
 GULL_FILENAME = "abode.txt"
 
 # run daily tasks at 1pm eastern time (6pm UTC+1)
-HOUR, MINUTE = 17, 0
-MIDNIGHT = 4
+HOUR, MINUTE = 18, 0
+MIDNIGHT = 5
 
 
 
@@ -1915,6 +1915,15 @@ async def on_member_update(before, after):
 #             with open('audit-log.txt', 'a') as file:
 #                 now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")
 #                 file.write(f"[{now}] Patreon membership removed for User {after.id} ({after.name}). Roles updated from {[role.name for role in before.roles]} to {[role.name for role in after.roles]} \n")
+
+#         elif not_patron in before.roles and patron not in after.roles:
+#             new_roles = list(set(before.roles) - set(after.roles))
+#             for role in new_roles:
+#                 print(role.name)
+#             await after.remove_roles(after.roles[1:],reason = "Permission denied; not an active Patron.")
+#             await after.add_roles(not_patron)
+#             await after.send("Permissions denied in Vel's Library; you do not have access to this role. Renew your Patreon membership and connect your Patreon and Discord accounts to fix this. See https://discord.com/channels/1148449914188218399/1428157511361368234 for more information.")
+
 
 
 

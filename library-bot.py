@@ -1108,7 +1108,7 @@ async def schedule(interaction):
 @tree.command(name = "lives", description = "Information about live recordings!")
 async def lives(interaction):
     await interaction.response.defer()
-    await interaction.followup.send("Vel does live audio recordings here on discord in https://discord.com/channels/1148449914188218399/1194153449647001621 every weekend, typically Sundays at 7:30PM EST! The next live recording will be " + live_time + "!")
+    await interaction.followup.send("Vel does live audio recordings here on discord in https://discord.com/channels/1148449914188218399/1194153449647001621 every weekend, typically Sundays at 7:30PM EST! The next scheduled live recording(s) will be on " + live_time + "!")
 
 
 

@@ -1108,7 +1108,7 @@ async def schedule(interaction):
 @tree.command(name = "lives", description = "Information about live recordings!")
 async def lives(interaction):
     await interaction.response.defer()
-    await interaction.followup.send("Vel does live audio recordings here on discord every Sunday at 7:30PM EST (" + live_time + ") in https://discord.com/channels/1148449914188218399/1194153449647001621!")
+    await interaction.followup.send("Vel does live audio recordings here on discord in https://discord.com/channels/1148449914188218399/1194153449647001621 every weekend, typically Sundays at 7:30PM EST! The next live recording will be " + live_time + "!")
 
 
 
@@ -1903,6 +1903,9 @@ async def on_member_update(before, after):
 #             with open('audit-log.txt', 'a') as file:
 #                 now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")
 #                 file.write(f"[{now}] Patreon membership renewed for User {after.id} ({after.name}). Roles updated from {[role.name for role in before.roles]} to {[role.name for role in after.roles]} \n")
+
+#             await after.send("Welcome back to the Vel's Library discord server! You can customize your roles for the channels you want to see and re-enter yourself as eligible for Good Girl of the Day here <id:customize>! If you're having trouble or still missing channels, please submit a ticket through https://discord.com/channels/1148449914188218399/1192558831222411294 and we'll help you access them!")
+#             print(f"welcome back message sent to {after.name}")
 
 
 #         elif patron in before.roles and patron not in after.roles:

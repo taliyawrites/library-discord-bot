@@ -200,6 +200,15 @@ class TagButton(discord.ui.View):
         await interaction.followup.send("Tags not updated — edit tag dictionary or discuss in channel to resolve the issue!")
 
 
+class RoleButton(discord.ui.View):
+    def __init__(self, timeout=180):
+        super().__init__(timeout=timeout)
+    @discord.ui.button(label = "Sign me back up for Good Girl of the Day!", style = discord.ButtonStyle.blurple)
+    async def this_button(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await interaction.response.defer()
+        await interaction.user.add_roles(client.get_guild(GUILD).get_role(OPTIONS_ROLE))
+        await interaction.followup.send("Role has been successfully re-added!")
+
 
 
 # FILTERING AUDIOS BY TAG #
@@ -1522,6 +1531,7 @@ async def gull(interaction):
         await interaction.channel.send("Vel’s abode now contains a - combined and condensed - gull volume of ~10.6 cubic meters (or roughly the volume of two ovens)!")
 
 
+
 # TAGGING COMMANDS
 
 @tree.command(name = "updatetags", description = "Command for maintenance by our tag team; please ignore!")
@@ -1856,7 +1866,7 @@ async def on_member_update(before, after):
                 now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")
                 file.write(f"[{now}] Patreon membership renewed for User {after.id} ({after.name}). Roles updated from {[role.name for role in before.roles]} to {[role.name for role in after.roles]} \n")
 
-            await after.send("Welcome back to the Vel's Library discord server! You can customize the channels you want to see here <id:browse> and re-enter yourself as eligible for Good Girl of the Day here <id:customize>! If you're having trouble or still missing channels, please submit a ticket through https://discord.com/channels/1148449914188218399/1192558831222411294 and we'll help you access them!")
+            await after.send("Welcome back to the Vel's Library discord server! You can customize the channels you want to see and re-enter yourself as eligible for Good Girl of the Day on the server's Channels & Roles page! If you're having trouble or still missing channels, please submit a ticket through https://discord.com/channels/1148449914188218399/1192558831222411294 and we'll help you access them!",view = RoleButton())
             print(f"welcome back message sent to {after.name}")
 
 

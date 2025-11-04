@@ -1817,7 +1817,7 @@ async def on_message(message):
         await message.channel.edit(category = client.get_channel(1405614176952389643))
 
 
-    if msg.content.startswith('!purge') and msg.author == taliya: 
+    if message.content.startswith('!purge') and msg.author == taliya: 
         patreon = client.get_guild(GUILD).get_role(1154619473773465610)
         not_patreon = client.get_guild(GUILD).get_role(1417728496825794642)
 
@@ -1844,7 +1844,7 @@ async def on_message(message):
 
         await msg.channel.send(f"Check: {check_sum == 0}")
 
-    if msg.content.startswith("!allaccounted") and msg.author == taliya:
+    if message.content.startswith("!allaccounted") and msg.author == taliya:
         LIBRARY_CARD = 1148454184824360990
         PATRON_ROLE = 1154619473773465610
         NOT_PATRON_ROLE = 1417728496825794642

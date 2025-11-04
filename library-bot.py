@@ -1817,63 +1817,6 @@ async def on_message(message):
         await message.channel.edit(category = client.get_channel(1405614176952389643))
 
 
-    if message.content.startswith('!purge') and message.author == taliya: 
-        patreon = client.get_guild(GUILD).get_role(1154619473773465610)
-        not_patreon = client.get_guild(GUILD).get_role(1417728496825794642)
-        library = client.get_guild(GUILD)
-
-        not_patron_count = 0
-        # for member in library.members: 
-        #     if not_patreon in member.roles and len(member.roles) > 2:
-        #         if patreon not in member.roles: 
-        #             print(member.name)
-        #             not_patron_count += 1
-        #             before_roles = [role.name for role in member.roles]
-        #             for role in member.roles[1:]:
-        #                 if role.id != 1148451678459285555:
-        #                     await member.remove_roles(role, reason = "No longer an active Patron.")
-        #             await member.add_roles(not_patreon)
-        #             with open('audit-log.txt', 'a') as file:
-        #                 now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")
-        #                 file.write(f"[{now}] Patreon membership removed for User {member.id} ({member.name}). Roles updated from {before_roles} to {[role.name for role in member.roles]} \n")
-
-        await message.channel.send(f"Permissions removed for {not_patron_count} users.")
-
-        check_sum = 0
-        for member in library.members: 
-            if not_patreon in member.roles:
-                if len(member.roles) != 2:
-                    check_sum += 1
-                    print(member.name)
-
-        await message.channel.send(f"Check: {check_sum == 0}")
-
-    if message.content.startswith("!allaccounted") and message.author == taliya:
-        LIBRARY_CARD = 1148454184824360990
-        PATRON_ROLE = 1154619473773465610
-        NOT_PATRON_ROLE = 1417728496825794642
-        BOT_ROLE = 1155697576230781079
-        LIBRARIAN_ROLE = 1148451019542499368
-        ADMIN_ROLE = 1148452325539713114
-
-        library = client.get_guild(GUILD)
-        lib_card = library.get_role(LIBRARY_CARD)
-        patreon = library.get_role(PATRON_ROLE)
-        not_patreon = library.get_role(NOT_PATRON_ROLE)
-        bots = library.get_role(BOT_ROLE)
-        librarian = library.get_role(LIBRARIAN_ROLE)
-        admin = library.get_role(ADMIN_ROLE)
-
-        error = 0
-        for member in library.members:
-            if bots not in member.roles and librarian not in member.roles and admin not in member.roles:
-                if patreon not in member.roles:
-                    if not_patreon not in member.roles or lib_card in member.roles:
-                        error += 1
-                else:
-                    if lib_card not in member.roles or not_patreon in member.roles:
-                        error += 1
-        await taliya.send(str(error) + " discrepancies")
     
 
 
@@ -1898,55 +1841,34 @@ async def on_guild_channel_create(channel):
 
 
 
-
-# @client.event
-# async def on_member_update(before, after):
-#     if before.roles != after.roles:
-#         patron = client.get_guild(GUILD).get_role(1154619473773465610)
-#         not_patron = client.get_guild(GUILD).get_role(1417728496825794642)
+@client.event
+async def on_member_update(before, after):
+    if before.roles != after.roles:
+        patron = client.get_guild(GUILD).get_role(1154619473773465610)
+        not_patron = client.get_guild(GUILD).get_role(1417728496825794642)
+        libcard = client.get_guild(GUILD).get_role(1148454184824360990)
         
-#         if patron in after.roles and patron not in before.roles:
-#             await after.remove_roles(not_patron)
-#             print(f"Active Patreon membership role added for {after.name}")
-#             with open('audit-log.txt', 'a') as file:
-#                 now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")
-#                 file.write(f"[{now}] Patreon membership renewed for User {after.id} ({after.name}). Roles updated from {[role.name for role in before.roles]} to {[role.name for role in after.roles]} \n")
-#         elif patron in before.roles and patron not in after.roles:
-#             await after.add_roles(not_patron)
-#             print(f"Active Patreon membership role removed for {after.name}")
-#             with open('audit-log.txt', 'a') as file:
-#                 now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")
-#                 file.write(f"[{now}] Patreon membership removed for User {after.id} ({after.name}). Roles updated from {[role.name for role in before.roles]} to {[role.name for role in after.roles]} \n")
+        if patron in after.roles and patron not in before.roles:
+            await after.remove_roles(not_patron)
+            await after.add_roles(libcard, reason = "Patreon membership renewed.")
+
+            with open('audit-log.txt', 'a') as file:
+                now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")
+                file.write(f"[{now}] Patreon membership renewed for User {after.id} ({after.name}). Roles updated from {[role.name for role in before.roles]} to {[role.name for role in after.roles]} \n")
+
+            await after.send("Welcome back to the Vel's Library discord server! You can customize the channels you want to see and re-enter yourself as eligible for Good Girl of the Day here <id:customize>! If you're having trouble or still missing channels, please submit a ticket through https://discord.com/channels/1148449914188218399/1192558831222411294 and we'll help you access them!")
+            print(f"welcome back message sent to {after.name}")
 
 
+        elif patron in before.roles and patron not in after.roles:
+            for role in after.roles[1:]:
+                if role.id != 1148451678459285555:
+                    await after.remove_roles(role,reason = "No longer an active Patron.")
+            await after.add_roles(not_patron)
 
-# @client.event
-# async def on_member_update(before, after):
-#     if before.roles != after.roles:
-#         patron = client.get_guild(GUILD).get_role(1154619473773465610)
-#         not_patron = client.get_guild(GUILD).get_role(1417728496825794642)
-#         libcard = client.get_guild(GUILD).get_role(1148454184824360990)
-        
-#         if patron in after.roles and patron not in before.roles:
-#             await after.remove_roles(not_patron)
-#             await after.add_roles(libcard, reason = "Patreon membership renewed.")
-
-#             with open('audit-log.txt', 'a') as file:
-#                 now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")
-#                 file.write(f"[{now}] Patreon membership renewed for User {after.id} ({after.name}). Roles updated from {[role.name for role in before.roles]} to {[role.name for role in after.roles]} \n")
-
-#             await after.send("Welcome back to the Vel's Library discord server! You can customize the channels you want to see and re-enter yourself as eligible for Good Girl of the Day here <id:customize>! If you're having trouble or still missing channels, please submit a ticket through https://discord.com/channels/1148449914188218399/1192558831222411294 and we'll help you access them!")
-#             print(f"welcome back message sent to {after.name}")
-
-
-#         elif patron in before.roles and patron not in after.roles:
-#             for role in after.roles[1:]:
-#                 await after.remove_roles(role,reason = "No longer an active Patron.")
-#             await after.add_roles(not_patron)
-
-#             with open('audit-log.txt', 'a') as file:
-#                 now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")
-#                 file.write(f"[{now}] Patreon membership removed for User {after.id} ({after.name}). Roles updated from {[role.name for role in before.roles]} to {[role.name for role in after.roles]} \n")
+            with open('audit-log.txt', 'a') as file:
+                now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")
+                file.write(f"[{now}] Patreon membership removed for User {after.id} ({after.name}). Roles updated from {[role.name for role in before.roles]} to {[role.name for role in after.roles]} \n")
 
 
 
@@ -2080,6 +2002,25 @@ async def track_patrons():
                 print(member.display_name)
 
     await taliya.send(str(len(all_members)) + " members \n" + str(patron_count) + " patrons \n" + str(non_patron_count) + " non-patrons \n" + str(neither) + " neither? (" + str(bot_count) +" bots) \n" + str(both) + " both?")
+
+    error_str = ""
+
+    for member in all_members:
+        if lib_card in member.roles and patreon not in member.roles:
+            error_str += member.name + " has library card but not patron \n"
+        if lib_card not in member.roles and patreon in member.roles:
+            error_str += member.name + " has patron but no library card \n"
+        if not_patreon in member.roles and lib_card in member.roles:
+            error_str += member.name + " has not patron but has library card \n"
+        if not_patreon in member.roles and patreon in member.roles:
+            error_str += member.name + " has both patron and not patron \n"
+        if not_patreon not in member.roles and patreon not in member.roles and bots not in member.roles:
+            error_str += member.name + " has neither patron nor not patron \n"
+        if not_patreon in member.roles and len(member.roles) > 2:
+            error_str += member.name + " has: " + str([role.name for role in member.roles]) + "\n"
+
+    await taliya.send(error_str)
+
    
 
 

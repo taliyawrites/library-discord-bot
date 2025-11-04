@@ -206,7 +206,8 @@ class RoleButton(discord.ui.View):
     @discord.ui.button(label = "Sign me back up for Good Girl of the Day!", style = discord.ButtonStyle.blurple)
     async def this_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
-        await interaction.user.add_roles(client.get_guild(GUILD).get_role(OPTIONS_ROLE))
+        member = client.get_guild(GUILD).get_member(interaction.user.id)
+        await member.add_roles(client.get_guild(GUILD).get_role(OPTIONS_ROLE))
         await interaction.followup.send("Role has been successfully re-added!")
 
 

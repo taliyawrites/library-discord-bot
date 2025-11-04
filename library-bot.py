@@ -1822,7 +1822,7 @@ async def on_message(message):
         not_patreon = client.get_guild(GUILD).get_role(1417728496825794642)
         library = client.get_guild(GUILD)
 
-        # not_patron_count = 0
+        not_patron_count = 0
         # for member in library.members: 
         #     if not_patreon in member.roles and len(member.roles) > 2:
         #         if patreon not in member.roles: 

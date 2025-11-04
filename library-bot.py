@@ -1829,7 +1829,8 @@ async def on_message(message):
                     print(member.name)
                     not_patron_count += 1
                     before_roles = [role.name for role in member.roles]
-                    await member.remove_roles(member.roles[1:])
+                    for role in member.roles[1:]:
+                        await member.remove_roles(role, reason = "No longer an active Patron.")
                     await member.add_roles(not_patreon)
                     with open('audit-log.txt', 'a') as file:
                         now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")
@@ -1937,7 +1938,8 @@ async def on_guild_channel_create(channel):
 
 
 #         elif patron in before.roles and patron not in after.roles:
-#             await after.remove_roles(after.roles[1:], reason = "No longer an active Patron.")
+#             for role in after.roles[1:]:
+#                 await after.remove_roles(role,reason = "No longer an active Patron.")
 #             await after.add_roles(not_patron)
 
 #             with open('audit-log.txt', 'a') as file:

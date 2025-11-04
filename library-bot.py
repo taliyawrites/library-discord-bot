@@ -2003,6 +2003,9 @@ async def track_patrons():
 
     await taliya.send(str(len(all_members)) + " members \n" + str(patron_count) + " patrons \n" + str(non_patron_count) + " non-patrons \n" + str(neither) + " neither? (" + str(bot_count) +" bots) \n" + str(both) + " both?")
 
+    check_sum = len(all_members) - patron_count - non_patron_count - bot_count
+    await taliya.send(f"Check sum: {check_sum == 0}")
+
     error_str = ""
 
     for member in all_members:

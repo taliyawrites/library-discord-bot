@@ -1822,20 +1822,20 @@ async def on_message(message):
         not_patreon = client.get_guild(GUILD).get_role(1417728496825794642)
         library = client.get_guild(GUILD)
 
-        not_patron_count = 0
-        for member in library.members: 
-            if not_patreon in member.roles and len(member.roles) > 2:
-                if patreon not in member.roles: 
-                    print(member.name)
-                    not_patron_count += 1
-                    before_roles = [role.name for role in member.roles]
-                    for role in member.roles[1:]:
-                        if role.id != 1148451678459285555:
-                            await member.remove_roles(role, reason = "No longer an active Patron.")
-                    await member.add_roles(not_patreon)
-                    with open('audit-log.txt', 'a') as file:
-                        now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")
-                        file.write(f"[{now}] Patreon membership removed for User {member.id} ({member.name}). Roles updated from {before_roles} to {[role.name for role in member.roles]} \n")
+        # not_patron_count = 0
+        # for member in library.members: 
+        #     if not_patreon in member.roles and len(member.roles) > 2:
+        #         if patreon not in member.roles: 
+        #             print(member.name)
+        #             not_patron_count += 1
+        #             before_roles = [role.name for role in member.roles]
+        #             for role in member.roles[1:]:
+        #                 if role.id != 1148451678459285555:
+        #                     await member.remove_roles(role, reason = "No longer an active Patron.")
+        #             await member.add_roles(not_patreon)
+        #             with open('audit-log.txt', 'a') as file:
+        #                 now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")
+        #                 file.write(f"[{now}] Patreon membership removed for User {member.id} ({member.name}). Roles updated from {before_roles} to {[role.name for role in member.roles]} \n")
 
         await message.channel.send(f"Permissions removed for {not_patron_count} users.")
 
@@ -1844,6 +1844,7 @@ async def on_message(message):
             if not_patreon in member.roles:
                 if len(member.roles) != 2:
                     check_sum += 1
+                    print(member.name)
 
         await message.channel.send(f"Check: {check_sum == 0}")
 

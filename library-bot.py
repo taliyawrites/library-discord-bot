@@ -1820,6 +1820,7 @@ async def on_message(message):
     if message.content.startswith('!purge') and message.author == taliya: 
         patreon = client.get_guild(GUILD).get_role(1154619473773465610)
         not_patreon = client.get_guild(GUILD).get_role(1417728496825794642)
+        library = client.get_guild(GUILD)
 
         not_patron_count = 0
         for member in library.members: 

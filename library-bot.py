@@ -1830,7 +1830,8 @@ async def on_message(message):
                     not_patron_count += 1
                     before_roles = [role.name for role in member.roles]
                     for role in member.roles[1:]:
-                        await member.remove_roles(role, reason = "No longer an active Patron.")
+                        if role.id != 1148451678459285555:
+                            await member.remove_roles(role, reason = "No longer an active Patron.")
                     await member.add_roles(not_patreon)
                     with open('audit-log.txt', 'a') as file:
                         now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")

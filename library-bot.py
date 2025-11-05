@@ -531,6 +531,7 @@ async def setup_hook():
     global taliya, vel
     taliya = await client.fetch_user(1169014359842885726)
     vel = await client.fetch_user(1089053035377999912)
+    print(len(voice_note_links))
 
 
     await taliya.send(f"Card Catalog bot restarted successfully!")

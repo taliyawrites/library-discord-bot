@@ -1756,6 +1756,29 @@ async def mod_embed(interaction, user_id: str, name: str, intro: str, embed_colo
     await interaction.followup.send("Message sent! " + sent.jump_url)
 
 
+@tree.command(name = "embed_edit",guild = discord.Object(COMMAND_SERVER))
+@app_commands.check(lambda u: u.user == taliya)
+@app_commands.allowed_installs(guilds=True, users=False)
+async def embed_edit(interaction, msg_id: str, filename: str):
+    await interaction.response.defer()
+    msg = await client.get_guild(GUILD).get_channel(1337426936435310754).fetch_message(msg_id)
+    new_embed = msg.embeds[0]
+    new_file = discord.File("thumbnails/" + filename, filename = filename)
+    new_embed.set_thumbnail(url = "attachment://" + filename)
+    new_msg = await msg.edit(embed = new_embed)
+    await msg.add_files(new_file)
+    await interaction.followup.send("Message sent! " + new_msg.jump_url)
+
+
+
+
+async def fix_embed(msg_id, filename):
+    msg = await client.get_guild(GUILD).get_channel(1337426936435310754).fetch_message(msg_id)
+    new_embed = msg.embeds[0]
+    new_file = discord.File("thumbnails/" + filename, filename = filename)
+    new_embed.set_thumbnail(url = "attachment://" + filename)
+    await msg.edit(embed = new_embed)
+    await msg.add_files(new_file)
 
 
 @tree.command(name = "send_rules", guild = discord.Object(COMMAND_SERVER))

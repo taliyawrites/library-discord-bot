@@ -1838,7 +1838,7 @@ async def on_guild_channel_create(channel):
         nonmods = False
         for user in channel.members:
             # CHANGE FOR PATREON SUBS 
-            regular_roles = [1148454184824360990,1154619473773465610,1417728496825794642]
+            regular_roles = [1148454184824360990,1154619473773465610,1417728496825794642, 1148449914188218399]
             special_roles = [1248762871073210441,1425196847047245855, 1432534631844151306,1432534814757752902]
             if user.top_role.id in regular_roles or user.top_role.id in special_roles:
                 nonmods = True
@@ -2010,10 +2010,10 @@ async def track_patrons():
             else:
                 print(member.display_name)
 
-    await taliya.send(str(len(all_members)) + " members \n" + str(patron_count) + " patrons \n" + str(non_patron_count) + " non-patrons \n" + str(neither) + " neither? (" + str(bot_count) +" bots) \n" + str(both) + " both?")
+    check_str = str(len(all_members)) + " members \n" + str(patron_count) + " patrons \n" + str(non_patron_count) + " non-patrons \n" # + str(neither) + " neither (" + str(bot_count) +" bots) \n" + str(both) + " both \n"
 
     check_sum = len(all_members) - patron_count - non_patron_count - bot_count
-    await taliya.send(f"Check sum: {check_sum == 0}")
+    sum_str = f"Check sum: {check_sum == 0 and both == 0 and neither == bot_count} \n"
 
     error_str = ""
 
@@ -2029,9 +2029,9 @@ async def track_patrons():
         if not_patreon not in member.roles and patreon not in member.roles and bots not in member.roles:
             error_str += member.name + " has neither patron nor not patron \n"
         if not_patreon in member.roles and len(member.roles) > 2:
-            error_str += member.name + " has: " + str([role.name for role in member.roles]) + "\n"
+            error_str += member.name + " has: " + str([role.name for role in member.roles[1:]]) + "\n"
 
-    await taliya.send(error_str)
+    await taliya.send(check_str + sum_str + error_str)
 
    
 

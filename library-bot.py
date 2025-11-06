@@ -647,9 +647,7 @@ async def title(interaction, title_phrase: str):
     if interaction.user.id == 1185405398883258369 and check_id == "recvWJsn8b3BPnSzG": 
         await interaction.followup.send("Back again, slut?")
     if interaction.user.id == 490759913757212672 and check_id == "recdatlFnyuOU1sze":
-        if isinstance(interaction.channel, discord.DMChannel):
-            await interaction.followup.send("You really are insatiable, aren't you, kitten.")
-            await taliya.send("gottem")
+        await interaction.followup.send("You really are insatiable, aren't you, kitten.")
 
 
 

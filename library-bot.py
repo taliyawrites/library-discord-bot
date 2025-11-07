@@ -1772,15 +1772,6 @@ async def embed_edit(interaction, msg_id: str, filename: str):
 
 
 
-async def fix_embed(msg_id, filename):
-    msg = await client.get_guild(GUILD).get_channel(1337426936435310754).fetch_message(msg_id)
-    new_embed = msg.embeds[0]
-    new_file = discord.File("thumbnails/" + filename, filename = filename)
-    new_embed.set_thumbnail(url = "attachment://" + filename)
-    await msg.edit(embed = new_embed)
-    await msg.add_files(new_file)
-
-
 @tree.command(name = "send_rules", guild = discord.Object(COMMAND_SERVER))
 @app_commands.check(lambda u: u.user == taliya)
 @app_commands.allowed_installs(guilds=True, users=False)
@@ -2264,7 +2255,7 @@ async def on_error(interaction, error):
     trce = "[Traceback](https://panel.pebblehost.com/server/91ec3214/files/edit/error-log.txt)"
 
     if unknown in str(error):
-        msg = await interaction.channel.send("Temporary server error: please wait a minute and then try again!")
+        msg = await interaction.channel.send("Temporary server outage: please wait a minute and then try again!")
         response_string += f"\nResponded: {msg.jump_url} ('{msg.content}')"
 
     if isinstance(interaction.channel, discord.DMChannel):

@@ -692,10 +692,11 @@ async def tag(interaction, taglist: str):
 @tag.autocomplete('taglist')
 async def tag_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
     canonical_matches = [app_commands.Choice(name=opt, value=opt) for opt in sorted_tag_list if current.lower() in opt.lower()][:25]
-    if len(canonical_matches) != 0:
+    if len(canonical_matches) > 24:
         return canonical_matches
     else:
-        return list(set([app_commands.Choice(name=tag_dictionary[opt], value=tag_dictionary[opt]) for opt in all_tags if current.lower() in opt.lower()][:25]))
+        partials = list(set([app_commands.Choice(name=tag_dictionary[opt], value=tag_dictionary[opt]) for opt in all_tags if current.lower() in opt.lower()][:25]))
+        return (partials + canonical_matches)[:25]
 
 
 

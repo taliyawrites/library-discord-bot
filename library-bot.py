@@ -1935,7 +1935,7 @@ async def on_member_update(before, after):
                 now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")
                 file.write(f"[{now}] Patreon membership removed for User {after.id} ({after.name}). Roles updated from {[role.name for role in before.roles]} to {[role.name for role in after.roles]} \n")
 
-        elif not_patron in before.roles and not_patron in after.roles
+        # elif not_patron in before.roles and not_patron in after.roles
 
 
 

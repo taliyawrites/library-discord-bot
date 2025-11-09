@@ -1856,7 +1856,7 @@ async def on_message(message):
 
     if message.author == taliya and message.content.startswith("!track"):
         await track_patrons()
-        await taliya.send("Welcome back to the Vel's Library discord server! You can customize the channels you want to see and your roles (including re-entering yourself as eligible for Good Girl of the Day, if you wish) on the server's Channels & Roles page. (Unfortunately this can't be linked through DMs, so if you can't find the page, use the command `/roles` in the server — only you'll be able to see it). If you're having trouble or still missing channels, please submit a ticket through https://discord.com/channels/1148449914188218399/1192558831222411294 and we'll help you access them!")
+        await taliya.send("Welcome back to the Vel's Library discord server! You can customize the channels you want to see and your roles — including re-entering yourself as eligible for Good Girl of the Day, if you wish — on the server's Channels & Roles page. (Unfortunately this can't be linked through DMs, so if you can't find the page, use the command `/roles` in the server — only you'll be able to see it). If you're having trouble or still missing channels, please submit a ticket through https://discord.com/channels/1148449914188218399/1192558831222411294 and we'll help you access them!")
 
     if message.author.id == 1262940885251784785 and message.content.startswith("!move"):
         await message.channel.edit(category = client.get_channel(1405614176952389643))
@@ -1904,7 +1904,7 @@ async def on_member_update(before, after):
                 file.write(f"[{now}] Patreon membership renewed for User {after.id} ({after.name}). Roles updated from {[role.name for role in before.roles]} to {[role.name for role in after.roles]} \n")
 
             try: 
-                await after.send("Welcome back to the Vel's Library discord server! You can customize the channels you want to see and your roles (including re-entering yourself as eligible for Good Girl of the Day, if you wish) on the server's Channels & Roles page. (Unfortunately this can't be linked through DMs, so if you can't find the page, use the command `/roles` in the server — only you'll be able to see it). If you're having trouble or still missing channels, please submit a ticket through https://discord.com/channels/1148449914188218399/1192558831222411294 and we'll help you access them!")
+                await after.send("Welcome back to the Vel's Library discord server! You can customize the channels you want to see and your roles — including re-entering yourself as eligible for Good Girl of the Day, if you wish — on the server's Channels & Roles page. (Unfortunately this can't be linked through DMs, so if you can't find the page, use the command `/roles` in the server — only you'll be able to see it). If you're having trouble or still missing channels, please submit a ticket through https://discord.com/channels/1148449914188218399/1192558831222411294 and we'll help you access them!")
                 print(f"welcome back message sent to {after.name}")
             except:
                 print(f'returning member {after.name} has closed DMs, welcome back message could not be sent')

@@ -169,7 +169,7 @@ class Audio:
 
 
 class Button(discord.ui.View):
-    def __init__(self, response, timeout=180):
+    def __init__(self, response, timeout=3600):
         super().__init__(timeout=timeout)
         self.response = response
     @discord.ui.button(label = "See Full Results", style = discord.ButtonStyle.blurple)
@@ -182,7 +182,7 @@ class Button(discord.ui.View):
 
 
 class TagButton(discord.ui.View):
-    def __init__(self, tags, audioID, names, wallbreak, tagQ, timeout=180):
+    def __init__(self, tags, audioID, names, wallbreak, tagQ, timeout=3600):
         super().__init__(timeout=timeout)
         self.tags = tags
         self.audioID = audioID
@@ -200,15 +200,15 @@ class TagButton(discord.ui.View):
         await interaction.followup.send("Tags not updated — edit tag dictionary or discuss in channel to resolve the issue!")
 
 
-class RoleButton(discord.ui.View):
-    def __init__(self, timeout=180):
-        super().__init__(timeout=timeout)
-    @discord.ui.button(label = "Sign me back up for Good Girl of the Day!", style = discord.ButtonStyle.blurple)
-    async def this_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.response.defer()
-        member = client.get_guild(GUILD).get_member(interaction.user.id)
-        await member.add_roles(client.get_guild(GUILD).get_role(OPTIONS_ROLE))
-        await interaction.followup.send("Role has been successfully re-added!")
+# class RoleButton(discord.ui.View):
+#     def __init__(self):
+#         super().__init__(timeout=None)
+#     @discord.ui.button(label = "Sign me back up for Good Girl of the Day!", style = discord.ButtonStyle.blurple)
+#     async def this_button(self, interaction: discord.Interaction, button: discord.ui.Button):
+#         await interaction.response.defer()
+#         member = client.get_guild(GUILD).get_member(interaction.user.id)
+#         await member.add_roles(client.get_guild(GUILD).get_role(OPTIONS_ROLE))
+#         await interaction.followup.send("Role has been successfully re-added!")
 
 
 
@@ -1213,6 +1213,15 @@ async def rules(interaction):
     await interaction.followup.send("The server rules for the library can be found at " + client.get_guild(GUILD).rules_channel.jump_url + ". For more information, see the resources available in the <id:guide>!")
 
 
+@tree.command(name = "roles", description = "Sends a link to the page where you can customize your roles (only works in the server, not in DMs).")
+async def roles(interaction):
+    await interaction.response.defer(ephemeral = True)
+    if isinstance(interaction.channel,discord.DMChannel):
+        await interaction.followup.send("Due to Discord limitations, you can't link to the role customization page in DMs. Use this command in https://discord.com/channels/1148449914188218399/1248773338726400040 instead (it won't be visible to anyone else).")
+    else:
+        await interaction.followup.send("You can customize your roles here: <id:customize>.")
+
+
 
 @tree.command(name = "time", description = "Converts a time in eastern timezone to your own using a universal timestamp!")
 @app_commands.rename(t = "time")
@@ -1541,6 +1550,8 @@ async def gull(interaction):
 
 
 
+
+
 # TAGGING COMMANDS
 
 @tree.command(name = "updatetags", description = "Command for maintenance by our tag team; please ignore!")
@@ -1845,9 +1856,12 @@ async def on_message(message):
 
     if message.author == taliya and message.content.startswith("!track"):
         await track_patrons()
+        await after.send("Welcome back to the Vel's Library discord server! You can customize the channels you want to see and your roles (including re-entering yourself as eligible for Good Girl of the Day, if you wish) on the server's Channels & Roles page. (Unfortunately this can't be linked through DMs, so if you can't find the page, use the command `/roles` in the server — only you'll be able to see it). If you're having trouble or still missing channels, please submit a ticket through https://discord.com/channels/1148449914188218399/1192558831222411294 and we'll help you access them!")
 
     if message.author.id == 1262940885251784785 and message.content.startswith("!move"):
         await message.channel.edit(category = client.get_channel(1405614176952389643))
+
+
 
 
     
@@ -1889,7 +1903,7 @@ async def on_member_update(before, after):
                 now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")
                 file.write(f"[{now}] Patreon membership renewed for User {after.id} ({after.name}). Roles updated from {[role.name for role in before.roles]} to {[role.name for role in after.roles]} \n")
 
-            await after.send("Welcome back to the Vel's Library discord server! You can customize the channels you want to see and re-enter yourself as eligible for Good Girl of the Day on the server's Channels & Roles page! If you're having trouble or still missing channels, please submit a ticket through https://discord.com/channels/1148449914188218399/1192558831222411294 and we'll help you access them!",view = RoleButton())
+            await after.send("Welcome back to the Vel's Library discord server! You can customize the channels you want to see and your roles (including re-entering yourself as eligible for Good Girl of the Day, if you wish) on the server's Channels & Roles page. (Unfortunately this can't be linked through DMs, so if you can't find the page, use the command `/roles` in the server — only you'll be able to see it). If you're having trouble or still missing channels, please submit a ticket through https://discord.com/channels/1148449914188218399/1192558831222411294 and we'll help you access them!")
             print(f"welcome back message sent to {after.name}")
 
 

@@ -1870,7 +1870,7 @@ async def on_message(message):
     if message.author == taliya and message.content.startswith("!track"):
         await track_patrons()
         idlist = [1089053035377999912,1169014359842885726,1241573320114049078,1185405398883258369,824634529608106025,806319975778222100]
-        await taliya.send(active_member(user_id) for user_id in idlist)
+        await taliya.send([active_member(user_id) for user_id in idlist])
 
     if message.author.id == 1262940885251784785 and message.content.startswith("!move"):
         await message.channel.edit(category = client.get_channel(1405614176952389643))

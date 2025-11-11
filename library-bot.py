@@ -368,11 +368,16 @@ def import_collections():
 
 def write_data_lists():
     character_list = []
+    writer_list = []
     for audio in audio_choices:
         if audio.characters() != '':
             for char in audio.characters().split(', '):
                 character_list.append(char)
-    all_characters = list(set(character_list))
+        if audio.writer() != '':
+            writer_list.append(audio.writer())
+    all_characters = sorted(set(character_list), key = lambda l: characterlist.count(l))
+    all_characters.reverse()
+    all_writers = sorted(set(writer_list))
 
     all_tags = []
     table = airtable_api.table('appeb72XP6YJzGRyY', 'tbltF1MithqYynsdU')
@@ -382,7 +387,7 @@ def write_data_lists():
         all_tags.append(data[0][1].strip())
 
     all_collections = [coll[0] for coll in collections]
-    return all_characters, all_tags, all_collections
+    return all_characters, all_tags, all_collections, all_writers
 
 
 
@@ -522,8 +527,8 @@ async def setup_hook():
     sorted_tag_list = read_from_file(TAGS_FILENAME)
     save_to_file(LIVETIMES_FILENAME,[live_time,twitch_time])
 
-    global all_characters, all_tags, all_collections
-    all_characters, all_tags, all_collections = write_data_lists()
+    global all_characters, all_tags, all_collections, all_writers
+    all_characters, all_tags, all_collections, all_writers = write_data_lists()
 
 
     global voice_note_links, pippin_ids
@@ -779,7 +784,9 @@ async def scriptwriter(interaction, writer: str):
 
             matches_embed = discord.Embed(title = canonical_name + " Audios",description=link_string)
             await interaction.followup.send(embed = matches_embed)
-
+@scriptwriter.autocomplete('writer')
+async def character_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
+    return [app_commands.Choice(name=opt, value=opt) for opt in all_writers if current.lower() in opt.lower()]
 
 
 
@@ -1674,8 +1681,8 @@ async def refresh(interaction):
     tag_dictionary = import_tag_dictionary()
     collections = import_collections()
 
-    global all_characters, all_tags, all_collections
-    all_characters, all_tags, all_collections = write_data_lists()
+    global all_characters, all_tags, all_collections, all_writers
+    all_characters, all_tags, all_collections, all_writers = write_data_lists()
     
     await interaction.followup.send("Masterlist data sync'ed with Airtable updates.")
 @refresh.error
@@ -1998,7 +2005,7 @@ async def run_daily_loops():
     elif (datetime.datetime.now().hour == MIDNIGHT and datetime.datetime.now().minute == MINUTE):
         await birthday_wishes()
         if datetime.datetime.now().weekday() == 0:
-            await client.get_channel(COMMAND_CHANNEL_ID).send("Remember to `/update` the live time to next Sunday at 4:30 PM and the stream time to next Sunday at 11:30 AM using [universal timestamps](https://r.3v.fi/discord-timestamps/), " + taliya.mention + "!")
+            await client.get_channel(COMMAND_CHANNEL_ID).send("Remember to `/update` the live time to next Sunday at 4:30 PM and the stream time to next Sunday at 11:30 AM using [universal timestamps](https://r.3v.fi/discord-timestamps/), " + taliya.mention + "! Also save the latest [Twitch VOD](https://dashboard.twitch.tv/u/velslibrary/content/video-producer).")
             threads = await client.get_guild(GUILD).active_threads()
             link_string = "Reminder that we have the following threads you can join!\n"
             for thread in threads:

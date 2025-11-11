@@ -377,7 +377,7 @@ def write_data_lists():
             writer_list.append(audio.writer()[14:])
     all_characters = sorted(set(character_list), key = lambda l: character_list.count(l))
     all_characters.reverse()
-    all_writers = sorted(set(writer_list))
+    all_writers = list(set(writer_list))
 
     all_tags = []
     table = airtable_api.table('appeb72XP6YJzGRyY', 'tbltF1MithqYynsdU')

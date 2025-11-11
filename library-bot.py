@@ -375,7 +375,7 @@ def write_data_lists():
                 character_list.append(char)
         if audio.writer() != '':
             writer_list.append(audio.writer())
-    all_characters = sorted(set(character_list), key = lambda l: characterlist.count(l))
+    all_characters = sorted(set(character_list), key = lambda l: character_list.count(l))
     all_characters.reverse()
     all_writers = sorted(set(writer_list))
 

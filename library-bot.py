@@ -750,7 +750,7 @@ async def character(interaction, character_name: str):
 async def character_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
     # options = ["Tex", "Max", "Sam", "Derek", "Finn", "Malachi", "Alastair", "Arwen", "Jason", "Dean", "Isaac", "Mike", "Asher", "Monsieur Dumas", "Charles", "Kel"]
     options = all_characters
-    return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]
+    return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()][:25]
 
 
 
@@ -786,7 +786,7 @@ async def scriptwriter(interaction, writer: str):
             await interaction.followup.send(embed = matches_embed)
 @scriptwriter.autocomplete('writer')
 async def character_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
-    return [app_commands.Choice(name=opt, value=opt) for opt in all_writers if current.lower() in opt.lower()]
+    return [app_commands.Choice(name=opt, value=opt) for opt in all_writers if current.lower() in opt.lower()][:25]
 
 
 

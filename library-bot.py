@@ -82,7 +82,7 @@ class Audio:
     def name(self):
         for entry in self.parsed_data():
             if entry[0]=='Title':
-                return entry[1].replace("’","'")
+                return entry[1].replace("’","'").replace('“','"').replace('”','"').replace("‘","'").strip()
         return 'WARNING: no name found'
 
     def tag_string(self):

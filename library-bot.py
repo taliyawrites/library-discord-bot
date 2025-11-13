@@ -1218,13 +1218,20 @@ async def books(interaction):
 @tree.command(name = "threads", description = "List of current Discord threads")
 async def threads(interaction):
     await interaction.response.defer()
+    await interaction.followup.send("Here's a list of all the active threads in the server!")
+    await list_threads(interaction.channel)
+
+async def list_threads(channel):
     threads = await client.get_guild(GUILD).active_threads()
-    link_string = "Here's a list of all the active threads in the server!\n"
+    link_string = ""
     for thread in threads:
-        link_string = link_string + "- " + thread.jump_url + "\n"
+        perms = thread.permissions_for(client.get_guild(GUILD).get_role(1154619473773465610))
+        if perms.send_messages:
+            link_string = link_string + "- " + thread.jump_url + "\n"
     msg_list = msg_split(link_string, "Matching Results", False)
     for msg in msg_list:
-        await interaction.followup.send(msg)
+        await channel.send(msg)
+
 
 
 @tree.command(name = "rules", description = "Links to the server rules")
@@ -2006,13 +2013,10 @@ async def run_daily_loops():
         await birthday_wishes()
         if datetime.datetime.now().weekday() == 0:
             await client.get_channel(COMMAND_CHANNEL_ID).send("Remember to `/update` the live time to next Sunday at 4:30 PM and the stream time to next Sunday at 11:30 AM using [universal timestamps](https://r.3v.fi/discord-timestamps/), " + taliya.mention + "! Also save the latest [Twitch VOD](https://dashboard.twitch.tv/u/velslibrary/content/video-producer).")
-            threads = await client.get_guild(GUILD).active_threads()
-            link_string = "Reminder that we have the following threads you can join!\n"
-            for thread in threads:
-                link_string = link_string + "- " + thread.jump_url + "\n"
-            msg_list = msg_split(link_string, "Matching Results", False)
-            for msg in msg_list:
-                await client.get_channel(GENERAL).send(msg)
+
+            bot_channel = await client.get_channel(GENERAL)
+            await bot_channel.send("Reminder that we have the following threads you can join!")
+            await list_threads(bot_channel)
     elif rerun_daily and rerun_gg:
         await taliya.send("Re-running audio of the day.")
         rerun_daily = False

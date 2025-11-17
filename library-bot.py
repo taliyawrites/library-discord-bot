@@ -2013,8 +2013,7 @@ async def run_daily_loops():
         await birthday_wishes()
         if datetime.datetime.now().weekday() == 0:
             await client.get_channel(COMMAND_CHANNEL_ID).send("Remember to `/update` the live time to next Sunday at 4:30 PM and the stream time to next Sunday at 11:30 AM using [universal timestamps](https://r.3v.fi/discord-timestamps/), " + taliya.mention + "! Also save the latest [Twitch VOD](https://dashboard.twitch.tv/u/velslibrary/content/video-producer).")
-
-            bot_channel = await client.get_channel(GENERAL)
+            bot_channel = client.get_channel(GENERAL)
             await bot_channel.send("Reminder that we have the following threads you can join!")
             await list_threads(bot_channel)
     elif rerun_daily and rerun_gg:

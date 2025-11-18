@@ -1574,6 +1574,16 @@ async def gull(interaction):
 
     if gull_counter == 100: 
         await interaction.channel.send("Vel’s abode now contains a - combined and condensed - gull volume of ~10.6 cubic meters (or roughly the volume of two ovens)!")
+    if gull_counter == 249: 
+        await interaction.channel.send("There is approximately 13.5meters of gull beak in Vel’s abode. That’s about the length of an adult grey whale or city bus. That’s a lotta squawking.")
+    if gull_counter == 300: 
+        await interaction.channel.send("If all the gulls in Vel’s home spread their wings and stood in a line, it would stretch for a quarter mile.")
+    if gull_counter == 331: 
+        await interaction.channel.send("If all the gulls in Vel’s abode molted at once, they would produce a pile of just over *2 million* feathers. I hope he can still bust under these conditions.")
+    if gull_counter == 386: 
+        await interaction.channel.send("The horde of gulls needs to be appeased with almost 9,000 flatfish daily. Consider getting something from his throne because the man is supporting a whole flock of our retaliatory violence!")
+    if gull_counter == 400: 
+        await interaction.channel.send("All the gulls in Vel’s abode weigh about the same as an adult Labrador retriever standing on the back of an adult female *grizzly bear*.")
 
 
 

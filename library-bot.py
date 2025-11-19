@@ -1403,7 +1403,7 @@ async def cum(interaction):
 @tree.command(name = "apple", description = "okay slut")
 async def apple(interaction):
     await interaction.response.defer()
-    await interaction.followup.send("[follow Vel's instagram for more!](https://www.instagram.com/reel/DB7U4JtSd1D/)")
+    await interaction.followup.send("follow [Vel's instagram](https://www.instagram.com/reel/DB7U4JtSd1D/) for more! (update: a second apple video has hit the library https://discord.com/channels/1148449914188218399/1194499430410371173/1440536316201664663)")
 
 
 

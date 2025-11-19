@@ -1661,7 +1661,7 @@ def push_masterlist_update(interaction, audioID, tags, petnames, wallbreak, tagQ
 
 @tree.command(name = "addaudio", description = "Add a new entry to the masterlist",  guild = discord.Object(COMMAND_SERVER))
 @app_commands.describe(date = "In form MM-DD")
-async def addaudio(interaction, title : str, tags : str, url : str, description : str, exclusive : str, date : str, scriptwriter: Optional[str] = "Vel", series: Optional[str] = "",   character : Optional[str] = ""):
+async def addaudio(interaction, url : str, title : str, tags : str, description : str, exclusive : str, date : str, scriptwriter: Optional[str] = "Vel", series: Optional[str] = "",   character : Optional[str] = ""):
     await interaction.response.defer()
 
     corrected = get_tags(tags.lower().replace("’","'").strip())

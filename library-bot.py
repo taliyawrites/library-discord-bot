@@ -1325,7 +1325,7 @@ async def pet(interaction):
 @tree.command(name = "degrade", description = "You know what you are.")
 async def degrade(interaction):
     await interaction.response.defer()
-    adjectives = ["desperate","pretty","depraved","pathetic","needy","worthless"]
+    adjectives = ["desperate","pretty","depraved","pathetic","needy","worthless","eager"]
     nouns = ["whore","slut","cunt","set of holes","cumslut","fucktoy","cumrag","cumdump","cocksleeve", "hole"]
     if random.choice(range(1000)) < 3:
         whose = "Vel's "

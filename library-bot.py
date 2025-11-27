@@ -1895,21 +1895,9 @@ async def on_message(message):
         await track_patrons()
 
     if message.content.startswith("!move"):
-        if message.author.top_role.id in [1256838598401986561, 1239743183617790015]:
+        mod = client.get_guild(GUILD).get_role(1239743183617790015)
+        if mod in message.author.roles:
             await message.channel.edit(category = client.get_channel(1405614176952389643))
-
-    if message.author == taliya and message.content.startswith("!test"):
-        mand = client.get_guild(GUILD).get_member(1307772265517023454)
-        teddy = client.get_guild(GUILD).get_member(619414762572349440)
-        delphine = client.get_guild(GUILD).get_member(1262940885251784785)
-        nyx = client.get_guild(GUILD).get_member(1082532069420314687)
-        tal = client.get_guild(GUILD).get_member(1169014359842885726)
-        users = [mand, teddy, delphine, nyx, tal]
-        string = ""
-        for user in users:
-            string += f"{user.display_name}: {user.top_role.id} \n"
-        await taliya.send(string)
-
 
     
 

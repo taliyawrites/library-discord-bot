@@ -1894,7 +1894,7 @@ async def on_message(message):
     if message.author == taliya and message.content.startswith("!track"):
         await track_patrons()
 
-    if message.content.startswith("!move"):
+    if message.content.startswith("!move") and message.channel.category_id == 1178075874906624140:
         mod = client.get_guild(GUILD).get_role(1239743183617790015)
         if mod in message.author.roles:
             await message.channel.edit(category = client.get_channel(1405614176952389643))

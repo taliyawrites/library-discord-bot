@@ -1933,13 +1933,14 @@ async def on_member_update(before, after):
         if patron in after.roles and patron not in before.roles:
             await after.remove_roles(not_patron)
             await after.add_roles(libcard, reason = "Patreon membership renewed.")
+            print(f"{after.name}: {active_member(after.id)}")
 
             with open('audit-log.txt', 'a') as file:
                 now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")
                 file.write(f"[{now}] Patreon membership renewed for User {after.id} ({after.name}). Roles updated from {[role.name for role in before.roles]} to {[role.name for role in after.roles]} \n")
 
             try: 
-                await after.send("Welcome back to the Vel's Library discord server! You can customize the channels you want to see and your roles — including re-entering yourself as eligible for Good Girl of the Day, if you wish — on the server's Channels & Roles page. (Unfortunately this can't be linked through DMs, so if you can't find the page, use the command `/roles` in the server — only you'll be able to see it). If you're having trouble or still missing channels, please submit a ticket through https://discord.com/channels/1148449914188218399/1192558831222411294 and we'll help you access them!")
+                await after.send("Welcome back to the Vel's Library discord server! You can customize the channels you want to see and your roles — including entering yourself as eligible for Good Girl of the Day, if you wish — on the server's Channels & Roles page. (Unfortunately this can't be linked through DMs, so if you can't find the page, use the command `/roles` in the server — only you'll be able to see it). If you're having trouble or still missing channels, please submit a ticket through https://discord.com/channels/1148449914188218399/1192558831222411294 and we'll help you access them!")
                 print(f"welcome back message sent to {after.name}")
             except:
                 print(f'returning member {after.name} has closed DMs, welcome back message could not be sent')
@@ -1947,10 +1948,9 @@ async def on_member_update(before, after):
 
 
         elif patron in before.roles and patron not in after.roles:
-            for role in after.roles[1:]:
-                if role.id != 1148451678459285555:
-                    await after.remove_roles(role,reason = "No longer an active Patron.")
+            await after.remove_roles(libcard, reason = "No longer an active Patron.")
             await after.add_roles(not_patron)
+            print(f"{after.name}: {active_member(after.id)}")
 
             with open('audit-log.txt', 'a') as file:
                 now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")
@@ -2192,7 +2192,7 @@ def choose_next_winner(options):
     choices = []
 
     for user in options:
-        if user.name not in recent:
+        if user.name not in recent and active_member(user.id):
             choices.append(user)
     remaining = [user.name for user in choices]
 

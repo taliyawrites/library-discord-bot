@@ -1933,7 +1933,6 @@ async def on_member_update(before, after):
         if patron in after.roles and patron not in before.roles:
             await after.remove_roles(not_patron)
             await after.add_roles(libcard, reason = "Patreon membership renewed.")
-            print(f"{after.name}: {active_member(after.id)}")
 
             with open('audit-log.txt', 'a') as file:
                 now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")
@@ -1950,7 +1949,6 @@ async def on_member_update(before, after):
         elif patron in before.roles and patron not in after.roles:
             await after.remove_roles(libcard, reason = "No longer an active Patron.")
             await after.add_roles(not_patron)
-            print(f"{after.name}: {active_member(after.id)}")
 
             with open('audit-log.txt', 'a') as file:
                 now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")

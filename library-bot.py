@@ -1787,9 +1787,12 @@ async def status_error(interaction, error):
 @tree.command(name = "botsend", description = "makes the bot send a specified message in given channel", guild = discord.Object(COMMAND_SERVER))
 @app_commands.check(lambda u: u.user == taliya)
 @app_commands.allowed_installs(guilds=True, users=False)
-async def botsend(interaction, channel_id: str, message: str):
+async def botsend(interaction, channel_id: str, message: str, paragraph: Optional[str] = ""):
     await interaction.response.defer()
-    sent = await client.get_channel(int(channel_id)).send(message)
+    if len(paragraph) != 0:
+        sent = await client.get_channel(int(channel_id)).send(message + " \n\n" + paragraph)
+    else:
+        sent = await client.get_channel(int(channel_id)).send(message)
     await interaction.followup.send("Message sent! " + sent.jump_url)
 @botsend.error
 async def botsend_error(interaction, error):

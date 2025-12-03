@@ -473,7 +473,8 @@ intents = discord.Intents.default()
 intents.message_content = True
 intents.members = True
 
-client = discord.Client(intents=intents, activity = discord.Activity(type=discord.ActivityType.listening, name = read_from_file(AUDIOS_FILENAME)[-1]))
+
+client = discord.Client(intents=intents, activity = discord.CustomActivity(name = '🎧 Listening to "' + read_from_file(AUDIOS_FILENAME)[-1] + '"' ))
 tree = app_commands.CommandTree(client)
 
 
@@ -2176,7 +2177,8 @@ async def announce_daily_audio():
         if daily_audio is not None: 
             await channel.send(f"The audio of the day!")
             await channel.send(embed=daily_audio.discord_post())
-            await client.change_presence(activity = discord.Activity(type=discord.ActivityType.listening, name = daily_audio.name(), details_url = daily_audio.link()))
+            # await client.change_presence(activity = discord.Activity(type=discord.ActivityType.listening, name = daily_audio.name(), details_url = daily_audio.link()))
+            await client.change_presence(activity = discord.CustomActivity(name = '🎧 Listening to "' + daily_audio.name() + '"' ))
         else:
             await taliya.send("ERROR: no non-recent options for daily audio.")
     except:

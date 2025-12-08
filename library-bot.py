@@ -1903,11 +1903,9 @@ async def on_message(message):
         if mod in message.author.roles:
             await message.channel.edit(category = client.get_channel(1405614176952389643))
 
-    if message.content.startswith("!editrules") and message.author == taliya: 
-        newmsg = "13. **No outright intoxication allowed in VCs.** We allow a drink or the equivalent of that for other substances but anything further is not allowed. Be sure to inform the people in VC of your intake of these substances. But most especially be responsible with your intake amount as to not cause discomfort with the people you join in VC. \n\n14. **No personal photos of people who are not members of this server.** This is due to a lack of explicit consent by the subject of the picture to be posted in a server focused on porn. This applies to photos of anyone who isn't a public figure (for instance, your friend appearing in the background of a cat photo or a picture at dinner), since we have no way to verify their consent. \n\n15. **Patreon/Discord exclusive content is not to be shared outside of the server without Vel's express permission.** Any and all images/videos/voice notes/writing shared by Vel in the server or Patreon should be treated as private unless posted publicly on his socials. \n\nFor more information, please feel free to reference https://discord.com/channels/1148449914188218399/1366039740301840405 and https://discord.com/channels/1148449914188218399/1365495051676946505, or ask anytime in the general channel! We're always happy to answer questions and clear up confusion so everyone can have a fun, safe, and relaxing time enjoying the horny merriment of the library."
-        old = await client.get_guild(GUILD).get_channel(1374549206286733322).fetch_message(1417702031619133534)
-        await old.edit(content = newmsg)
-
+    if message.content.startswith("!delcome") and message.author.id == 1262940885251784785 or message.author == taliya:
+        del_msg = "Hi! I'm Del, one of the mods. We're happy to have you! \n\nIf you have a chance, we have some great info on the server in <#1366039740301840405> and <#1365495051676946505>.  <#1419427817380122664> explains all the channels we have! \n\nYou can find very hot photos of Vel in <#1363958978253557820> that he posts in <#1194499430410371173> along with past voice notes (VNs) that he's posted in <#1363978490436780214>.\n\nIf you have any questions, don't hesitate to ping or ask. <3"
+        await message.channel.send(del_msg)
 
     
 

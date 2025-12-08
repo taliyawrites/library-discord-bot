@@ -1160,8 +1160,7 @@ async def stream(interaction):
     # await interaction.followup.send(file = file, embed=stream_embed)
     await interaction.response.defer()
     stream_info = 'Vel streams live every weekend on [Twitch](https://www.twitch.tv/velslibrary). The next stream(s) will be ' + twitch_time + '!'
-    stream_embed = discord.Embed(title = "Vel's Livestreams", description = stream_info, url = "https://www.twitch.tv/velslibrary")
-    await interaction.followup.send(embed = stream_embed)
+    await interaction.followup.send(stream_info)
 
 
 @tree.command(name = "merch", description = "Information about Vel's merch!")

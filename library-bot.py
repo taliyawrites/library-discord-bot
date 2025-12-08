@@ -1903,7 +1903,7 @@ async def on_message(message):
         if mod in message.author.roles:
             await message.channel.edit(category = client.get_channel(1405614176952389643))
 
-    if message.content.startswith("!delcome") and message.author.id == 1262940885251784785 or message.author == taliya:
+    if message.content.startswith("!delcome") and message.author.id == 1262940885251784785:
         del_msg = "Hi! I'm Del, one of the mods. We're happy to have you! \n\nIf you have a chance, we have some great info on the server in <#1366039740301840405> and <#1365495051676946505>.  <#1419427817380122664> explains all the channels we have! \n\nYou can find very hot photos of Vel in <#1363958978253557820> that he posts in <#1194499430410371173> along with past voice notes (VNs) that he's posted in <#1363978490436780214>.\n\nIf you have any questions, don't hesitate to ping or ask. <3"
         await message.channel.send(del_msg)
 

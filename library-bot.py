@@ -2109,8 +2109,6 @@ async def track_patrons():
             error_str += member.name + " has both patron and not patron \n"
         if not_patreon not in member.roles and patreon not in member.roles and bots not in member.roles:
             error_str += member.name + " has neither patron nor not patron \n"
-        if not_patreon in member.roles and len(member.roles) > 2:
-            error_str += member.name + " has: " + str([role.name for role in member.roles[1:]]) + "\n"
 
     await taliya.send(check_str + sum_str + error_str)
 

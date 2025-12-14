@@ -1536,6 +1536,12 @@ async def eventcalendar(interaction):
     await interaction.followup.send("Upcoming calendar of server events! See the Events tab and https://discord.com/channels/1148449914188218399/1153466557524082771 for further details.", file = image)
 
 
+@tree.command(name = "eventsuggestions", description = "Link to submit event suggestions!")
+async def eventcalendar(interaction):
+    await interaction.response.defer()
+    await interaction.followup.send("If you have an idea for a server event, please submit it using [the form here](https://airtable.com/apptzc73zzoFe9gC3/pagvo758WcIU3LpYB/form) and our mods will be in touch about making it happen!")
+
+
 @tree.command(name = "pippin", description = "Forwards a random pipture of Vel's cat Pippin!")
 async def pippin(interaction):
     await interaction.response.defer()
@@ -2221,11 +2227,15 @@ async def choose_good_girl():
         guild = client.get_guild(GUILD)
         channel = client.get_channel(GENERAL)
         good_girl_role = guild.get_role(WINNER_ROLE)
+        good_boy_ids = [315323866291372032]
 
         await asyncio.sleep(4)
         for member in good_girl_role.members:
             # remove good girl role from yesterday's winner
             await member.remove_roles(good_girl_role)
+            if member.id in good_boy_ids:
+                await good_girl_role.edit(name = "Good Girl")
+
 
         # choose new random winner for the day
         # UPDATE TO ONLY THOSE WITH PATRON ROLE
@@ -2240,7 +2250,12 @@ async def choose_good_girl():
 
         # send message and assign good girl role to winner
         if winner is not None:
-            await channel.send(f'{winner.mention} is the good girl of the day!')
+            if winner.id in good_boy_ids:
+                await good_girl_role.edit(name = "Good Boy")
+                await channel.send(f'{winner.mention} is the good boy of the day!')
+
+            else:
+                await channel.send(f'{winner.mention} is the good girl of the day!')
             await winner.add_roles(good_girl_role)
             good_girl = winner.display_name
         else:

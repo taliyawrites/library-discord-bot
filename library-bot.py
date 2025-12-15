@@ -1227,7 +1227,7 @@ async def list_threads(channel):
     link_string = ""
     for thread in threads:
         perms = thread.permissions_for(client.get_guild(GUILD).get_role(1154619473773465610))
-        if perms.send_messages and not thread.locked:
+        if perms.send_messages and not thread.locked and not thread.is_private():
             link_string = link_string + "- " + thread.jump_url + "\n"
     msg_list = msg_split(link_string, "Matching Results", False)
     for msg in msg_list:

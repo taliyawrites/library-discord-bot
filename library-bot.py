@@ -2267,6 +2267,8 @@ async def choose_good_girl():
         winners = random.sample(options, 6)
         global cum_permission_ids
         cum_permission_ids  = [user.id for user in winners]
+        if datetime.datetime.now().month == 12 and datetime.datetime.now().day == 25:
+            cum_permission_ids.insert(0,1336919243735826533)
         print(f"daily permissions assigned to: {winners[0].display_name}, {winners[1].display_name}, {winners[2].display_name}, {winners[3].display_name}, {winners[4].display_name}, and {winners[5].display_name}")
         save_to_file(RECORD_FILENAME,[str(ids) for ids in cum_permission_ids])
     except:

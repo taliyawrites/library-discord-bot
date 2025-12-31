@@ -496,7 +496,7 @@ def duration_days(sec):
         string += str(weeks) + " week, " + str(days % 7) + " days, "
     else:
         string += str(weeks) + " weeks, " + str(days % 7) + " days, "
-    string += str(minutes) + " minutes, and " + str(seconds) + " seconds!"
+    string += str(hours) + " hours, " + str(minutes) + " minutes, and " + str(seconds) + " seconds!"
     return string
 
 

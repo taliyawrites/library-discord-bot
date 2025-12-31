@@ -9,6 +9,7 @@ import calendar
 import traceback
 import json
 import jaro
+import math
 
 
 from dotenv import load_dotenv
@@ -154,6 +155,12 @@ class Audio:
             if entry[0]=='Recurring Characters':
                 return entry[1]
         return ''
+
+    def duration(self):
+        for entry in self.parsed_data():
+            if entry[0]=='Duration':
+                return entry[1]
+        return 0
 
     # format a post for the audio
     def discord_post(self):
@@ -448,6 +455,32 @@ def active_member(userID):
     except:
         return False
 
+# DURATION FUNCTIONS
+
+def duration_string(dur):
+    components = dur.split(":")
+    if len(components) == 2:
+        components.insert(0,"0")
+    hours, minutes, seconds = int(components[0]), int(components[1]), int(components[2])
+    return 3600*hours + 60*minutes + seconds
+
+def duration_seconds(sec):
+    hours = math.floor(sec/3600)
+    minutes = math.floor((sec % 3600)/60)
+    seconds = (sec % 3600) % 60
+    if hours != 0:
+        hour_str = str(hours) + ":"
+    else:
+        hour_str = ""
+    if minutes < 10:
+        minute_str = "0" + str(minutes) + ":"
+    else:
+        minute_str = str(minutes) + ":"
+    if seconds < 10:
+        second_str = "0" + str(seconds)
+    else:
+        second_str = str(seconds)
+    return hour_str + minute_str + second_str
 
 
 
@@ -1668,13 +1701,6 @@ def push_masterlist_update(interaction, audioID, tags, petnames, wallbreak, tagQ
 #     audio_choices = import_airtable_data()
 
 
-def duration_string(dur):
-    components = dur.split(":")
-    if len(components) == 2:
-        components.insert(0,"0")
-    hours, minutes, seconds = int(components[0]), int(components[1]), int(components[2])
-    return 3600*hours + 60*minutes + seconds
-
 
 @tree.command(name = "addaudio", description = "Add a new entry to the masterlist",  guild = discord.Object(COMMAND_SERVER))
 @app_commands.describe(date = "In form MM-DD")
@@ -1922,6 +1948,12 @@ async def on_message(message):
     if message.content.startswith("!delcome") and message.author.id == 1262940885251784785:
         del_msg = "Hi! I'm Del, one of the mods. We're happy to have you! \n\nIf you have a chance, we have some great info on the server in <#1366039740301840405> and <#1365495051676946505>.  <#1419427817380122664> explains all the channels we have! \n\nYou can find very hot photos of Vel in <#1363958978253557820> that he posts in <#1194499430410371173> along with past voice notes (VNs) that he's posted in <#1363978490436780214>.\n\nIf you have any questions, don't hesitate to ping or ask. <3"
         await message.channel.send(del_msg)
+
+    if message.content.startswith("!duration") and message.author == taliya:
+        dur_seconds = 0
+        for audio in audio_choices:
+            dur_seconds += audio.duration()
+        await message.channel.send(duration_seconds(dur_seconds))
 
     
 

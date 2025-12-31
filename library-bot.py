@@ -1670,14 +1670,14 @@ def push_masterlist_update(interaction, audioID, tags, petnames, wallbreak, tagQ
 
 @tree.command(name = "addaudio", description = "Add a new entry to the masterlist",  guild = discord.Object(COMMAND_SERVER))
 @app_commands.describe(date = "In form MM-DD")
-async def addaudio(interaction, url : str, title : str, tags : str, description : str, exclusive : str, date : str, scriptwriter: Optional[str] = "Vel", series: Optional[str] = "",   character : Optional[str] = ""):
+async def addaudio(interaction, url : str, title : str, tags : str, description : str, exclusive : str, date : str, duration : str, scriptwriter: Optional[str] = "Vel", series: Optional[str] = "",   character : Optional[str] = ""):
     await interaction.response.defer()
 
     corrected = get_tags(tags.lower().replace("’","'").strip())
     corrected_tags = "[" + '] ['.join(corrected) + "]"
 
     table = airtable_api.table('apprrNWlCwDHYj4wW', 'tblqwSpe5CdMuWHW6')
-    record = table.create({"Title": title, "Tags": corrected_tags, "Post Link": url,"Description": description,"Scriptwriter": scriptwriter,"General Date": "2025-" + date,"Series Name (if applicable)": series, "Public/Patreon": exclusive, "Recurring Characters": character})
+    record = table.create({"Title": title, "Tags": corrected_tags, "Post Link": url,"Description": description,"Scriptwriter": scriptwriter,"General Date": "2025-" + date, "Duration": duration, "Series Name (if applicable)": series, "Public/Patreon": exclusive, "Recurring Characters": character})
 
     global audio_choices
     audio_choices = import_airtable_data()

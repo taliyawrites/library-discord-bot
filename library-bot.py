@@ -472,6 +472,7 @@ def duration_seconds(sec):
         hour_str = str(hours) + ":"
     else:
         hour_str = ""
+
     if minutes < 10:
         minute_str = "0" + str(minutes) + ":"
     else:
@@ -482,7 +483,21 @@ def duration_seconds(sec):
         second_str = str(seconds)
     return hour_str + minute_str + second_str
 
-
+def duration_days(sec):
+    days = math.floor(sec/(3600*24))
+    hours = math.floor((sec % (3600*24))/3600)
+    minutes = math.floor(((sec % (3600*24)) % 3600)/60)
+    seconds = ((sec % (3600*24)) % 3600) % 60
+    weeks = math.floor(days/7)
+    string = ""
+    if weeks == 0:
+        string += str(days) + " days, "
+    elif weeks == 1:
+        string += str(weeks) + " week, " + str(days % 7) + " days, "
+    else:
+        string += str(weeks) + " weeks, " + str(days % 7) + " days, "
+    string += str(minutes) + " minutes, and " + str(seconds) + " seconds!"
+    return string
 
 
 
@@ -1953,7 +1968,7 @@ async def on_message(message):
         dur_seconds = 0
         for audio in audio_choices:
             dur_seconds += audio.duration()
-        await message.channel.send(duration_seconds(dur_seconds))
+        await message.channel.send(duration_days(dur_seconds))
 
     
 

@@ -489,14 +489,36 @@ def duration_days(sec):
     minutes = math.floor(((sec % (3600*24)) % 3600)/60)
     seconds = ((sec % (3600*24)) % 3600) % 60
     weeks = math.floor(days/7)
+    new_days = days
     string = ""
-    if weeks == 0:
-        string += str(days) + " days, "
-    elif weeks == 1:
-        string += str(weeks) + " week, " + str(days % 7) + " days, "
+
+    if weeks == 1:
+        string += str(weeks) + " week, "
+        new_days = days % 7
+    elif weeks > 1:
+        string += str(weeks) + " weeks, "
+        new_days = days % 7
+
+    if new_days == 1:
+        string += str(new_days) + " day, "
     else:
-        string += str(weeks) + " weeks, " + str(days % 7) + " days, "
-    string += str(hours) + " hours, " + str(minutes) + " minutes, and " + str(seconds) + " seconds!"
+        string += str(new_days) + " days, "
+
+    if hours == 1:
+        string += str(hours) + " hour, "
+    else: 
+        string += str(hours) + " hours, "
+
+    if minutes == 1:
+        string += str(minutes) + " minute, and "
+    else: 
+        string += str(minutes) + " minutes, and "
+
+    if seconds == 1:
+        string += str(seconds) + " second!"
+    else: 
+        string += str(seconds) + " seconds!"
+
     return string
 
 

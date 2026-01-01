@@ -1748,7 +1748,7 @@ async def addaudio(interaction, url : str, title : str, tags : str, description 
     corrected_tags = "[" + '] ['.join(corrected) + "]"
 
     table = airtable_api.table('apprrNWlCwDHYj4wW', 'tblqwSpe5CdMuWHW6')
-    record = table.create({"Title": title, "Tags": corrected_tags, "Post Link": url,"Description": description,"Scriptwriter": scriptwriter,"General Date": "2025-" + date, "Duration": duration_string(duration), "Series Name (if applicable)": series, "Public/Patreon": exclusive, "Recurring Characters": character})
+    record = table.create({"Title": title, "Tags": corrected_tags, "Post Link": url,"Description": description,"Scriptwriter": scriptwriter,"General Date": "2026-" + date, "Duration": duration_string(duration), "Series Name (if applicable)": series, "Public/Patreon": exclusive, "Recurring Characters": character})
 
     global audio_choices
     audio_choices = import_airtable_data()

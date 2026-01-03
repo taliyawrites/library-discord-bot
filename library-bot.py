@@ -515,9 +515,9 @@ def duration_days(sec):
         string += str(minutes) + " minutes, and "
 
     if seconds == 1:
-        string += str(seconds) + " second!"
+        string += str(seconds) + " second"
     else: 
-        string += str(seconds) + " seconds!"
+        string += str(seconds) + " seconds"
 
     return string
 
@@ -1557,15 +1557,13 @@ async def hydrate(interaction, victim: Optional[str] = ""):
 @tree.command(name = "count", description = "Returns the number of audios Vel has made so far!")
 async def count(interaction):
     await interaction.response.defer()
+
     dur_seconds = 0
     for audio in audio_choices:
         dur_seconds += audio.duration()
-    total_count = len(audio_choices) + 2
 
-
-    await interaction.followup.send(f"Vel has made {total_count} audios!")
+    await interaction.followup.send(f"Vel has made {len(audio_choices) + 2} audios! Listening to all of them would take {duration_days(dur_seconds)}.")
     await interaction.channel.send("https://tenor.com/view/sesame-street-the-count-the-count-sesame-street-laughing-laugh-gif-15452219526891068818")
-    await interaction.channel.send(f"Listening to all {total_count} of Vel's audios would take {duration_days(dur_seconds)}")
 
 
 @tree.command(name = "birthday", description = "Save your birthday with the bot!")

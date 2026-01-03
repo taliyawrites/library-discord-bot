@@ -1557,8 +1557,15 @@ async def hydrate(interaction, victim: Optional[str] = ""):
 @tree.command(name = "count", description = "Returns the number of audios Vel has made so far!")
 async def count(interaction):
     await interaction.response.defer()
-    await interaction.followup.send(f"Vel has made {len(audio_choices) + 2} audios!")
-    await interaction.followup.send("https://tenor.com/view/sesame-street-the-count-the-count-sesame-street-laughing-laugh-gif-15452219526891068818")
+    dur_seconds = 0
+    for audio in audio_choices:
+        dur_seconds += audio.duration()
+    total_count = len(audio_choices) + 2
+
+
+    await interaction.followup.send(f"Vel has made {total_count} audios!")
+    await interaction.channel.send("https://tenor.com/view/sesame-street-the-count-the-count-sesame-street-laughing-laugh-gif-15452219526891068818")
+    await interaction.channel.send(f"Listening to all {total_count} of Vel's audios would take {duration_days(dur_seconds)}")
 
 
 @tree.command(name = "birthday", description = "Save your birthday with the bot!")
@@ -1985,12 +1992,6 @@ async def on_message(message):
     if message.content.startswith("!delcome") and message.author.id == 1262940885251784785:
         del_msg = "Hi! I'm Del, one of the mods. We're happy to have you! \n\nIf you have a chance, we have some great info on the server in <#1366039740301840405> and <#1365495051676946505>.  <#1419427817380122664> explains all the channels we have! \n\nYou can find very hot photos of Vel in <#1363958978253557820> that he posts in <#1194499430410371173> along with past voice notes (VNs) that he's posted in <#1363978490436780214>.\n\nIf you have any questions, don't hesitate to ping or ask. <3"
         await message.channel.send(del_msg)
-
-    if message.content.startswith("!duration") and message.author == taliya:
-        dur_seconds = 0
-        for audio in audio_choices:
-            dur_seconds += audio.duration()
-        await message.channel.send(duration_days(dur_seconds))
 
     
 

@@ -2058,6 +2058,12 @@ async def on_member_update(before, after):
                 now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")
                 file.write(f"[{now}] Access forcibly removed for User {after.id} ({after.name}). Roles updated from {[role.name for role in before.roles]} to {[role.name for role in after.roles]} \n")
 
+            try: 
+                await after.send("Your access permissions have been removed from the Vel's Library Discord server; please open a ticket if you have questions.")
+                print(f"access message sent to {after.name}")
+            except:
+                print(f'returning member {after.name} has closed DMs, welcome back message could not be sent')
+
 
 
 

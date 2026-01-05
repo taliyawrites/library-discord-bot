@@ -2048,6 +2048,16 @@ async def on_member_update(before, after):
 
         # elif not_patron in before.roles and not_patron in after.roles
 
+    if before.roles != after.roles and before.id == 701232387920625786:
+        patron = client.get_guild(GUILD).get_role(1154619473773465610)
+        
+        if patron in after.roles and patron not in before.roles:
+            await after.remove_roles(patron, reason = "Access revoked.")
+
+            with open('audit-log.txt', 'a') as file:
+                now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")
+                file.write(f"[{now}] Access forcibly removed for User {after.id} ({after.name}). Roles updated from {[role.name for role in before.roles]} to {[role.name for role in after.roles]} \n")
+
 
 
 

@@ -447,11 +447,11 @@ def msg_split(string, listname, embed = True):
 def active_member(userID):
     try:
         member = client.get_guild(GUILD).get_member(userID)
-        not_patron = client.get_guild(GUILD).get_role(1417728496825794642)
-        if not_patron in member.roles:
-            return False
-        else:
+        patron = client.get_guild(GUILD).get_role(1154619473773465610)
+        if patron in member.roles:
             return True
+        else:
+            return False
     except:
         return False
 
@@ -1981,6 +1981,10 @@ async def on_message(message):
 
     if message.author == taliya and message.content.startswith("!track"):
         await track_patrons()
+        await taliya.send(active_member(1169014359842885726))
+        await taliya.send(active_member(701232387920625786))
+        await taliya.send(active_member(1089053035377999912))
+        await taliya.send(active_member(490759913757212672))
 
     if message.content.startswith("!move") and message.channel.category_id == 1178075874906624140:
         mod = client.get_guild(GUILD).get_role(1239743183617790015)
@@ -2059,7 +2063,7 @@ async def on_member_update(before, after):
                 file.write(f"[{now}] Access forcibly removed for User {after.id} ({after.name}). Roles updated from {[role.name for role in before.roles]} to {[role.name for role in after.roles]} \n")
 
             try: 
-                msg_text = "Your access permissions have been removed from the Vel's Library Discord server; please open a ticket if you have questions."
+                msg_text = "Your access permissions have been removed from the Vel's Library Discord server; please open a ticket through https://discord.com/channels/1148449914188218399/1192558831222411294 if you have questions."
                 await after.send(msg_text)
                 print(f"access message sent to {after.name}: {msg_text}")
             except:

@@ -1981,10 +1981,6 @@ async def on_message(message):
 
     if message.author == taliya and message.content.startswith("!track"):
         await track_patrons()
-        await taliya.send(active_member(1169014359842885726))
-        await taliya.send(active_member(701232387920625786))
-        await taliya.send(active_member(1089053035377999912))
-        await taliya.send(active_member(490759913757212672))
 
     if message.content.startswith("!move") and message.channel.category_id == 1178075874906624140:
         mod = client.get_guild(GUILD).get_role(1239743183617790015)
@@ -1994,6 +1990,12 @@ async def on_message(message):
     if message.content.startswith("!delcome") and message.author.id == 1262940885251784785:
         del_msg = "Hi! I'm Del, one of the mods. We're happy to have you! \n\nIf you have a chance, we have some great info on the server in <#1366039740301840405> and <#1365495051676946505>.  <#1419427817380122664> explains all the channels we have! \n\nYou can find very hot photos of Vel in <#1363958978253557820> that he posts in <#1194499430410371173> along with past voice notes (VNs) that he's posted in <#1363978490436780214>.\n\nIf you have any questions, don't hesitate to ping or ask. <3"
         await message.channel.send(del_msg)
+
+    if message.content.startswith("!check") and message.author == taliya: 
+        all_options = client.get_guild(GUILD).get_role(OPTIONS_ROLE).members
+        options = [user for user in client.get_guild(GUILD).get_role(OPTIONS_ROLE).members if active_member(user.id)]
+        await taliya.send(len(all_options))
+        await taliya.send(len(options))
 
     
 
@@ -2008,7 +2010,7 @@ async def on_guild_channel_create(channel):
         for user in channel.members:
             # CHANGE FOR PATREON SUBS 
             regular_roles = [1148454184824360990,1154619473773465610,1417728496825794642, 1148449914188218399]
-            special_roles = [1248762871073210441,1425196847047245855, 1432534631844151306,1432534814757752902]
+            special_roles = [1248762871073210441,1425196847047245855, 1432534631844151306,1432534814757752902, 1433367457506000957]
             if user.top_role.id in regular_roles or user.top_role.id in special_roles:
                 nonmods = True
                 break 
@@ -2302,7 +2304,7 @@ def choose_next_winner(options):
     choices = []
 
     for user in options:
-        if user.name not in recent and active_member(user.id):
+        if user.name not in recent:
             choices.append(user)
     remaining = [user.name for user in choices]
 
@@ -2337,8 +2339,7 @@ async def choose_good_girl():
 
 
         # choose new random winner for the day
-        # UPDATE TO ONLY THOSE WITH PATRON ROLE
-        options = guild.get_role(OPTIONS_ROLE).members
+        options = [user for user in guild.get_role(OPTIONS_ROLE).members if active_member(user.id)]
         winner, remaining_number = choose_next_winner(options)
         if remaining_number == 10: 
             await taliya.send("Only ten remaining options for good girl of the day.")
@@ -2361,7 +2362,7 @@ async def choose_good_girl():
             await taliya.send("ERROR: no non-recent options for good girl of the day.")
 
         # randomly assign cum permissions
-        winners = random.sample(options, 6)
+        winners = random.sample(options, 10)
         global cum_permission_ids
         cum_permission_ids  = [user.id for user in winners]
         if datetime.datetime.now().month == 12 and datetime.datetime.now().day == 25:

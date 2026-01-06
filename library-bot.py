@@ -1986,27 +1986,6 @@ async def on_message(message):
         del_msg = "Hi! I'm Del, one of the mods. We're happy to have you! \n\nIf you have a chance, we have some great info on the server in <#1366039740301840405> and <#1365495051676946505>.  <#1419427817380122664> explains all the channels we have! \n\nYou can find very hot photos of Vel in <#1363958978253557820> that he posts in <#1194499430410371173> along with past voice notes (VNs) that he's posted in <#1363978490436780214>.\n\nIf you have any questions, don't hesitate to ping or ask. <3"
         await message.channel.send(del_msg)
 
-    if message.content.startswith("!check") and message.author == taliya:
-        mod_roles = [1148451019542499368, 1148452325539713114, 1155697576230781079, 1256838598401986561, 1239743183617790015]
-        ticket = client.get_guild(GUILD).get_channel(1457607661192478782)
-        string = ""
-        for user in ticket.members:
-            if user.top_role.id in mod_roles:
-                string += user.display_name + ": True \n "
-            else:
-                string += user.display_name + ": False \n "
-        await taliya.send(string)
-
-        ticket = client.get_guild(GUILD).get_channel(1452509691534905374)
-        string = ""
-        for user in ticket.members:
-            if user.top_role.id in mod_roles:
-                string += user.display_name + ": True \n "
-            else:
-                string += user.display_name + ": False \n "
-        await taliya.send(string)
-
-
     
 
 

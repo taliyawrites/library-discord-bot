@@ -447,8 +447,8 @@ def msg_split(string, listname, embed = True):
 def active_member(userID):
     try:
         member = client.get_guild(GUILD).get_member(userID)
-        patron = client.get_guild(GUILD).get_role(1154619473773465610)
-        if patron in member.roles:
+        patron_role = client.get_guild(GUILD).get_role(1154619473773465610)
+        if patron_role in member.roles:
             return True
         else:
             return False
@@ -1019,27 +1019,22 @@ async def randomrequest(interaction):
                 user_index = random.choice(range(len(snack_requests)))
                 entry = snack_requests[user_index]
 
-                try: 
-                    # UPDATE TO ONLY THOSE WITH PATRON ROLE
-                    user = await client.get_guild(GUILD).fetch_member(entry[0])
-                except:
+                if active_member(entry[0]):
+                    request_index = random.choice(range(1,len(entry)))
+                    await interaction.followup.send(f"From {user.mention} — {entry[request_index]}")
+                    if len(entry) == 2:
+                        del snack_requests[user_index]
+                    else:
+                        del snack_requests[user_index][request_index]
+                    with open("snack-requests.json", "w") as outfile:
+                        outfile.write(json.dumps(snack_requests))
+                    not_found = False
+                else:
                     # snack_requests.remove(entry)
                     # with open("snack-requests.json", "w") as outfile:
                     #     outfile.write(json.dumps(snack_requests))
                     not_found = True
-                else:
-                    if active_member(entry[0]):
-                        request_index = random.choice(range(1,len(entry)))
-                        await interaction.followup.send(f"From {user.mention} — {entry[request_index]}")
-                        if len(entry) == 2:
-                            del snack_requests[user_index]
-                        else:
-                            del snack_requests[user_index][request_index]
-                        with open("snack-requests.json", "w") as outfile:
-                            outfile.write(json.dumps(snack_requests))
-                        not_found = False
-                    else:
-                        not_found = True
+
     else:
         await interaction.followup.send("Only Vel can use the randomrequest command! Feel free to submit your own tags with `/request`.")
 
@@ -1991,11 +1986,6 @@ async def on_message(message):
         del_msg = "Hi! I'm Del, one of the mods. We're happy to have you! \n\nIf you have a chance, we have some great info on the server in <#1366039740301840405> and <#1365495051676946505>.  <#1419427817380122664> explains all the channels we have! \n\nYou can find very hot photos of Vel in <#1363958978253557820> that he posts in <#1194499430410371173> along with past voice notes (VNs) that he's posted in <#1363978490436780214>.\n\nIf you have any questions, don't hesitate to ping or ask. <3"
         await message.channel.send(del_msg)
 
-    if message.content.startswith("!check") and message.author == taliya: 
-        all_options = client.get_guild(GUILD).get_role(OPTIONS_ROLE).members
-        options = [user for user in client.get_guild(GUILD).get_role(OPTIONS_ROLE).members if active_member(user.id)]
-        await taliya.send(len(all_options))
-        await taliya.send(len(options))
 
     
 
@@ -2390,12 +2380,11 @@ async def birthday_wishes():
         todays = []
         for entry in birthdays:
             if datetime.datetime.now().month == entry[1] and datetime.datetime.now().day == entry[2]:
-                try:
-                    user = await client.get_guild(GUILD).fetch_member(entry[0])
-                    if active_member(entry[0]):
-                        todays.append(user.mention)
-                except:
-                    print('user no longer in server/no longer active patreon sub')
+                if active_member(entry[0]):
+                    user = client.get_guild(GUILD).get_member(entry[0])
+                    todays.append(user.mention)
+                else:
+                    print(f'user {entry[0]} no longer in server/no longer active patreon sub')
 
         for birthday_girl in todays:
             await client.get_channel(BIRTHDAY_CHANNEL).send("Happy birthday, " + birthday_girl + "!")

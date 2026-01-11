@@ -1762,6 +1762,12 @@ async def addaudio_autocomplete(interaction: discord.Interaction, current: str) 
     return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]
 
 
+@tree.command(name = "canonicaltags", description = "Returns canonicalized list of tags",  guild = discord.Object(COMMAND_SERVER))
+async def canonicaltags(interaction, tags : str):
+    await interaction.response.defer()
+    corrected = get_tags(tags.lower().replace("’","'").strip())
+    await interaction.followup.send("[" + '] ['.join(corrected) + "]")
+
 
 # BACKEND UTILITY COMMANDS #
 

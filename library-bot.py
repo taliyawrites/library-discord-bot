@@ -1021,7 +1021,7 @@ async def randomrequest(interaction):
 
                 if active_member(entry[0]):
                     request_index = random.choice(range(1,len(entry)))
-                    user = client.get_guild(GUILD).get_member(userID)
+                    user = client.get_guild(GUILD).get_member(entry[0])
                     await interaction.followup.send(f"From {user.mention} — {entry[request_index]}")
                     if len(entry) == 2:
                         del snack_requests[user_index]

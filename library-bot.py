@@ -2017,7 +2017,7 @@ async def on_guild_channel_create(channel):
 
 @client.event
 async def on_member_update(before, after):
-    if before.roles != after.roles and before.id != 701232387920625786:
+    if before.roles != after.roles and before.id != 832300007281131531:
         patron = client.get_guild(GUILD).get_role(1154619473773465610)
         not_patron = client.get_guild(GUILD).get_role(1417728496825794642)
         libcard = client.get_guild(GUILD).get_role(1148454184824360990)
@@ -2048,7 +2048,7 @@ async def on_member_update(before, after):
 
         # elif not_patron in before.roles and not_patron in after.roles
 
-    if before.roles != after.roles and before.id == 701232387920625786:
+    if before.roles != after.roles and before.id == 832300007281131531:
         patron = client.get_guild(GUILD).get_role(1154619473773465610)
         
         if patron in after.roles and patron not in before.roles:

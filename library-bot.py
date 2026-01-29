@@ -58,7 +58,7 @@ PIPPIN_FILENAME = "pippin-pics.txt"
 GULL_FILENAME = "abode.txt"
 
 # run daily tasks at 1pm eastern time (6pm UTC+1)
-HOUR, MINUTE = 18, 0
+HOUR, MINUTE = 18, 20
 MIDNIGHT = 5
 
 
@@ -2120,6 +2120,7 @@ async def on_scheduled_event_update(before, after):
 async def run_daily_loops():
     global rerun_daily, rerun_gg, rerun_birthdays
     if (datetime.datetime.now().hour == HOUR and datetime.datetime.now().minute == MINUTE):
+        print("now")
         await announce_daily_audio()
         await choose_good_girl()
         await daily_balatro()

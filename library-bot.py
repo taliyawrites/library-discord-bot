@@ -58,7 +58,7 @@ PIPPIN_FILENAME = "pippin-pics.txt"
 GULL_FILENAME = "abode.txt"
 
 # run daily tasks at 1pm eastern time (6pm UTC+1)
-HOUR, MINUTE = 18, 20
+HOUR, MINUTE = 18, 0
 MIDNIGHT = 5
 
 

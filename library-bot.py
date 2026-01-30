@@ -620,7 +620,7 @@ async def setup_hook():
     global wash_day, february
     february = False
     for audio in audio_choices:
-        if audio.recordID == "recqeXgsB7icY36zg":
+        if audio.recordID() == "recqeXgsB7icY36zg":
             wash_day = audio
 
 

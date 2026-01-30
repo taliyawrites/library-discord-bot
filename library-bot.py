@@ -617,6 +617,12 @@ async def setup_hook():
     taliya = await client.fetch_user(1169014359842885726)
     vel = await client.fetch_user(1089053035377999912)
 
+    global wash_day, february
+    february = False
+    for audio in audio_choices:
+        if audio.recordID == "recqeXgsB7icY36zg":
+            wash_day = audio
+
 
     await taliya.send(f"Card Catalog bot restarted successfully!")
     print(f"bot local time: {datetime.datetime.now().hour}h{datetime.datetime.now().minute}.")
@@ -643,9 +649,11 @@ async def randomaudio(interaction, taglist: Optional[str] = None):
         else:
             await interaction.followup.send("No audios tagged [" + string + "] were found")
     else:
-        audio = random_audio(audio_choices)
-        # await interaction.followup.send(f"Here's a random audio!")
-        await interaction.followup.send(embed = audio.discord_post())
+        if february:
+            await interaction.followup.send(embed = wash_day.discord_post())
+        else:
+            audio = random_audio(audio_choices)
+            await interaction.followup.send(embed = audio.discord_post())
 @randomaudio.autocomplete('taglist')
 async def randomaudio_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
     canonical_matches = [app_commands.Choice(name=opt, value=opt) for opt in sorted_tag_list if current.lower() in opt.lower()][:25]
@@ -1526,16 +1534,19 @@ async def hydrate(interaction, victim: Optional[str] = ""):
     image = discord.File("esnupi.jpg")
 
     if len(victim) == 0:
-        if random_num == 0:
-            await interaction.followup.send(content = "Remember to hydrate, everyone!", file = image)
-        elif random_num == 1:
-            try:
-                await msg.forward(interaction.channel)
-                await interaction.followup.send("Remember to hydrate, everyone!")
-            except:
-                await interaction.followup.send(f"Remember to hydrate, everyone! {msg.jump_url}")
+        if datetime.datetime.now().month == 2:
+            await interaction.followup.send("We need some hydration & holleration in this dancery!")
         else:
-            await interaction.followup.send("Remember to hydrate, everyone!")
+            if random_num == 0:
+                await interaction.followup.send(content = "Remember to hydrate, everyone!", file = image)
+            elif random_num == 1:
+                try:
+                    await msg.forward(interaction.channel)
+                    await interaction.followup.send("Remember to hydrate, everyone!")
+                except:
+                    await interaction.followup.send(f"Remember to hydrate, everyone! {msg.jump_url}")
+            else:
+                await interaction.followup.send("Remember to hydrate, everyone!")
     else:
         if random_num == 0:
             await interaction.followup.send(content = f"Reminder to be a good girl and drink some water, {victim}!", file = image)
@@ -1983,6 +1994,13 @@ async def on_message(message):
 
     if message.author == taliya and message.content.startswith("!track"):
         await track_patrons()
+
+    global february
+    if message.author == taliya and message.content.startswith("!february"):
+        if february:
+            february = False
+        else:
+            february = True
 
     if message.content.startswith("!move") and message.channel.category_id == 1178075874906624140:
         mod = client.get_guild(GUILD).get_role(1239743183617790015)

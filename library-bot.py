@@ -650,6 +650,7 @@ async def randomaudio(interaction, taglist: Optional[str] = None):
             await interaction.followup.send("No audios tagged [" + string + "] were found")
     else:
         if february:
+            global wash_day
             await interaction.followup.send(embed = wash_day.discord_post())
         else:
             audio = random_audio(audio_choices)

@@ -2039,6 +2039,7 @@ async def on_member_update(before, after):
     if before.roles != after.roles:
         patron = client.get_guild(GUILD).get_role(1154619473773465610)
         not_patron = client.get_guild(GUILD).get_role(1417728496825794642)
+        libcard = client.get_guild(GUILD).get_role(1148454184824360990)
 
         if patron in after.roles and patron not in before.roles:
             timeout = client.get_guild(GUILD).get_role(1433367457506000957)

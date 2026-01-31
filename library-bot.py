@@ -2036,7 +2036,8 @@ async def on_guild_channel_create(channel):
 
 @client.event
 async def on_member_update(before, after):
-    if before.roles != after.roles and before.id != 832300007281131531:
+    timeout_ids = [832300007281131531]
+    if before.roles != after.roles and before.id not in timeout_ids:
         patron = client.get_guild(GUILD).get_role(1154619473773465610)
         not_patron = client.get_guild(GUILD).get_role(1417728496825794642)
         libcard = client.get_guild(GUILD).get_role(1148454184824360990)
@@ -2056,7 +2057,6 @@ async def on_member_update(before, after):
                 print(f'returning member {after.name} has closed DMs, welcome back message could not be sent')
 
 
-
         elif patron in before.roles and patron not in after.roles:
             await after.remove_roles(libcard, reason = "No longer an active Patron.")
             await after.add_roles(not_patron)
@@ -2067,22 +2067,18 @@ async def on_member_update(before, after):
 
         # elif not_patron in before.roles and not_patron in after.roles
 
-    if before.roles != after.roles and before.id == 832300007281131531:
+
+
+    if before.roles != after.roles and before.id in timeout_ids:
         patron = client.get_guild(GUILD).get_role(1154619473773465610)
         
         if patron in after.roles and patron not in before.roles:
             await after.remove_roles(patron, reason = "Access revoked.")
+            print(f"Access revoked for user {before.name}.")
 
             with open('audit-log.txt', 'a') as file:
                 now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")
                 file.write(f"[{now}] Access forcibly removed for User {after.id} ({after.name}). Roles updated from {[role.name for role in before.roles]} to {[role.name for role in after.roles]} \n")
-
-            # try: 
-            #     msg_text = "Your access permissions have been removed from the Vel's Library Discord server; please open a ticket through https://discord.com/channels/1148449914188218399/1192558831222411294 if you have questions."
-            #     await after.send(msg_text)
-            #     print(f"access message sent to {after.name}: {msg_text}")
-            # except:
-            #     print(f'returning member {after.name} has closed DMs, access message could not be sent')
 
 
 

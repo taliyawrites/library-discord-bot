@@ -2040,9 +2040,9 @@ async def on_member_update(before, after):
         patron = client.get_guild(GUILD).get_role(1154619473773465610)
         not_patron = client.get_guild(GUILD).get_role(1417728496825794642)
         libcard = client.get_guild(GUILD).get_role(1148454184824360990)
+        timeout = client.get_guild(GUILD).get_role(1433367457506000957)
 
         if patron in after.roles and patron not in before.roles:
-            timeout = client.get_guild(GUILD).get_role(1433367457506000957)
             if timeout not in before.roles:
                 await after.remove_roles(not_patron)
                 await after.add_roles(libcard, reason = "Patreon membership renewed.")
@@ -2065,7 +2065,8 @@ async def on_member_update(before, after):
 
         elif patron in before.roles and patron not in after.roles:
             await after.remove_roles(libcard, reason = "No longer an active Patron.")
-            await after.add_roles(not_patron)
+            if timeout not in before.roles:
+                await after.add_roles(not_patron)
 
             with open('audit-log.txt', 'a') as file:
                 now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")

@@ -2282,8 +2282,11 @@ async def announce_daily_audio():
         guild = client.get_guild(GUILD)
         channel = client.get_channel(GENERAL)
 
-        global daily_audio
-        daily_audio = audio_of_the_day()
+        global daily_audio, wash_day
+        if datetime.datetime.now().month == 2 and datetime.datetime.now().day == 10:
+            daily_audio = wash_day
+        else:
+            daily_audio = audio_of_the_day()
 
         if daily_audio is not None: 
             await channel.send(f"The audio of the day!")

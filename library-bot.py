@@ -1529,8 +1529,9 @@ async def treat(interaction, t: str):
 @app_commands.describe(victim = "@ whomever you'd like the bot to remind")
 async def hydrate(interaction, victim: Optional[str] = ""):
     await interaction.response.defer()
-    random_num = random.choice(range(0,4))
-    msg = client.get_channel(1158145318781714493).get_partial_message(1187442200980766940)
+    random_num = random.choice(range(0,6))
+    msg1 = client.get_channel(1158145318781714493).get_partial_message(1187442200980766940)
+    msg2 = client.get_channel(1194499430410371173).get_partial_message(1475573285046583336)
     esnupi = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQw4dIe87tpv0gK-1hTrDZHPYLowAY-uYj3FCLOKJwZNH6mb3YE9xzGCYGKv2YHTY-d6LM&usqp=CAU"
     image = discord.File("esnupi.jpg")
 
@@ -1542,10 +1543,16 @@ async def hydrate(interaction, victim: Optional[str] = ""):
                 await interaction.followup.send(content = "Remember to hydrate, everyone!", file = image)
             elif random_num == 1:
                 try:
-                    await msg.forward(interaction.channel)
+                    await msg1.forward(interaction.channel)
                     await interaction.followup.send("Remember to hydrate, everyone!")
                 except:
-                    await interaction.followup.send(f"Remember to hydrate, everyone! {msg.jump_url}")
+                    await interaction.followup.send(f"Remember to hydrate, everyone! {msg1.jump_url}")
+            elif random_num == 2:
+                try:
+                    await msg2.forward(interaction.channel)
+                    await interaction.followup.send("Remember to hydrate, everyone!")
+                except:
+                    await interaction.followup.send(f"Remember to hydrate, everyone! {msg2.jump_url}")
             else:
                 await interaction.followup.send("Remember to hydrate, everyone!")
     else:

@@ -852,6 +852,7 @@ async def character_autocomplete(interaction: discord.Interaction, current: str)
 @tree.command(name = "dsp", description = "Lists all audios Vel has posted to the DarkSidePlayground subreddit!")
 async def dsp(interaction):
     await interaction.response.defer()
+    dsp_list.sort(key = age_sort)
 
     count = len(dsp_list)
     link_string = ""

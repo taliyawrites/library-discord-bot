@@ -397,6 +397,12 @@ def write_data_lists():
     return all_characters, all_tags, all_collections, all_writers
 
 
+def get_dsp_audios(audios):
+    dsp_audios = []
+    for audio in audios: 
+        if "darksideplayground" in audio.link().lower():
+            dsp_audios.append(audio)
+    return(dsp_audios)
 
 
 
@@ -598,8 +604,9 @@ async def setup_hook():
     sorted_tag_list = read_from_file(TAGS_FILENAME)
     save_to_file(LIVETIMES_FILENAME,[live_time,twitch_time])
 
-    global all_characters, all_tags, all_collections, all_writers
+    global all_characters, all_tags, all_collections, all_writers, dsp_list
     all_characters, all_tags, all_collections, all_writers = write_data_lists()
+    dsp_list = get_dsp_audios(audio_choices)
 
 
     global voice_note_links, pippin_ids
@@ -823,7 +830,15 @@ async def character(interaction, character_name: str):
             link_string = link_string + next
 
         matches_embed = discord.Embed(title = name.capitalize() + " Audios",description=link_string)
-        await interaction.followup.send(embed = matches_embed)
+        try:
+            await interaction.followup.send(embed = matches_embed)
+        else:
+            match_embeds = msg_split(link_string,name.capitalize() + " Audios")
+            await interaction.followup.send(embed = match_embeds[0])
+            if len(match_embeds) > 1:
+                for embed in match_embeds[1:]:
+                    await interaction.channel.send(embed = embed)
+
         if name.lower() == "tex":
             await interaction.followup.send("Good luck, godspeed, and remember to hydrate, " + interaction.user.mention + "!")
 @character.autocomplete('character_name')
@@ -831,6 +846,27 @@ async def character_autocomplete(interaction: discord.Interaction, current: str)
     # options = ["Tex", "Max", "Sam", "Derek", "Finn", "Malachi", "Alastair", "Arwen", "Jason", "Dean", "Isaac", "Mike", "Asher", "Monsieur Dumas", "Charles", "Kel"]
     options = all_characters
     return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()][:25]
+
+
+
+@tree.command(name = "dsp", description = "Lists all audios Vel has posted to the DarkSidePlayground subreddit!")
+async def dsp(interaction):
+    await interaction.response.defer()
+
+    count = len(dsp_list)
+    link_string = ""
+    for in list(range(count)):
+        link_string = link_string + str(i+1) + ". [" + dsp_list[i].name() + "](" + dsp_list[i].link() + ")" + '\n'
+        try:
+            embed = discord.Embed(title = "DarkSidePlayground Audios", description=link_string)
+            await interaction.followup.send(embed = embed)
+        else:
+            embeds = msg_split(link_string, "DarkSidePlayground Audios")
+            await interaction.followup.send(embed = embeds[0])
+            if len(embeds) > 1:
+                for embed in embeds[1:]:
+                    await interaction.channel.send(embed = embed)
+
 
 
 

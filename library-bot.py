@@ -855,7 +855,7 @@ async def dsp(interaction):
 
     count = len(dsp_list)
     link_string = ""
-    for in list(range(count)):
+    for i in list(range(count)):
         link_string = link_string + str(i+1) + ". [" + dsp_list[i].name() + "](" + dsp_list[i].link() + ")" + '\n'
         try:
             embed = discord.Embed(title = "DarkSidePlayground Audios", description=link_string)

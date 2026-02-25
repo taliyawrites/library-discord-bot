@@ -832,7 +832,7 @@ async def character(interaction, character_name: str):
         matches_embed = discord.Embed(title = name.capitalize() + " Audios",description=link_string)
         try:
             await interaction.followup.send(embed = matches_embed)
-        else:
+        except:
             match_embeds = msg_split(link_string,name.capitalize() + " Audios")
             await interaction.followup.send(embed = match_embeds[0])
             if len(match_embeds) > 1:
@@ -860,7 +860,7 @@ async def dsp(interaction):
         try:
             embed = discord.Embed(title = "DarkSidePlayground Audios", description=link_string)
             await interaction.followup.send(embed = embed)
-        else:
+        except:
             embeds = msg_split(link_string, "DarkSidePlayground Audios")
             await interaction.followup.send(embed = embeds[0])
             if len(embeds) > 1:

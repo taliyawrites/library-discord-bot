@@ -854,16 +854,18 @@ async def dsp(interaction):
     await interaction.response.defer()
     dsp_list.sort(key = age_sort)
 
+    await interaction.followup.send("Here's a list of all the audios Vel has posted to [r/DarkSidePlayground](https://www.reddit.com/r/DarkSidePlayground/), a subreddit for content with darker themes and tags.")
+
     count = len(dsp_list)
     link_string = ""
     for i in list(range(count)):
         link_string = link_string + str(i+1) + ". [" + dsp_list[i].name() + "](" + dsp_list[i].link() + ")" + '\n'
     try:
         embed = discord.Embed(title = "DarkSidePlayground Audios", description=link_string)
-        await interaction.followup.send(embed = embed)
+        await interaction.channel.send(embed = embed)
     except:
         embeds = msg_split(link_string, "DarkSidePlayground Audios")
-        await interaction.followup.send(embed = embeds[0])
+        await interaction.channel.send(embed = embeds[0])
         if len(embeds) > 1:
             for embed in embeds[1:]:
                 await interaction.channel.send(embed = embed)

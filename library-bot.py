@@ -857,15 +857,15 @@ async def dsp(interaction):
     link_string = ""
     for i in list(range(count)):
         link_string = link_string + str(i+1) + ". [" + dsp_list[i].name() + "](" + dsp_list[i].link() + ")" + '\n'
-        try:
-            embed = discord.Embed(title = "DarkSidePlayground Audios", description=link_string)
-            await interaction.followup.send(embed = embed)
-        except:
-            embeds = msg_split(link_string, "DarkSidePlayground Audios")
-            await interaction.followup.send(embed = embeds[0])
-            if len(embeds) > 1:
-                for embed in embeds[1:]:
-                    await interaction.channel.send(embed = embed)
+    try:
+        embed = discord.Embed(title = "DarkSidePlayground Audios", description=link_string)
+        await interaction.followup.send(embed = embed)
+    except:
+        embeds = msg_split(link_string, "DarkSidePlayground Audios")
+        await interaction.followup.send(embed = embeds[0])
+        if len(embeds) > 1:
+            for embed in embeds[1:]:
+                await interaction.channel.send(embed = embed)
 
 
 

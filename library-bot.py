@@ -854,7 +854,7 @@ async def dsp(interaction):
     await interaction.response.defer()
     dsp_list.sort(key = age_sort)
 
-    await interaction.followup.send("Here's a list of all the audios Vel has posted to [r/DarkSidePlayground](https://www.reddit.com/r/DarkSidePlayground/), a subreddit for content with darker themes and tags.")
+    await interaction.followup.send("Here's a list of all the audios Vel has posted to [r/DarkSidePlayground](https://www.reddit.com/r/DarkSidePlayground/), a subreddit for content with darker/more intense themes and tags.")
 
     count = len(dsp_list)
     link_string = ""

@@ -2326,7 +2326,7 @@ async def announce_daily_audio():
         channel = client.get_channel(GENERAL)
 
         global daily_audio, wash_day
-        if datetime.datetime.now().month == 2 and datetime.datetime.now().day == 10:
+        if datetime.datetime.now().month == 2 and datetime.datetime.now().day == 28:
             daily_audio = wash_day
         else:
             daily_audio = audio_of_the_day()

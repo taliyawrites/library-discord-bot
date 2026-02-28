@@ -627,7 +627,9 @@ async def setup_hook():
     global wash_day, february
     february = False
     for audio in audio_choices:
-        if audio.recordID() == "recqeXgsB7icY36zg":
+        # if audio.recordID() == "recqeXgsB7icY36zg":
+        #     wash_day = audio
+        if audio.recordID() == "recOfwCnnZlT90l6N":
             wash_day = audio
 
 
@@ -2045,6 +2047,7 @@ async def on_message(message):
             february = False
         else:
             february = True
+            await taliya.send(embed = wash_day.discord_post())
 
     if message.content.startswith("!move") and message.channel.category_id == 1178075874906624140:
         mod = client.get_guild(GUILD).get_role(1239743183617790015)

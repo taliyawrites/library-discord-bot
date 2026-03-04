@@ -1599,7 +1599,7 @@ async def hydrate(interaction, victim: Optional[str] = ""):
                 await msg.forward(interaction.channel)
                 await interaction.followup.send(f"Reminder to be a good girl and drink some water, {victim}!")
             except:
-                await interaction.followup.send(f"Reminder to be a good girl and drink some water, {victim}! {msg.jump_url}")
+                await interaction.followup.send(f"Reminder to be a good girl and drink some water, {victim}! {msg1.jump_url}")
         else:
             await interaction.followup.send(f"Reminder to be a good girl and drink some water, {victim}!")
 
@@ -2045,12 +2045,6 @@ async def on_message(message):
             february = False
         else:
             february = True
-            this_one = None 
-            if datetime.datetime.now().month == 2 and datetime.datetime.now().day == 28:
-                for audio in audio_choices:
-                    if audio.recordID() == "recOfwCnnZlT90l6N":
-                        this_one = audio
-            await taliya.send(embed = this_one.discord_post())
 
     if message.content.startswith("!move") and message.channel.category_id == 1178075874906624140:
         mod = client.get_guild(GUILD).get_role(1239743183617790015)

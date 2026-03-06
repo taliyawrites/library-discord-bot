@@ -624,12 +624,6 @@ async def setup_hook():
     taliya = await client.fetch_user(1169014359842885726)
     vel = await client.fetch_user(1089053035377999912)
 
-    global wash_day, february
-    february = False
-    for audio in audio_choices:
-        if audio.recordID() == "recqeXgsB7icY36zg":
-            wash_day = audio
-
 
     await taliya.send(f"Card Catalog bot restarted successfully!")
     print(f"bot local time: {datetime.datetime.now().hour}h{datetime.datetime.now().minute}.")
@@ -656,12 +650,8 @@ async def randomaudio(interaction, taglist: Optional[str] = None):
         else:
             await interaction.followup.send("No audios tagged [" + string + "] were found")
     else:
-        if february:
-            global wash_day
-            await interaction.followup.send(embed = wash_day.discord_post())
-        else:
-            audio = random_audio(audio_choices)
-            await interaction.followup.send(embed = audio.discord_post())
+        audio = random_audio(audio_choices)
+        await interaction.followup.send(embed = audio.discord_post())
 @randomaudio.autocomplete('taglist')
 async def randomaudio_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
     canonical_matches = [app_commands.Choice(name=opt, value=opt) for opt in sorted_tag_list if current.lower() in opt.lower()][:25]
@@ -1572,34 +1562,37 @@ async def hydrate(interaction, victim: Optional[str] = ""):
     image = discord.File("esnupi.jpg")
 
     if len(victim) == 0:
-        if datetime.datetime.now().month == 2:
-            await interaction.followup.send("We need some hydration & holleration in this dancery!")
-        else:
-            if random_num == 0:
-                await interaction.followup.send(content = "Remember to hydrate, everyone!", file = image)
-            elif random_num == 1:
-                try:
-                    await msg1.forward(interaction.channel)
-                    await interaction.followup.send("Remember to hydrate, everyone!")
-                except:
-                    await interaction.followup.send(f"Remember to hydrate, everyone! {msg1.jump_url}")
-            elif random_num == 2:
-                try:
-                    await msg2.forward(interaction.channel)
-                    await interaction.followup.send("Remember to hydrate, everyone!")
-                except:
-                    await interaction.followup.send(f"Remember to hydrate, everyone! {msg2.jump_url}")
-            else:
+        if random_num == 0:
+            await interaction.followup.send(content = "Remember to hydrate, everyone!", file = image)
+        elif random_num == 1:
+            try:
+                await msg1.forward(interaction.channel)
                 await interaction.followup.send("Remember to hydrate, everyone!")
+            except:
+                await interaction.followup.send(f"Remember to hydrate, everyone! {msg1.jump_url}")
+        elif random_num == 2:
+            try:
+                await msg2.forward(interaction.channel)
+                await interaction.followup.send("Remember to hydrate, everyone!")
+            except:
+                await interaction.followup.send(f"Remember to hydrate, everyone! {msg2.jump_url}")
+        else:
+            await interaction.followup.send("Remember to hydrate, everyone!")
     else:
         if random_num == 0:
             await interaction.followup.send(content = f"Reminder to be a good girl and drink some water, {victim}!", file = image)
         elif random_num == 1:
             try:
-                await msg.forward(interaction.channel)
+                await msg1.forward(interaction.channel)
                 await interaction.followup.send(f"Reminder to be a good girl and drink some water, {victim}!")
             except:
                 await interaction.followup.send(f"Reminder to be a good girl and drink some water, {victim}! {msg1.jump_url}")
+        elif random_num == 2:
+            try:
+                await msg2.forward(interaction.channel)
+                await interaction.followup.send(f"Reminder to be a good girl and drink some water, {victim}!")
+            except:
+                await interaction.followup.send(f"Reminder to be a good girl and drink some water, {victim}! {msg2.jump_url}")
         else:
             await interaction.followup.send(f"Reminder to be a good girl and drink some water, {victim}!")
 
@@ -2039,12 +2032,6 @@ async def on_message(message):
     if message.author == taliya and message.content.startswith("!track"):
         await track_patrons()
 
-    global february
-    if message.author == taliya and message.content.startswith("!february"):
-        if february:
-            february = False
-        else:
-            february = True
 
     if message.content.startswith("!move") and message.channel.category_id == 1178075874906624140:
         mod = client.get_guild(GUILD).get_role(1239743183617790015)
@@ -2326,12 +2313,7 @@ async def announce_daily_audio():
         channel = client.get_channel(GENERAL)
 
         global daily_audio
-        if datetime.datetime.now().month == 2 and datetime.datetime.now().day == 28:
-            for audio in audio_choices:
-                if audio.recordID() == "recOfwCnnZlT90l6N":
-                    daily_audio = audio
-        else:
-            daily_audio = audio_of_the_day()
+        daily_audio = audio_of_the_day()
 
         if daily_audio is not None: 
             await channel.send(f"The audio of the day!")
@@ -2415,9 +2397,12 @@ async def choose_good_girl():
         winners = random.sample(options, 10)
         global cum_permission_ids
         cum_permission_ids  = [user.id for user in winners]
-        if datetime.datetime.now().month == 12 and datetime.datetime.now().day == 25:
-            cum_permission_ids.insert(0,1336919243735826533)
-        print(f"daily permissions assigned to: {winners[0].display_name}, {winners[1].display_name}, {winners[2].display_name}, {winners[3].display_name}, {winners[4].display_name}, and {winners[5].display_name}")
+        # if datetime.datetime.now().month == 12 and datetime.datetime.now().day == 25:
+        #     cum_permission_ids.insert(0,1336919243735826533)
+        permissions_string = "daily permissions assigned to: "
+        for winner in winners:
+            permissions_string += winner.display_name + ", "
+        print(permissions_string)
         save_to_file(RECORD_FILENAME,[str(ids) for ids in cum_permission_ids])
     except:
         await taliya.send("Error in good girl of the day anouncement.")

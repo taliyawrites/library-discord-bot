@@ -901,11 +901,19 @@ async def character_autocomplete(interaction: discord.Interaction, current: str)
 async def collection(interaction, name: str):
     await interaction.response.defer()
     collection = None
+    match_collection = None
     for coll in collections:
         if name.strip() == coll[0].strip():
             collection = coll
             break
+        elif name.strip() in coll[0].strip():
+            match_collection = coll
+
     if collection is not None:
+        coll_embed = discord.Embed(title = collection[0], url = collection[1], description = collection[2])
+        await interaction.followup.send(embed = coll_embed)
+    elif match_collection is not None:
+        collection = match_collection
         coll_embed = discord.Embed(title = collection[0], url = collection[1], description = collection[2])
         await interaction.followup.send(embed = coll_embed)
     else:

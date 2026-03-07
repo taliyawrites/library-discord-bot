@@ -903,10 +903,10 @@ async def collection(interaction, name: str):
     collection = None
     match_collection = None
     for coll in collections:
-        if name.strip() == coll[0].strip():
+        if name.strip().lower() == coll[0].strip().lower():
             collection = coll
             break
-        elif name.strip() in coll[0].strip():
+        elif name.strip().lower() in coll[0].strip().lower():
             match_collection = coll
 
     if collection is not None:

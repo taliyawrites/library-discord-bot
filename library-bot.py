@@ -2208,9 +2208,7 @@ async def run_daily_loops():
             bot_channel = client.get_channel(GENERAL)
             await bot_channel.send("Reminder that we have the following threads you can join!")
             await list_threads(bot_channel)
-    elif (datetime.datetime.now().hour in REMINDER_HOURS and datetime.datetime.now().minute == 0):
-        await reminder_pings()
-    elif (datetime.datetime.now().minute in [0,1,2,3,4,5]):
+    elif (datetime.datetime.now().minute in [2,3,4,5,6,7]):
         await reminder_pings_test()
     elif rerun_daily and rerun_gg:
         await taliya.send("Re-running audio of the day.")
@@ -2231,6 +2229,9 @@ async def run_daily_loops():
         await taliya.send("Re-running birthday wishes.")
         rerun_birthdays = False
         await birthday_wishes()
+
+    if (datetime.datetime.now().hour in REMINDER_HOURS and datetime.datetime.now().minute == 0):
+        await reminder_pings()
 
     global event_times
     for event in event_times:
@@ -2482,13 +2483,13 @@ async def birthday_wishes():
 async def reminder_pings():
     ping_id = role_dictionary[datetime.datetime.now().hour]
     ping_role = client.get_guild(GUILD).get_role(ping_id)
-    await client.get_channel(1489744967940440285).send(f"Reminder to take your meds, {ping_id.mention}!")
+    await client.get_channel(1489744967940440285).send(f"Reminder to take your meds, {ping_role.mention}!")
 
 async def reminder_pings_test():
-    hour_value = REMINDER_HOURS[datetime.datetime.now().minute]
+    hour_value = REMINDER_HOURS[-2+datetime.datetime.now().minute]
     ping_id = role_dictionary[hour_value]
     ping_role = client.get_guild(GUILD).get_role(ping_id)
-    await client.get_channel(1489744967940440285).send(f"Reminder to take your meds, {ping_id.mention}!")
+    await client.get_channel(1489744967940440285).send(f"Reminder to take your meds, {ping_role.mention}!")
 
 
 

@@ -625,7 +625,6 @@ async def setup_hook():
     role_dictionary = dict()
     for index in range(0,6):
         role_dictionary[REMINDER_HOURS[index]] = role_ids[index]
-    print(role_dictionary[4])
 
 
     # set all daily tasks running
@@ -2208,8 +2207,6 @@ async def run_daily_loops():
             bot_channel = client.get_channel(GENERAL)
             await bot_channel.send("Reminder that we have the following threads you can join!")
             await list_threads(bot_channel)
-    elif (datetime.datetime.now().minute in [3,4,5,6,7,8]):
-        await reminder_pings_test()
     elif rerun_daily and rerun_gg:
         await taliya.send("Re-running audio of the day.")
         rerun_daily = False
@@ -2482,12 +2479,6 @@ async def birthday_wishes():
 
 async def reminder_pings():
     ping_id = role_dictionary[datetime.datetime.now().hour]
-    ping_role = client.get_guild(GUILD).get_role(ping_id)
-    await client.get_channel(1489744967940440285).send(f"Reminder to take your meds, {ping_role.mention}!")
-
-async def reminder_pings_test():
-    hour_value = REMINDER_HOURS[-3+datetime.datetime.now().minute]
-    ping_id = role_dictionary[hour_value]
     ping_role = client.get_guild(GUILD).get_role(ping_id)
     await client.get_channel(1489744967940440285).send(f"Reminder to take your meds, {ping_role.mention}!")
 

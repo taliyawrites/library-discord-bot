@@ -1670,6 +1670,13 @@ async def birthdayremove(interaction):
     await interaction.followup.send("Your birthday has been removed.")
 
 
+@tree.command(name = "reminders", description = "Sign up for reminders with the bot!")
+async def reminders(interaction):
+    await interaction.response.defer()
+    info_string = "You can sign up for daily reminder notifications using the bot by assigning yourself roles in <id:customize>. The times are listed there in ET, but you can see here how those translate to your local timezone! \n- Role A gets reminders at midnight ET (<t:1775275200:t>) \n- Role B gets reminders at at  4 AM ET (<t:1775203200:t>) \n- Role C gets reminders at at 8 AM ET (<t:1775217600:t>) \n- Role D gets reminders at at noon ET (<t:1775232000:t>) \n- Role E gets reminders at at 4 PM ET (<t:1775246400:t>) \n- Role F gets reminders at at 8 PM ET (<t:1775260800:t>)"
+    await interaction.followup.send(info_string)
+
+
 
 @tree.command(name = "tierlist", description = "Links to Vel's official tier list of all his audios!")
 async def tierlist(interaction):

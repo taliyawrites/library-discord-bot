@@ -56,10 +56,12 @@ EVENTS_FILENAME = "event-schedule.json"
 TAGS_FILENAME = "updatedtags.txt"
 PIPPIN_FILENAME = "pippin-pics.txt"
 GULL_FILENAME = "abode.txt"
+THREADS_FILENAME = "threads-list.txt"
 
 # run daily tasks at 1pm eastern time (6pm UTC+1)
 HOUR, MINUTE = 17, 0
 MIDNIGHT = 4
+REMINDER_HOURS = [4, 8, 12, 16, 20, 0]
 
 
 
@@ -612,8 +614,19 @@ async def setup_hook():
     global voice_note_links, pippin_ids
     voice_note_links = read_from_file(ARCHIVE_FILENAME)
     pippin_ids = read_from_file(PIPPIN_FILENAME)
+    # global all_threads
+    # all_threads = read_from_file(THREADS_FILENAME)
     global rerun_gg, rerun_daily, rerun_birthdays
     rerun_gg, rerun_daily, rerun_birthdays = False, False, False
+
+
+    global role_dictionary
+    role_ids = [1489739337020080248, 1489739431748567212, 1489739458633924639, 1489739481744674960, 1489739511448604802, 1489739535557591232]
+    role_dictionary = dict()
+    for index in range(0,6):
+        role_dictionary[REMINDER_HOURS[index]] = role_ids[index]
+    print(role_dictionary[4])
+
 
     # set all daily tasks running
     if not run_daily_loops.is_running():
@@ -1342,6 +1355,17 @@ async def list_threads(channel):
     for msg in msg_list:
         await channel.send(msg)
 
+# async def list_threads(channel):
+#     link_string = ""
+#     for url in all_threads:
+#         link_string = link_string + "- " + url + "\n"
+#     msg_list = msg_split(link_string, "Matching Results", False)
+#     for msg in msg_list:
+#         await channel.send(msg)
+
+
+
+
 
 
 @tree.command(name = "rules", description = "Rules and etiquette for live recordings!")
@@ -2069,6 +2093,12 @@ async def on_guild_channel_create(channel):
             await asyncio.sleep(0.5)
             await channel.send(f"Thank you for opening a ticket! **Please let us know what we can help you with.** If you're reporting an incident or raising a concern, it helps us to have as much information as possible, so feel free to include as much as you remember and are comfortable sharing (for instance, it's helpful and completely allowed to name names of the relevant folks involved, include screenshots, or type out specific quotes you can recall). The more specific you are, the more quickly we can address the issue and help everyone involved! \n\nFor your privacy, everything discussed in this ticket is 100% confidential and only ever discussed with other moderators. If we need to ask other people questions about their involvement, we will get your permission first, and also do our best to keep your role in this anonymous! Finally, if your issue concerns the actions of a moderator and you do not feel comfortable with them being present in the channel while you discuss it, this can absolutely be arranged, just say the word. \n\n**Once you ask your question, make your suggestion, or tell us about the issue/concern,** a member of our {staff_role.mention} will respond to help!")
 
+# @client.event
+# async def on_thread_create(thread):
+#     perms = thread.permissions_for(client.get_guild(GUILD).get_role(1154619473773465610))
+#     if perms.send_messages and not thread.locked and not thread.is_private():
+#         all_threads.append(thread.jump_url)
+#     save_to_file(THREADS_FILENAME,all_threads)
 
 
 
@@ -2178,6 +2208,10 @@ async def run_daily_loops():
             bot_channel = client.get_channel(GENERAL)
             await bot_channel.send("Reminder that we have the following threads you can join!")
             await list_threads(bot_channel)
+    elif (datetime.datetime.now().hour in REMINDER_HOURS and datetime.datetime.now().minute == 0):
+        await reminder_pings()
+    elif (datetime.datetime.now().minute in [0,1,2,3,4,5]):
+        await reminder_pings_test()
     elif rerun_daily and rerun_gg:
         await taliya.send("Re-running audio of the day.")
         rerun_daily = False
@@ -2445,7 +2479,16 @@ async def birthday_wishes():
         await taliya.send("Error in daily birthday anouncements.")
 
 
+async def reminder_pings():
+    ping_id = role_dictionary[datetime.datetime.now().hour]
+    ping_role = client.get_guild(GUILD).get_role(ping_id)
+    await client.get_channel(1489744967940440285).send(f"Reminder to take your meds, {ping_id.mention}!")
 
+async def reminder_pings_test():
+    hour_value = REMINDER_HOURS[datetime.datetime.now().minute]
+    ping_id = role_dictionary[hour_value]
+    ping_role = client.get_guild(GUILD).get_role(ping_id)
+    await client.get_channel(1489744967940440285).send(f"Reminder to take your meds, {ping_id.mention}!")
 
 
 

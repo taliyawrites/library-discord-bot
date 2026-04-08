@@ -1677,7 +1677,7 @@ async def birthdayremove(interaction):
 @tree.command(name = "reminders", description = "Sign up for reminders with the bot!")
 async def reminders(interaction):
     await interaction.response.defer()
-    info_string = "You can sign up for daily reminder notifications in the https://discord.com/channels/1148449914188218399/1489744967940440285 by assigning yourself roles in <id:customize>. The times are listed there in ET, but you can see here how those translate to your local timezone! \n- :regional_indicator_a: for reminders at midnight ET (<t:1775275200:t>) \n- :regional_indicator_b: for reminders at at  4 AM ET (<t:1775203200:t>) \n- :regional_indicator_c: for reminders at at 8 AM ET (<t:1775217600:t>) \n- :regional_indicator_d: for reminders at at noon ET (<t:1775232000:t>) \n- :regional_indicator_e: for reminders at at 4 PM ET (<t:1775246400:t>) \n- :regional_indicator_f: for reminders at at 8 PM ET (<t:1775260800:t>) \nNote that you may choose multiple options if you wish! You can opt-out of these notifications at any time by simply de-selecting the option(s) on that same page."
+    info_string = "You can sign up for daily reminder notifications by assigning yourself roles in <id:customize>. The times are listed there in ET, but you can see here how those translate to your local timezone! \n- :regional_indicator_a: for reminders at midnight ET (<t:1775275200:t>) \n- :regional_indicator_b: for reminders at at  4 AM ET (<t:1775203200:t>) \n- :regional_indicator_c: for reminders at at 8 AM ET (<t:1775217600:t>) \n- :regional_indicator_d: for reminders at at noon ET (<t:1775232000:t>) \n- :regional_indicator_e: for reminders at at 4 PM ET (<t:1775246400:t>) \n- :regional_indicator_f: for reminders at at 8 PM ET (<t:1775260800:t>) \nNote that you may choose multiple options if you wish! You can opt-out of these notifications at any time by simply de-selecting the option(s) on that same page."
     await interaction.followup.send(info_string)
 
 
@@ -2491,7 +2491,7 @@ async def birthday_wishes():
 async def reminder_pings():
     ping_id = role_dictionary[datetime.datetime.now().hour]
     ping_role = client.get_guild(GUILD).get_role(ping_id)
-    await client.get_channel(1489744967940440285).send(f"Reminder to take your meds, {ping_role.mention}!")
+    await client.get_channel(1491574892695523328).send(f"Pspspsps {ping_role_mention}, have you taken your meds? Eaten yet? Hydrated recently?")
 
 
 

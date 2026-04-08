@@ -2084,6 +2084,9 @@ async def on_message(message):
         del_msg = "Hi! I'm Del, one of the mods. We're happy to have you! \n\nIf you have a chance, we have some great info on the server in <#1366039740301840405> and <#1365495051676946505>.  <#1419427817380122664> explains all the channels we have! \n\nYou can find very hot photos of Vel in <#1363958978253557820> that he posts in <#1194499430410371173> along with past voice notes (VNs) that he's posted in <#1363978490436780214>.\n\nIf you have any questions, don't hesitate to ping or ask. <3"
         await message.channel.send(del_msg)
 
+    if message.content.startswith("!purgereminders") and message.author == taliya:
+        await client.get_channel(1491574892695523328).purge(check = lambda m : not m.pinned)
+
     
 
 
@@ -2218,6 +2221,7 @@ async def run_daily_loops():
             bot_channel = client.get_channel(GENERAL)
             await bot_channel.send("Reminder that we have the following threads you can join!")
             await list_threads(bot_channel)
+            await client.get_channel(1491574892695523328).purge(check = lambda m : not m.pinned)
     elif rerun_daily and rerun_gg:
         await taliya.send("Re-running audio of the day.")
         rerun_daily = False

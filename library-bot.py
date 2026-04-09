@@ -2496,7 +2496,7 @@ async def birthday_wishes():
 async def reminder_pings():
     ping_id = role_dictionary[datetime.datetime.now().hour]
     ping_role = client.get_guild(GUILD).get_role(ping_id)
-    await client.get_channel(1491574892695523328).send(f"Pspspsps {ping_role_mention}, have you taken your meds? Eaten yet? Hydrated recently?")
+    await client.get_channel(1491574892695523328).send(f"Pspspsps {ping_role.mention}, have you taken your meds? Eaten yet? Hydrated recently?")
 
 
 

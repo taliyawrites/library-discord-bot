@@ -2484,7 +2484,7 @@ async def birthday_wishes():
                 user = client.get_guild(GUILD).get_member(entry[0])
                 todays.append(user.mention)
             else:
-                print(f'user {entry[0]} ({client.get_user(entry[0]).name}) no longer in server/no longer active patreon sub')
+                print(f'user {entry[0]} no longer in server/no longer active patreon sub')
 
     for birthday_girl in todays:
         await client.get_channel(BIRTHDAY_CHANNEL).send("Happy birthday, " + birthday_girl + "!")

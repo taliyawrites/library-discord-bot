@@ -2476,21 +2476,18 @@ async def daily_balatro():
 
 # wishes people a happy birthday!
 async def birthday_wishes():
-    try:
-        await client.get_channel(BIRTHDAY_CHANNEL).purge(check = lambda m : not((len(m.embeds) != 0) and (m.author == client.user)))
-        todays = []
-        for entry in birthdays:
-            if datetime.datetime.now().month == entry[1] and datetime.datetime.now().day == entry[2]:
-                if active_member(entry[0]):
-                    user = client.get_guild(GUILD).get_member(entry[0])
-                    todays.append(user.mention)
-                else:
-                    print(f'user {entry[0]} ({client.get_user(entry[0]).name}) no longer in server/no longer active patreon sub')
+    await client.get_channel(BIRTHDAY_CHANNEL).purge(check = lambda m : not((len(m.embeds) != 0) and (m.author == client.user)))
+    todays = []
+    for entry in birthdays:
+        if datetime.datetime.now().month == entry[1] and datetime.datetime.now().day == entry[2]:
+            if active_member(entry[0]):
+                user = client.get_guild(GUILD).get_member(entry[0])
+                todays.append(user.mention)
+            else:
+                print(f'user {entry[0]} ({client.get_user(entry[0]).name}) no longer in server/no longer active patreon sub')
 
-        for birthday_girl in todays:
-            await client.get_channel(BIRTHDAY_CHANNEL).send("Happy birthday, " + birthday_girl + "!")
-    except:
-        await taliya.send("Error in daily birthday anouncements.")
+    for birthday_girl in todays:
+        await client.get_channel(BIRTHDAY_CHANNEL).send("Happy birthday, " + birthday_girl + "!")
 
 
 async def reminder_pings():

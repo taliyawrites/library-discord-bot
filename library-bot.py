@@ -2221,8 +2221,6 @@ async def run_daily_loops():
             bot_channel = client.get_channel(GENERAL)
             await bot_channel.send("Reminder that we have the following threads you can join!")
             await list_threads(bot_channel)
-            await client.get_channel(1491574892695523328).purge(check = lambda m : not m.pinned)
-            print("reminders channel cleared")
     elif rerun_daily and rerun_gg:
         await taliya.send("Re-running audio of the day.")
         rerun_daily = False

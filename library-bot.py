@@ -1980,13 +1980,16 @@ async def botsend_error(interaction, error):
 @app_commands.allowed_installs(guilds=True, users=False)
 async def delittle(interaction, taglist : str):
     await interaction.response.defer()
-    newlist = taglist[0]
-    for i in range(1,len(taglist)):
-        if taglist[-1+i] == "[" or taglist[-1+i] == " " or taglist[-1+i] == "-":
-            newlist += taglist[i].capitalize()
-        else:
-            newlist += taglist[i]
-    await interaction.followup.send(newlist)
+    if "[" in taglist and "]" in taglist:
+        newlist = taglist[0]
+        for i in range(1,len(taglist)):
+            if taglist[-1+i] == "[" or taglist[-1+i] == " " or taglist[-1+i] == "-":
+                newlist += taglist[i].capitalize()
+            else:
+                newlist += taglist[i]
+        await interaction.followup.send(newlist)
+    else:
+        await interaction.followup.send(taglist.capitalize())
 
 
 

@@ -1987,9 +1987,14 @@ async def delittle(interaction, taglist : str):
                 newlist += taglist[i].capitalize()
             else:
                 newlist += taglist[i]
-        await interaction.followup.send(newlist)
     else:
-        await interaction.followup.send(taglist.capitalize())
+        newlist = taglist[0].capitalize() + taglist[1]
+        for i in range(2,len(taglist)):
+            if taglist[-2+i] == "." and taglist[-1+i] == " ":
+                newlist += taglist[i].capitalize()
+            else:
+                newlist += taglist[i]
+    await interaction.followup.send(newlist)
 
 
 

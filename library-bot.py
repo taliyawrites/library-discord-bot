@@ -1962,7 +1962,6 @@ async def status_error(interaction, error):
 
 
 @tree.command(name = "botsend", description = "makes the bot send a specified message in given channel", guild = discord.Object(COMMAND_SERVER))
-@app_commands.check(lambda u: u.user == taliya)
 @app_commands.allowed_installs(guilds=True, users=False)
 async def botsend(interaction, channel_id: str, message: str, paragraph: Optional[str] = ""):
     await interaction.response.defer()
@@ -1974,6 +1973,24 @@ async def botsend(interaction, channel_id: str, message: str, paragraph: Optiona
 @botsend.error
 async def botsend_error(interaction, error):
     await interaction.response.send_message("Permissions denied.")
+
+
+
+@tree.command(name = "delittle", description = "capitalizes a string of words and tags", guild = discord.Object(COMMAND_SERVER))
+@app_commands.allowed_installs(guilds=True, users=False)
+async def delittle(interaction, taglist : str):
+    await interaction.response.defer()
+    newlist = taglist[0]
+    for i in range(1,len(taglist)):
+        if taglist[-1+i] == "[" or taglist[-1+i] == " ":
+            newlist += taglist[i].capitalize()
+        else:
+            newlist += taglist[i]
+    await interaction.followup.send(newlist)
+
+
+
+
 
 
 @tree.command(name = "mod_embed", guild = discord.Object(COMMAND_SERVER))

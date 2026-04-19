@@ -1765,7 +1765,7 @@ async def gull(interaction):
 @app_commands.describe(record = "From the record ID field on the masterlist!")
 async def updatetags(interaction, record : str, tags : str, mode : str, petnames: Optional[str] = "", fourthwallbreak: Optional[str] = "no"):
     await interaction.response.defer()
-    allowed_users = [1185405398883258369, 490759913757212672, 1169014359842885726, 1089053035377999912]
+    allowed_users = [1185405398883258369, 490759913757212672, 1169014359842885726, 1089053035377999912, 1291121211643793449]
 
     if interaction.user.id not in allowed_users:
         await interaction.followup.send("Sorry, you do not have access to this command! The team behind the masterlist uses this to update tags quickly and efficiently, but unfortunately it can't be hidden from the full list of commands. You might have been looking for the `/tag` command to search for an audio by its tags.")

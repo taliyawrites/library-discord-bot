@@ -883,7 +883,7 @@ async def scriptwriter(interaction, writer: str):
     name = writer.lower().strip()
     matches = []
 
-    if 'vel' in name:
+    if 'vel' in name and 'emilia' not in name:
         await interaction.followup.send("Too many results to display (every audio that isn't a script fill is original Vel improv!).")
     else: 
         for audio in audio_choices:

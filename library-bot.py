@@ -1846,7 +1846,10 @@ def canonify_tags(raw_tags):
                 if opt in audio_tags:
                     count += 1
             if count == 0:
-                warnings += "Please add either " + " or ".join(flagged[tag])  + " for " + tag + " if appropriate!\n"
+                warnings += "Remember to add " + " or ".join(flagged[tag])  + " if appropriate!\n"
+
+    if "mdom" not in audio_tags and "msub" not in audio_tags and "switch" not in audio_tags and "vanilla" not in audio_tags:
+        warnings += "Consider adding a tag for relevant power dynamics if any are present! ([mdom], [msub], [switch])"
 
     return audio_tags, warnings
 

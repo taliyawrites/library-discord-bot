@@ -1799,15 +1799,21 @@ async def updatetags(interaction, record : str, tags : str, mode : str, petnames
                     this_audio = entry
         title = this_audio.name()
 
-        corrected_string, warnings = canonify_tags(tags)
+
+        if mode == "complete tags":
+            corrected_string, warnings = canonify_tags(tags)
+        elif mode == "extra tags":
+            current_tags = this_audio.tag_string()[:-1]
+            corrected_string, warnings = canonify_tags(tags + current_tags)
+        else:
+            warnings = ""
+
 
         if mode == "complete tags":
             await interaction.followup.send(f'Tags for "{title}" (Record ID: {record}) written in canonical form as: {corrected_string}', view = TagButton(tags = corrected_string, audioID = record, names = petnames, wallbreak = fourthwallbreak, tagQ = True))
             # mark_as_tagged(record)
         elif mode == "extra tags":
-            current_tags = this_audio.tag_string()[:-1]
-            all_tags = current_tags.strip() + " " + corrected_string
-            await interaction.followup.send(f'Adding tags to "{title}" (Record ID: {record}) written in canonical form as: {corrected_string}', view = TagButton(tags = all_tags, audioID = record, names = petnames, wallbreak = fourthwallbreak, tagQ = False))
+            await interaction.followup.send(f'Adding tags to "{title}" (Record ID: {record}) written in canonical form as: {corrected_string}', view = TagButton(tags = corrected_string, audioID = record, names = petnames, wallbreak = fourthwallbreak, tagQ = False))
         elif mode == "petnames only":
             current_tags = this_audio.tag_string()[:-1].strip()
             await interaction.followup.send(f'Adding petnames to "{title}" (Record ID: {record}): {petnames}', view = TagButton(tags = current_tags, audioID = record, names = petnames, wallbreak = fourthwallbreak, tagQ = False))

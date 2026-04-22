@@ -1804,9 +1804,9 @@ async def updatetags(interaction, record : str, tags : str, mode : str, petnames
             corrected_string, warnings = canonify_tags(tags)
         elif mode == "extra tags":
             current_tags = this_audio.tag_string()[:-1]
-            if tags[-1] != " ":
-                tags += " "
-            corrected_string, warnings = canonify_tags(tags + current_tags)
+            if current_tags[-1] != " ":
+                current_tags += " "
+            corrected_string, warnings = canonify_tags(current_tags + tags)
         else:
             warnings = ""
 
@@ -1890,8 +1890,9 @@ def push_masterlist_update(interaction, audioID, tags, petnames, wallbreak, tagQ
 async def addaudio(interaction, url : str, title : str, tags : str, description : str, exclusive : str, date : str, duration : str, scriptwriter: Optional[str] = "Vel", series: Optional[str] = "",   character : Optional[str] = ""):
     await interaction.response.defer()
 
-    corrected = get_tags(tags.lower().replace("’","'").strip())
-    corrected_tags = "[" + '] ['.join(corrected) + "]"
+    # corrected = get_tags(tags.lower().replace("’","'").strip())
+    # corrected_tags = "[" + '] ['.join(corrected) + "]"
+    corrected_tags, warnings = canonify_tags(tags + " [further tags needed]")
 
     table = airtable_api.table('apprrNWlCwDHYj4wW', 'tblqwSpe5CdMuWHW6')
     record = table.create({"Title": title, "Tags": corrected_tags, "Post Link": url,"Description": description,"Scriptwriter": scriptwriter,"General Date": "2026-" + date, "Duration": duration_string(duration), "Series Name (if applicable)": series, "Public/Patreon": exclusive, "Recurring Characters": character})

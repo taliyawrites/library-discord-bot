@@ -1804,6 +1804,8 @@ async def updatetags(interaction, record : str, tags : str, mode : str, petnames
             corrected_string, warnings = canonify_tags(tags)
         elif mode == "extra tags":
             current_tags = this_audio.tag_string()[:-1]
+            if tags[-1] != " ":
+                tags += " "
             corrected_string, warnings = canonify_tags(tags + current_tags)
         else:
             warnings = ""

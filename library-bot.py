@@ -361,6 +361,29 @@ def import_tag_dictionary():
 
     return dictionary
 
+def import_pairs():
+    table = airtable_api.table('appeb72XP6YJzGRyY', 'tblmAslJSIAbQHIuI')
+
+    dictionary = dict()
+    specific_flags = dict()
+    for entry in table.all():
+        fields = list(entry.items())[2][1]
+        data = list(fields.items())
+        specific_tag = "[" + data[0][1].strip() + "]"
+        general_tag = "[" + data[1][1].strip() + "]"
+        dictionary[specific_tag] = general_tag
+
+        check = data[2][1]
+        if check == "Yes":
+            if general_tag in specific_flags:
+                current = specific_flags[general_tag]
+                specific_flags[general_tag] = current + [specific_tag]
+            else:
+                specific_flags[general_tag] = [specific_tag]
+
+    return dictionary, specific_flags
+
+
 def import_collections():
     table = airtable_api.table('appeb72XP6YJzGRyY', 'tblphntbN1NGnEpEr')
     collections = []
@@ -581,11 +604,12 @@ async def setup_hook():
 
 
     # import data from airtable
-    global audio_choices, tag_dictionary, collections, sorted_tag_list
+    global audio_choices, tag_dictionary, collections, sorted_tag_list, paired_tags, flagged
     sorted_tag_list = read_from_file(TAGS_FILENAME)
     audio_choices = import_airtable_data()
     tag_dictionary = import_tag_dictionary()
     collections = import_collections()
+    paired_tags, flagged = import_pairs()
     print("data pulled from airtable")
 
 
@@ -1775,8 +1799,7 @@ async def updatetags(interaction, record : str, tags : str, mode : str, petnames
                     this_audio = entry
         title = this_audio.name()
 
-        corrected_tags = get_tags(tags.lower().replace("’","'").strip())
-        corrected_string = "[" + '] ['.join(corrected_tags) + "]"
+        corrected_string, warnings = canonify_tags(tags)
 
         if mode == "complete tags":
             await interaction.followup.send(f'Tags for "{title}" (Record ID: {record}) written in canonical form as: {corrected_string}', view = TagButton(tags = corrected_string, audioID = record, names = petnames, wallbreak = fourthwallbreak, tagQ = True))
@@ -1793,6 +1816,10 @@ async def updatetags(interaction, record : str, tags : str, mode : str, petnames
             await interaction.followup.send(f'Updating fourth wall break for "{title}" (Record ID: {record}): {fourthwallbreak}', view = TagButton(tags = current_tags, audioID = record, names = petnames, wallbreak = fourthwallbreak, tagQ = False))
         else: 
             await interaction.followup.send("Invalid choice for mode.")
+
+        if len(warnings) > 0:
+            await interaction.followup.send(warnings)
+            
 @updatetags.autocomplete('mode')
 async def updatetags_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
     options = ["complete tags","extra tags","petnames only","fourth wall break only"]
@@ -1801,6 +1828,27 @@ async def updatetags_autocomplete(interaction: discord.Interaction, current: str
 async def updatetags_autocomplete_2(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
     options = ["yes","no"]
     return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]
+
+
+def canonify_tags(raw_tags):
+    corrected_tags = get_tags(raw_tags.lower().replace("’","'").strip())
+    audio_tags = "[" + '] ['.join(corrected_tags) + "]"
+
+    for tag in list(paired_tags.keys()):
+        if tag in audio_tags and paired_tags[tag] not in audio_tags:
+            audio_tags = audio_tags.replace(tag, paired_tags[tag] + " " + tag)
+
+    warnings = "" 
+    for tag in list(flagged.keys()):
+        if tag in audio_tags:
+            count = 0
+            for opt in flagged[tag]:
+                if opt in audio_tags:
+                    count += 1
+            if count == 0:
+                warnings += "Please add either " + " or ".join(flagged[tag])  + " for " + tag + " if appropriate!\n"
+
+    return audio_tags, warnings
 
 
 def push_masterlist_update(interaction, audioID, tags, petnames, wallbreak, tagQ):
@@ -1822,11 +1870,7 @@ def push_masterlist_update(interaction, audioID, tags, petnames, wallbreak, tagQ
         if entry.recordID() == audioID:
             return entry
 
-# def mark_as_tagged(audioID):
-#     global audio_choices
-#     table = airtable_api.table('apprrNWlCwDHYj4wW', 'tblqwSpe5CdMuWHW6')
-#     table.update(audioID, {"Tagged?" : True})
-#     audio_choices = import_airtable_data()
+
 
 
 

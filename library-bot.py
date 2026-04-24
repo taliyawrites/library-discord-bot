@@ -272,7 +272,7 @@ def age_sort(audio):
 def title_matches(phrase):
     matching = []
     for audio in audio_choices:
-        if phrase.lower() in audio.name().lower():
+        if phrase.lower() in audio.name().lower().replace("&","and"):
             matching.append(audio)
     matching.sort(key = age_sort)
     return matching
@@ -291,7 +291,7 @@ def inexact_matches(phrase):
     for audio in audio_choices:
         overlap = 0
         for word in search_words:
-            if word in audio.name().lower():
+            if word in audio.name().lower().replace("&","and"):
                 overlap += 1
         if overlap > 0:
             matching.append(audio)
@@ -709,7 +709,7 @@ async def randomaudio_autocomplete(interaction: discord.Interaction, current: st
 @app_commands.describe(title_phrase="any words or phrases from the audio's title that you remember")
 async def title(interaction, title_phrase: str):
     await interaction.response.defer()
-    phrase = title_phrase.lower().replace("’","'").replace('“','"').replace('”','"').replace("‘","'").strip()
+    phrase = title_phrase.lower().replace("’","'").replace('“','"').replace('”','"').replace("‘","'").replace("&","and").strip()
     if phrase[0] == '"' or phrase[0] == "'":
         phrase = phrase[1:-1]
     phrase = phrase.strip()

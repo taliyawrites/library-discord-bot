@@ -272,7 +272,7 @@ def age_sort(audio):
 def title_matches(phrase):
     matching = []
     for audio in audio_choices:
-        if phrase.lower() in audio.name().lower().replace("&","and"):
+        if phrase.lower() in audio.name().lower():
             matching.append(audio)
     matching.sort(key = age_sort)
     return matching

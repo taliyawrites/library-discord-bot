@@ -1816,7 +1816,7 @@ async def updatetags(interaction, record : str, tags : str, mode : str, petnames
 
         if len(warnings) > 0:
             await interaction.followup.send("Reminder to add the following tags if applicable! Respond to this message with any extra tags you'd like to add, enclosed in square brackets, or simply reply with \"no\" if you don't want to add any at this time.\n"  + warnings)
-            msg = await client.wait_for('message',timeout = 120.0,check = lambda m: m.author.id == interaction.user.id)
+            msg = await client.wait_for('message',timeout = 120.0,check = lambda m: m.author.id == interaction.user.id and m.channel.id == interaction.channel.id)
             response = msg.content.lower().strip()
             if response != "no":
                 if response[0] == "[" and response[-1] == "]":

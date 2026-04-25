@@ -1892,6 +1892,18 @@ def tag_sort(tag_string):
             preamble_tags = preamble_tags + [tag]
         else:
             new_tags = new_tags + [tag]
+
+    for entry in list(paired_tags.keys()):
+        specific, general = entry[1:-1], paired_tags[entry][1:-1]
+        if specific in new_tags and general in new_tags:
+            spec_index, gen_index = new_tags.index(specific), new_tags.index(general)
+            if spec_index > gen_index:
+                new_tags.remove(specific)
+                new_tags.insert(gen_index + 1,specific)
+            else:
+                new_tags.remove(general)
+                new_tags.insert(spec_index, general)
+
     full_tags = preamble_tags + new_tags
     return "[" + "] [".join(full_tags) + "]"
 

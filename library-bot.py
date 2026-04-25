@@ -1806,16 +1806,34 @@ async def updatetags(interaction, record : str, tags : str, mode : str, petnames
             current_tags = this_audio.tag_string()[:-1]
             if current_tags[-1] != " ":
                 current_tags += " "
-            corrected_string, warnings = canonify_tags(current_tags + tags)
+            if tags[0] == "[" and tags[-1] == "]":
+                full_tags = current_tags + tags
+            else:
+                full_tags = current_tags + "[" + tags + "]"
+            corrected_string, warnings = canonify_tags(full_tags)
         else:
             warnings = ""
 
+        if len(warnings) > 0:
+            await interaction.followup.send("Reminder to add the following tags if applicable! Respond to this message with any extra tags you'd like to add, enclosed in square brackets, or simply reply with \"no\" if you don't want to add any at this time.\n"  + warnings)
+            msg = await client.wait_for('message',timeout = 120.0,check = lambda m: m.author.id == interaction.user.id)
+            response = msg.content.lower().strip()
+            if response != "no":
+                if response[0] == "[" and response[-1] == "]":
+                    additional_tags = response
+                else:
+                    additional_tags = "[" + response + "]"
+                edited_tags = corrected_string + " " + additional_tags
+                corrected_string, warnings = canonify_tags(edited_tags)
+
+
+        sorted_tag_string = tag_sort(corrected_string)
 
         if mode == "complete tags":
-            await interaction.followup.send(f'Tags for "{title}" (Record ID: {record}) written in canonical form as: {corrected_string}', view = TagButton(tags = corrected_string, audioID = record, names = petnames, wallbreak = fourthwallbreak, tagQ = True))
+            await interaction.followup.send(f'Tags for "{title}" (Record ID: {record}) written in canonical form as: {sorted_tag_string}', view = TagButton(tags = sorted_tag_string, audioID = record, names = petnames, wallbreak = fourthwallbreak, tagQ = True))
             # mark_as_tagged(record)
         elif mode == "extra tags":
-            await interaction.followup.send(f'Adding tags to "{title}" (Record ID: {record}) written in canonical form as: {corrected_string}', view = TagButton(tags = corrected_string, audioID = record, names = petnames, wallbreak = fourthwallbreak, tagQ = False))
+            await interaction.followup.send(f'Adding tags to "{title}" (Record ID: {record}) written in canonical form as: {sorted_tag_string}', view = TagButton(tags = sorted_tag_string, audioID = record, names = petnames, wallbreak = fourthwallbreak, tagQ = False))
         elif mode == "petnames only":
             current_tags = this_audio.tag_string()[:-1].strip()
             await interaction.followup.send(f'Adding petnames to "{title}" (Record ID: {record}): {petnames}', view = TagButton(tags = current_tags, audioID = record, names = petnames, wallbreak = fourthwallbreak, tagQ = False))
@@ -1825,8 +1843,6 @@ async def updatetags(interaction, record : str, tags : str, mode : str, petnames
         else: 
             await interaction.followup.send("Invalid choice for mode.")
 
-        if len(warnings) > 0:
-            await interaction.followup.send(warnings)
             
 @updatetags.autocomplete('mode')
 async def updatetags_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
@@ -1854,12 +1870,30 @@ def canonify_tags(raw_tags):
                 if opt in audio_tags:
                     count += 1
             if count == 0:
-                warnings += "Remember to add " + " or ".join(flagged[tag])  + " if appropriate!\n"
+                warnings += "- Remember to add " + " or ".join(flagged[tag])  + " if appropriate!\n"
 
     if "mdom" not in audio_tags and "msub" not in audio_tags and "switch" not in audio_tags and "vanilla" not in audio_tags:
-        warnings += "Consider adding a tag for relevant power dynamics if any are present! ([mdom], [msub], [switch])"
+        warnings += "- Consider adding a tag for relevant power dynamics ([mdom], [msub], [switch]) if any are present.\n"
+
+    if "4" not in audio_tags: 
+        warnings += "- Audio needs a relevant gender tag! [M4F], [M4M], [M4A], [MM4F], [M4MF], etc"
 
     return audio_tags, warnings
+
+def tag_sort(tag_string):
+    tag_list = tag_string[1:-1].split('] [')
+    dynamic_tags = ["mdom","msub","switch","mdom to msub","mdom to msub"]
+    preamble_tags = []
+    new_tags = []
+    for tag in tag_list:
+        if "4" in tag:
+            preamble_tags = [tag] + preamble_tags
+        elif  tag in dynamic_tags:
+            preamble_tags = preamble_tags + [tag]
+        else:
+            new_tags = new_tags + [tag]
+    full_tags = preamble_tags + new_tags
+    return "[" + "] [".join(full_tags) + "]"
 
 
 def push_masterlist_update(interaction, audioID, tags, petnames, wallbreak, tagQ):
@@ -1880,7 +1914,6 @@ def push_masterlist_update(interaction, audioID, tags, petnames, wallbreak, tagQ
     for entry in audio_choices:
         if entry.recordID() == audioID:
             return entry
-
 
 
 

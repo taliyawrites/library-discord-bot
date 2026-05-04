@@ -1962,6 +1962,8 @@ async def getcanonicaltags(interaction, tags : str):
                     sorted_tag_string += " [further tags needed]"
             else:
                 sorted_tag_string = tag_sort(tag_sort(corrected_string))
+                if "further tags needed" not in sorted_tag_string:
+                    sorted_tag_string += " [further tags needed]"
         else:
             sorted_tag_string = tag_sort(tag_sort(corrected_string))
         

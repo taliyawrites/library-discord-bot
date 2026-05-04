@@ -1828,7 +1828,7 @@ async def updatetags(interaction, record : str, tags : str, mode : str, petnames
                 corrected_string, warnings = canonify_tags(edited_tags)
 
 
-        sorted_tag_string = tag_sort(corrected_string)
+        sorted_tag_string = tag_sort(tag_sort(corrected_string))
 
         if mode == "complete tags":
             await interaction.followup.send(f'Tags for "{title}" (Record ID: {record}) written in canonical form as: {sorted_tag_string}', view = TagButton(tags = sorted_tag_string, audioID = record, names = petnames, wallbreak = fourthwallbreak, tagQ = True))
@@ -1883,7 +1883,7 @@ def canonify_tags(raw_tags):
 
 def tag_sort(tag_string):
     tag_list = tag_string[1:-1].split('] [')
-    dynamic_tags = ["mdom","msub","switch","mdom to msub","mdom to msub"]
+    dynamic_tags = ["mdom","msub","switch","mdom to msub","msub to mdom"]
     preamble_tags = []
     complete = True
     new_tags = []
@@ -1957,13 +1957,13 @@ async def getcanonicaltags(interaction, tags : str):
                     additional_tags = "[" + response + "]"
                 edited_tags = corrected_string + " " + additional_tags
                 new_corrected_string, new_warnings = canonify_tags(edited_tags)
-                sorted_tag_string = tag_sort(new_corrected_string)
-                if len(new_warnings) > 0:
+                sorted_tag_string = tag_sort(tag_sort(new_corrected_string))
+                if len(new_warnings) > 0 and "further tags needed" not in sorted_tag_string:
                     sorted_tag_string += " [further tags needed]"
             else:
-                sorted_tag_string = tag_sort(corrected_string)
+                sorted_tag_string = tag_sort(tag_sort(corrected_string))
         else:
-            sorted_tag_string = tag_sort(corrected_string)
+            sorted_tag_string = tag_sort(tag_sort(corrected_string))
         
         await interaction.followup.send(sorted_tag_string)
 

@@ -1488,7 +1488,7 @@ async def pet(interaction):
 @tree.command(name = "degrade", description = "You know what you are.")
 async def degrade(interaction):
     await interaction.response.defer()
-    adjectives = ["desperate","pretty","depraved","pathetic","needy","worthless","eager"]
+    adjectives = ["desperate","pretty","depraved","pathetic","needy","worthless","eager","dirty"]
     nouns = ["whore","slut","cunt","set of holes","cumslut","fucktoy","cumrag","cumdump","cocksleeve", "hole"]
     if random.choice(range(1000)) < 3:
         whose = "Vel's "
@@ -1813,6 +1813,7 @@ async def updatetags(interaction, record : str, tags : str, mode : str, petnames
             corrected_string, warnings = canonify_tags(full_tags)
         else:
             warnings = ""
+            corrected_string = this_audio.tag_string()[:-1]
 
         if len(warnings) > 0:
             await interaction.followup.send("Reminder to add the following tags if applicable! Respond to this message with any extra tags you'd like to add, enclosed in square brackets, or simply reply with \"no\" if you don't want to add any at this time.\n"  + warnings)
@@ -1884,12 +1885,15 @@ def tag_sort(tag_string):
     tag_list = tag_string[1:-1].split('] [')
     dynamic_tags = ["mdom","msub","switch","mdom to msub","mdom to msub"]
     preamble_tags = []
+    complete = True
     new_tags = []
     for tag in tag_list:
         if "4" in tag:
             preamble_tags = [tag] + preamble_tags
         elif  tag in dynamic_tags:
             preamble_tags = preamble_tags + [tag]
+        elif "further tags needed" == tag:
+            complete = False
         else:
             new_tags = new_tags + [tag]
 
@@ -1903,6 +1907,8 @@ def tag_sort(tag_string):
             else:
                 new_tags.remove(general)
                 new_tags.insert(spec_index, general)
+    if not complete:
+        new_tags = new_tags + ["further tags needed"]
 
     full_tags = preamble_tags + new_tags
     return "[" + "] [".join(full_tags) + "]"
@@ -1926,6 +1932,43 @@ def push_masterlist_update(interaction, audioID, tags, petnames, wallbreak, tagQ
     for entry in audio_choices:
         if entry.recordID() == audioID:
             return entry
+
+
+
+
+@tree.command(name = "getcanonicaltags", description = "Returns canonicalized list of tags")
+async def getcanonicaltags(interaction, tags : str):
+    await interaction.response.defer()
+    allowed_users = [1185405398883258369, 490759913757212672, 1169014359842885726, 1089053035377999912, 1291121211643793449]
+
+    if interaction.user.id not in allowed_users:
+        await interaction.followup.send("Sorry, you do not have access to this command! The team behind the masterlist uses this to update tags quickly and efficiently, but unfortunately it can't be hidden from the full list of commands. You might have been looking for the `/tag` command to search for an audio by its tags.")
+    else:
+        corrected_string, warnings = canonify_tags(tags)
+
+        if len(warnings) > 0:
+            await interaction.followup.send("Reminder to add the following tags if applicable! Respond to this message with any extra tags you'd like to add, enclosed in square brackets, or simply reply with \"no\" if you don't want to add any at this time.\n"  + warnings)
+            msg = await client.wait_for('message',timeout = 120.0,check = lambda m: m.author.id == interaction.user.id and m.channel.id == interaction.channel.id)
+            response = msg.content.lower().strip()
+            if response != "no":
+                if response[0] == "[" and response[-1] == "]":
+                    additional_tags = response
+                else:
+                    additional_tags = "[" + response + "]"
+                edited_tags = corrected_string + " " + additional_tags
+                new_corrected_string, new_warnings = canonify_tags(edited_tags)
+                sorted_tag_string = tag_sort(new_corrected_string)
+                if len(new_warnings) > 0:
+                    sorted_tag_string += " [further tags needed]"
+            else:
+                sorted_tag_string = tag_sort(corrected_string)
+        else:
+            sorted_tag_string = tag_sort(corrected_string)
+        
+        await interaction.followup.send(sorted_tag_string)
+
+        
+
 
 
 
@@ -1954,11 +1997,6 @@ async def addaudio_autocomplete(interaction: discord.Interaction, current: str) 
     return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]
 
 
-@tree.command(name = "canonicaltags", description = "Returns canonicalized list of tags",  guild = discord.Object(COMMAND_SERVER))
-async def canonicaltags(interaction, tags : str):
-    await interaction.response.defer()
-    corrected = get_tags(tags.lower().replace("’","'").strip())
-    await interaction.followup.send("[" + '] ['.join(corrected) + "]")
 
 
 # BACKEND UTILITY COMMANDS #

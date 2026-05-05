@@ -1816,7 +1816,7 @@ async def updatetags(interaction, record : str, tags : str, mode : str, petnames
             corrected_string = this_audio.tag_string()[:-1]
 
         if len(warnings) > 0:
-            await interaction.followup.send("Reminder to add the following tags if applicable! Respond to this message with any extra tags you'd like to add, enclosed in square brackets, or simply reply with \"no\" if you don't want to add any at this time.\n"  + warnings)
+            await interaction.followup.send("Reminder to add the following tags if applicable! Respond to this message with any extra tags you'd like to add, enclosed in square brackets, or simply reply with \"no\" if you don't want to add any at this time."  + warnings)
             msg = await client.wait_for('message',timeout = 120.0,check = lambda m: m.author.id == interaction.user.id and m.channel.id == interaction.channel.id)
             response = msg.content.lower().strip()
             if response != "no":
@@ -1874,13 +1874,13 @@ def canonify_tags(raw_tags):
                 if opt in audio_tags:
                     count += 1
             if count == 0:
-                warnings += "- Remember to add " + " or ".join(flagged[tag])  + " if appropriate!\n"
+                warnings += "\n- Remember to add " + " or ".join(flagged[tag])  + " if appropriate!"
 
     if "mdom" not in audio_tags and "msub" not in audio_tags and "switch" not in audio_tags and "vanilla" not in audio_tags:
-        warnings += "- Consider adding a tag for relevant power dynamics ([mdom], [msub], [switch]) if any are present.\n"
+        warnings += "\n- Consider adding a tag for relevant power dynamics ([mdom], [msub], [switch]) if any are present."
 
     if "4" not in audio_tags: 
-        warnings += "- Audio needs a relevant gender tag! [M4F], [M4M], [M4A], [MM4F], [M4MF], etc"
+        warnings += "\n- Audio needs a relevant gender tag! [M4F], [M4M], [M4A], [MM4F], [M4MF], etc"
 
     return audio_tags, warnings
 
@@ -1950,7 +1950,7 @@ async def getcanonicaltags(interaction, tags : str):
         corrected_string, warnings = canonify_tags(tags)
 
         if len(warnings) > 0:
-            await interaction.followup.send("Reminder to add the following tags if applicable! Respond to this message with any extra tags you'd like to add, enclosed in square brackets, or simply reply with \"no\" if you don't want to add any at this time.\n"  + warnings)
+            await interaction.followup.send("Reminder to add the following tags if applicable! Respond to this message with any extra tags you'd like to add, enclosed in square brackets, or simply reply with \"no\" if you don't want to add any at this time."  + warnings)
             msg = await client.wait_for('message',timeout = 120.0,check = lambda m: m.author.id == interaction.user.id and m.channel.id == interaction.channel.id)
             response = msg.content.lower().strip()
             if response != "no":
@@ -1988,7 +1988,7 @@ async def betatags(interaction, filename : str, tags : str):
         corrected_string, warnings = canonify_tags(tags)
 
         if len(warnings) > 0:
-            await interaction.followup.send("Reminder to add the following tags if applicable! Respond to this message with any extra tags you'd like to add, enclosed in square brackets, or simply reply with \"no\" if you don't want to add any at this time.\n"  + warnings)
+            await interaction.followup.send("Reminder to add the following tags if applicable! Respond to this message with any extra tags you'd like to add, enclosed in square brackets, or simply reply with \"no\" if you don't want to add any at this time."  + warnings)
             msg = await client.wait_for('message',timeout = 120.0,check = lambda m: m.author.id == interaction.user.id and m.channel.id == interaction.channel.id)
             response = msg.content.lower().strip()
             if response != "no":

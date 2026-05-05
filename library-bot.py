@@ -2073,6 +2073,7 @@ def further(tags, warnings):
         return False
     elif len(warnings) > 0:
         warning_list = warnings.split("\n")
+        print(warning_list)
         if len(warning_list) == 1 and "power dynamics" in warning_list[0]:
             return False
         else:

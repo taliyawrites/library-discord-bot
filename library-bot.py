@@ -1785,7 +1785,7 @@ async def gull(interaction):
 
 # TAGGING COMMANDS
 
-@tree.command(name = "updatetags", description = "Command for maintenance by our tag team; please ignore!")
+@tree.command(name = "updatetags", description = "Command for backend use by our tag team; please ignore!")
 @app_commands.describe(record = "From the record ID field on the masterlist!")
 async def updatetags(interaction, record : str, tags : str, mode : str, petnames: Optional[str] = "", fourthwallbreak: Optional[str] = "no"):
     await interaction.response.defer()
@@ -1826,6 +1826,9 @@ async def updatetags(interaction, record : str, tags : str, mode : str, petnames
                     additional_tags = "[" + response + "]"
                 edited_tags = corrected_string + " " + additional_tags
                 corrected_string, warnings = canonify_tags(edited_tags)
+
+        if further(corrected_string, warnings): 
+            corrected_string += " [further tags needed]"
 
 
         sorted_tag_string = tag_sort(tag_sort(corrected_string))
@@ -1958,16 +1961,78 @@ async def getcanonicaltags(interaction, tags : str):
                 edited_tags = corrected_string + " " + additional_tags
                 new_corrected_string, new_warnings = canonify_tags(edited_tags)
                 sorted_tag_string = tag_sort(tag_sort(new_corrected_string))
-                if len(new_warnings) > 0 and "further tags needed" not in sorted_tag_string:
+                if further(sorted_tag_string, new_warnings):
                     sorted_tag_string += " [further tags needed]"
             else:
                 sorted_tag_string = tag_sort(tag_sort(corrected_string))
-                if "further tags needed" not in sorted_tag_string:
+                if further(sorted_tag_string, warnings):
                     sorted_tag_string += " [further tags needed]"
         else:
             sorted_tag_string = tag_sort(tag_sort(corrected_string))
         
         await interaction.followup.send(sorted_tag_string)
+
+
+
+
+
+
+@tree.command(name = "betatags", description = "Command for backend use by our tag team; please ignore!", guild = discord.Object(COMMAND_SERVER))
+async def betatags(interaction, filename : str, tags : str):
+    await interaction.response.defer()
+    allowed_users = [1185405398883258369, 490759913757212672, 1169014359842885726, 1089053035377999912, 1291121211643793449]
+
+    if interaction.user.id not in allowed_users:
+        await interaction.followup.send("Sorry, you do not have access to this command! The team behind the masterlist uses this to update tags quickly and efficiently, but unfortunately it can't be hidden from the full list of commands. You might have been looking for the `/tag` command to search for an audio by its tags.")
+    else:
+        corrected_string, warnings = canonify_tags(tags)
+
+        if len(warnings) > 0:
+            await interaction.followup.send("Reminder to add the following tags if applicable! Respond to this message with any extra tags you'd like to add, enclosed in square brackets, or simply reply with \"no\" if you don't want to add any at this time.\n"  + warnings)
+            msg = await client.wait_for('message',timeout = 120.0,check = lambda m: m.author.id == interaction.user.id and m.channel.id == interaction.channel.id)
+            response = msg.content.lower().strip()
+            if response != "no":
+                if response[0] == "[" and response[-1] == "]":
+                    additional_tags = response
+                else:
+                    additional_tags = "[" + response + "]"
+                edited_tags = corrected_string + " " + additional_tags
+                new_corrected_string, new_warnings = canonify_tags(edited_tags)
+                sorted_tag_string = tag_sort(tag_sort(new_corrected_string))
+                if further(sorted_tag_string, new_warnings):
+                    sorted_tag_string += " [further tags needed]"
+            else:
+                sorted_tag_string = tag_sort(tag_sort(corrected_string))
+                if further(sorted_tag_string, warnings):
+                    sorted_tag_string += " [further tags needed]"
+        else:
+            sorted_tag_string = tag_sort(tag_sort(corrected_string))
+        
+
+        table = airtable_api.table('app2ce30eI0NYrsAn', 'tblEiMkFjShd6wXkV')
+        found = False
+        for entry in table.all():
+            if not found: 
+                fields = list(entry.items())[2][1]
+                data = list(fields.items())
+                for pair in data:
+                    if pair[0] == "File Name":
+                        if filename.lower().strip() in pair[1].lower().strip() or pair[1].lower().strip() in filename.lower().strip():
+                            audioID = list(entry.items())[0][1]
+                            current = fields.get("Keywords & Tags","")
+                            if len(current) > 0:
+                                new_tag_string = current + "\n\nFull Tags: " + sorted_tag_string
+                            else:
+                                new_tag_string = sorted_tag_string
+                            table.update(audioID, {"Keywords & Tags" : new_tag_string})
+                            found = True
+                            break
+
+        if not found: 
+            table.create({"Audio Name" : filename, "Keywords & Tags" : sorted_tag_string})
+
+        await interaction.followup.send("Recording tags for " + filename + " as:\n\n" + sorted_tag_string)
+
 
         
 
@@ -1982,7 +2047,9 @@ async def addaudio(interaction, url : str, title : str, tags : str, description 
 
     # corrected = get_tags(tags.lower().replace("’","'").strip())
     # corrected_tags = "[" + '] ['.join(corrected) + "]"
-    corrected_tags, warnings = canonify_tags(tags + " [further tags needed]")
+    corrected_tags, warnings = canonify_tags(tags)
+    if further(corrected_tags, warnings):
+        corrected_tags += " [further tags needed]"
 
     table = airtable_api.table('apprrNWlCwDHYj4wW', 'tblqwSpe5CdMuWHW6')
     record = table.create({"Title": title, "Tags": corrected_tags, "Post Link": url,"Description": description,"Scriptwriter": scriptwriter,"General Date": "2026-" + date, "Duration": duration_string(duration), "Series Name (if applicable)": series, "Public/Patreon": exclusive, "Recurring Characters": character})
@@ -1999,6 +2066,19 @@ async def addaudio_autocomplete(interaction: discord.Interaction, current: str) 
     return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]
 
 
+
+
+def further(tags, warnings):
+    if "further tags needed" in tags:
+        return False
+    elif len(warnings) > 0:
+        warning_list = warnings.split("\n")[1:]
+        if len(warning_list) == 1 and "M4F" in warning_list[0]:
+            return False
+        else:
+            return True
+    else:
+        return False
 
 
 # BACKEND UTILITY COMMANDS #

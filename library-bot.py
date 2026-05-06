@@ -2047,7 +2047,8 @@ async def addaudio(interaction, url : str, title : str, tags : str, description 
 
     # corrected = get_tags(tags.lower().replace("’","'").strip())
     # corrected_tags = "[" + '] ['.join(corrected) + "]"
-    corrected_tags, warnings = canonify_tags(tags)
+    unsorted_tags, warnings = canonify_tags(tags)
+    corrected_tags = tag_sort(tag_sort(unsorted_tags))
     if further(corrected_tags, warnings):
         corrected_tags += " [further tags needed]"
 
@@ -2074,7 +2075,6 @@ def further(tags, warnings):
     elif len(warnings) > 0:
         warning_list = warnings.split("\n")
         warning_list.remove('')
-        print(warning_list)
         if len(warning_list) == 1 and "power dynamics" in warning_list[0]:
             return False
         else:

@@ -1780,6 +1780,9 @@ async def gull(interaction):
         await interaction.channel.send("All the gulls in Vel’s abode weigh about the same as an adult Labrador retriever standing on the back of an adult female *grizzly bear*. (Gull facts by Mollie!)")
 
 
+    if random.choice(range(50)) == 0:
+        await interaction.channel.send("The rookery grows in number...")
+
 
 
 

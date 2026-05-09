@@ -2338,8 +2338,8 @@ async def on_message(message):
     if message.author == vel and message.content.startswith("!attack"):
         global gull_counter
         await message.channel.send(f"{gull_counter} gulls descend on the library. Fly, my children!")
-        # gull_counter = 0
-        # save_to_file(GULL_FILENAME, [str(gull_counter)])
+        gull_counter = 0
+        save_to_file(GULL_FILENAME, [str(gull_counter)])
 
     
 

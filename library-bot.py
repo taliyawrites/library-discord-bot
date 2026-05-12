@@ -353,8 +353,8 @@ def import_tag_dictionary():
     for entry in table.all():
         fields = list(entry.items())[2][1]
         data = list(fields.items())
-        tag = data[0][1].strip()
-        canonical = data[1][1].strip()
+        tag = fields["Tag"].strip()
+        canonical = fields["Canonical Tag"].strip()
         dictionary[tag] = canonical
         if canonical not in sorted_tag_list:
             sorted_tag_list.append(canonical)
@@ -369,11 +369,11 @@ def import_pairs():
     for entry in table.all():
         fields = list(entry.items())[2][1]
         data = list(fields.items())
-        specific_tag = "[" + data[0][1].strip() + "]"
-        general_tag = "[" + data[1][1].strip() + "]"
+        specific_tag = "[" + fields["Specific Tag"].strip() + "]"
+        general_tag = "[" + fields["General Tag"].strip() + "]"
         dictionary[specific_tag] = general_tag
 
-        check = data[2][1]
+        check = fields["Specific Tag Required?"]
         if check == "Yes":
             if general_tag in specific_flags:
                 current = specific_flags[general_tag]

@@ -390,12 +390,11 @@ def import_collections():
 
     for entry in table.all():
         fields = list(entry.items())[2][1]
-        data = list(fields.items())
-        title = data[0][1].strip()
-        url = data[1][1].strip()
-        description = data[2][1].strip()
-        style = data[3][1].strip()
-        order = int(data[4][1].strip())
+        title = fields["Name"].strip()
+        url = fields["URL"].strip()
+        description = fields["Description"].strip()
+        style = fields["Type"].strip()
+        order = int(fields["Order"].strip())
         coll_data = [title,url,description,style,order]
         collections.append(coll_data)
 
@@ -419,7 +418,6 @@ def write_data_lists():
     table = airtable_api.table('appeb72XP6YJzGRyY', 'tbltF1MithqYynsdU')
     for entry in table.all():
         fields = list(entry.items())[2][1]
-        data = list(fields.items())
         all_tags.append(fields["Tag"].strip())
 
     all_collections = [coll[0] for coll in collections]

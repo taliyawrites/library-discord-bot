@@ -2034,7 +2034,7 @@ async def betatags(interaction, filename : str, tags : str):
         if not found: 
             table.create({"Audio Name" : filename, "Keywords & Tags" : sorted_tag_string})
 
-        await interaction.followup.send("Recording tags for " + filename + " as:\n\n" + sorted_tag_string)
+        await interaction.followup.send("Recording tags for \"" + filename + "\" as:\n\n" + sorted_tag_string)
 
 
         

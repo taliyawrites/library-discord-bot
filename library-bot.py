@@ -2015,7 +2015,7 @@ async def betatags(interaction, filename : str, tags : str):
                 fields = list(entry.items())[2][1]
                 data = list(fields.items())
                 for pair in data:
-                    if pair[0] == "File Name":
+                    if pair[0] == "File Name" or pair[0] == "Audio Name":
                         if filename.lower().strip() in pair[1].lower().strip() or pair[1].lower().strip() in filename.lower().strip():
                             audioID = list(entry.items())[0][1]
                             current = fields.get("Keywords & Tags","")

@@ -420,7 +420,7 @@ def write_data_lists():
     for entry in table.all():
         fields = list(entry.items())[2][1]
         data = list(fields.items())
-        all_tags.append(data[0][1].strip())
+        all_tags.append(fields["Tag"].strip())
 
     all_collections = [coll[0] for coll in collections]
     return all_characters, all_tags, all_collections, all_writers

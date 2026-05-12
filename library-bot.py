@@ -352,7 +352,6 @@ def import_tag_dictionary():
 
     for entry in table.all():
         fields = list(entry.items())[2][1]
-        data = list(fields.items())
         tag = fields["Tag"].strip()
         canonical = fields["Canonical Tag"].strip()
         dictionary[tag] = canonical
@@ -368,7 +367,6 @@ def import_pairs():
     specific_flags = dict()
     for entry in table.all():
         fields = list(entry.items())[2][1]
-        data = list(fields.items())
         specific_tag = "[" + fields["Specific Tag"].strip() + "]"
         general_tag = "[" + fields["General Tag"].strip() + "]"
         dictionary[specific_tag] = general_tag

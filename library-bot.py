@@ -1976,7 +1976,7 @@ async def getcanonicaltags(interaction, tags : str):
 
 
 
-@tree.command(name = "betatags", description = "Command for backend use by our tag team; please ignore!", guild = discord.Object(COMMAND_SERVER))
+@tree.command(name = "betatags", description = "Command for backend use by our tag team; please ignore!")
 async def betatags(interaction, filename : str, tags : str):
     await interaction.response.defer()
     allowed_users = [1185405398883258369, 490759913757212672, 1169014359842885726, 1089053035377999912, 1291121211643793449]

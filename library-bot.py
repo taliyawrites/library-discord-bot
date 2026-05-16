@@ -24,6 +24,7 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = int(os.getenv('GUILD_ID'))
 GENERAL = int(os.getenv('GENERAL_CHANNEL'))
 OPTIONS_ROLE = int(os.getenv('ROLE_ID_OPTIONS'))
+ALT_OPTIONS_ROLE = = int(os.getenv('ROLE_ID_OPTIONS_ALT'))
 WINNER_ROLE = int(os.getenv('ROLE_ID_WINNER'))
 airtable_api = Api(os.getenv('AIRTABLE_TOKEN'))
 
@@ -373,7 +374,6 @@ def import_pairs():
 
         check = fields.get("Specific Tag Required?",False)
         if check:
-            print(general_tag)
             if general_tag in specific_flags:
                 current = specific_flags[general_tag]
                 specific_flags[general_tag] = current + [specific_tag]
@@ -2674,12 +2674,15 @@ async def choose_good_girl():
         for member in good_girl_role.members:
             # remove good girl role from yesterday's winner
             await member.remove_roles(good_girl_role)
-            if member.id in good_boy_ids:
-                await good_girl_role.edit(name = "Good Girl")
+        
+        if good_girl_role.name == "Good Boy":
+            await good_girl_role.edit(name = "Good Girl")
 
 
         # choose new random winner for the day
-        options = [user for user in guild.get_role(OPTIONS_ROLE).members if active_member(user.id)]
+        options_gg = [user for user in guild.get_role(OPTIONS_ROLE).members if active_member(user.id)]
+        options_gb = [user for user in guild.get_role(ALT_OPTIONS_ROLE).members if active_member(user.id)]
+        options = options_gg + options_gb
         winner, remaining_number = choose_next_winner(options)
         if remaining_number == 10: 
             await taliya.send("Only ten remaining options for good girl of the day.")
@@ -2690,7 +2693,7 @@ async def choose_good_girl():
 
         # send message and assign good girl role to winner
         if winner is not None:
-            if winner.id in good_boy_ids:
+            if winner in options_gb:
                 await good_girl_role.edit(name = "Good Boy")
                 await channel.send(f'{winner.mention} is the good boy of the day!')
 

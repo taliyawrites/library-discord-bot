@@ -24,7 +24,7 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = int(os.getenv('GUILD_ID'))
 GENERAL = int(os.getenv('GENERAL_CHANNEL'))
 OPTIONS_ROLE = int(os.getenv('ROLE_ID_OPTIONS'))
-ALT_OPTIONS_ROLE = = int(os.getenv('ROLE_ID_OPTIONS_ALT'))
+ALT_OPTIONS_ROLE = int(os.getenv('ROLE_ID_OPTIONS_ALT'))
 WINNER_ROLE = int(os.getenv('ROLE_ID_WINNER'))
 airtable_api = Api(os.getenv('AIRTABLE_TOKEN'))
 

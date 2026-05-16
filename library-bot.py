@@ -371,8 +371,9 @@ def import_pairs():
         general_tag = "[" + fields["General Tag"].strip() + "]"
         dictionary[specific_tag] = general_tag
 
-        check = fields["Specific Tag Required?"]
-        if check == "Yes":
+        check = fields.get("Specific Tag Required?",False)
+        if check:
+            print(general_tag)
             if general_tag in specific_flags:
                 current = specific_flags[general_tag]
                 specific_flags[general_tag] = current + [specific_tag]

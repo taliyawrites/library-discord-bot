@@ -300,7 +300,7 @@ def inexact_matches(phrase):
                 numeric_overlap += 1
         if (overlap - numeric_overlap) > 0:
             matching.append(audio)
-        if overlap == len(search_words) or numeric_overlap > 0:
+        if overlap == len(search_words) or numeric_overlap > 0 and (overlap - numeric_overlap) > 0:
             closer_matches.append(audio)
 
     if len(closer_matches) != 0:

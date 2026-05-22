@@ -2462,41 +2462,34 @@ async def on_scheduled_event_update(before, after):
 async def run_daily_loops():
     global rerun_daily, rerun_gg, rerun_birthdays
     if (datetime.datetime.now().hour == HOUR and datetime.datetime.now().minute == MINUTE):
-        print("now")
+        print("running daily tasks now")
         await announce_daily_audio()
         await choose_good_girl()
         await daily_balatro()
-        if datetime.datetime.now().weekday() == 0:
-            await track_patrons()
-    elif (datetime.datetime.now().hour == MIDNIGHT and datetime.datetime.now().minute == MINUTE):
-        await birthday_wishes()
-        if datetime.datetime.now().weekday() == 0:
-            await client.get_channel(COMMAND_CHANNEL_ID).send("Remember to `/update` the live time to next Sunday at 4:30 PM and the stream time to next Sunday at 11:30 AM using [universal timestamps](https://r.3v.fi/discord-timestamps/), " + taliya.mention + "! Also save the latest [Twitch VOD](https://dashboard.twitch.tv/u/velslibrary/content/video-producer).")
-            bot_channel = client.get_channel(GENERAL)
-            await bot_channel.send("Reminder that we have the following threads you can join!")
-            await list_threads(bot_channel)
-    elif rerun_daily and rerun_gg:
+    if rerun_daily:
         await taliya.send("Re-running audio of the day.")
         rerun_daily = False
         await announce_daily_audio()
+    if rerun_gg:
         await taliya.send("Re-running good girl of the day.")
         rerun_gg = False
         await choose_good_girl()
-    elif rerun_daily and not rerun_gg:
-        await taliya.send("Re-running audio of the day.")
-        rerun_daily = False
-        await announce_daily_audio()
-    elif rerun_gg and not rerun_daily:
-        await taliya.send("Re-running good girl of the day.")
-        rerun_gg = False
-        await choose_good_girl()
-    elif rerun_birthdays:
+    if rerun_birthdays:
         await taliya.send("Re-running birthday wishes.")
         rerun_birthdays = False
         await birthday_wishes()
 
     if (datetime.datetime.now().hour in REMINDER_HOURS and datetime.datetime.now().minute == 0):
         await reminder_pings()
+
+
+    if (datetime.datetime.now().hour == MIDNIGHT and datetime.datetime.now().minute == MINUTE):
+        await birthday_wishes()
+        if datetime.datetime.now().weekday() == 0:
+            await client.get_channel(COMMAND_CHANNEL_ID).send("Remember to `/update` the live time to next Sunday at 4:30 PM and the stream time to next Sunday at 11:30 AM using [universal timestamps](https://r.3v.fi/discord-timestamps/), " + taliya.mention + "! Also save the latest [Twitch VOD](https://dashboard.twitch.tv/u/velslibrary/content/video-producer).")
+            bot_channel = client.get_channel(GENERAL)
+            await bot_channel.send("Reminder that we have the following threads you can join!")
+            await list_threads(bot_channel)
 
     global event_times
     for event in event_times:
@@ -2668,9 +2661,8 @@ async def choose_good_girl():
         guild = client.get_guild(GUILD)
         channel = client.get_channel(GENERAL)
         good_girl_role = guild.get_role(WINNER_ROLE)
-        good_boy_ids = [315323866291372032]
 
-        await asyncio.sleep(4)
+        await asyncio.sleep(3)
         for member in good_girl_role.members:
             # remove good girl role from yesterday's winner
             await member.remove_roles(good_girl_role)

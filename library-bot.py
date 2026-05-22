@@ -303,6 +303,22 @@ def inexact_matches(phrase):
         if overlap == len(search_words) or (numeric_overlap > 0 and (overlap - numeric_overlap) > 0):
             closer_matches.append(audio)
 
+    if len(closer_matches) == 0 and (len(matching) == 0 or len(matching) > 10): 
+        for audio in audio_choices:
+            audio_name = audio.name().lower().replace("&","and").replace("\'","")
+            overlap = 0
+            numeric_overlap = 0
+            for word in search_words:
+                if word in audio_name:
+                    overlap += 1
+                    if word.isnumeric():
+                        numeric_overlap += 1
+            if (overlap - numeric_overlap) > 0:
+                matching.append(audio)
+            if overlap == len(search_words) or (numeric_overlap > 0 and (overlap - numeric_overlap) > 0):
+                closer_matches.append(audio)
+
+
     if len(closer_matches) != 0:
         closer_matches.sort(key = age_sort)
     matching.sort(key = age_sort)

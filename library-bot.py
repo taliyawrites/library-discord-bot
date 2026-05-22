@@ -290,11 +290,15 @@ def inexact_matches(phrase):
             search_words.append(word)
 
     for audio in audio_choices:
+        audio_name = audio.name().lower().replace("&","and")
         overlap = 0
+        numeric_overlap = 0
         for word in search_words:
-            if word in audio.name().lower().replace("&","and"):
+            if word in audio_name:
                 overlap += 1
-        if overlap > 0:
+            if word.isnumeric():
+                numeric_overlap += 1
+        if (overlap - numeric_overlap) > 0:
             matching.append(audio)
         if overlap == len(search_words):
             closer_matches.append(audio)

@@ -289,18 +289,29 @@ def inexact_matches(phrase):
         if word not in too_common_words and (len(word) > 2 or word.isnumeric() or word == "bi"):
             search_words.append(word)
 
+    # for audio in audio_choices:
+    #     audio_name = audio.name().lower().replace("&","and")
+    #     overlap = 0
+    #     numeric_overlap = 0
+    #     for word in search_words:
+    #         if word in audio_name:
+    #             overlap += 1
+    #         if word.isnumeric():
+    #             numeric_overlap += 1
+    #     if (overlap - numeric_overlap) > 0:
+    #         matching.append(audio)
+    #     if overlap == len(search_words) or (numeric_overlap > 0 and (overlap - numeric_overlap) > 0):
+    #         closer_matches.append(audio)
+
     for audio in audio_choices:
         audio_name = audio.name().lower().replace("&","and")
         overlap = 0
-        numeric_overlap = 0
         for word in search_words:
             if word in audio_name:
                 overlap += 1
-            if word.isnumeric():
-                numeric_overlap += 1
-        if (overlap - numeric_overlap) > 0:
+        if (overlap) > 0:
             matching.append(audio)
-        if overlap == len(search_words) or numeric_overlap > 0 and (overlap - numeric_overlap) > 0:
+        if overlap == len(search_words):
             closer_matches.append(audio)
 
     if len(closer_matches) != 0:

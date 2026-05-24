@@ -304,6 +304,7 @@ def inexact_matches(phrase):
             closer_matches.append(audio)
 
     if len(closer_matches) == 0 and (len(matching) == 0 or len(matching) > 10): 
+        new_matching, new_closer = []. []
         for audio in audio_choices:
             audio_name = audio.name().lower().replace("&","and").replace("\'","")
             overlap = 0
@@ -314,9 +315,12 @@ def inexact_matches(phrase):
                     if word.isnumeric():
                         numeric_overlap += 1
             if (overlap - numeric_overlap) > 0:
-                matching.append(audio)
+                new_matching.append(audio)
             if overlap == len(search_words) or (numeric_overlap > 0 and (overlap - numeric_overlap) > 0):
-                closer_matches.append(audio)
+                new_closer.append(audio)
+        if (len(closer_matches) == 0 and len(new_closer) != 0) or (len(new_closer) < len(closer_matches)) or (len(new_matching) < len(matching)):
+            closer_matches = new_closer
+            matching = new_matching
 
 
     if len(closer_matches) != 0:
@@ -674,6 +678,8 @@ async def setup_hook():
 
     # set all daily tasks running
     if not run_daily_loops.is_running():
+        if datetime.datetime.now().second > 15:
+            await asyncio.sleep(65 - datetime.datetime.now().second)
         run_daily_loops.start()
         print("starting daily looping tasks")
 
@@ -682,8 +688,7 @@ async def setup_hook():
     vel = await client.fetch_user(1089053035377999912)
 
 
-    await taliya.send(f"Card Catalog bot restarted successfully!")
-    print(f"bot local time: {datetime.datetime.now().hour}h{datetime.datetime.now().minute}.")
+    await taliya.send(f"Card Catalog bot restarted successfully at {datetime.datetime.now().hour}:{datetime.datetime.now().minute}:{datetime.datetime.now().second}!")
 
 
 

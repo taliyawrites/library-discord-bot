@@ -304,7 +304,7 @@ def inexact_matches(phrase):
             closer_matches.append(audio)
 
     if len(closer_matches) == 0 and (len(matching) == 0 or len(matching) > 10): 
-        new_matching, new_closer = []. []
+        new_matching, new_closer = [], []
         for audio in audio_choices:
             audio_name = audio.name().lower().replace("&","and").replace("\'","")
             overlap = 0

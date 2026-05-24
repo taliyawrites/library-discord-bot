@@ -1891,6 +1891,11 @@ def canonify_tags(raw_tags):
         if tag in audio_tags and paired_tags[tag] not in audio_tags:
             audio_tags = audio_tags.replace(tag, paired_tags[tag] + " " + tag)
 
+    # repeat for nested pairs
+    for tag in list(paired_tags.keys()):
+        if tag in audio_tags and paired_tags[tag] not in audio_tags:
+            audio_tags = audio_tags.replace(tag, paired_tags[tag] + " " + tag)
+
     warnings = "" 
     for tag in list(flagged.keys()):
         if tag in audio_tags:
@@ -2117,11 +2122,12 @@ def further(tags, warnings):
 @app_commands.allowed_installs(guilds=True, users=False)
 async def refresh(interaction):
     await interaction.response.defer()
-    global audio_choices, tag_dictionary, collections
+    global audio_choices, tag_dictionary, collections, paired_tags, flagged
 
     audio_choices = import_airtable_data()
     tag_dictionary = import_tag_dictionary()
     collections = import_collections()
+    paired_tags, flagged = import_pairs()
 
     global all_characters, all_tags, all_collections, all_writers
     all_characters, all_tags, all_collections, all_writers = write_data_lists()

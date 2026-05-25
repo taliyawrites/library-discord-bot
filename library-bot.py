@@ -689,7 +689,7 @@ async def setup_hook():
     vel = await client.fetch_user(1089053035377999912)
 
 
-    await taliya.send(f"Card Catalog bot restarted successfully at {datetime.datetime.now().hour}:{datetime.datetime.now().minute}:{datetime.datetime.now().second}!")
+    await taliya.send(f"Card Catalog bot restarted successfully at {datetime.datetime.now().strftime("%H:%M:%S")}!")
 
 
 

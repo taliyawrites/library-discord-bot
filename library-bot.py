@@ -679,8 +679,8 @@ async def setup_hook():
     # set all daily tasks running
     if not run_daily_loops.is_running():
         if datetime.datetime.now().second > 15:
-            await asyncio.sleep(65 - datetime.datetime.now().second)
             print("waiting until top of the minute to start loop")
+            await asyncio.sleep(65 - datetime.datetime.now().second)
         run_daily_loops.start()
         print("starting daily looping tasks")
 
@@ -1370,12 +1370,12 @@ async def allcharacters(interaction):
 
 
 
-@tree.command(name = "bingo", description = "Server bingo card!")
-async def bingo(interaction):
-    await interaction.response.defer()
-    bingo_info = "Vel's Library discord server bingo! If you win, let Teacups know."
-    bingo_embed = discord.Embed(title = "Server Bingo", description = bingo_info, url = "https://www.bingocardcreator.com/game/29103/")
-    await interaction.followup.send(embed = bingo_embed)
+# @tree.command(name = "bingo", description = "Server bingo card!")
+# async def bingo(interaction):
+#     await interaction.response.defer()
+#     bingo_info = "Vel's Library discord server bingo! If you win, let Teacups know."
+#     bingo_embed = discord.Embed(title = "Server Bingo", description = bingo_info, url = "https://www.bingocardcreator.com/game/29103/")
+#     await interaction.followup.send(embed = bingo_embed)
 
 
 
@@ -1435,7 +1435,7 @@ async def roles(interaction):
         await interaction.followup.send("You can customize your roles here: <id:customize>.")
 
 
-@tree.command(name = "troubleshoot",description = "Advice for if you can't hear Vel during a live!")
+@tree.command(name = "troubleshoot",description = "Advice for if you can't hear Vel during a live recording!")
 async def troubleshoot(interaction):
     await interaction.response.defer()
     help_message = "Can't hear Vel during a live but others can? Try these steps: \n\n- Make sure you're not deafened on Discord. \n- Check your computer or phone’s sound and headphone settings. \n- Check your computer’s Discord sound settings and make sure Discord isn’t muted or set to a low volume in your system volume mixer. \n- In Discord, go to Settings > Voice & Video and confirm the correct speaker device is selected. \n- Make sure Vel isn’t muted in https://discord.com/channels/1148449914188218399/1194153449647001621. On desktop Discord, right-click Vel’s name while he’s live to check or adjust his volume. Don't worry, this won't affect his volume for other people, just you! \n- Leave the live stream, fully close Discord, reopen it, and rejoin the live. \n- Restart your computer or phone. \n\nIf none of these steps work, the issue is most likely on Discord’s side. You can also reference [Discord's Voice and Video Troubleshooting Guide.](https://support.discord.com/hc/en-us/articles/360045138471-Discord-Voice-and-Video-Troubleshooting-Guide)"

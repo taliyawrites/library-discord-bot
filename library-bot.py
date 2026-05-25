@@ -1434,6 +1434,13 @@ async def roles(interaction):
         await interaction.followup.send("You can customize your roles here: <id:customize>.")
 
 
+@tree.command(name = "troubleshoot",description = "Advice for if you can't hear Vel during a live!")
+async def troubleshoot(interaction):
+    await interaction.response.defer()
+    help_message = "Can't hear Vel during a live but others can? Try these steps: \n\n- Make sure you're not deafened on Discord. \n- Check your computer or phone’s sound and headphone settings. \n- Check your computer’s Discord sound settings and make sure Discord isn’t muted or set to a low volume in your system volume mixer. \n- In Discord, go to Settings > Voice & Video and confirm the correct speaker device is selected. \n-Make sure Vel isn’t muted in https://discord.com/channels/1148449914188218399/1194153449647001621. On desktop Discord, right-click Vel’s name while he’s live to check or adjust his volume. Don't worry, this won't affect his volume for other people, just you! \n- Leave the live stream, fully close Discord, reopen it, and rejoin the live. \n- Restart your computer or phone. \n\nIf none of these steps work, the issue is most likely on Discord’s side. You can also reference [Discord's Voice and Video Troubleshooting Guide.](https://support.discord.com/hc/en-us/articles/360045138471-Discord-Voice-and-Video-Troubleshooting-Guide)"
+    await interaction.followup.send(help_message)
+
+
 
 @tree.command(name = "time", description = "Converts a time in eastern timezone to your own using a universal timestamp!")
 @app_commands.rename(t = "time")
@@ -2292,7 +2299,7 @@ async def embed_edit(interaction, msg_id: str, filename: str):
 @tree.command(name = "send_rules", guild = discord.Object(COMMAND_SERVER))
 @app_commands.check(lambda u: u.user == taliya)
 @app_commands.allowed_installs(guilds=True, users=False)
-async def mod_embed_edits(interaction, channelid: Optional[str] = "1374549206286733322"):
+async def send_rules(interaction, channelid: Optional[str] = "1374549206286733322"):
     await interaction.response.defer()
     channel_id = int(channelid)
 
@@ -2705,7 +2712,12 @@ async def choose_good_girl():
         # choose new random winner for the day
         options_gg = [user for user in guild.get_role(OPTIONS_ROLE).members if active_member(user.id)]
         options_gb = [user for user in guild.get_role(ALT_OPTIONS_ROLE).members if active_member(user.id)]
+        print(len(options_gg))
+        print(len(options_gb))
+        for opt in options_gb:
+            print(opt.display_name)
         options = options_gg + options_gb
+        print(len(options))
         winner, remaining_number = choose_next_winner(options)
         if remaining_number == 10: 
             await taliya.send("Only ten remaining options for good girl of the day.")

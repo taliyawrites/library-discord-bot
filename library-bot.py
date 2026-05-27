@@ -821,6 +821,7 @@ async def title(interaction, title_phrase: str):
 async def tag(interaction, taglist: str):
     await interaction.response.defer()
     tags = get_tags(taglist.lower().replace("’","'").strip())
+    print(tags)
 
     matches = tagged_options(audio_choices,tags)
     matches.sort(key = age_sort)

@@ -282,6 +282,7 @@ def title_matches(phrase):
 def inexact_matches(phrase):
     matching = []
     closer_matches = []
+    closest_matches = []
     search_terms = phrase.split(" ")
     too_common_words = ["the","a","an","is","on","for","you","my","i","to","me","up","and","are","with","your","by","part","of","pt","pt.","ep","ep."]
     search_words = []
@@ -300,6 +301,8 @@ def inexact_matches(phrase):
                     numeric_overlap += 1
         if (overlap - numeric_overlap) > 0:
             matching.append(audio)
+        if overlap == len(search_words):
+            closest_matches.append(audio)
         if overlap == len(search_words) or (numeric_overlap > 0 and (overlap - numeric_overlap) > 0):
             closer_matches.append(audio)
 
@@ -322,11 +325,12 @@ def inexact_matches(phrase):
             closer_matches = new_closer
             matching = new_matching
 
-
-    if len(closer_matches) != 0:
-        closer_matches.sort(key = age_sort)
+    if len(closest_matches) == 0:
+        closest_matches = closer_matches
+    if len(closest_matches) != 0:
+        closest_matches.sort(key = age_sort)
     matching.sort(key = age_sort)
-    return matching,closer_matches
+    return matching,closest_matches
 
 
 # search to see if any part of the phrase appears in any titles
@@ -680,7 +684,7 @@ async def setup_hook():
     if not run_daily_loops.is_running():
         if datetime.datetime.now().second > 15:
             print("waiting until top of the minute to start loop")
-            await asyncio.sleep(65 - datetime.datetime.now().second)
+            await asyncio.sleep(62 - datetime.datetime.now().second)
         run_daily_loops.start()
         print("starting daily looping tasks")
 
@@ -689,7 +693,7 @@ async def setup_hook():
     vel = await client.fetch_user(1089053035377999912)
 
 
-    await taliya.send(f"Card Catalog bot restarted successfully at {datetime.datetime.now().strftime('%H:%M:%S')}!")
+    await taliya.send(f"Card Catalog bot restarted successfully at {datetime.datetime.now().strftime('%H:%M:%S')} local server time!")
 
 
 

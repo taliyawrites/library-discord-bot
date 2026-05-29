@@ -1654,7 +1654,7 @@ async def hydrate(interaction, victim: Optional[str] = "", nom: Optional[str] = 
 
     if len(victim) == 0:
         if nom == "yes":
-            await interaction.followup.send(content = "Remember to hydrate and have [something to eat](https://www.kkinstagram.com/reel/DY0OmO_kjNY/), everyone!")
+            await interaction.followup.send(content = "Remember to hydrate and have something to eat, everyone! https://www.kkinstagram.com/reel/DY0OmO_kjNY/")
         elif random_num == 0:
             await interaction.followup.send(content = "Remember to hydrate, everyone!", file = image)
         elif random_num == 1:
@@ -1673,7 +1673,7 @@ async def hydrate(interaction, victim: Optional[str] = "", nom: Optional[str] = 
             await interaction.followup.send("Remember to hydrate, everyone!")
     else:
         if nom == "yes":
-            await interaction.followup.send(content = f"Remember to hydrate and have [something to eat](https://www.kkinstagram.com/reel/DY0OmO_kjNY/), {victim}!")
+            await interaction.followup.send(content = f"Remember to hydrate and have something to eat, {victim}! https://www.kkinstagram.com/reel/DY0OmO_kjNY/")
         elif random_num == 0:
             await interaction.followup.send(content = f"Reminder to be a good girl and drink some water, {victim}!", file = image)
         elif random_num == 1:

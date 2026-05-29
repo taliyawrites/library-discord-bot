@@ -1690,7 +1690,7 @@ async def hydrate(interaction, victim: Optional[str] = "", nom: Optional[str] = 
                 await interaction.followup.send(f"Reminder to be a good girl and drink some water, {victim}! {msg2.jump_url}")
         else:
             await interaction.followup.send(f"Reminder to be a good girl and drink some water, {victim}!")
-@updatetags.autocomplete('nom')
+@hydrate.autocomplete('nom')
 async def hydrate_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
     options = ["yes","no"]
     return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]

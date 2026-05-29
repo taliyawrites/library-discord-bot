@@ -1643,7 +1643,8 @@ async def treat(interaction, t: str):
 
 @tree.command(name = "hydrate", description = "Remind folks to hydrate!")
 @app_commands.describe(victim = "@ whomever you'd like the bot to remind")
-async def hydrate(interaction, victim: Optional[str] = ""):
+@app_commands.describe(nom = "include a reminder to eat?")
+async def hydrate(interaction, victim: Optional[str] = "", nom: Optional[str] = "no"):
     await interaction.response.defer()
     random_num = random.choice(range(0,6))
     msg1 = client.get_channel(1158145318781714493).get_partial_message(1187442200980766940)
@@ -1652,7 +1653,9 @@ async def hydrate(interaction, victim: Optional[str] = ""):
     image = discord.File("esnupi.jpg")
 
     if len(victim) == 0:
-        if random_num == 0:
+        if nom == "yes":
+            await interaction.followup.send(content = "Remember to hydrate and have [something to eat](https://www.kkinstagram.com/reel/DY0OmO_kjNY/), everyone!")
+        elif random_num == 0:
             await interaction.followup.send(content = "Remember to hydrate, everyone!", file = image)
         elif random_num == 1:
             try:
@@ -1669,7 +1672,9 @@ async def hydrate(interaction, victim: Optional[str] = ""):
         else:
             await interaction.followup.send("Remember to hydrate, everyone!")
     else:
-        if random_num == 0:
+        if nom == "yes":
+            await interaction.followup.send(content = f"Remember to hydrate and have [something to eat](https://www.kkinstagram.com/reel/DY0OmO_kjNY/), {victim}!")
+        elif random_num == 0:
             await interaction.followup.send(content = f"Reminder to be a good girl and drink some water, {victim}!", file = image)
         elif random_num == 1:
             try:
@@ -1685,6 +1690,10 @@ async def hydrate(interaction, victim: Optional[str] = ""):
                 await interaction.followup.send(f"Reminder to be a good girl and drink some water, {victim}! {msg2.jump_url}")
         else:
             await interaction.followup.send(f"Reminder to be a good girl and drink some water, {victim}!")
+@updatetags.autocomplete('nom')
+async def hydrate_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
+    options = ["yes","no"]
+    return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]
 
 
 

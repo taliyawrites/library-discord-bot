@@ -2274,6 +2274,18 @@ async def delittle(interaction, taglist : str):
 
 
 
+@tree.command(name = "pipture", description = "add link to new picture of Pippin", guild = discord.Object(COMMAND_SERVER))
+@app_commands.check(lambda u: u.user == taliya)
+@app_commands.allowed_installs(guilds=True, users=False)
+async def pipture(interaction, message_link: str):
+    await interaction.response.defer()
+    pippin_ids.append(message_link)
+    save_to_file(PIPPIN_FILENAME,pippin_ids)
+    await interaction.followup.send(f"Pipture logged! {message_link}")
+@pipture.error
+async def pipture_error(interaction, error):
+    await interaction.response.send_message("Permissions denied.")
+
 
 
 

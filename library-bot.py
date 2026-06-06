@@ -324,6 +324,7 @@ def inexact_matches(phrase):
         if (len(closer_matches) == 0 and len(new_closer) != 0) or (len(new_closer) < len(closer_matches)) or (len(new_matching) < len(matching)):
             closer_matches = new_closer
             matching = new_matching
+    # refine for BEST match
 
     if len(closest_matches) == 0:
         closest_matches = closer_matches
@@ -2280,7 +2281,7 @@ async def delittle(interaction, taglist : str):
 @tree.command(name = "mod_embed", guild = discord.Object(COMMAND_SERVER))
 @app_commands.check(lambda u: u.user == taliya)
 @app_commands.allowed_installs(guilds=True, users=False)
-async def mod_embed(interaction, user_id: str, name: str, intro: str, embed_color: Optional[str] = "magenta"):
+async def mod_embed(interaction, name: str, intro: str, filename: str,embed_color: Optional[str] = "magenta",channel_id: Optional[str] = "1337426936435310754"):
     await interaction.response.defer()
     if embed_color == "magenta":
         custom_color = discord.Colour.magenta()
@@ -2289,9 +2290,10 @@ async def mod_embed(interaction, user_id: str, name: str, intro: str, embed_colo
     elif embed_color == "blue":
         custom_color = discord.Colour.blurple()
     mod_embed = discord.Embed(title = name, color = custom_color, description = intro)
-    profile = await client.get_guild(GUILD).fetch_member(user_id)
-    mod_embed.set_thumbnail(url = profile.display_avatar.url)
-    sent = await client.get_channel(1337426936435310754).send(embed=mod_embed)
+    new_file = discord.File("thumbnails/" + filename, filename = filename)
+    mod_embed.set_thumbnail(url = "attachment://" + filename)
+    sent = await client.get_channel(int(channel_id)).send(embed=mod_embed)
+    await sent.add_files(new_file)
     await interaction.followup.send("Message sent! " + sent.jump_url)
 
 

@@ -826,7 +826,6 @@ async def title(interaction, title_phrase: str):
 async def tag(interaction, taglist: str):
     await interaction.response.defer()
     tags = get_tags(taglist.lower().replace("’","'").strip())
-    print(tags)
 
     matches = tagged_options(audio_choices,tags)
     matches.sort(key = age_sort)
@@ -2729,12 +2728,7 @@ async def choose_good_girl():
         # choose new random winner for the day
         options_gg = [user for user in guild.get_role(OPTIONS_ROLE).members if active_member(user.id)]
         options_gb = [user for user in guild.get_role(ALT_OPTIONS_ROLE).members if active_member(user.id)]
-        print(len(options_gg))
-        print(len(options_gb))
-        for opt in options_gb:
-            print(opt.display_name)
         options = options_gg + options_gb
-        print(len(options))
         winner, remaining_number = choose_next_winner(options)
         if remaining_number == 10: 
             await taliya.send("Only ten remaining options for good girl of the day.")

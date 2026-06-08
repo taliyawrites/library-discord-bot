@@ -306,7 +306,7 @@ def inexact_matches(phrase):
         if overlap == len(search_words) or (numeric_overlap > 0 and (overlap - numeric_overlap) > 0):
             closer_matches.append(audio)
 
-    if len(closer_matches) == 0 and (len(matching) == 0 or len(matching) > 10): 
+    if len(closer_matches) == 0 and (len(matching) == 0 or len(matching) > 5): 
         new_matching, new_closer = [], []
         for audio in audio_choices:
             audio_name = audio.name().lower().replace("&","and").replace("\'","")
@@ -2418,7 +2418,7 @@ async def on_guild_channel_create(channel):
         staff_role = client.get_guild(GUILD).get_role(1203228614414573633)
         nonmods = False
         for user in channel.members:
-            mod_roles = [1148451019542499368, 1148452325539713114, 1155697576230781079, 1256838598401986561, 1239743183617790015]
+            mod_roles = [1148451019542499368, 1148452325539713114, 1155697576230781079, 1256838598401986561, 1239743183617790015,1203228614414573633]
             if user.top_role.id not in mod_roles:
                 nonmods = True
                 break 

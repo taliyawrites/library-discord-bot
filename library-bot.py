@@ -654,8 +654,9 @@ async def setup_hook():
         snack_requests = json.load(read_file)
     with open(BIRTHDAY_FILENAME, "r") as read_file:
         birthdays = json.load(read_file)
-    with open(EVENTS_FILENAME, "r") as read_file:
-        event_times = json.load(read_file)
+    # with open(EVENTS_FILENAME, "r") as read_file:
+    #     event_times = json.load(read_file)
+    event_times = [0,[0, 0, 0, 0]]
     twitch_time = read_from_file(LIVETIMES_FILENAME)[1]
     live_time = read_from_file(LIVETIMES_FILENAME)[0]
     save_to_file(LIVETIMES_FILENAME,[live_time,twitch_time])

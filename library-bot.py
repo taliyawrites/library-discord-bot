@@ -2557,11 +2557,11 @@ async def run_daily_loops():
             await bot_channel.send("Reminder that we have the following threads you can join!")
             await list_threads(bot_channel)
 
-    global event_times
-    for event in event_times:
-        utc = datetime.datetime.now(datetime.timezone.utc)
-        if (utc.month == event[1][0] and utc.day == event[1][1] and utc.hour == event[1][2] and utc.minute == event[1][3]):
-            await event_reminder(event)
+    # global event_times
+    # for event in event_times:
+    #     utc = datetime.datetime.now(datetime.timezone.utc)
+    #     if (utc.month == event[1][0] and utc.day == event[1][1] and utc.hour == event[1][2] and utc.minute == event[1][3]):
+    #         await event_reminder(event)
 
 
 

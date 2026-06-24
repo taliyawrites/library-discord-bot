@@ -187,7 +187,10 @@ class Button(discord.ui.View):
         await interaction.response.defer()
         await interaction.followup.send(embed = self.response[0])
         for msg in self.response[1:]:
-            await interaction.channel.send(embed = msg)
+            try: 
+                await interaction.channel.send(embed = msg)
+            except:
+                await interaction.channel.send(file = msg)
 
 
 

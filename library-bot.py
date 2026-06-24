@@ -856,13 +856,14 @@ async def tag(interaction, taglist: str):
             await interaction.followup.send(embed = matches_embed)
         except:
             msg_list = msg_split(link_string, tagstring + "Audios")
+            if tag_list == ["breeding"]:
+                if random.choice(range(2)) == 0:
+                    gif = discord.File("whoomp_a.gif")
+                else:
+                    gif = discord.File("whoomp_b.gif")
+                msg_list += [gif]
+            
             await interaction.followup.send("Vel has too many audios tagged " + tagstring.lower() + "to display without exceeding the Discord character limit! You can limit results by adding another tag you enjoy, or find a random audio with the tag " + tagstring.lower() + "by using the `/randomaudio` command with the tag option! \n\nTo see a full list of all " + str(len(matches)) + " audios tagged " + tagstring.lower()[:-1] + ", press the button below (note, the result will be multiple messages long)!",view =  Button(response = msg_list))
-    if tag_list == ["breeding"]:
-        if random.choice(range(2)) == 0:
-            await interaction.channel.send("https://tenor.com/view/project-hail-mary-grace-whoomp-there-it-is-gif-6833018458377456468")
-        else:
-            gif = discord.File("whoomp.gif")
-            await interaction.channel.send(file = gif)
 @tag.autocomplete('taglist')
 async def tag_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
     canonical_matches = [app_commands.Choice(name=opt, value=opt) for opt in sorted_tag_list if current.lower() in opt.lower()][:25]

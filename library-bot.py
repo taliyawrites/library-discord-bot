@@ -834,6 +834,7 @@ async def tag(interaction, taglist: str):
     matches = tagged_options(audio_choices,tags)
     matches.sort(key = age_sort)
 
+    taglist = taglist.replace("][","] [").replace("]  [","] [")
     if taglist[0] == '[':
         tag_list = taglist[1:-1].split('] [')
     else:

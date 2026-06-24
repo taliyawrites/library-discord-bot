@@ -2109,11 +2109,9 @@ async def betatags(interaction, filename : str, tags : str):
 async def addaudio(interaction, url : str, title : str, tags : str, description : str, exclusive : str, date : str, duration : str, scriptwriter: Optional[str] = "Vel", series: Optional[str] = "",   character : Optional[str] = "", gender : Optional[str] = "M4F"):
     await interaction.response.defer()
 
-    # corrected = get_tags(tags.lower().replace("’","'").strip())
-    # corrected_tags = "[" + '] ['.join(corrected) + "]"
     unsorted_tags, warnings = canonify_tags(tags)
     corrected_tags = tag_sort(tag_sort(unsorted_tags))
-    if further(corrected_tags, warnings):
+    if "further tags needed" not in corrected_tags:
         corrected_tags += " [further tags needed]"
 
     table = airtable_api.table('apprrNWlCwDHYj4wW', 'tblqwSpe5CdMuWHW6')

@@ -229,7 +229,8 @@ class TagButton(discord.ui.View):
 
 # extracts tag from !randomaudio request 
 def get_tags(message):
-    tag = message.strip()
+    tag_raw = message.strip()
+    tag = tag_raw.replace("][","] [").replace("]  [","] [")
 
     if len(tag) == 0:
         return None
@@ -1884,7 +1885,7 @@ async def updatetags(interaction, record : str, tags : str, mode : str, petnames
                 edited_tags = corrected_string + " " + additional_tags
                 corrected_string, warnings = canonify_tags(edited_tags)
 
-        if further(corrected_string, warnings): 
+        if further(corrected_string, warnings) and mode != "complete tags": 
             corrected_string += " [further tags needed]"
 
 
@@ -2104,7 +2105,7 @@ async def betatags(interaction, filename : str, tags : str):
 
 @tree.command(name = "addaudio", description = "Add a new entry to the masterlist",  guild = discord.Object(COMMAND_SERVER))
 @app_commands.describe(date = "In form MM-DD")
-async def addaudio(interaction, url : str, title : str, tags : str, description : str, exclusive : str, date : str, duration : str, scriptwriter: Optional[str] = "Vel", series: Optional[str] = "",   character : Optional[str] = ""):
+async def addaudio(interaction, url : str, title : str, tags : str, description : str, exclusive : str, date : str, duration : str, scriptwriter: Optional[str] = "Vel", series: Optional[str] = "",   character : Optional[str] = "", gender : Optional[str] = "M4F"):
     await interaction.response.defer()
 
     # corrected = get_tags(tags.lower().replace("’","'").strip())
@@ -2115,7 +2116,7 @@ async def addaudio(interaction, url : str, title : str, tags : str, description 
         corrected_tags += " [further tags needed]"
 
     table = airtable_api.table('apprrNWlCwDHYj4wW', 'tblqwSpe5CdMuWHW6')
-    record = table.create({"Title": title, "Tags": corrected_tags, "Post Link": url,"Description": description,"Scriptwriter": scriptwriter,"General Date": "2026-" + date, "Duration": duration_string(duration), "Series Name (if applicable)": series, "Public/Patreon": exclusive, "Recurring Characters": character})
+    record = table.create({"Title": title, "Tags": corrected_tags, "Post Link": url,"Description": description,"Scriptwriter": scriptwriter,"General Date": "2026-" + date, "Duration": duration_string(duration), "Series Name (if applicable)": series, "Public/Patreon": exclusive, "Recurring Characters": character, "Audience" : gender})
 
     global audio_choices
     audio_choices = import_airtable_data()
@@ -2124,8 +2125,12 @@ async def addaudio(interaction, url : str, title : str, tags : str, description 
             await interaction.followup.send(embed = entry.discord_post())
             break
 @addaudio.autocomplete('exclusive')
-async def addaudio_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
+async def addaudio_autocomplete_exclusive(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
     options = ["Patreon Exclusive","Public"]
+    return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]
+@addaudio.autocomplete('gender')
+async def addaudio_autocomplete_gender(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
+    options = ["M4F", "M4M", "MM4F", "M4A", "MMM4F", "MF4F", "M4MF", "M4AA", "MM4A"]
     return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]
 
 

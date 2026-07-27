@@ -847,7 +847,7 @@ async def tag(interaction, taglist: str):
     tagstring = "".join(formatted)
 
     if len(matches) == 0:
-        if tagstring.lower() == "fourth wall break":
+        if tagstring.lower() == "[fourth wall break]":
             await interaction.followup.send("Since some people prefer to be surprised by fourth wall breaks, rather than tagging them we've created a special column in the [masterlist](https://airtable.com/apprrNWlCwDHYj4wW/shrb4mT61rtxVW04M/tblqwSpe5CdMuWHW6/viwM1D86nvAQFsCMr) to mark which audios have fourth wall breaks. You can either toggle \"Fourth Wall Break?\" on under hidden fields, or filter by this field. This way, folks who prefer to avoid or be prepared for fourth wall breaks can check for them, and other folks can enjoy the surprise.")
         else:
             await interaction.followup.send("No audios tagged with " + tagstring.lower() + "found.")

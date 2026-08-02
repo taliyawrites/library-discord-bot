@@ -195,17 +195,18 @@ class Button(discord.ui.View):
 
 
 class TagButton(discord.ui.View):
-    def __init__(self, tags, audioID, names, wallbreak, tagQ, timeout=3600):
+    def __init__(self, tags, audioID, names, wallbreak, tagQ, userID, timeout=3600):
         super().__init__(timeout=timeout)
         self.tags = tags
         self.audioID = audioID
         self.tagQ = tagQ
         self.names = names
         self.wallbreak = wallbreak
+        self.userID = userID
     @discord.ui.button(label = "Accept Tags", style = discord.ButtonStyle.blurple)
     async def this_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
-        taggedaudio = push_masterlist_update(interaction, self.audioID, self.tags, self.names, self.wallbreak, self.tagQ)
+        taggedaudio = push_masterlist_update(interaction, self.audioID, self.tags, self.names, self.wallbreak, self.tagQ, self.userID)
         await interaction.followup.send(content = "Tags successfully updated!",embed = taggedaudio.discord_post())
     @discord.ui.button(label = "Reject Tags", style = discord.ButtonStyle.blurple)
     async def this_button_2(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -1896,16 +1897,16 @@ async def updatetags(interaction, record : str, tags : str, mode : str, petnames
         sorted_tag_string = tag_sort(tag_sort(corrected_string))
 
         if mode == "complete tags":
-            await interaction.followup.send(f'Tags for "{title}" (Record ID: {record}) written in canonical form as: {sorted_tag_string}', view = TagButton(tags = sorted_tag_string, audioID = record, names = petnames, wallbreak = fourthwallbreak, tagQ = True))
+            await interaction.followup.send(f'Tags for "{title}" (Record ID: {record}) written in canonical form as: {sorted_tag_string}', view = TagButton(tags = sorted_tag_string, audioID = record, names = petnames, wallbreak = fourthwallbreak, tagQ = True, userID = interaction.user.id))
             # mark_as_tagged(record)
         elif mode == "extra tags":
-            await interaction.followup.send(f'Adding tags to "{title}" (Record ID: {record}) written in canonical form as: {sorted_tag_string}', view = TagButton(tags = sorted_tag_string, audioID = record, names = petnames, wallbreak = fourthwallbreak, tagQ = False))
+            await interaction.followup.send(f'Adding tags to "{title}" (Record ID: {record}) written in canonical form as: {sorted_tag_string}', view = TagButton(tags = sorted_tag_string, audioID = record, names = petnames, wallbreak = fourthwallbreak, tagQ = False, userID = ""))
         elif mode == "petnames only":
             current_tags = this_audio.tag_string()[:-1].strip()
-            await interaction.followup.send(f'Adding petnames to "{title}" (Record ID: {record}): {petnames}', view = TagButton(tags = current_tags, audioID = record, names = petnames, wallbreak = fourthwallbreak, tagQ = False))
+            await interaction.followup.send(f'Adding petnames to "{title}" (Record ID: {record}): {petnames}', view = TagButton(tags = current_tags, audioID = record, names = petnames, wallbreak = fourthwallbreak, tagQ = False,userID = ""))
         elif mode == "fourth wall break only":
             current_tags = this_audio.tag_string()[:-1].strip()
-            await interaction.followup.send(f'Updating fourth wall break for "{title}" (Record ID: {record}): {fourthwallbreak}', view = TagButton(tags = current_tags, audioID = record, names = petnames, wallbreak = fourthwallbreak, tagQ = False))
+            await interaction.followup.send(f'Updating fourth wall break for "{title}" (Record ID: {record}): {fourthwallbreak}', view = TagButton(tags = current_tags, audioID = record, names = petnames, wallbreak = fourthwallbreak, tagQ = False, userID = ""))
         else: 
             await interaction.followup.send("Invalid choice for mode.")
 
@@ -1984,12 +1985,12 @@ def tag_sort(tag_string):
     return "[" + "] [".join(full_tags) + "]"
 
 
-def push_masterlist_update(interaction, audioID, tags, petnames, wallbreak, tagQ):
+def push_masterlist_update(interaction, audioID, tags, petnames, wallbreak, tagQ, userID):
     global audio_choices
     table = airtable_api.table('apprrNWlCwDHYj4wW', 'tblqwSpe5CdMuWHW6')
 
     # UPDATE MASTERLIST
-    table.update(audioID, {"Tags" : tags})
+    table.update(audioID, {"Tags" : tags, "Team ID" : userID})
     if len(petnames) != 0:
         table.update(audioID, {"Petnames Used" : petnames})
     if tagQ:

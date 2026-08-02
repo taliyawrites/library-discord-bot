@@ -1990,7 +1990,7 @@ def push_masterlist_update(interaction, audioID, tags, petnames, wallbreak, tagQ
     table = airtable_api.table('apprrNWlCwDHYj4wW', 'tblqwSpe5CdMuWHW6')
 
     # UPDATE MASTERLIST
-    table.update(audioID, {"Tags" : tags, "Team ID" : userID})
+    table.update(audioID, {"Tags" : tags, "Team ID" : str(userID)})
     if len(petnames) != 0:
         table.update(audioID, {"Petnames Used" : petnames})
     if tagQ:

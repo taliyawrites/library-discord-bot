@@ -1900,13 +1900,13 @@ async def updatetags(interaction, record : str, tags : str, mode : str, petnames
             await interaction.followup.send(f'Tags for "{title}" (Record ID: {record}) written in canonical form as: {sorted_tag_string}', view = TagButton(tags = sorted_tag_string, audioID = record, names = petnames, wallbreak = fourthwallbreak, tagQ = True, userID = interaction.user.id))
             # mark_as_tagged(record)
         elif mode == "extra tags":
-            await interaction.followup.send(f'Adding tags to "{title}" (Record ID: {record}) written in canonical form as: {sorted_tag_string}', view = TagButton(tags = sorted_tag_string, audioID = record, names = petnames, wallbreak = fourthwallbreak, tagQ = False, userID = ""))
+            await interaction.followup.send(f'Adding tags to "{title}" (Record ID: {record}) written in canonical form as: {sorted_tag_string}', view = TagButton(tags = sorted_tag_string, audioID = record, names = petnames, wallbreak = fourthwallbreak, tagQ = False, userID = interaction.user.id))
         elif mode == "petnames only":
             current_tags = this_audio.tag_string()[:-1].strip()
-            await interaction.followup.send(f'Adding petnames to "{title}" (Record ID: {record}): {petnames}', view = TagButton(tags = current_tags, audioID = record, names = petnames, wallbreak = fourthwallbreak, tagQ = False,userID = ""))
+            await interaction.followup.send(f'Adding petnames to "{title}" (Record ID: {record}): {petnames}', view = TagButton(tags = current_tags, audioID = record, names = petnames, wallbreak = fourthwallbreak, tagQ = False,userID = interaction.user.id))
         elif mode == "fourth wall break only":
             current_tags = this_audio.tag_string()[:-1].strip()
-            await interaction.followup.send(f'Updating fourth wall break for "{title}" (Record ID: {record}): {fourthwallbreak}', view = TagButton(tags = current_tags, audioID = record, names = petnames, wallbreak = fourthwallbreak, tagQ = False, userID = ""))
+            await interaction.followup.send(f'Updating fourth wall break for "{title}" (Record ID: {record}): {fourthwallbreak}', view = TagButton(tags = current_tags, audioID = record, names = petnames, wallbreak = fourthwallbreak, tagQ = False, userID = interaction.user.id))
         else: 
             await interaction.followup.send("Invalid choice for mode.")
 
@@ -1990,11 +1990,11 @@ def push_masterlist_update(interaction, audioID, tags, petnames, wallbreak, tagQ
     table = airtable_api.table('apprrNWlCwDHYj4wW', 'tblqwSpe5CdMuWHW6')
 
     # UPDATE MASTERLIST
-    table.update(audioID, {"Tags" : tags, "Team ID" : str(userID)})
+    table.update(audioID, {"Tags" : tags})
     if len(petnames) != 0:
         table.update(audioID, {"Petnames Used" : petnames})
     if tagQ:
-        table.update(audioID, {"Tagged?" : True})
+        table.update(audioID, {"Tagged?" : True, "Team ID" : str(userID)})
     if wallbreak == "yes":
         table.update(audioID, {"Fourth Wall Break?" : True})
     audio_choices = import_airtable_data()

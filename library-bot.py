@@ -1212,7 +1212,7 @@ async def tutorial(interaction):
         await interaction.user.send("The bot is primarily used to search through the masterlist of Vel's audios! If you don't know what you're in the mood for, send the command `/randomaudio` to have any of over four hundred audios chosen for you. Try it here: ")
     else:
         await interaction.response.defer()
-        await interaction.followup.send("The bot is primarily used to search through the masterlist of Vel's audios! If you don't know what you're in the mood for, send the command `/randomaudio` to have any of over four hundred audios chosen for you. Try it here: ")
+        await interaction.followup.send("The bot is primarily used to search through the masterlist of Vel's audios! If you don't know what you're in the mood for, send the command `/randomaudio` to have any of over seven hundred audios chosen for you. Try it here: ")
 
     cont = True
     if cont:
@@ -1352,7 +1352,8 @@ async def stream(interaction):
     # file = discord.File("schedule.webp", filename="schedule.webp")
     # await interaction.followup.send(file = file, embed=stream_embed)
     await interaction.response.defer()
-    stream_info = 'Vel streams live every weekend on [Twitch](https://www.twitch.tv/velslibrary). The next stream(s) will be ' + twitch_time + '!'
+    # stream_info = 'Vel streams live every weekend on [Twitch](https://www.twitch.tv/velslibrary). The next stream(s) will be ' + twitch_time + '!'
+    stream_info = "Vel's Twitch streams are currently on hiatus."
     stream_embed = discord.Embed(title = "Vel's Livestreams", description = stream_info, url = "https://www.twitch.tv/velslibrary")
     await interaction.followup.send(embed = stream_embed)
 
@@ -1360,8 +1361,9 @@ async def stream(interaction):
 @tree.command(name = "merch", description = "Information about Vel's merch!")
 async def merch(interaction):
     await interaction.response.defer()
-    merch_info = "Merch is now live for patrons to purchase! This is a special collection with art by our very own Teddy! Merch drops are seasonal, so this is your only chance to get these items."
-    merch_embed = discord.Embed(title = "Vel's Library Merch, Spring 2025", description = merch_info, url = "https://velslibrary.com/collections/the-vl-x-tm-collection")
+    # merch_info = "Merch is now live for patrons to purchase! This is a special collection with art by our very own Teddy! Merch drops are seasonal, so this is your only chance to get these items."
+    merch_info = "Merch drops are seasonal, and currently the library does not have any merch available — look forward to the next merch drop later this year!"
+    merch_embed = discord.Embed(title = "Vel's Library Merch, Spring 2025", description = merch_info, url = "https://velslibrary.com")
     await interaction.followup.send(embed = merch_embed)
 
 
@@ -1369,7 +1371,8 @@ async def merch(interaction):
 @tree.command(name = "socials", description = "Links to Vel's social media accounts")
 async def socials(interaction):
     await interaction.response.defer()
-    links = "- [Twitter](https://x.com/VelsLibrary) \n- [Reddit](https://www.reddit.com/user/VelsLibrary/) \n- [Twitch](https://www.twitch.tv/velslibrary) \n- [Pornhub](https://www.pornhub.com/model/velslibrary) \n- [Youtube](https://www.youtube.com/@VelsLibrary) \n- [TikTok](https://www.tiktok.com/@vels.library) \n- [Instagram](https://www.instagram.com/velslibrary/) \n- [Throne](https://throne.com/velslibrary) \n- [Ko-fi](https://ko-fi.com/velslibrary) \n- [Quinn](https://www.tryquinn.com/creators/vels-library)"
+    # \n- [Ko-fi](https://ko-fi.com/velslibrary) 
+    links = "- [Twitter](https://x.com/VelsLibrary) \n- [Reddit](https://www.reddit.com/user/VelsLibrary/) \n- [Twitch](https://www.twitch.tv/velslibrary) \n- [Pornhub](https://www.pornhub.com/model/velslibrary) \n- [Youtube](https://www.youtube.com/@VelsLibrary) \n- [TikTok](https://www.tiktok.com/@vels.library) \n- [Instagram](https://www.instagram.com/velslibrary/) \n- [Throne](https://throne.com/velslibrary) \n- [Quinn](https://www.tryquinn.com/creators/vels-library)"
     link_embed = discord.Embed(title = "Vel's Social Media",description=links)
     await interaction.followup.send(embed=link_embed)
 
@@ -2239,7 +2242,7 @@ async def update_error(interaction, error):
 
 
 
-@tree.command(name = "status", description = "makes the bot send a specified message in given channel", guild = discord.Object(COMMAND_SERVER))
+@tree.command(name = "status", description = "set bot status manually", guild = discord.Object(COMMAND_SERVER))
 @app_commands.check(lambda u: u.user == taliya)
 @app_commands.allowed_installs(guilds=True, users=False)
 async def status(interaction, status: Optional[str] = ""):
@@ -2381,7 +2384,7 @@ async def on_message(message):
 
     # logs new voice notes in the full list and forwards pics/videos to the pic channel
     if message.author == vel and len(message.attachments) != 0:
-        allowed_pic_channels = [VSPOT, GYM]
+        allowed_pic_channels = [VSPOT, GYM, PETS]
         allowed_vn_channels = [VSPOT, RR, GEN]
 
         pic_channel = client.get_channel(PICS)

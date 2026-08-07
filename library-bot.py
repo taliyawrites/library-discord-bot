@@ -284,13 +284,14 @@ def title_matches(phrase):
     return matching
 
 # search to see if any part of the phrase appears in any titles
-def inexact_matches(phrase):
+def inexact_matches_old(phrase):
     matching = []
     closer_matches = []
     closest_matches = []
     search_terms = phrase.split(" ")
     too_common_words = ["the","a","an","is","on","for","you","my","i","to","me","up","and","are","with","your","by","part","of","pt","pt.","ep","ep."]
     search_words = []
+    full_matches = []
     for word in search_terms:
         if word not in too_common_words and (len(word) > 2 or word.isnumeric() or word == "bi" or word == "ex"):
             search_words.append(word)
@@ -331,12 +332,60 @@ def inexact_matches(phrase):
             matching = new_matching
     # refine for BEST match
 
+
     if len(closest_matches) == 0:
         closest_matches = closer_matches
     if len(closest_matches) != 0:
         closest_matches.sort(key = age_sort)
     matching.sort(key = age_sort)
     return matching,closest_matches
+
+
+
+# search to see if any part of the phrase appears in any titles
+def inexact_matches(phrase):
+    search_terms = phrase.lower().split(" ")
+    too_common_words = ["the","a","an","is","on","for","you","my","i","to","me","up","and","are","with","your","by","part","of","pt","pt.","ep","ep."]
+    search_words = []
+    search_num = ""
+    for word in search_terms:
+        if word not in too_common_words and (len(word) > 2 or word.isnumeric() or word == "bi" or word == "ex"):
+            search_words.append(word)
+        if word.isnumeric():
+            search_num = word
+
+    all_matches, complete_matches, full_matches, best_matches, = [], [], [], []
+    for audio in audio_choices:
+        audio_name = audio.name().lower().replace("&","and")
+        overlap = 0
+        numeric_overlap = 0
+        numMatch = False
+        for word in search_words:
+            if word in audio_name:
+                overlap += 1
+                if word.isnumeric():
+                    numeric_overlap += 1
+        if (search_num != "" and numeric_overlap > 0) or search_num == "":
+            numMatch = True
+        if (overlap - numeric_overlap) > 0 and numMatch:
+            all_matches.append([audio, (overlap - numeric_overlap)])
+        if overlap == len(search_words):
+            complete_matches.append(audio)
+
+    if len(complete_matches) != 0:
+        complete_matches.sort(key = age_sort)
+
+    if len(all_matches) != 0:
+        full_matches = [entry[0] for entry in all_matches]
+        full_matches.sort(key = age_sort)
+
+        all_matches.sort(reverse = True, key = lambda l : l[-1])
+        max_overlap = all_matches[0][1]
+        best_matches = [entry[0] for entry in list(filter(lambda l: l[-1] == max_overlap, all_matches))]
+        best_matches.sort(key = age_sort)
+
+    return complete_matches, best_matches, full_matches
+
 
 
 # search to see if any part of the phrase appears in any titles
@@ -740,7 +789,8 @@ async def randomaudio_autocomplete(interaction: discord.Interaction, current: st
 @tree.command(name = "title", description = "Finds an audio by (part of) its title!")
 @app_commands.rename(title_phrase = "title")
 @app_commands.describe(title_phrase="any words or phrases from the audio's title that you remember")
-async def title(interaction, title_phrase: str):
+@app_commands.describe(show_all="use this option if you want the bot to respond with every audio that partially matches your search phrase (this might be a lot of audios!)")
+async def title(interaction, title_phrase: str, show_all: Optional[str] = "no"):
     await interaction.response.defer()
     phrase = title_phrase.lower().replace("’","'").replace('“','"').replace('”','"').replace("‘","'").replace("&","and").strip()
     if phrase[0] == '"' or phrase[0] == "'":
@@ -751,31 +801,39 @@ async def title(interaction, title_phrase: str):
     check_id = "none"
 
     if len(matches) == 0:
-        possible_matches, full_overlap_matches = inexact_matches(phrase)
+        full_overlap_matches, best_matches, all_matches = inexact_matches(phrase)
+        respondQ = False
         if len(full_overlap_matches) == 0: 
-            if len(possible_matches) == 0:
+            if len(all_matches) == 0:
                 await interaction.followup.send(f'No audios found with title including the phrase "{phrase}." Consider using a `/tag` search instead, as tags are often more descriptive than titles and make audios easier to find!')
-            elif len(possible_matches) == 1:
-                # await interaction.followup.send('No exact matches found for "' + phrase + '." One partially matching result found.')
-                check_id = possible_matches[0].recordID()
-                await interaction.followup.send(embed=possible_matches[0].discord_post())
+            elif len(best_matches) == 1:
+                check_id = best_matches[0].recordID()
+                await interaction.followup.send(embed=best_matches[0].discord_post())
             else:
+                respondQ = True
+                if show_all == "yes" or len(best_matches) == len(all_matches):
+                    response_matches = all_matches
+                    response_title = "All Partially Matching Results"
+
+                elif len(best_matches) < len(all_matches):
+                    response_matches = best_matches
+                    response_title = "Best Partially Matching Results"
+
+            if respondQ:
                 link_string = ""
-                for i in list(range(len(possible_matches))):
-                    next = str(i+1) + ". [" + possible_matches[i].name() + "](" + possible_matches[i].link() + ")" + '\n'
+                for i in list(range(len(response_matches))):
+                    next = str(i+1) + ". [" + response_matches[i].name() + "](" + response_matches[i].link() + ")" + '\n'
                     link_string = link_string + next
-                match_embeds = msg_split(link_string,"Partially Matching Results")
-
-
-                # best_match = closest_match(phrase, possible_matches)
-                # await interaction.followup.send(embed=best_match.discord_post())
-                # await interaction.channel.send(content = f'This was the closest match found for your "{phrase}" search. Not the audio you were looking for? Press the button below to see all audios that partially match your query!', view =  Button(response = match_embeds))
-
-                await interaction.followup.send(embed = match_embeds[0])
-                if len(match_embeds) > 1:
-                    for embed in match_embeds[1:]:
-                        await interaction.channel.send(embed = embed)
-
+                try:
+                    await interaction.followup.send(embed = discord.Embed(title = response_title,description=link_string))
+                except:
+                    match_embeds = msg_split(link_string,response_title)
+                    await interaction.followup.send(embed = match_embeds[0])
+                    if len(match_embeds) > 1:
+                        for embed in match_embeds[1:]:
+                            await interaction.channel.send(embed = embed)
+                if len(best_matches) < len(all_matches):
+                    await interaction.followup.send(f'This was the closest match found for your "{phrase}" search. Not the audio you were looking for? Redo the `/title` command search with the option "all results" to see every audio that partially matches your query!')
 
         elif len(full_overlap_matches) == 1:
             check_id = full_overlap_matches[0].recordID()
@@ -821,6 +879,10 @@ async def title(interaction, title_phrase: str):
         await interaction.followup.send("Back again, slut?")
     if interaction.user.id == 490759913757212672 and check_id == "recdatlFnyuOU1sze":
         await interaction.followup.send("You really are insatiable, aren't you, kitten.")
+@title.autocomplete('show_all')
+async def title_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
+    options = ["yes","no"]
+    return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]
 
 
 

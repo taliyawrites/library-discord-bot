@@ -292,7 +292,7 @@ def inexact_matches(phrase):
     too_common_words = ["the","a","an","is","on","for","you","my","i","to","me","up","and","are","with","your","by","part","of","pt","pt.","ep","ep."]
     search_words = []
     for word in search_terms:
-        if word not in too_common_words and (len(word) > 2 or word.isnumeric() or word == "bi"):
+        if word not in too_common_words and (len(word) > 2 or word.isnumeric() or word == "bi" or word == "ex"):
             search_words.append(word)
 
     for audio in audio_choices:
@@ -867,9 +867,9 @@ async def tag(interaction, taglist: str):
             msg_list = msg_split(link_string, tagstring + "Audios")
             if tag_list == ["breeding"]:
                 if random.choice(range(2)) == 0:
-                    gif = discord.File("whoomp_a.gif")
+                    gif = discord.File("media/whoomp_a.gif")
                 else:
-                    gif = discord.File("whoomp_b.gif")
+                    gif = discord.File("media/whoomp_b.gif")
                 msg_list += [gif]
             
             await interaction.followup.send("Vel has too many audios tagged " + tagstring.lower() + "to display without exceeding the Discord character limit! You can limit results by adding another tag you enjoy, or find a random audio with the tag " + tagstring.lower() + "by using the `/randomaudio` command with the tag option! \n\nTo see a full list of all " + str(len(matches)) + " audios tagged " + tagstring.lower()[:-1] + ", press the button below (note, the result will be multiple messages long)!",view =  Button(response = msg_list))
@@ -1023,8 +1023,8 @@ async def masterlist(interaction):
 @tree.command(name = "photoshoots", description = "Links to Vel's photoshoot pics!")
 async def photoshoots(interaction):
     await interaction.response.defer()
-    image = discord.File("photoshootpreviewpic.jpg")
-    image_url = "attachment://photoshootpreviewpic.jpg"
+    image = discord.File("media/photoshootpreviewpic.jpg")
+    image_url = "attachment://media/photoshootpreviewpic.jpg"
 
     # link_string = "Here are links to all of Vel's photoshoots!\n- [June 2025](https://www.patreon.com/posts/june-photoshoot-135185141)"
     # full_embed = discord.Embed(title = "Vel's Photoshoots <3", description = link_string, url = COLLECTION_URL_INSE)
@@ -1673,7 +1673,7 @@ async def hydrate(interaction, victim: Optional[str] = "", nom: Optional[str] = 
     msg1 = client.get_channel(1158145318781714493).get_partial_message(1187442200980766940)
     msg2 = client.get_channel(1194499430410371173).get_partial_message(1475573285046583336)
     esnupi = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQw4dIe87tpv0gK-1hTrDZHPYLowAY-uYj3FCLOKJwZNH6mb3YE9xzGCYGKv2YHTY-d6LM&usqp=CAU"
-    image = discord.File("esnupi.jpg")
+    image = discord.File("media/esnupi.jpg")
 
     if len(victim) == 0:
         if nom == "yes":
@@ -1776,9 +1776,9 @@ async def reminders(interaction):
 @tree.command(name = "tierlist", description = "Links to Vel's official tier list of all his audios!")
 async def tierlist(interaction):
     await interaction.response.defer()
-    image = discord.File("just_the_top.webp")
+    image = discord.File("media/just_the_top.webp")
     embed = discord.Embed(title = "Vel's Library Full Audio Tierlist!", url = "https://tiermaker.com/create/vels-library-audio-tierlist-18367623-2", description = "You can see Vel's full official tier list of all his audios here! https://discord.com/channels/1148449914188218399/1194499430410371173/1391176460781359224 This was done live on twitch stream (use `/stream` for  more details on how to join us next time). If you'd like to do your own tierlist, you can [make your own here](https://tiermaker.com/create/vels-library-audio-tierlist-18367623-2), courtesy of Kayla!")
-    embed.set_image(url="attachment://just_the_top.webp")
+    embed.set_image(url="attachment://media/just_the_top.webp")
     await interaction.followup.send(file = image, embed=embed)
 
 
@@ -1786,7 +1786,7 @@ async def tierlist(interaction):
 @tree.command(name = "eventcalendar", description = "This month's calendar of events!")
 async def eventcalendar(interaction):
     await interaction.response.defer()
-    image = discord.File("current_calendar.webp")
+    image = discord.File("media/current_calendar.webp")
     await interaction.followup.send("Upcoming calendar of server events! See the Events tab and https://discord.com/channels/1148449914188218399/1153466557524082771 for further details.", file = image)
 
 
@@ -1831,7 +1831,7 @@ async def gull(interaction):
     gull_counter += 1
     save_to_file(GULL_FILENAME, [str(gull_counter)])
 
-    await interaction.followup.send(content = f"{interaction.user.display_name} has sent another gull! There are now {gull_counter} gulls in Vel's abode.", file = discord.File("gull.png"))
+    await interaction.followup.send(content = f"{interaction.user.display_name} has sent another gull! There are now {gull_counter} gulls in Vel's abode.", file = discord.File("media/gull.png"))
 
     if gull_counter == 100: 
         await interaction.channel.send("Vel’s abode now contains a - combined and condensed - gull volume of ~10.6 cubic meters (or roughly the volume of two ovens)! (Gull facts by Mollie!)")

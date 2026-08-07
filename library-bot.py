@@ -2413,7 +2413,7 @@ async def on_message(message):
     if message.author == taliya and message.content.startswith("!track"):
         await track_patrons()
 
-    if message.author == taliya and message.content.startswith("!git"):
+    if message.author == taliya and message.content.startswith("!githubstatus"):
         await message.channel.send("github repo public")
 
     if message.author == taliya and message.content.startswith("!editrule"):

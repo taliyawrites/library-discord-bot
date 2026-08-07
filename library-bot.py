@@ -1363,7 +1363,7 @@ async def merch(interaction):
     await interaction.response.defer()
     # merch_info = "Merch is now live for patrons to purchase! This is a special collection with art by our very own Teddy! Merch drops are seasonal, so this is your only chance to get these items."
     merch_info = "Merch drops are seasonal, and currently the library does not have any merch available — look forward to the next merch drop later this year!"
-    merch_embed = discord.Embed(title = "Vel's Library Merch, Spring 2025", description = merch_info, url = "https://velslibrary.com")
+    merch_embed = discord.Embed(title = "Vel's Library Merch", description = merch_info, url = "https://velslibrary.com")
     await interaction.followup.send(embed = merch_embed)
 
 
@@ -1743,9 +1743,13 @@ async def birthday(interaction, month: int, day: int):
         if entry[0] == user_id:
             birthdays.remove(entry)
     birthdays.append([user_id,month,day])
+    month_names  = ["invalid","January","February","March","April","May","June","July","August","September","October","November","December"]
     with open(BIRTHDAY_FILENAME, "w") as outfile:
         outfile.write(json.dumps(birthdays))
-    await interaction.followup.send("Your birthday has been saved with the bot!")
+    try: 
+        await interaction.followup.send(f"Your birthday has been saved with the bot as {month_names[month]} {day}!")
+    except:
+        await interaction.followup.send("Month out of range. Please try again and make sure you are entering the month first, then the day!")
 
 
 @tree.command(name = "birthdayremove", description = "Remove your birthday from the bot's list.")

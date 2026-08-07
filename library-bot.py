@@ -814,10 +814,12 @@ async def title(interaction, title_phrase: str, show_all: Optional[str] = "no"):
                 if show_all == "yes" or len(best_matches) == len(all_matches):
                     response_matches = all_matches
                     response_title = "All Partially Matching Results"
+                    optionTextQ = False
 
                 elif len(best_matches) < len(all_matches):
                     response_matches = best_matches
                     response_title = "Best Partially Matching Results"
+                    optionTextQ = True
 
             if respondQ:
                 link_string = ""
@@ -832,8 +834,8 @@ async def title(interaction, title_phrase: str, show_all: Optional[str] = "no"):
                     if len(match_embeds) > 1:
                         for embed in match_embeds[1:]:
                             await interaction.channel.send(embed = embed)
-                if len(best_matches) < len(all_matches):
-                    await interaction.followup.send(f'This was the closest match found for your "{phrase}" search. Not the audio you were looking for? Redo the `/title` command search with the option "all results" to see every audio that partially matches your query!')
+                if optionTextQ:
+                    await interaction.followup.send(f'This was the closest match found for your "{phrase}" search. Not the audio you were looking for? Redo the `/title` command search with the option "show_all" to see every audio that partially matches your query!')
 
         elif len(full_overlap_matches) == 1:
             check_id = full_overlap_matches[0].recordID()

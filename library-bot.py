@@ -827,7 +827,7 @@ async def title(interaction, title_phrase: str, show_all: Optional[str] = "no"):
                     next = str(i+1) + ". [" + response_matches[i].name() + "](" + response_matches[i].link() + ")" + '\n'
                     link_string = link_string + next
                 if optionTextQ:
-                    link_string += f'These are the closest matches found for your "{phrase}" search. Not the audio you were looking for? Redo the `/title` command search with the option "show_all" to see every audio that partially matches your query!'
+                    link_string = f'*These are the closest matches found for your "{phrase}" search. Not the audio you were looking for? Redo the `/title` command search with the option "show_all" to see every audio that partially matches your query!*\n' + link_string
                 try:
                     await interaction.followup.send(embed = discord.Embed(title = response_title,description=link_string))
                 except:

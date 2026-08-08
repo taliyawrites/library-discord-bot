@@ -826,6 +826,8 @@ async def title(interaction, title_phrase: str, show_all: Optional[str] = "no"):
                 for i in list(range(len(response_matches))):
                     next = str(i+1) + ". [" + response_matches[i].name() + "](" + response_matches[i].link() + ")" + '\n'
                     link_string = link_string + next
+                if optionTextQ:
+                    link_string += f'\nThis was the closest match found for your "{phrase}" search. Not the audio you were looking for? Redo the `/title` command search with the option "show_all" to see every audio that partially matches your query!'
                 try:
                     await interaction.followup.send(embed = discord.Embed(title = response_title,description=link_string))
                 except:
@@ -834,8 +836,6 @@ async def title(interaction, title_phrase: str, show_all: Optional[str] = "no"):
                     if len(match_embeds) > 1:
                         for embed in match_embeds[1:]:
                             await interaction.channel.send(embed = embed)
-                if optionTextQ:
-                    await interaction.followup.send(f'This was the closest match found for your "{phrase}" search. Not the audio you were looking for? Redo the `/title` command search with the option "show_all" to see every audio that partially matches your query!')
 
         elif len(full_overlap_matches) == 1:
             check_id = full_overlap_matches[0].recordID()
@@ -2480,11 +2480,6 @@ async def on_message(message):
     if message.author == taliya and message.content.startswith("!githubstatus"):
         await message.channel.send("github repo currently public")
 
-    if message.author == taliya and message.content.startswith("!editrule"):
-        rule_block_b = "6. **No selfies or photos/videos of your body.** We do not allow any photos of any members to be posted in the server, even if your face is censored. Face cams are not permitted in VC. This rule applies even to cropped photos of your tattoos or piercings. The permitted exception is hands: hand cams are allowed in VC for activities like drawing & cooking, and you can post photos showing your hands (like nail/ring pics in the fashion channel or if you’re holding something to take a photo of it) even if hand tattoos are visible! \n\n7. **Keep conversations about audios focused on Vel.** Please save discussion of other VAs and their audios for those creators’ own community spaces or your private DMs. \n\n8. **No advertisements without authorization.** Please do not advertise for other creators. You may share your own creative work in appropriate channels provided it does not violate rule 6, but do not advertise your own commissionable services or solicit engagement for your own content. \n\n9. **No pornographic material outside of NSFW channels.** Porn and other adult/sexual material and discussions are only allowed in the appropriate age-restricted channels. \n\n10. **No AI.** The use of any of Vel's content in generative AI is strictly prohibited. \n\n11. **Listen to moderators.** If a moderator tags or DMs you in their official capacity, you are expected to address the message by replying and/or taking the action they recommended. Please refrain from blocking moderators. \n\n12. **No spoiling Vel’s content.** For recently released audios, please keep discussion in the https://discord.com/channels/1148449914188218399/1150656210341732393 channel and use [spoiler text](https://support.discord.com/hc/en-us/articles/360022320632-Spoiler-Tags) as a courtesy. Spoilers (including memes, fanart, and teasing hints) about yet-to-be released audios recorded during weekly lives should only be shared in https://discord.com/channels/1148449914188218399/1274877049118396416. \n\u200b"
-        rule_msg = await client.get_guild(GUILD).get_channel(1374549206286733322).fetch_message(1417702029421314210)
-        new_msg = await rule_msg.edit(content = rule_block_b)
-        await message.channel.send(new_msg.jump_url)
 
 
 

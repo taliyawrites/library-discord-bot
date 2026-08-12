@@ -2233,8 +2233,9 @@ def further(tags, warnings):
 @app_commands.allowed_installs(guilds=True, users=False)
 async def refresh(interaction):
     await interaction.response.defer()
-    global audio_choices, tag_dictionary, collections, paired_tags, flagged
+    global audio_choices, tag_dictionary, collections, paired_tags, flagged, sorted_tag_list
 
+    sorted_tag_list = read_from_file(TAGS_FILENAME)
     audio_choices = import_airtable_data()
     tag_dictionary = import_tag_dictionary()
     collections = import_collections()

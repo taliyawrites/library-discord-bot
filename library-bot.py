@@ -1282,7 +1282,7 @@ async def tutorial(interaction):
     if cont:
         try:
             await client.wait_for('interaction',check = lambda m: m.command.name == "randomaudio", timeout = 600)
-            await asyncio.sleep(0.5)
+            await asyncio.sleep(2)
             cont = True
         except:
             await interaction.user.send("Tutorial automatically ended after ten minutes of inactivity. If you want to finish the tutorial, send `/tutorial` to start again.")
@@ -1293,7 +1293,7 @@ async def tutorial(interaction):
         cont = False
         try:
             await client.wait_for('interaction',check = lambda m: m.command.name == "randomaudio", timeout = 600)
-            await asyncio.sleep(0.5)
+            await asyncio.sleep(2)
             cont = True
         except:
             await interaction.user.send("Tutorial automatically ended after ten minutes of inactivity. If you want to finish the tutorial, send `/tutorial` to start again.")
@@ -1304,7 +1304,7 @@ async def tutorial(interaction):
         cont = False
         try:
             await client.wait_for('interaction',check = lambda m: m.command.name == "tag", timeout = 600)
-            await asyncio.sleep(0.5)
+            await asyncio.sleep(2)
             cont = True
         except:
             await interaction.user.send("Tutorial automatically ended after ten minutes of inactivity. If you want to finish the tutorial, send `/tutorial` to start again.")
@@ -1315,7 +1315,7 @@ async def tutorial(interaction):
         cont = False
         try:
             await client.wait_for('interaction',check = lambda m: m.command.name == "title", timeout = 600)
-            await asyncio.sleep(0.5)
+            await asyncio.sleep(2)
             cont = True
         except:
             await interaction.user.send("Tutorial automatically ended after ten minutes of inactivity. If you want to finish the tutorial, send `/tutorial` to start again.")
@@ -1326,7 +1326,7 @@ async def tutorial(interaction):
         cont = False
         try:
             await client.wait_for('interaction',check = lambda m: m.command.name == "character", timeout = 600)
-            await asyncio.sleep(0.5)
+            await asyncio.sleep(2)
             cont = True
         except:
             await interaction.user.send("Tutorial automatically ended after ten minutes of inactivity. If you want to finish the tutorial, send `/tutorial` to start again.")
@@ -1337,7 +1337,7 @@ async def tutorial(interaction):
         cont = False
         try:
             await client.wait_for('interaction',check = lambda m: m.command.name == "vn", timeout = 600)
-            await asyncio.sleep(0.5)
+            await asyncio.sleep(2)
             cont = True
         except:
             await interaction.user.send("Tutorial automatically ended after ten minutes of inactivity. If you want to finish the tutorial, send `/tutorial` to start again.")

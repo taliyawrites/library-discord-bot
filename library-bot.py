@@ -37,6 +37,7 @@ RR = int(os.getenv('RR'))
 GEN = int(os.getenv('GEN'))
 PICS = int(os.getenv('PICS'))
 VNS = int(os.getenv('VNS'))
+WRITING = int(os.getenv('WRITING'))
 
 
 BIRTHDAY_CHANNEL = int(os.getenv('BIRTHDAY_CHANNEL'))
@@ -2377,6 +2378,28 @@ async def pipture_error(interaction, error):
     await interaction.response.send_message("Permissions denied.")
 
 
+@tree.command(name = "forward_message", description = "add link to new picture of Pippin", guild = discord.Object(COMMAND_SERVER))
+@app_commands.check(lambda u: u.user == taliya)
+@app_commands.allowed_installs(guilds=True, users=False)
+async def forward_message(interaction, message_id: str, from_channel: str, to_channel: str):
+    await interaction.response.defer()
+    fwd_channel = client.get_channel(int(to_channel))
+    message = client.get_channel(int(from_channel)).get_partial_message(int(message_id))
+    fwd_msg = await message.forward(fwd_channel)
+    await interaction.followup.send(f"Message forwarded! {fwd_msg.jump_url}")
+@forward_message.error
+async def forward_message_error(interaction, error):
+    await interaction.response.send_message("Permissions denied.")
+@forward_message.autocomplete('from_channel')
+async def forward_message_autocomplete_from(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
+    options = {"v spot" : VSPOT,"thirst traps" : PICS, "voice notes" : VNS, "writing" : WRITING,"abyss" : ABYSS, "horny jail" : HORNYJAIL, "release reactions" : RR, "bot spam" : GENERAL, "command" : COMMAND_CHANNEL_ID}
+    return [app_commands.Choice(name=opt, value=str(options[opt])) for opt in list(options.keys()) if current.lower() in opt.lower()][:25]
+@forward_message.autocomplete('to_channel')
+async def forward_message_autocomplete_to(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
+    options = {"v spot" : VSPOT,"thirst traps" : PICS, "voice notes" : VNS, "writing" : WRITING,"abyss" : ABYSS, "horny jail" : HORNYJAIL, "release reactions" : RR, "bot spam" : GENERAL, "command" : COMMAND_CHANNEL_ID}
+    return [app_commands.Choice(name=opt, value=str(options[opt])) for opt in list(options.keys()) if current.lower() in opt.lower()][:25]
+
+
 
 
 @tree.command(name = "mod_embed", guild = discord.Object(COMMAND_SERVER))
@@ -2475,11 +2498,15 @@ async def on_message(message):
                     save_to_file(PIPPIN_FILENAME,pippin_ids)
                     print("Pippin picture logged!")
 
+    if message.author == vel and len(message.content) > 1000: 
+        allowed_writing_channels = [VSPOT, RR, HORNYJAIL, ABYSS]
+        writing_channel = client.get_channel(WRITING)
+        if message.channel.id in allowed_writing_channels: 
+            await message.forward(writing_channel)
+            await client.get_channel(COMMAND_CHANNEL_ID).send(f"{taliya.mention} new writing forwarded: {message.jump_url}")
+
     if message.author == taliya and message.content.startswith("!track"):
         await track_patrons()
-
-    if message.author == taliya and message.content.startswith("!githubstatus"):
-        await message.channel.send("github repo currently public")
 
 
 

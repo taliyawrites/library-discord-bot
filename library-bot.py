@@ -1911,6 +1911,48 @@ async def gull(interaction):
     if gull_counter == 400: 
         await interaction.channel.send("All the gulls in Vel’s abode weigh about the same as an adult Labrador retriever standing on the back of an adult female *grizzly bear*. (Gull facts by Mollie!)")
 
+    if gull_counter == 512:
+            await interaction.channel.send("There is approximately half a metric ton of gull in Vel’s abode. Please consult a structural engineer before adding any more retaliatory violence. (Gull facts by Mollie!)")
+
+    if gull_counter == 531:
+            await interaction.channel.send("Vel’s abode now contains 1,062 little gull feet. If everyone wore shoes, that would be 531 pairs. Probably none of them wiped their feet before coming inside. (Gull facts by Mollie!)")
+
+    if gull_counter == 555:
+            await interaction.channel.send("There are now approximately 30 meters of gull beak in Vel’s home. That’s enough beak to reach from one end of a basketball court to the other. Every centimeter has something to complain about. (Gull facts by Mollie!)")
+
+    if gull_counter == 600:
+            await interaction.channel.send("If all the gulls in Vel’s abode spread their wings and stood in a line, they would stretch for about half a mile. Unfortunately, they have chosen to be in his kitchen instead. (Gull facts by Mollie!)")
+
+    if gull_counter == 625:
+            await interaction.channel.send("If each gull in Vel’s abode stole just one fry, he would lose 625 fries. At a rate of one theft per minute, that’s over 10 hours of uninterrupted potato crime to add to his roster. (Gull facts by Mollie!)")
+
+    if gull_counter == 666:
+            await interaction.channel.send("Vel’s abode now contains 666 gulls and approximately 4 million feathers. If it wasn't cultural appropriation he could make bank off of custom dreamcatchers. (Gull facts by Mollie!)")
+
+    if gull_counter == 700:
+            await interaction.channel.send("If every gull in Vel’s home demanded just one minute of individual attention, it would take almost 12 hours to hear everyone out. All 700 complaints are about his shower singing. (Gull facts by Mollie!)")
+
+    if gull_counter == 750:
+            await interaction.channel.send("Lined up beak to tail, the gulls in Vel’s abode would stretch approximately 450 meters. That’s more than a full lap of a standard running track. A horrible little conga line of consequences for his hotness. (Gull facts by Mollie!)")
+
+    if gull_counter == 800:
+            await interaction.channel.send("Vel’s abode now contains approximately 800 kilograms of gull. If distributed evenly across four bathroom scales, each would need to support 200 kilograms and 200 deeply uncooperative birds. (Gull facts by Mollie!)")
+
+    if gull_counter == 850:
+            await interaction.channel.send("There are approximately 46 meters of gull beak in Vel’s abode. That’s almost the length of an Olympic swimming pool. Imagine swimming a lap, except the water is angry and wants your chips. (Gull facts by Mollie!)")
+
+    if gull_counter == 900:
+            await interaction.channel.send("Vel’s abode now contains 1,800 wings. If every gull flapped once, that would be 1,800 individual wing downstrokes. We do not recommend this as Vel has already replaced his roof once in recent memory. (Gull facts by Mollie!)")
+
+    if gull_counter == 925:
+            await interaction.channel.send("If every gull in Vel’s abode contributed one dollar toward rent, he would have $925. They have instead contributed screaming and a fish they found somewhere. (Gull facts by Mollie!)")
+
+    if gull_counter == 950:
+            await interaction.channel.send("At approximately 6,000 feathers per gull, Vel’s abode now contains 5.7 million feathers. Somewhere beneath all of them is a man who used to own furniture. (Gull facts by Mollie!)")
+
+    if gull_counter == 1000:
+            await interaction.channel.send("Congratulations! Vel’s abode now contains approximately ONE METRIC TON of gull. We have reached the kilogull. His home is now a bulk shipment of consequences. (Gull facts by Mollie!)")
+
 
     if random.choice(range(50)) == 0:
         await interaction.channel.send("The rookery grows in number...")
@@ -2503,7 +2545,7 @@ async def on_message(message):
         writing_channel = client.get_channel(WRITING)
         if message.channel.id in allowed_writing_channels: 
             await message.forward(writing_channel)
-            await client.get_channel(COMMAND_CHANNEL_ID).send(f"{taliya.mention} new writing forwarded: {message.jump_url}")
+            await client.get_channel(COMMAND_CHANNEL_ID).send(f"{taliya.mention} new writing forwarded: {message.jump_url}. Use `/forward_message` for any addendums or content warnings!")
 
     if message.author == taliya and message.content.startswith("!track"):
         await track_patrons()

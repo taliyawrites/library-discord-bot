@@ -1556,7 +1556,7 @@ async def time(interaction, t: str):
         time_string = cut[:end_index].strip()
         split = time_string.partition(":")
 
-        try int(split[0]):
+        try:
             if len(split[2]) != 0:
                 hour, minute = int(split[0]), int(split[2])
             else:

@@ -1188,7 +1188,7 @@ async def removerequest(interaction, remove_index: int):
     not_found = True
     for entry in snack_requests:
         if entry[0] == interaction.user.id:
-            if remove_index > -1 + len(entry):
+            if remove_index > -1 + len(entry) or remove_index < 1:
                 await interaction.followup.send(f"Request out of range; entry {remove_index} does not exist!")
                 not_found=False
             else:
@@ -1556,28 +1556,31 @@ async def time(interaction, t: str):
         time_string = cut[:end_index].strip()
         split = time_string.partition(":")
 
-        if len(split[2]) != 0:
-            hour, minute = int(split[0]), int(split[2])
-        else:
-            hour, minute = int(split[0]), 0
+        try int(split[0]):
+            if len(split[2]) != 0:
+                hour, minute = int(split[0]), int(split[2])
+            else:
+                hour, minute = int(split[0]), 0
 
-        if hour == 12:
-            hour = 0
+            if hour == 12:
+                hour = 0
 
-        if isAM:
-            utc_hour = hour + 4
-        else:
-            utc_hour = hour + 4 + 12
+            if isAM:
+                utc_hour = hour + 4
+            else:
+                utc_hour = hour + 4 + 12
 
-        now = datetime.datetime.utcnow()
-        if utc_hour < 24:
-            utc_time = datetime.datetime(now.year, now.month, now.day, utc_hour, minute)
-        else:
-            utc_time = datetime.datetime(now.year, now.month, now.day + 1, utc_hour % 24, minute)
+            now = datetime.datetime.utcnow()
+            if utc_hour < 24:
+                utc_time = datetime.datetime(now.year, now.month, now.day, utc_hour, minute)
+            else:
+                utc_time = datetime.datetime(now.year, now.month, now.day + 1, utc_hour % 24, minute)
 
-        epoch_time = calendar.timegm(utc_time.timetuple())
-        timestamp = "<t:" + str(epoch_time) + ":t>"
-        await interaction.followup.send(timestamp)
+            epoch_time = calendar.timegm(utc_time.timetuple())
+            timestamp = "<t:" + str(epoch_time) + ":t>"
+            await interaction.followup.send(timestamp)
+        except:
+            await interaction.followup.send("Please try again and specify a numerical time.")
 
 
 

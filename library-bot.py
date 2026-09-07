@@ -151,9 +151,9 @@ class Audio:
     def scriptlink(self):
         for entry in self.parsed_data():
             if entry[0]=='Script Offer':
-                return " (script available [here!](" + entry[1] + "))"
+                return "\n*(script available [here!](" + entry[1] + "))*"
             elif entry[0]=='Script Link':
-                return " (script available [here!](" + entry[1] + "))"
+                return "\n*(script available [here!](" + entry[1] + "))*"
         return ''
 
     def description(self):

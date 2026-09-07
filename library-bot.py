@@ -2515,8 +2515,6 @@ async def send_rules(interaction, channelid: Optional[str] = "137454920628673332
 
 
 
-
-
 # ON MESSSAGE ACTIONS #
 
 @client.event
@@ -2561,6 +2559,9 @@ async def on_message(message):
 
     if message.author == taliya and message.content.startswith("!track"):
         await track_patrons()
+
+    if message.author == taliya and message.content.startswith("!upcoming"):
+        await upcoming_audios(True, taliya, message.channel)
 
 
 
@@ -2794,9 +2795,6 @@ async def track_patrons():
 
     await taliya.send(check_str + sum_str + error_str)
 
-   
-
-
 
 async def event_reminder(event):
     global event_times
@@ -2807,6 +2805,31 @@ async def event_reminder(event):
     event_times.remove(event)
     with open(EVENTS_FILENAME, "w") as outfile:
         outfile.write(json.dumps(event_times))
+
+
+async def upcoming_audios(mentionQ, at, channel):
+    pipeline_table = airtable_api.table('app2ce30eI0NYrsAn', 'tblEiMkFjShd6wXkV')
+    upcoming = ""
+    for entry in pipeline_table.all():
+        fields = list(entry.items())[2][1]
+        if fields["Imminent?"] == 1:
+            due_date = fields.get("Due Date","XXXX-XX-XX")
+            month, date = due_date[5:7], due_date[8:10]
+            day = fields.get("Day","Day of Week")
+            date_info = f"{fields.get("Day","Day of Week")}, {month}/{date}: "
+            platform = fields.get("Platform","")
+            if len(platform) != 0:
+                platform = " for " + platform
+            info_string = "- " + date_info + fields.get("Audio Name", "Unnamed Audio") + platform + "\n"
+            upcoming += info_string
+    if len(upcoming) == 0:
+        response = "No audios scheduled for this upcoming week."
+    else:
+        preamble = "List of upcoming audios for the following week!"
+        if mentionQ:
+            preamble += " " + at.mention
+        response = preamble + "\n" + upcoming + "More details available [here](https://airtable.com/app2ce30eI0NYrsAn/tblEiMkFjShd6wXkV/viwrFP3SYrCRn5aVC?blocks=hide)."
+    await channel.send(response)
 
 
 

@@ -2821,7 +2821,7 @@ async def upcoming_audios(mentionQ, at, channel):
                 if len(platform) != 0:
                     platform = " for " + platform
                 info_string = "- " + date_info + fields.get("Audio Name", "Unnamed Audio") + platform
-                upcoming.append[info_string, fields["Imminent?"]]
+                upcoming.append([info_string, fields["Imminent?"]])
     if len(upcoming) == 0:
         response = "No audios scheduled for this upcoming week."
     else:

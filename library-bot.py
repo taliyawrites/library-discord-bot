@@ -1570,7 +1570,7 @@ async def time(interaction, t: str):
             else:
                 utc_hour = hour + 4 + 12
 
-            now = datetime.datetime.utcnow()
+            now = datetime.datetime.now(datetime.UTC)
             if utc_hour < 24:
                 utc_time = datetime.datetime(now.year, now.month, now.day, utc_hour, minute)
             else:

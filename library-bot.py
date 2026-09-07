@@ -2560,8 +2560,9 @@ async def on_message(message):
     if message.author == taliya and message.content.startswith("!track"):
         await track_patrons()
 
-    if message.author == taliya and message.content.startswith("!upcoming"):
-        await upcoming_audios(True, taliya, message.channel)
+    audio_planning_ids = [1234217150294659103, 1169014359842885726, 1089053035377999912]
+    if message.author.id in audio_planning_ids and message.content.startswith("!upcoming"):
+        await upcoming_audios(False, vel, message.channel)
 
 
 
@@ -2828,7 +2829,7 @@ async def upcoming_audios(mentionQ, at, channel):
         if mentionQ:
             preamble += " " + at.mention
         response = preamble + "\n" + upcoming + "More details available [here](https://airtable.com/app2ce30eI0NYrsAn/tblEiMkFjShd6wXkV/viwrFP3SYrCRn5aVC?blocks=hide)."
-    await channel.send(response)
+    await channel.send(content = response, suppress_embeds = True)
 
 
 

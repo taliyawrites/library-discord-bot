@@ -148,6 +148,14 @@ class Audio:
                     return 'Scriptwriter: ' + entry[1]
         return ''
 
+    def scriptlink(self):
+        for entry in self.parsed_data():
+            if entry[0]=='Script Offer':
+                return " (script available [here!](" + entry[1] + "))"
+            elif entry[0]=='Script Link':
+                return " (script available [here!](" + entry[1] + "))"
+        return ''
+
     def description(self):
         for entry in self.parsed_data():
             if entry[0]=='Description':
@@ -168,7 +176,7 @@ class Audio:
 
     # format a post for the audio
     def discord_post(self):
-        post_body = self.tag_string() + self.series() + self.description() + self.writer()
+        post_body = self.tag_string() + self.series() + self.description() + self.writer() + self.scriptlink()
         return discord.Embed(title = self.name(), url = self.link(), description = post_body)
 
     # exclude certain audios from showing up as a random choice or the audio of the day

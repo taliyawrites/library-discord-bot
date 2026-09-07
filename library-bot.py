@@ -152,7 +152,8 @@ class Audio:
         for entry in self.parsed_data():
             if entry[0]=='Script Offer':
                 return " (script available [here!](" + entry[1] + "))"
-            elif entry[0]=='Script Link':
+        for entry in self.parsed_data():
+            if entry[0]=='Script Link':
                 return " (script available [here!](" + entry[1] + "))"
         return ''
 
@@ -836,7 +837,7 @@ async def title(interaction, title_phrase: str, show_all: Optional[str] = "no"):
                     next = str(i+1) + ". [" + response_matches[i].name() + "](" + response_matches[i].link() + ")" + '\n'
                     link_string = link_string + next
                 if optionTextQ:
-                    link_string = link_string + f'\n*These are the closest matches found for your "{phrase}" search. Not the audio you were looking for? Redo the `/title` command search with the option "show_all" to see every audio that partially matches your query!*\n'
+                    link_string = link_string + f'*These are the closest matches found for your "{phrase}" search. Not the audio you were looking for? Redo the `/title` command search with the option "show_all" to see every audio that partially matches your query!*'
                 try:
                     await interaction.followup.send(embed = discord.Embed(title = response_title,description=link_string))
                 except:

@@ -2811,7 +2811,7 @@ async def upcoming_audios(mentionQ, at, channel):
     upcoming = ""
     for entry in pipeline_table.all():
         fields = list(entry.items())[2][1]
-        if fields["Imminent?"] == 1:
+        if fields["Imminent?"] == 1 and fields["Status"] != "Posted":
             due_date = fields.get("Due Date","XXXX-XX-XX")
             month, date = due_date[5:7], due_date[8:10]
             day = fields.get("Day","Day of Week")

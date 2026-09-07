@@ -2811,25 +2811,25 @@ async def event_reminder(event):
 
 async def upcoming_audios(mentionQ, at, channel):
     pipeline_table = airtable_api.table('app2ce30eI0NYrsAn', 'tblEiMkFjShd6wXkV')
-    upcoming = ""
+    upcoming = []
     for entry in pipeline_table.all():
         fields = list(entry.items())[2][1]
-        if fields["Imminent?"] == 1 and fields["Status"] != "Posted":
-            due_date = fields.get("Due Date","XXXX-XX-XX")
-            day = fields.get("Day","Day of Week")
-            date_info = f"{fields.get("Day","Day of Week")}, {date_format(due_date)}: "
-            platform = fields.get("Platform","")
-            if len(platform) != 0:
-                platform = " for " + platform
-            info_string = "- " + date_info + fields.get("Audio Name", "Unnamed Audio") + platform + "\n"
-            upcoming += info_string
+        if len(fields.get("Due Date","")) != 0 and fields["Status"] != "Posted":
+            if fields["Imminent?"] <= 8:
+                date_info = f"{fields.get("Day","Day of Week")}, {date_format(fields["Due Date"])}: "
+                platform = fields.get("Platform","")
+                if len(platform) != 0:
+                    platform = " for " + platform
+                info_string = "- " + date_info + fields.get("Audio Name", "Unnamed Audio") + platform
+                upcoming.append[info_string, fields["Imminent?"]]
     if len(upcoming) == 0:
         response = "No audios scheduled for this upcoming week."
     else:
         preamble = "List of upcoming audios for the following week!"
         if mentionQ:
             preamble += " " + at.mention
-        response = preamble + "\n" + upcoming + "More details available [here](https://airtable.com/app2ce30eI0NYrsAn/tblEiMkFjShd6wXkV/viwrFP3SYrCRn5aVC?blocks=hide)."
+        audio_string = "\n".join([item[0] for item in sorted(upcoming, key = lambda L: L[-1])])
+        response = preamble + "\n" + audio_string + "\nMore details available [here](https://airtable.com/app2ce30eI0NYrsAn/tblEiMkFjShd6wXkV/viwrFP3SYrCRn5aVC?blocks=hide)."
     await channel.send(content = response, suppress_embeds = True)
 
 def date_format(date_string):

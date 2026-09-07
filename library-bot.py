@@ -2815,9 +2815,8 @@ async def upcoming_audios(mentionQ, at, channel):
         fields = list(entry.items())[2][1]
         if fields["Imminent?"] == 1 and fields["Status"] != "Posted":
             due_date = fields.get("Due Date","XXXX-XX-XX")
-            month, date = due_date[5:7], due_date[8:10]
             day = fields.get("Day","Day of Week")
-            date_info = f"{fields.get("Day","Day of Week")}, {month}/{date}: "
+            date_info = f"{fields.get("Day","Day of Week")}, {date_format(due_date)}: "
             platform = fields.get("Platform","")
             if len(platform) != 0:
                 platform = " for " + platform
@@ -2832,7 +2831,17 @@ async def upcoming_audios(mentionQ, at, channel):
         response = preamble + "\n" + upcoming + "More details available [here](https://airtable.com/app2ce30eI0NYrsAn/tblEiMkFjShd6wXkV/viwrFP3SYrCRn5aVC?blocks=hide)."
     await channel.send(content = response, suppress_embeds = True)
 
-
+def date_format(date_string):
+    raw_month, raw_date = date_string[5:7], date_string[8:10]
+    if raw_month[0] == "0":
+        month = raw_month[1]
+    else:
+        month = raw_month
+    if raw_date[0] == "0":
+        date = raw_date[1]
+    else:
+        date = raw_date
+    return f"{month}/{date}"
 
 
 # AUDIO OF THE DAY #

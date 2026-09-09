@@ -3058,16 +3058,22 @@ async def on_error(interaction, error):
     unknown = "404 Not Found (error code: 10062): Unknown interaction"
     response_string = ""
     trce = "[Traceback](https://panel.pebblehost.com/server/91ec3214/files/edit/error-log.txt)"
-    options = str(interaction.data['options'])
+    raw_options = interaction.data['options']
+    if len(raw_options) != 0:
+        options_string = ") with options:\n"
+    else:
+        options_string = ")\n"
+    for opt in raw_options:
+        options_string += "- " + opt['name'] + ": " + opt['value'] + "\n"
 
     if unknown in str(error):
         msg = await interaction.channel.send("Temporary server outage: please wait a minute and then try again!")
         response_string += f"\nResponded: {msg.jump_url} ('{msg.content}')"
 
     if isinstance(interaction.channel, discord.DMChannel):
-        await taliya.send("**ERROR:** in *" + error.command.name + "* in DM with " + interaction.user.display_name + " (" + trce + ")\n" +  options + "\n" + str(error) + response_string)
+        await taliya.send("**ERROR:** in *" + error.command.name + "* in DM with " + interaction.user.display_name + " (" + trce +  options_string + "\n" + str(error) + response_string)
     else:
-        await taliya.send("**ERROR:** in *" + error.command.name + "* in " + interaction.channel.jump_url + " (" + trce + ")\n" + options + "\n" + str(error) + response_string)
+        await taliya.send("**ERROR:** in *" + error.command.name + "* in " + interaction.channel.jump_url + " (" + trce + options_string + "\n" + str(error) + response_string)
 
     with open('error-log.txt', 'a') as file:
         now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")

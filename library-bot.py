@@ -2822,9 +2822,9 @@ async def upcoming_audios(mentionQ, at, channel, boldQ):
                 date_info = f"{fields.get("Day","Day of Week")}, {date_format(fields["Due Date"])}: "
                 platform = fields.get("Platform","")
                 if len(platform) != 0:
-                    platform = " for " + platform
+                    platform = "[" + platform + "]"
                 audio_name = fields.get("Audio Name", "Unnamed Audio")
-                script = fields.get("Script Link","")
+                script = "*" + fields.get("Script Link","") + "*"
                 if len(script) != 0:
                     audio_name += f" ([script]({fields["Script Link"]}) by {fields["Scriptwriter"]})"
                 info_string = "- " + date_info + audio_name + platform

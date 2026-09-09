@@ -3060,10 +3060,10 @@ async def on_error(interaction, error):
     trce = "[Traceback](https://panel.pebblehost.com/server/91ec3214/files/edit/error-log.txt)"
     raw_options = interaction.data['options']
     if len(raw_options) != 0:
-        options_string = ") with options: ["
+        options_string = ") with the following options: "
         for opt in raw_options:
             options_string += opt['name'] + " = " + opt['value'] + ", "
-        options_string = options_string[:-2] + "]\n"
+        options_string = options_string[:-2] + "\n"
     else:
         options_string = ")\n"
 

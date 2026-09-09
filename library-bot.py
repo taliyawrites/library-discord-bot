@@ -3063,7 +3063,7 @@ async def on_error(interaction, error):
         options_string = ") with the following options: "
         for opt in raw_options:
             options_string += opt['name'] + " = " + opt['value'] + ", "
-        options_string = options_string[:-2] + "\n"
+        options_string = options_string[:-2] + "\n\n"
     else:
         options_string = ")\n"
 

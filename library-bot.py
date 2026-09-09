@@ -2562,7 +2562,10 @@ async def on_message(message):
 
     audio_planning_ids = [1234217150294659103, 1169014359842885726, 1089053035377999912]
     if message.author.id in audio_planning_ids and message.content.startswith("!upcoming"):
-        await upcoming_audios(False, vel, message.channel)
+        await upcoming_audios(False, vel, message.channel, False)
+        
+    if message.author.id in audio_planning_ids and message.content.startswith("!hammers"):
+        await upcoming_audios(True, vel, message.channel, True)
 
 
 
@@ -2809,7 +2812,7 @@ async def event_reminder(event):
         outfile.write(json.dumps(event_times))
 
 
-async def upcoming_audios(mentionQ, at, channel):
+async def upcoming_audios(mentionQ, at, channel, boldQ):
     pipeline_table = airtable_api.table('app2ce30eI0NYrsAn', 'tblEiMkFjShd6wXkV')
     upcoming = []
     for entry in pipeline_table.all():
@@ -2834,6 +2837,8 @@ async def upcoming_audios(mentionQ, at, channel):
             preamble += " " + at.mention
         audio_string = "\n".join([item[0] for item in sorted(upcoming, key = lambda L: L[-1])])
         response = preamble + "\n" + audio_string + "\nMore details available [here](https://airtable.com/app2ce30eI0NYrsAn/tblEiMkFjShd6wXkV/viwrFP3SYrCRn5aVC?blocks=hide)."
+    if boldQ:
+        response = "**" + response + "**"
     await channel.send(content = response, suppress_embeds = True)
 
 def date_format(date_string):

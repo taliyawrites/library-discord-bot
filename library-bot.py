@@ -3071,9 +3071,9 @@ async def on_error(interaction, error):
         response_string += f"\nResponded: {msg.jump_url} ('{msg.content}')"
 
     if isinstance(interaction.channel, discord.DMChannel):
-        await taliya.send("**ERROR:** in *" + error.command.name + "* in DM with " + interaction.user.display_name + " (" + trce +  options_string + "\n" + str(error) + response_string)
+        await taliya.send("**ERROR:** in *" + error.command.name + "* command in DM with " + interaction.user.display_name + " (" + trce +  options_string + "\n" + str(error) + response_string)
     else:
-        await taliya.send("**ERROR:** in *" + error.command.name + "* in " + interaction.channel.jump_url + " (" + trce + options_string + "\n" + str(error) + response_string)
+        await taliya.send("**ERROR:** in *" + error.command.name + "* command in " + interaction.channel.jump_url + " (" + trce + options_string + "\n" + str(error) + response_string)
 
     with open('error-log.txt', 'a') as file:
         now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")

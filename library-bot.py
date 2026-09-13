@@ -2729,7 +2729,7 @@ async def run_daily_loops():
         await reminder_pings()
 
     if datetime.datetime.now().weekday() == 0 and datetime.datetime.now().hour == 15 and datetime.datetime.now().minute == 0:
-        await upcoming_audios(True, vel, client.get_channel(1396943304847003758))
+        await upcoming_audios(True, vel, client.get_channel(1396943304847003758),False)
 
     if (datetime.datetime.now().hour == MIDNIGHT and datetime.datetime.now().minute == MINUTE):
         await birthday_wishes()

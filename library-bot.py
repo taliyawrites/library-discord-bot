@@ -1046,7 +1046,7 @@ async def scriptwriter(interaction, writer: str):
                 next = str(i+1) + ". [" + matches[i].name() + "](" + matches[i].link() + ")" + '\n'
                 link_string = link_string + next
 
-            matches_embed = discord.Embed(title = canonical_name + " Audios",description=link_string)
+            matches_embed = discord.Embed(title = canonical_name + " Script Fills",description=link_string)
             await interaction.followup.send(embed = matches_embed)
 @scriptwriter.autocomplete('writer')
 async def character_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
@@ -2734,7 +2734,7 @@ async def run_daily_loops():
     if (datetime.datetime.now().hour == MIDNIGHT and datetime.datetime.now().minute == MINUTE):
         await birthday_wishes()
         if datetime.datetime.now().weekday() == 0:
-            await client.get_channel(COMMAND_CHANNEL_ID).send("Remember to `/update` the live time to next Sunday at 4:30 PM and the stream time to next Sunday at 11:30 AM using [universal timestamps](https://r.3v.fi/discord-timestamps/), " + taliya.mention + "! Also save the latest [Twitch VOD](https://dashboard.twitch.tv/u/velslibrary/content/video-producer).")
+            await client.get_channel(COMMAND_CHANNEL_ID).send(content = "Remember to `/update` the live time to next Sunday at 4:30 PM and the stream time to next Sunday at 11:30 AM using [universal timestamps](https://r.3v.fi/discord-timestamps/), " + taliya.mention + "! Also save the latest [Twitch VOD](https://dashboard.twitch.tv/u/velslibrary/content/video-producer).",suppress_embeds = True)
             bot_channel = client.get_channel(GENERAL)
             await bot_channel.send("Reminder that we have the following threads you can join!")
             await list_threads(bot_channel)
@@ -2817,7 +2817,7 @@ async def upcoming_audios(mentionQ, at, channel, boldQ):
     upcoming = []
     for entry in pipeline_table.all():
         fields = list(entry.items())[2][1]
-        if len(fields.get("Due Date","")) != 0 and fields["Status"] != "Posted":
+        if len(fields.get("Due Date","")) >= 0 and fields["Status"] != "Posted":
             if fields["Imminent?"] <= 8:
                 date_info = f"{fields.get("Day","Day of Week")}, {date_format(fields["Due Date"])}: "
                 platform = fields.get("Platform","")

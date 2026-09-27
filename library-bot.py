@@ -2587,6 +2587,9 @@ async def on_message(message):
         gull_counter = 0
         save_to_file(GULL_FILENAME, [str(gull_counter)])
 
+    if message.author == taliya and message.content.startswith("!kinktober")
+        date = int(message.content[11:])
+        await kinktober_announcement(message.channel, date)
     
 
 
@@ -2857,6 +2860,37 @@ def date_format(date_string):
     else:
         date = raw_date
     return f"{month}/{date}"
+
+
+async def kinktober_announcement(channel, date):
+    prompt_table = airtable_api.table('appGWFF5O8on1mtsT', 'tblwvQFRlfofS15Wu')
+
+    for entry in prompt_table.all():
+        fields = list(entry.items())[2][1]
+        if int(fields["Day"]) == date:
+            prompt_a, prompt_b = fields["Tag One"], fields["Tag Two"]
+            id_a, id_b = fields["Audio One ID"], fields["Audio Two ID"]
+            date_string = fields["Weekday"] + " October " + str(date)
+        break 
+
+    for audio in audio_choices:
+        if audio.recordID() == id_a:
+            audio_a = audio
+        elif audio.recordID() == id_b:
+            audio_b = audio
+
+    string_copy = "You can choose whichever prompt you like the best, or do both if you're feeling so inclined (separately or together)! You can write in whatever format you'd like. Have fun and share your work in the Kinktober Writing Thread!"
+
+    await channel.send(f"## Kinktober Prompts for {date_string}\n1. **{prompt_a}**\n2. **{prompt_b}**\n{string_copy}")
+
+    await channel.send(f"As inspiration for the prompt **{prompt_a}**, you could listen to:")
+    await channel.send(embed=audio_a.discord_post())
+
+    await channel.send(f"As inspiration for the prompt **{prompt_b}**, you could listen to:")
+    await channel.send(embed=audio_b.discord_post())
+
+
+
 
 
 # AUDIO OF THE DAY #

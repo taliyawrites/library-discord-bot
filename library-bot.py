@@ -2884,7 +2884,7 @@ async def kinktober_announcement(channel, date):
 
     string_copy = "You can choose whichever prompt you like the best, or do both if you're feeling so inclined (separately or together)! You can write in whatever format you'd like. For ideas, feel free to use the prompts as tags in a `/randomaudio` search. Have fun and share your work in the Kinktober Writing Thread!"
 
-    await channel.send(f"## Kinktober Prompts for {date_string}!\n1. {prompt_a}\n2. {prompt_b}\n{string_copy}")
+    await channel.send(f"## Kinktober Prompts for {date_string}\n- {prompt_a}\n- {prompt_b}\n{string_copy}")
 
     if audio_a is not None: 
         await channel.send(f"As inspiration for the prompt **{prompt_a}**, you could listen to:")

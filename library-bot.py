@@ -2830,7 +2830,7 @@ async def upcoming_audios(mentionQ, at, channel, boldQ):
                 audio_name =  fields.get("Audio Name", "Unnamed Audio")
                 script = fields.get("Script Link","")
                 if len(script) != 0:
-                    if !repostQ:
+                    if not repostQ:
                         audio_name += f" ([script]({fields["Script Link"]}) by {fields["Scriptwriter"]})"
                     else:
                         audio_name += f" (script by {fields["Scriptwriter"]})"

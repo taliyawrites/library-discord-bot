@@ -2872,7 +2872,7 @@ async def kinktober_announcement(channel, date):
         entry_date = fields.get("Date","0000-00-00")
         if int(entry_date[-2:]) == date:
             prompt_a, prompt_b = fields["Tag One"], fields["Tag Two"]
-            id_a, id_b = fields["Audio One ID"], fields["Audio Two ID"]
+            id_a, id_b = fields.get("Audio One ID",""), fields.get("Audio Two ID","")
             date_string = fields["Weekday"] + ", October " + str(date)
             break 
 
@@ -2886,11 +2886,13 @@ async def kinktober_announcement(channel, date):
 
     await channel.send(f"## Kinktober Prompts for {date_string}!\n1. {prompt_a}\n2. {prompt_b}\n{string_copy}")
 
-    await channel.send(f"As inspiration for the prompt **{prompt_a}**, you could listen to:")
-    await channel.send(embed=audio_a.discord_post())
+    if audio_a is not None: 
+        await channel.send(f"As inspiration for the prompt **{prompt_a}**, you could listen to:")
+        await channel.send(embed=audio_a.discord_post())
 
-    await channel.send(f"As inspiration for the prompt **{prompt_b}**, you could listen to:")
-    await channel.send(embed=audio_b.discord_post())
+    if audio_b is not None: 
+        await channel.send(f"As inspiration for the prompt **{prompt_b}**, you could listen to:")
+        await channel.send(embed=audio_b.discord_post())
 
 
 

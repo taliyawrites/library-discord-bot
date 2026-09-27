@@ -2874,7 +2874,7 @@ async def kinktober_announcement(channel, date):
         if int(entry_date[-2:]) == date:
             prompt_a, prompt_b = fields["Tag One"], fields["Tag Two"]
             id_a, id_b = fields["Audio One ID"], fields["Audio Two ID"]
-            date_string = fields["Weekday"] + " October " + str(date)
+            date_string = fields["Weekday"] + ", October " + str(date)
             break 
 
     for audio in audio_choices:
@@ -2885,7 +2885,7 @@ async def kinktober_announcement(channel, date):
 
     string_copy = "You can choose whichever prompt you like the best, or do both if you're feeling so inclined (separately or together)! You can write in whatever format you'd like. Have fun and share your work in the Kinktober Writing Thread!"
 
-    await channel.send(f"## Kinktober Prompts for {date_string}\n1. **{prompt_a}**\n2. **{prompt_b}**\n{string_copy}")
+    await channel.send(f"## Kinktober Prompts for {date_string}!\n1. {prompt_a}\n2. {prompt_b}\n{string_copy}")
 
     await channel.send(f"As inspiration for the prompt **{prompt_a}**, you could listen to:")
     await channel.send(embed=audio_a.discord_post())

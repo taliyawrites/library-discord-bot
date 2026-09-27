@@ -2587,7 +2587,7 @@ async def on_message(message):
         gull_counter = 0
         save_to_file(GULL_FILENAME, [str(gull_counter)])
 
-    if message.author == taliya and message.content.startswith("!kinktober"):
+    if (message.author == taliya or channel.id == 1550577326444781578) and message.content.startswith("!kinktober"):
         date = int(message.content[11:])
         await kinktober_announcement(message.channel, date)
     
@@ -2866,7 +2866,6 @@ async def kinktober_announcement(channel, date):
     prompt_table = airtable_api.table('appGWFF5O8on1mtsT', 'tblwvQFRlfofS15Wu')
     prompt_a, prompt_b, id_a, id_b, date_string = "","","","",""
     audio_a, audio_b = None, None 
-    print(date)
 
     for entry in prompt_table.all():
         fields = list(entry.items())[2][1]

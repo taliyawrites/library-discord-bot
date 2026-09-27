@@ -2869,6 +2869,7 @@ async def kinktober_announcement(channel, date):
         fields = list(entry.items())[2][1]
         if int(fields["Day"]) == date:
             prompt_a, prompt_b = fields["Tag One"], fields["Tag Two"]
+            print(prompt_a)
             id_a, id_b = fields["Audio One ID"], fields["Audio Two ID"]
             date_string = fields["Weekday"] + " October " + str(date)
         break 

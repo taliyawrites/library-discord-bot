@@ -2587,7 +2587,7 @@ async def on_message(message):
         gull_counter = 0
         save_to_file(GULL_FILENAME, [str(gull_counter)])
 
-    if (message.author == taliya or channel.id == 1550577326444781578) and message.content.startswith("!kinktober"):
+    if (message.author == taliya or message.channel.id == 1550577326444781578) and message.content.startswith("!kinktober"):
         date = int(message.content[11:])
         await kinktober_announcement(message.channel, date)
     

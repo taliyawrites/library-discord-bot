@@ -2821,15 +2821,19 @@ async def upcoming_audios(mentionQ, at, channel, boldQ):
             if fields["Imminent?"] <= 8 and fields["Imminent?"] >= 0:
                 date_info = f"{fields.get("Day","Day of Week")}, {date_format(fields["Due Date"])}: "
                 platform = fields.get("Platform","")
+                repostQ = fields.get("Repost?",False)
                 repost = ""
-                if fields.get("Repost?",False):
+                if repostQ:
                     repost = " (Repost)"
                 if len(platform) != 0:
                     platform = " [" + platform + "]" + repost
                 audio_name =  fields.get("Audio Name", "Unnamed Audio")
                 script = fields.get("Script Link","")
                 if len(script) != 0:
-                    audio_name += f" ([script]({fields["Script Link"]}) by {fields["Scriptwriter"]})"
+                    if !repostQ:
+                        audio_name += f" ([script]({fields["Script Link"]}) by {fields["Scriptwriter"]})"
+                    else:
+                        audio_name += f" (script by {fields["Scriptwriter"]})"
                 info_string = "- " + date_info + audio_name + platform
                 upcoming.append([info_string, fields["Imminent?"]])
     if len(upcoming) == 0:

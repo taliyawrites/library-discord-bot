@@ -2882,7 +2882,7 @@ async def kinktober_announcement(channel, date):
         elif audio.recordID() == id_b:
             audio_b = audio
 
-    string_copy = "You can choose whichever prompt you like the best, or do both if you're feeling so inclined (separately or together)! You can write in whatever format you'd like. Have fun and share your work in the Kinktober Writing Thread!"
+    string_copy = "You can choose whichever prompt you like the best, or do both if you're feeling so inclined (separately or together)! You can write in whatever format you'd like. Have fun and share your work in the Kinktober Writing Thread! For ideas, you can use the prompts as tags in a `/randomaudio` search."
 
     await channel.send(f"## Kinktober Prompts for {date_string}!\n1. {prompt_a}\n2. {prompt_b}\n{string_copy}")
 

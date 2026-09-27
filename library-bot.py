@@ -2823,9 +2823,9 @@ async def upcoming_audios(mentionQ, at, channel, boldQ):
                 platform = fields.get("Platform","")
                 repost = ""
                 if fields.get("Repost?",False):
-                    repost = "Patreon Repost on "
+                    repost = " (Repost)"
                 if len(platform) != 0:
-                    platform = " [" + repost + platform + "]"
+                    platform = " [" + platform + "]" + repost
                 audio_name =  fields.get("Audio Name", "Unnamed Audio")
                 script = fields.get("Script Link","")
                 if len(script) != 0:

@@ -2870,8 +2870,9 @@ async def kinktober_announcement(channel, date):
 
     for entry in prompt_table.all():
         fields = list(entry.items())[2][1]
-        print(int(fields["Date"][-2:]))
-        if int(fields["Date"][-2:]) == date:
+        entry_date = fields.get("Date","0000-00-00")
+        print(entry_date)
+        if int(entry_date[-2:]) == date:
             prompt_a, prompt_b = fields["Tag One"], fields["Tag Two"]
             print(prompt_a)
             id_a, id_b = fields["Audio One ID"], fields["Audio Two ID"]

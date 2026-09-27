@@ -2832,8 +2832,6 @@ async def upcoming_audios(mentionQ, at, channel, boldQ):
                 if len(script) != 0:
                     if not repostQ:
                         audio_name += f" ([script]({fields["Script Link"]}) by {fields["Scriptwriter"]})"
-                    else:
-                        audio_name += f" (script by {fields["Scriptwriter"]})"
                 info_string = "- " + date_info + audio_name + platform
                 upcoming.append([info_string, fields["Imminent?"]])
     if len(upcoming) == 0:

@@ -2728,6 +2728,13 @@ async def run_daily_loops():
         rerun_birthdays = False
         await birthday_wishes()
 
+    if datetime.datetime.now().hour == 7 and datetime.datetime.now().minute == 0 and datetime.datetime.now().month == 10:
+        if datetime.datetime.now().month == 10:
+            await kinktober_announcement(client.get_channel(1249892325505896569), datetime.datetime.now().day)
+        else:
+            await kinktober_announcement(taliya, datetime.datetime.now().day)
+
+
     if (datetime.datetime.now().hour in REMINDER_HOURS and datetime.datetime.now().minute == 0):
         await reminder_pings()
 
@@ -2882,7 +2889,7 @@ async def kinktober_announcement(channel, date):
         elif audio.recordID() == id_b:
             audio_b = audio
 
-    string_copy = "You can choose whichever prompt you like the best, or do both if you're feeling so inclined (separately or together)! You can write in whatever format you'd like. For ideas, feel free to use the prompts as tags in a `/randomaudio` search. Have fun and share your work in the Kinktober Writing Thread!"
+    string_copy = "You can choose whichever prompt you like the best, or do both if you're feeling so inclined (separately or together)! You can write in whatever format you'd like. For ideas, feel free to use the prompts as tags in a `/randomaudio` search. Have fun and share your work in the <Link to Kinktober Writing Thread>!"
 
     await channel.send(f"## Kinktober Prompts for {date_string}\n- {prompt_a}\n- {prompt_b}\n{string_copy}")
 

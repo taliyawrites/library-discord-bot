@@ -2729,10 +2729,7 @@ async def run_daily_loops():
         await birthday_wishes()
 
     if datetime.datetime.now().hour == 7 and datetime.datetime.now().minute == 0 and datetime.datetime.now().month == 10:
-        if datetime.datetime.now().month == 10:
-            await kinktober_announcement(client.get_channel(1249892325505896569), datetime.datetime.now().day)
-        else:
-            await kinktober_announcement(client.get_channel(1550577326444781578), datetime.datetime.now().day)
+        await kinktober_announcement(client.get_channel(1249892325505896569), datetime.datetime.now().day)
 
 
     if (datetime.datetime.now().hour in REMINDER_HOURS and datetime.datetime.now().minute == 0):

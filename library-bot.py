@@ -2731,6 +2731,9 @@ async def run_daily_loops():
     if datetime.datetime.now().hour == 7 and datetime.datetime.now().minute == 0 and datetime.datetime.now().month == 10:
         await kinktober_announcement(client.get_channel(1249892325505896569), datetime.datetime.now().day)
 
+    if datetime.datetime.now().hour == 6 and datetime.datetime.now().minute == 0 and datetime.datetime.now().month == 10:
+        await taliya.send(f"{client.get_channel(1249892325505896569).jump_url} {datetime.datetime.now().day}")
+
 
     if (datetime.datetime.now().hour in REMINDER_HOURS and datetime.datetime.now().minute == 0):
         await reminder_pings()

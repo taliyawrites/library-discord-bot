@@ -61,9 +61,9 @@ GULL_FILENAME = "abode.txt"
 THREADS_FILENAME = "threads-list.txt"
 
 # run daily tasks at 1pm eastern time (6pm UTC+1)
-HOUR, MINUTE = 17, 0
-MIDNIGHT = 4
-REMINDER_HOURS = [4, 8, 12, 16, 20, 0]
+HOUR, MINUTE = 18, 0
+MIDNIGHT = 5
+REMINDER_HOURS = [5, 9, 13, 17, 21, 1]
 
 
 
@@ -2753,7 +2753,7 @@ async def run_daily_loops():
     if (datetime.datetime.now().hour in REMINDER_HOURS and datetime.datetime.now().minute == 0):
         await reminder_pings()
 
-    if datetime.datetime.now().weekday() == 0 and datetime.datetime.now().hour == 15 and datetime.datetime.now().minute == 0:
+    if datetime.datetime.now().weekday() == 0 and datetime.datetime.now().hour == 16 and datetime.datetime.now().minute == 0:
         await upcoming_audios(True, vel, client.get_channel(1396943304847003758),False)
 
     if (datetime.datetime.now().hour == MIDNIGHT and datetime.datetime.now().minute == MINUTE):

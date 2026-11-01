@@ -1872,7 +1872,7 @@ async def eventcalendar(interaction):
 @tree.command(name = "eventsuggestions", description = "Link to submit event suggestions!")
 async def eventcalendar(interaction):
     await interaction.response.defer()
-    await interaction.followup.send("If you have an idea for a server event, please submit it using [the form here](https://airtable.com/apptzc73zzoFe9gC3/pagvo758WcIU3LpYB/form) and our mods will be in touch about making it happen!")
+    await interaction.followup.send(content = "If you have an idea for a server event, please submit it using [the form here](https://airtable.com/apptzc73zzoFe9gC3/pagvo758WcIU3LpYB/form) and our mods will be in touch about making it happen!", suppress_embeds = True)
 
 
 @tree.command(name = "pippin", description = "Forwards a random pipture of Vel's cat Pippin!")

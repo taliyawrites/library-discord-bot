@@ -2765,7 +2765,7 @@ async def run_daily_loops():
             bot_channel = client.get_channel(GENERAL)
             await bot_channel.send("Reminder that we have the following threads you can join!")
             await list_threads(bot_channel)
-            await client.get_channel(1396943304847003758).send(content = f"Please jot down what audios you recorded during today's live (or add them directly to the [pipeline]((https://airtable.com/app2ce30eI0NYrsAn/tblEiMkFjShd6wXkV/viwrFP3SYrCRn5aVC?blocks=hide)))! {vel.mention}")
+            await client.get_channel(1396943304847003758).send(content = f"Reminder to please note here what audios you recorded during today's live (or add them directly to the [pipeline]((https://airtable.com/app2ce30eI0NYrsAn/tblEiMkFjShd6wXkV/viwrFP3SYrCRn5aVC?blocks=hide)))! {vel.mention}")
 
     # global event_times
     # for event in event_times:

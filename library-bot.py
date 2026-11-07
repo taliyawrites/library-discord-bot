@@ -1002,7 +1002,7 @@ async def dsp(interaction):
     await interaction.response.defer()
     dsp_list.sort(key = age_sort)
 
-    await interaction.followup.send(content = "Here's a list of all the audios Vel has posted to [r/DarkSidePlayground](https://www.reddit.com/r/DarkSidePlayground/), a subreddit for content with darker/more intense themes and tags.",suppress_embeds = False)
+    await interaction.followup.send(content = "Here's a list of all the audios Vel has posted to [r/DarkSidePlayground](https://www.reddit.com/r/DarkSidePlayground/), a subreddit for content with darker/more intense themes and tags. **UPDATE: while DSP is down, please use /title on the individual audio you'd like to listen to for a direct link to the soundgasm page.**" ,suppress_embeds = False)
 
     count = len(dsp_list)
     link_string = ""

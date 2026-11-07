@@ -111,6 +111,12 @@ class Audio:
                 return entry[1]
         return 'WARNING: no link found'
 
+    def soundgasm_link(self):
+        for entry in self.parsed_data():
+            if entry[0]=='Direct Link':
+                return entry[1]
+        return ''
+
     def date(self):
         for entry in self.parsed_data():
             if entry[0]=='Simplified Date':
@@ -178,6 +184,8 @@ class Audio:
     # format a post for the audio
     def discord_post(self):
         post_body = self.tag_string() + self.series() + self.description() + self.writer() + self.scriptlink()
+        if self.soundgasm_link() != "":
+            post_body += f"**Here's a [direct link]({self.soundgasm_link()}) to the audio while DSP is down!**"
         return discord.Embed(title = self.name(), url = self.link(), description = post_body)
 
     # exclude certain audios from showing up as a random choice or the audio of the day
@@ -1007,7 +1015,7 @@ async def dsp(interaction):
     count = len(dsp_list)
     link_string = ""
     for i in list(range(count)):
-        link_string = link_string + str(i+1) + ". [" + dsp_list[i].name() + "](" + dsp_list[i].link() + ")" + '\n'
+        link_string = link_string + str(i+1) + ". [" + dsp_list[i].name() + "](" + dsp_list[i].soundgasm_link() + ")" + '\n'
 
     embeds = msg_split(link_string, "DarkSidePlayground Audios")
     await interaction.channel.send(embed = embeds[0])

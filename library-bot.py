@@ -166,7 +166,10 @@ class Audio:
     def description(self):
         for entry in self.parsed_data():
             if entry[0]=='Description':
-                return '\n' + entry[1] + '\n \n'
+                content = entry[1] + '\n \n'
+                if self.soundgasm_link() != "":
+                    content += f"**Here's a [direct link]({self.soundgasm_link()}) to the audio while DSP is down!** \n\n"
+                return '\n' + content
         return ''
 
     def characters(self):
@@ -184,8 +187,6 @@ class Audio:
     # format a post for the audio
     def discord_post(self):
         post_body = self.tag_string() + self.series() + self.description() + self.writer() + self.scriptlink()
-        if self.soundgasm_link() != "":
-            post_body += f"**Here's a [direct link]({self.soundgasm_link()}) to the audio while DSP is down!**"
         return discord.Embed(title = self.name(), url = self.link(), description = post_body)
 
     # exclude certain audios from showing up as a random choice or the audio of the day

@@ -531,7 +531,7 @@ def write_data_lists():
 def get_dsp_audios(audios):
     dsp_audios = []
     for audio in audios: 
-        if "darksideplayground" in audio.link().lower() or "Emilia Rose" in audio.writer():
+        if "darksideplayground" in audio.soundgasm_link().lower() or "Emilia Rose" in audio.writer():
             dsp_audios.append(audio)
     return(dsp_audios)
 

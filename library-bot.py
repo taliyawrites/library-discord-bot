@@ -108,7 +108,7 @@ class Audio:
     def link(self):
         for entry in self.parsed_data():
             if entry[0]=='Post Link':
-                if "darksideplayground" in entry[1]:
+                if "darksideplayground" in entry[1].lower():
                     return self.soundgasm_link()
                 else:
                     return entry[1]

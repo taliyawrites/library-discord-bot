@@ -108,7 +108,10 @@ class Audio:
     def link(self):
         for entry in self.parsed_data():
             if entry[0]=='Post Link':
-                return entry[1]
+                if "darksideplayground" in entry[1]:
+                    return self.soundgasm_link()
+                else:
+                    return entry[1]
         return 'WARNING: no link found'
 
     def soundgasm_link(self):
@@ -167,8 +170,8 @@ class Audio:
         for entry in self.parsed_data():
             if entry[0]=='Description':
                 content = entry[1] + '\n \n'
-                if self.soundgasm_link() != "" and "Emilia Rose" not in self.writer():
-                    content += f"**Here's a [direct link]({self.soundgasm_link()}) to the audio while DSP is down!** \n\n"
+                # if "darksideplayground" in self.link():
+                #     content += f"**Here's a [direct link]({self.soundgasm_link()}) to the audio while DSP is down!** \n\n"
                 return '\n' + content
         return ''
 
@@ -1016,7 +1019,7 @@ async def dsp(interaction):
     count = len(dsp_list)
     link_string = ""
     for i in list(range(count)):
-        link_string = link_string + str(i+1) + ". [" + dsp_list[i].name() + "](" + dsp_list[i].soundgasm_link() + ")" + '\n'
+        link_string = link_string + str(i+1) + ". [" + dsp_list[i].name() + "](" + dsp_list[i].link() + ")" + '\n'
 
     embeds = msg_split(link_string, "DarkSidePlayground Audios")
     await interaction.channel.send(embed = embeds[0])

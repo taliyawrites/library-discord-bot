@@ -114,6 +114,12 @@ class Audio:
                     return entry[1]
         return 'WARNING: no link found'
 
+    def raw_link(self):
+        for entry in self.parsed_data():
+            if entry[0]=='Post Link':
+                return entry[1]
+        return 'WARNING: no link found'
+
     def soundgasm_link(self):
         for entry in self.parsed_data():
             if entry[0]=='Direct Link':

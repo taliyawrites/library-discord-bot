@@ -144,7 +144,7 @@ class Audio:
 
     def date_long(self):
         for entry in self.parsed_data():
-            if entry[0]=='General Date':
+            if entry[0]=='Date':
                 datestring = entry[1]
                 datelist = datestring.split('-')
                 date_full = [int(x) for x in datelist]
@@ -152,7 +152,7 @@ class Audio:
 
     def series(self):
         for entry in self.parsed_data():
-            if entry[0]=='Series Name (if applicable)':
+            if entry[0]=='Series Name':
                 return '\n Series: ' + entry[1] + '\n'
         return ''
 
@@ -2265,7 +2265,7 @@ async def addaudio(interaction, url : str, title : str, tags : str, description 
         corrected_tags += " [further tags needed]"
 
     table = airtable_api.table('apprrNWlCwDHYj4wW', 'tblqwSpe5CdMuWHW6')
-    record = table.create({"Title": title, "Tags": corrected_tags, "Post Link": url,"Description": description,"Scriptwriter": scriptwriter,"General Date": "2026-" + date, "Duration": duration_string(duration), "Series Name (if applicable)": series, "Public/Patreon": exclusive, "Recurring Characters": character, "Audience" : gender})
+    record = table.create({"Title": title, "Tags": corrected_tags, "Post Link": url,"Description": description,"Scriptwriter": scriptwriter,"Date": "2026-" + date, "Duration": duration_string(duration), "Series Name": series, "Public/Patreon": exclusive, "Recurring Characters": character, "Audience" : gender})
 
     global audio_choices
     audio_choices = import_airtable_data()

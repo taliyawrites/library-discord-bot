@@ -2299,6 +2299,51 @@ def further(tags, warnings):
         return False
 
 
+
+@tree.command(name = "newtags", description = "Command for backend use by our tag team; please ignore!",guild = discord.Object(COMMAND_SERVER))
+@app_commands.describe(record = "From the record ID field on the masterlist!")
+async def newtags(interaction, record : str, tags : str, date: str):
+    await interaction.response.defer()
+
+    for entry in audio_choices:
+        if entry.recordID() == record:
+                this_audio = entry
+    title = this_audio.name()
+
+    corrected_string, warnings = canonify_tags(tags)
+
+    if len(warnings) > 0:
+        await interaction.followup.send("Reminder to add the following tags if applicable! Respond to this message with any extra tags you'd like to add, enclosed in square brackets, or simply reply with \"no\" if you don't want to add any at this time."  + warnings)
+        msg = await client.wait_for('message',timeout = 120.0,check = lambda m: m.author.id == interaction.user.id and m.channel.id == interaction.channel.id)
+        response = msg.content.lower().strip()
+        if response != "no":
+            if response[0] == "[" and response[-1] == "]":
+                additional_tags = response
+            else:
+                additional_tags = "[" + response + "]"
+            edited_tags = corrected_string + " " + additional_tags
+            corrected_string, warnings = canonify_tags(edited_tags)
+
+    if further(corrected_string, warnings): 
+        corrected_string += " [further tags needed]"
+
+    sorted_tag_string = tag_sort(tag_sort(corrected_string))
+
+    # UPDATE MASTERLIST
+    global audio_choices
+    table = airtable_api.table('apprrNWlCwDHYj4wW', 'tblqwSpe5CdMuWHW6')
+    table.update(record, {"Tags" : sorted_tag_string, "Date" : date})
+    audio_choices = import_airtable_data()
+
+    # PULL NEW ENTRY
+    for entry in audio_choices:
+        if entry.recordID() == record:
+            await interaction.followup.send(embed = entry.discord_post())
+            break
+
+
+
+
 # BACKEND UTILITY COMMANDS #
 
 

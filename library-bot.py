@@ -2304,6 +2304,7 @@ def further(tags, warnings):
 @app_commands.describe(record = "From the record ID field on the masterlist!")
 async def newtags(interaction, record : str, tags : str, date: str):
     await interaction.response.defer()
+    global audio_choices
 
     for entry in audio_choices:
         if entry.recordID() == record:
@@ -2330,7 +2331,6 @@ async def newtags(interaction, record : str, tags : str, date: str):
     sorted_tag_string = tag_sort(tag_sort(corrected_string))
 
     # UPDATE MASTERLIST
-    global audio_choices
     table = airtable_api.table('apprrNWlCwDHYj4wW', 'tblqwSpe5CdMuWHW6')
     table.update(record, {"Tags" : sorted_tag_string, "Date" : date})
     audio_choices = import_airtable_data()

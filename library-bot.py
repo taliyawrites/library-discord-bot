@@ -2256,7 +2256,7 @@ async def betatags(interaction, filename : str, tags : str):
 
 @tree.command(name = "addaudio", description = "Add a new entry to the masterlist",  guild = discord.Object(COMMAND_SERVER))
 @app_commands.describe(date = "In form MM-DD")
-async def addaudio(interaction, url : str, title : str, tags : str, description : str, exclusive : str, date : str, duration : str, scriptwriter: Optional[str] = "Vel", series: Optional[str] = "",   character : Optional[str] = "", gender : Optional[str] = "M4F", uploaded: Optional[str] = "", subreddit: Optional[str] = ""):
+async def addaudio(interaction, url : str, title : str, tags : str, description : str, exclusive : str, date : str, duration : str, scriptwriter: Optional[str] = "Vel", series: Optional[str] = "",   character : Optional[str] = "", gender : Optional[str] = "M4F", uploaded: Optional[str] = ""):
     await interaction.response.defer()
 
     unsorted_tags, warnings = canonify_tags(tags)
@@ -2265,7 +2265,7 @@ async def addaudio(interaction, url : str, title : str, tags : str, description 
         corrected_tags += " [further tags needed]"
 
     table = airtable_api.table('apprrNWlCwDHYj4wW', 'tblqwSpe5CdMuWHW6')
-    record = table.create({"Title": title, "Tags": corrected_tags, "Post Link": url,"Description": description,"Scriptwriter": scriptwriter,"Date": "2026-" + date, "Duration": duration_string(duration), "Series Name": series, "Public/Patreon": exclusive, "Recurring Characters": character, "Audience" : gender, "Direct Link" : uploaded, "Subreddit" : subreddit})
+    record = table.create({"Title": title, "Tags": corrected_tags, "Post Link": url,"Description": description,"Scriptwriter": scriptwriter,"Date": "2026-" + date, "Duration": duration_string(duration), "Series Name": series, "Public/Patreon": exclusive, "Recurring Characters": character, "Audience" : gender, "Direct Link" : uploaded})
 
     global audio_choices
     audio_choices = import_airtable_data()
@@ -2281,10 +2281,10 @@ async def addaudio_autocomplete_exclusive(interaction: discord.Interaction, curr
 async def addaudio_autocomplete_gender(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
     options = ["M4F", "M4M", "MM4F", "M4A", "MMM4F", "MF4F", "M4MF", "M4AA", "MM4A"]
     return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]
-@addaudio.autocomplete('subreddit')
-async def addaudio_autocomplete_subreddit(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
-    options = ["GWA","DSP","GWA Gay","Profile","PTA"]
-    return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]
+# @addaudio.autocomplete('subreddit')
+# async def addaudio_autocomplete_subreddit(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
+#     options = ["GWA","DSP","GWA Gay","Profile","PTA"]
+#     return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]
 
 
 

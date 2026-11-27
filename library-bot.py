@@ -2252,8 +2252,8 @@ async def betatags(interaction, filename : str, tags : str):
 
 
 @tree.command(name = "addaudio", description = "Add a new entry to the masterlist",  guild = discord.Object(COMMAND_SERVER))
-@app_commands.describe(date = "In form MM-DD")
-async def addaudio(interaction, url : str, title : str, tags : str, description : str, exclusive : str, date : str, duration : str, scriptwriter: Optional[str] = "Vel", series: Optional[str] = "",   character : Optional[str] = "", gender : Optional[str] = "M4F", uploaded: Optional[str] = "", subreddit: Optional[str] = ""):
+@app_commands.describe(date = "In form MM-DD", url = "Link to the audio post", link = "Direct link to audio file on soundgasm")
+async def addaudio(interaction, url : str, title : str, tags : str, description : str, exclusive : str, date : str, duration : str, scriptwriter: Optional[str] = "Vel", series: Optional[str] = "",   character : Optional[str] = "", gender : Optional[str] = "M4F", link: Optional[str] = "", subreddit: Optional[str] = ""):
     await interaction.response.defer()
 
     unsorted_tags, warnings = canonify_tags(tags)
@@ -2262,7 +2262,7 @@ async def addaudio(interaction, url : str, title : str, tags : str, description 
         corrected_tags += " [further tags needed]"
 
     table = airtable_api.table('apprrNWlCwDHYj4wW', 'tblqwSpe5CdMuWHW6')
-    record = table.create({"Title": title, "Tags": corrected_tags, "Audio Post Link": url,"Description": description,"Scriptwriter": scriptwriter,"Date": "2026-" + date, "Duration": duration_string(duration), "Series Name": series, "Public/Patreon": exclusive, "Recurring Characters": character, "Audience" : gender, "Direct Soundgasm Link" : uploaded})
+    record = table.create({"Title": title, "Tags": corrected_tags, "Audio Post Link": url,"Description": description,"Scriptwriter": scriptwriter,"Date": "2026-" + date, "Duration": duration_string(duration), "Series Name": series, "Public/Patreon": exclusive, "Recurring Characters": character, "Audience" : gender, "Direct Soundgasm Link" : link})
     if subreddit != "":
         table.update(record['id'], {"Subreddit" : subreddit})
 

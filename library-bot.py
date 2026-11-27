@@ -107,7 +107,7 @@ class Audio:
 
     def link(self):
         for entry in self.parsed_data():
-            if entry[0]=='Post Link':
+            if entry[0]=='Audio Post Link':
                 if "darksideplayground" in entry[1].lower():
                     return self.soundgasm_link()
                 else:
@@ -116,13 +116,13 @@ class Audio:
 
     def raw_link(self):
         for entry in self.parsed_data():
-            if entry[0]=='Post Link':
+            if entry[0]=='Audio Post Link':
                 return entry[1]
         return 'WARNING: no link found'
 
     def soundgasm_link(self):
         for entry in self.parsed_data():
-            if entry[0]=='Direct Link':
+            if entry[0]=='Direct Soundgasm Link':
                 return entry[1]
         return ''
 
@@ -165,10 +165,7 @@ class Audio:
 
     def scriptlink(self):
         for entry in self.parsed_data():
-            if entry[0]=='Script Offer':
-                return " (script available [here!](" + entry[1] + "))"
-        for entry in self.parsed_data():
-            if entry[0]=='Script Link':
+            if entry[0]=='Script URL':
                 return " (script available [here!](" + entry[1] + "))"
         return ''
 
@@ -2256,7 +2253,7 @@ async def betatags(interaction, filename : str, tags : str):
 
 @tree.command(name = "addaudio", description = "Add a new entry to the masterlist",  guild = discord.Object(COMMAND_SERVER))
 @app_commands.describe(date = "In form MM-DD")
-async def addaudio(interaction, url : str, title : str, tags : str, description : str, exclusive : str, date : str, duration : str, scriptwriter: Optional[str] = "Vel", series: Optional[str] = "",   character : Optional[str] = "", gender : Optional[str] = "M4F", uploaded: Optional[str] = ""):
+async def addaudio(interaction, url : str, title : str, tags : str, description : str, exclusive : str, date : str, duration : str, scriptwriter: Optional[str] = "Vel", series: Optional[str] = "",   character : Optional[str] = "", gender : Optional[str] = "M4F", uploaded: Optional[str] = "", subreddit: Optional[str] = ""):
     await interaction.response.defer()
 
     unsorted_tags, warnings = canonify_tags(tags)
@@ -2265,7 +2262,9 @@ async def addaudio(interaction, url : str, title : str, tags : str, description 
         corrected_tags += " [further tags needed]"
 
     table = airtable_api.table('apprrNWlCwDHYj4wW', 'tblqwSpe5CdMuWHW6')
-    record = table.create({"Title": title, "Tags": corrected_tags, "Post Link": url,"Description": description,"Scriptwriter": scriptwriter,"Date": "2026-" + date, "Duration": duration_string(duration), "Series Name": series, "Public/Patreon": exclusive, "Recurring Characters": character, "Audience" : gender, "Direct Link" : uploaded})
+    record = table.create({"Title": title, "Tags": corrected_tags, "Audio Post Link": url,"Description": description,"Scriptwriter": scriptwriter,"Date": "2026-" + date, "Duration": duration_string(duration), "Series Name": series, "Public/Patreon": exclusive, "Recurring Characters": character, "Audience" : gender, "Direct Soundgasm Link" : uploaded})
+    if subreddit != "":
+        table.update(record['id'], {"Subreddit" : subreddit})
 
     global audio_choices
     audio_choices = import_airtable_data()
@@ -2281,10 +2280,10 @@ async def addaudio_autocomplete_exclusive(interaction: discord.Interaction, curr
 async def addaudio_autocomplete_gender(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
     options = ["M4F", "M4M", "MM4F", "M4A", "MMM4F", "MF4F", "M4MF", "M4AA", "MM4A"]
     return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]
-# @addaudio.autocomplete('subreddit')
-# async def addaudio_autocomplete_subreddit(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
-#     options = ["GWA","DSP","GWA Gay","Profile","PTA"]
-#     return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]
+@addaudio.autocomplete('subreddit')
+async def addaudio_autocomplete_subreddit(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
+    options = ["GWA","DSP","GWA Gay","Profile","PTA"]
+    return [app_commands.Choice(name=opt, value=opt) for opt in options if current.lower() in opt.lower()]
 
 
 
